@@ -1,0 +1,91 @@
+<div class="cuadro-reserva">
+  <div class="seleccionar-area">
+    <h4>Seleccionar Área: <span *ngIf="areas.length == 0"> No existen Áreas de Consulta disponibles</span></h4>
+    <mat-radio-group [(ngModel)]="areaSelected" (change)="changeAreas($event)">
+      <ng-container *ngFor="let area of areas; let i = index">
+        <mat-radio-button [value]="area" color="primary" >{{ area.nombre }}</mat-radio-button>
+      </ng-container>
+    </mat-radio-group>
+  </div>
+  <p class="cwarn" *ngIf="areaSelected">
+    Area Seleccionada: <b>{{ areaSelected.nombre }}</b>
+  </p>
+  <div class="busqueda-reserva" *ngIf="areas.length > 0 && areaSelected">
+    <div class="busqueda-hora">
+      <h4>Búsqueda de hora por</h4>
+      <button
+        mat-stroked-button class="c-btn btn-azul2" style="margin-right:15px"
+        [ngClass]="{'activo' : tipoConsulta == 'especialidad'}"
+        (click)="getEspecialidades('especialidad')">ESPECIALIDAD</button>
+        <button
+          mat-stroked-button class="c-btn btn-azul2" style="margin-right:15px"
+          [ngClass]="{'activo' : tipoConsulta == 'profesional'}"
+          (click)="getProfesionales()">PROFESIONALES</button>
+    </div>
+    <div class="wrap-area-busqueda" *ngIf="areas.length > 0 && areaSelected">
+      <div class="panel-area" id="buscar1">
+        <div class="row">
+          <div class="col-lg-6 col-md-12" *ngIf="(tipoConsulta == 'especialidad' && especialidades.length == 0) || (tipoConsulta == 'profesional' && profesionales.length == 0)">
+            <p>No existen {{ tipoConsulta == 'especialidad' ? 'Especialidades' : 'Profesionales' }} disponibles </p>
+          </div>
+          <div class="col-lg-6 col-md-12" *ngIf="tipoConsulta == 'profesional' && profesionales.length > 0">
+            <mat-form-field class="full" appearance="fill" [color]="primary">
+                <mat-label>Seleccione un Profesional</mat-label>
+                <input matInput type="text" placeholder="Puede buscar por nombre o apellido" [formControl]="profesionalCtrl" [matAutocomplete]="auto" autocomplete="off">
+                <mat-icon matPrefix style="margin-right: 10px">school</mat-icon>
+                <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayTextAutocomplete" (optionSelected)="profesionalSelection($event)">
+                  <mat-option *ngFor="let prof of filterProfesionales | async" [value]="prof" class="picProfesional" matTooltip="{{prof.detalle}}"  matTooltipPosition="right">
+                    <div class="detalleProfesional">
+                      <img [src]="prof.urlImagenProfesional" *ngIf="prof.urlImagenProfesional" />
+                      {{ prof.detalle }}
+                    </div>
+                  </mat-option>
+                </mat-autocomplete>
+                <button mat-button matSuffix mat-icon-button aria-label="Clear" (click)="clearSelection('profesional')" matTooltip="Limpiar Seleccion" *ngIf="profesionalCtrl.value">
+                  <mat-icon>close</mat-icon>
+                </button>
+              </mat-form-field>
+          </div>
+
+          <div class="col-lg-6 col-md-12" *ngIf="(tipoConsulta == 'profesional' && profesionalSelected ) || (tipoConsulta == 'especialidad' && especialidades.length > 0)">
+            <mat-form-field class="full" appearance="fill" [color]="primary">
+                <mat-label>Seleccione una Especialidad</mat-label>
+                <input matInput type="text" placeholder="Puede buscar por {{ tipoConsulta == 'especialidad' ? 'especialidad o servicio' : 'nombre'}}" [formControl]="especialidadCtrl" [matAutocomplete]="auto" autocomplete="off">
+                <mat-icon matPrefix style="margin-right: 10px">accessible</mat-icon>
+                <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayTextAutocomplete" (optionSelected)="especialidadSelection($event)">
+                  <mat-option *ngFor="let esp of filterEspecialidades | async" [value]="esp" matTooltip="{{esp.detalle}}"  matTooltipPosition="right">
+                    {{ esp.detalle }}
+                  </mat-option>
+                </mat-autocomplete>
+                <button mat-button matSuffix mat-icon-button aria-label="Clear" (click)="clearSelection('especialidad')" matTooltip="Limpiar Seleccion" *ngIf="especialidadCtrl.value">
+                  <mat-icon>close</mat-icon>
+                </button>
+              </mat-form-field>
+          </div>
+          <div class="col-lg-6 col-md-12" *ngIf="especialidadSelected">
+            <mat-form-field class="full" appearance="fill" [color]="primary">
+                <mat-label>Seleccione un Centro de Atención</mat-label>
+                <mat-icon matPrefix style="margin-right: 10px">local_hospital</mat-icon>
+                <input matInput type="text" placeholder="Puede buscar por nombre del Centro" [formControl]="centroAtencionCtrl" [matAutocomplete]="auto" autocomplete="off">
+                <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayTextAutocomplete" (optionSelected)="centroAtencionSelection($event)">
+                  <mat-option *ngFor="let cet of filterCentrosAtencion | async" [value]="cet" matTooltip="{{cet.detalle}}" matTooltipPosition="right">
+                    {{ cet.detalle }}
+                  </mat-option>
+                </mat-autocomplete>
+                <button mat-button matSuffix mat-icon-button aria-label="Clear" (click)="clearSelection('centros')" matTooltip="Limpiar Seleccion" *ngIf="centroAtencionCtrl.value">
+                  <mat-icon>close</mat-icon>
+                </button>
+              </mat-form-field>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<p class="info-busqueda bg-purple" *ngIf="profesionalSelected || especialidadSelected || centroAtencionSelected">
+  <span *ngIf="profesionalSelected"> Profesional: <b>{{ profesionalSelected.nombreProfesional }}</b></span>
+  <span *ngIf="especialidadSelected"> Especialidad: <b>{{ especialidadSelected.nombreEspecialidad }} - {{ especialidadSelected.nombreServicio }}</b></span>
+  <span *ngIf="centroAtencionSelected"> Centro de Atención: <b>{{ centroAtencionSelected.nombreEspecialidad }} - {{ centroAtencionSelected.nombre }}</b> </span>
+  <button mat-raised-button class="full-btn" *ngIf="especialidadSelected && centroAtencionSelected" (click)="buscarHora()">BUSCAR HORA</button>
+</p>

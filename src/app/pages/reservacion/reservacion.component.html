@@ -1,0 +1,73 @@
+<section class="w-reservas">
+	<div>
+		<div class="flex-container header-reserva">
+			<h2 class="titulo-2 azul"><i class="far fa-clock"></i> RESERVA DE HORAS</h2>
+
+			<div class="w-pasos" *ngIf=" tabGroup">
+				<a class="item-paso" [ngClass]="{'activo' : curEtapa == 0 || busquedaInfo }">
+					<figure matRipple>
+						<i class="fas fa-user-md"></i>
+					</figure>
+					<h4>Búsqueda</h4>
+				</a>
+				<a class="item-paso"  [ngClass]="{'activo' : curEtapa == 1 || calendario}">
+					<figure matRipple>
+						<i class="far fa-calendar-alt"></i>
+					</figure>
+					<h4>Selección</h4>
+				</a>
+				<a class="item-paso"  [ngClass]="{'activo' : curEtapa == 2 || paciente}">
+					<figure matRipple>
+						<i class="fas fa-user-injured"></i>
+					</figure>
+					<h4>Identificación</h4>
+				</a>
+				<a class="item-paso"  [ngClass]="{'activo' : curEtapa == 3}">
+					<figure matRipple>
+						<i class="fas fa-check"></i>
+					</figure>
+					<h4>Confirmación</h4>
+				</a>
+			</div>
+		</div>
+
+	</div>
+</section>
+
+<div class="mensaje-exito" *ngIf="reservaRealizada">
+	<img src="images/check-morado.svg" alt=""> HORA RESERVADA CON ÉXITO
+</div>
+
+<div class="reservaStepper">
+	<mat-tab-group dynamicHeight #tabGroup>
+	  <mat-tab label="Búsqueda">
+	    <app-busqueda #busqueda></app-busqueda>
+	  </mat-tab>
+	  <mat-tab label="Selección">
+			<button mat-raised-button color="primary"  class="btn-ret" (click)="cambiarEtapa(0)" *ngIf="!reservaRealizada">Volver</button>
+	    <app-seleccion #seleccion [busquedaInicial]="busquedaInfo"></app-seleccion>
+	  </mat-tab>
+	  <mat-tab label="Identificación">
+			<button mat-raised-button color="primary" class="btn-ret" (click)="cambiarEtapa(1)" *ngIf="!reservaRealizada">Volver</button>
+	    <app-identificacion #identificacion ></app-identificacion>
+	  </mat-tab>
+	  <mat-tab label="Confirmación">
+			<button mat-raised-button color="primary" class="btn-ret" (click)="cambiarEtapa(2)" *ngIf="!reservaRealizada">Volver</button>
+	    <app-confirmacion #confirmacion [busquedaInicial]="busquedaInfo" [calendario]="calendario" [paciente]="paciente"></app-confirmacion>
+	  </mat-tab>
+	</mat-tab-group>
+</div>
+
+<div class="mesa-central" *ngIf="reservaRealizada">
+	<div class="row">
+		<div class="col-lg-6">
+			<h4>Mesa Central</h4>
+			<h3><img src="images/ic-tel.svg" alt=""> 22 676 7000</h3>
+		</div>
+		<div class="col-lg-6">
+			<div class="btns-mesa">
+				<button mat-raised-button color="primary" (click)="nuevaReserva()">TOMAR OTRA HORA</button>
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,10 @@
+<div class="wrapper wrapper-home">
+  <app-header></app-header>
+  <div class="content wrap cloader">
+    <div class="container-loader" *ngIf="utils.progressBar">
+      <mat-spinner [diameter]="60"></mat-spinner>
+    </div>
+    <router-outlet></router-outlet>
+  </div>
+  <app-footer></app-footer>
+</div>

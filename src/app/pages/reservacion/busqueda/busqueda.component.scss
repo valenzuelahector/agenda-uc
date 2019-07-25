@@ -1,0 +1,21 @@
+.picProfesional{padding:30px 16px; border-bottom: 1px solid #eee;}
+.detalleProfesional{ position: relative; padding-left: 70px;}
+.detalleProfesional.nopic{ padding-left:0px !important}
+.detalleProfesional img{width: 50px; position: absolute; left:0px; top:0px; border-radius: 100%; }
+.info-busqueda{
+  background: #802E87;
+  padding: 20px;
+  border-radius: 10px;
+  color:#fff;
+  margin-top:20px;
+  position: relative;
+}
+.info-busqueda span{
+  display: block;
+}
+.info-busqueda .full-btn{
+  position: absolute;
+    right: 20px;
+    top: 50%;
+    margin-top:-28px;
+}

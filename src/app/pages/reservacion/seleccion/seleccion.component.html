@@ -1,0 +1,91 @@
+<div *ngIf="busquedaInicial">
+  <div class="resultados-para">
+  	<div>
+  		<h5>Resultados para:</h5>
+  		<h3>{{ busquedaInicial.especialidad.detalle }}</h3>
+  		<div class="cuadro-res">
+  			<div class="item-res">
+  				<img src="/assets/images/ic-area.svg" alt="">
+  				<p><b>Área Médica:</b> {{ busquedaInicial.area.nombre }}</p>
+  			</div>
+  			<div class="item-res">
+  				<img src="/assets/images/ic-clinica.svg" alt="">
+  				<p><b>Clínica/Centro:</b> {{ busquedaInicial.centroAtencion.nombre }} </p>
+  			</div>
+  			<div class="item-res">
+  				<img src="/assets/images/ic-esp.svg" alt="">
+  				<p><b>Especialidad:</b> {{ busquedaInicial.especialidad.nombreEspecialidad }} </p>
+  			</div>
+  		</div>
+  	</div>
+  </div>
+  <section class="w-resultados">
+    <div class="cwarn" *ngIf="recursos && loadedRecursos">
+      <h5 style="margin:0px">Se han encontrado {{ recursos.length }} resultados</h5>
+    </div>
+
+  	<div class="content-res">
+  			<div class="item-doc" *ngFor="let re of recursos; let i = index">
+  				<div class="row">
+  					<div class="col-lg-6">
+  						<div class="box-doc">
+  							<figure>
+  								<img [src]="re?.urlImagenProfesional" alt="">
+  							</figure>
+  							<div class="txt-doc">
+  								<h4>{{ re.nombre }}</h4>
+  								<p>Especialidad del Médico</p>
+  								<button class="ver-perfil full-btn" mat-stroked-button (click)="verPerfil(re)">Ver perfil
+                      <i class="fa fa-angle-right" aria-hidden="true"></i>
+                  </button>
+                  <p class="small" *ngIf="re.propiedadesDinamicas?.informacionAdicional">* {{ re.propiedadesDinamicas?.informacionAdicional }}</p>
+  							</div>
+  						</div>
+  					</div>
+  					<div class="col-lg-6">
+  						<div class="cal-doc calendario" data-rel="cal3">
+  							 <div class="calendar-utils">
+                    <div class="container-calendar" *ngIf="!re.datesToHighlight || (selectedDate[i] && centrosProfesional[i] && centrosProfesional[i].length > 0)">
+                      <button mat-raised-button *ngIf="!re.datesToHighlight" color="primary" class="full-btn" (click)="cargarCalendario(re, i)">Ver Calendario Disponible</button>
+                      <div class="sel-hora" style="display: block;" *ngIf="selectedDate[i] && centrosProfesional[i] && centrosProfesional[i].length > 0">
+                        <p class="header-sel-hora">
+                          Seleccione un Centro y una Hora Disponible para el {{ selectedDate[i] | date:'dd/MM/yyyy'}}
+                          <button mat-stroked-button (click)="centrosProfesional[i] = null" color="primary">
+                            Elegir otro día
+                          </button>
+                        </p>
+                        <ng-container *ngFor="let cet of centrosProfesional[i];">
+
+                          <a class="item-hora" [ngClass]="{ 'active' : cet.habilitado}" (click)="cet.habilitado = (cet.habilitado) ? false : true">
+                              <div class="centro-medico">
+                                <img src="/assets/images/ic-centro.svg">{{ cet.nombreCentro }}
+                              </div>
+                          </a>
+
+                          <ng-container *ngIf="cet.habilitado">
+                            <a class="item-hora" *ngFor="let cupo of cet.cupos"  (click)="seleccionarHora({fecha: selectedDate[i], cupo : cupo, recurso:re})">
+                                <div class="hora">{{ cupo.fechaHora | date:'HH:mm' }}</div>
+                            </a>
+                          </ng-container>
+                        </ng-container>
+
+                      </div>
+                    </div>
+
+                    <div *ngIf="re.datesToHighlight && re.datesToHighlight['displayed']">
+                      <mat-calendar [minDate]="fechaHoy" [maxDate]="fechaLimite" [dateClass]="re.datesToHighlight.dateClass" [selected]="selectedDate[i]" (selectedChange)="onSelect($event, i)"></mat-calendar>
+                      <div class="datos-horas" >
+       							 		<p *ngIf="re.proximaFecha">Próxima hora disponible: <span>{{ re.proximaFecha | date:'EEEE dd/MM/yyyy HH:mm'}}</span></p>
+                        <p *ngIf="!re.proximaFecha">No existen horas disponibles.</p>
+                      </div>
+                    </div>
+                 </div>
+                 <div class="clear"></div>
+  						</div>
+
+  					</div>
+  				</div>
+  			</div>
+  	</div>
+  </section>
+</div>
