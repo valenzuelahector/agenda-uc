@@ -17,6 +17,7 @@ export class ReservacionComponent implements OnInit {
   public paciente:any;
   public calendario:any;
   public reservaRealizada:boolean = false;
+  public readQuery:boolean = false;
 
   @ViewChild('tabGroup') tabGroup:any;
   @ViewChild('busqueda') busqueda:BusquedaComponent;
@@ -69,5 +70,9 @@ export class ReservacionComponent implements OnInit {
     this.calendario = null
     this.reservaRealizada = null;
     this.cambiarEtapa(0);
+  }
+  
+  readQuerySetter(event){
+    this.readQuery = event;
   }
 }

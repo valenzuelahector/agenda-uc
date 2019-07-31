@@ -4,6 +4,7 @@ import { FormControl } from '@angular/forms'
 import { map, startWith } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { UtilsService } from 'src/app/services/utils.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-busqueda',
@@ -29,12 +30,14 @@ export class BusquedaComponent implements OnInit {
   public profesionalCtrl = new FormControl();
   public especialidadCtrl = new FormControl();
   public centroAtencionCtrl = new FormControl();
-
+  public readQuery:boolean = false;
+  @Output() public emitReadQuery:EventEmitter<boolean> = new EventEmitter();
   @Output() public emitBusqueda:EventEmitter<any> = new EventEmitter();
 
   constructor(
     public agendaService:AgendaAmbulatoriaService,
-    public utils:UtilsService
+    public utils:UtilsService,
+    public aRouter:ActivatedRoute
   ) { }
 
   ngOnInit() {
@@ -50,13 +53,39 @@ export class BusquedaComponent implements OnInit {
 
       if(res['areas'] && res['areas'].length > 0){
         this.areas = res['areas'];
-        res['areas'].forEach((val, key) => {
-            if(val['nombre'].toLowerCase() == 'consultas'){
+      
+        this.setDataQueryParams().then( params => {
+          let qp = params;
+          this.areaSelected = {};
+
+          res['areas'].forEach((val, key) => {
+            if((val['nombre'].toLowerCase() == 'consultas' && !qp['area']) ||
+               (qp['area'] && qp['area'] == val['id']) ){
               this.areaSelected = val;
             }
+          })
+
+          if(!this.areaSelected.id){
+            res['areas'].forEach((val, key) => {
+              if(val['nombre'].toLowerCase() == 'consultas'){
+                this.areaSelected = val;
+              }
+            })
+            this.emitterReadQuery(true)
+          }
+
+          this.clearSelection('profesional');
+
+          if(qp['tipo'] && qp['tipo'] == 'profesional'){
+            this.getProfesionales();
+          }else{
+            this.getEspecialidades('especialidad');
+          }
+
         })
-        this.clearSelection('profesional');
-        this.getEspecialidades('especialidad');
+        
+      }else{
+        this.emitterReadQuery(true)
       }
     })
   }
@@ -64,21 +93,43 @@ export class BusquedaComponent implements OnInit {
   getProfesionales(){
     this.clearSelection('profesional')
     this.agendaService.getProfesionales(this.areaSelected['id']).subscribe( res => {
+      
+      this.setDataQueryParams().then( params => {
 
-      if(res['profesionales'] && res['profesionales'].length > 0){
-        res['profesionales'].forEach( (val, key)  => {
-          res['profesionales'][key]['detalle'] = val['nombreProfesional'];
-        })
+        let matchProfesional = null;
+        let qp = params;
 
-        this.profesionales = res['profesionales'];
-        this.filterProfesionales = this.profesionalCtrl.valueChanges.pipe(
-            startWith<string | any>(''),
-            map(value => typeof value === 'string' ? value : value.detalle),
-            map(nombreFiltro => nombreFiltro ? this.filterAutocomplete(nombreFiltro, 'profesionales') : this.profesionales.slice()),
-          );
+        if(res['profesionales'] && res['profesionales'].length > 0){
+          res['profesionales'].forEach( (val, key)  => {
+            res['profesionales'][key]['detalle'] = val['nombreProfesional'];
 
-      }
-      this.tipoConsulta = 'profesional';
+            if(qp['profesional'] == val['idProfesional']){
+              matchProfesional = val;
+            }
+          })
+  
+          this.profesionales = res['profesionales'];
+          this.filterProfesionales = this.profesionalCtrl.valueChanges.pipe(
+              startWith<string | any>(''),
+              map(value => typeof value === 'string' ? value : value.detalle),
+              map(nombreFiltro => nombreFiltro ? this.filterAutocomplete(nombreFiltro, 'profesionales') : this.profesionales.slice()),
+            );
+
+            if(matchProfesional){
+              this.profesionalCtrl.patchValue(matchProfesional);
+              this.profesionalSelection(matchProfesional);
+              this.getEspecialidades('profesional');
+            }else{
+              this.emitterReadQuery(true)
+            }
+
+  
+        }
+        this.tipoConsulta = 'profesional';
+
+      });
+
+     
     })
   }
 
@@ -89,25 +140,50 @@ export class BusquedaComponent implements OnInit {
     if(tipo == 'profesional'){
       observer = this.agendaService.getEspecialidadesByProfesional(this.profesionalSelected['idProfesional']);
     }else{
+      
       observer = this.agendaService.getEspecialidadesByGeneric(this.areaSelected['id']);
+      this.clearSelection('especialidad');
+
     }
       observer.subscribe( res => {
 
-        if(res['especialidadesPorServicio'] && res['especialidadesPorServicio'].length > 0){
-          res['especialidadesPorServicio'].forEach( (val, key)  => {
-            res['especialidadesPorServicio'][key]['detalle'] = val['nombreEspecialidad'] + " - " + val['nombreServicio'];
-          })
+        this.setDataQueryParams().then( params => {
 
-          this.especialidades = res['especialidadesPorServicio'];
+          let matEspecialidad = null;
+          let qp = params;
 
-          this.filterEspecialidades = this.especialidadCtrl.valueChanges.pipe(
-              startWith<string | any>(''),
-              map(value => typeof value === 'string' ? value : value.detalle),
-              map(nombreFiltro => nombreFiltro ? this.filterAutocomplete(nombreFiltro, 'especialidades') : this.especialidades.slice()),
-            );
-        }else{
-          this.especialidades = [];
-        }
+          if(res['especialidadesPorServicio'] && res['especialidadesPorServicio'].length > 0){
+            res['especialidadesPorServicio'].forEach( (val, key)  => {
+              res['especialidadesPorServicio'][key]['detalle'] = val['nombreEspecialidad'] + " - " + val['nombreServicio'];
+
+              if(qp['especialidad'] && qp['especialidad'] == val['idEspecialidad']){
+                matEspecialidad = val;
+              }
+            })
+  
+            this.especialidades = res['especialidadesPorServicio'];
+  
+            this.filterEspecialidades = this.especialidadCtrl.valueChanges.pipe(
+                startWith<string | any>(''),
+                map(value => typeof value === 'string' ? value : value.detalle),
+                map(nombreFiltro => nombreFiltro ? this.filterAutocomplete(nombreFiltro, 'especialidades') : this.especialidades.slice()),
+              );
+
+            if(matEspecialidad){
+              this.especialidadCtrl.patchValue(matEspecialidad);
+              this.especialidadSelection(matEspecialidad);
+            }else{
+              this.emitterReadQuery(true)
+            }
+
+          }else{
+            this.especialidades = [];
+            this.emitterReadQuery(true)
+          }
+        
+        })  
+
+
 
       })
 
@@ -197,22 +273,43 @@ export class BusquedaComponent implements OnInit {
     this.especialidadSelected =  this.especialidadCtrl.value;
     this.centrosAtencion = [];
     this.agendaService.getCentrosByEspecialidad(this.especialidadCtrl.value.idServicio).subscribe( res => {
-      if(res['centros'] && res['centros'].length > 0){
-        res['centros'].forEach( (val, key)  => {
-          res['centros'][key]['detalle'] = val['nombre'] + ' - ' + val['direccion']['comuna'];
-        })
-        if(res['centros'].length >= 2){
-           res['centros'].unshift({idCentro: 0, nombre:'Todos', detalle: 'Todos'})
+
+      this.setDataQueryParams().then( params => {
+
+        let matCentro = null;
+        let qp = params;
+
+        if(res['centros'] && res['centros'].length > 0){
+          res['centros'].forEach( (val, key)  => {
+            res['centros'][key]['detalle'] = val['nombre'] + ' - ' + val['direccion']['comuna'];
+            if(qp['centro'] && qp['centro'] == val['idCentro']){
+              matCentro = res['centros'][key];
+            }
+          })
+          if(res['centros'].length >= 2){
+             res['centros'].unshift({idCentro: 0, nombre:'Todos', detalle: 'Todos'})
+          }
+          this.centrosAtencion = res['centros'];
+          this.filterCentrosAtencion = this.centroAtencionCtrl.valueChanges.pipe(
+              startWith<string | any>(''),
+              map(value => typeof value === 'string' ? value : value.detalle),
+              map(nombreFiltro => nombreFiltro ? this.filterAutocomplete(nombreFiltro, 'centros') : this.centrosAtencion.slice()),
+            );
+
+            if(matCentro){
+              this.centroAtencionCtrl.patchValue(matCentro);
+              this.centroAtencionSelection(matCentro);
+              this.buscarHora();
+            }else{
+              this.emitterReadQuery(true)
+            }
+        }else{
+          this.centrosAtencion = [];
+          this.readQuery = true;
         }
-        this.centrosAtencion = res['centros'];
-        this.filterCentrosAtencion = this.centroAtencionCtrl.valueChanges.pipe(
-            startWith<string | any>(''),
-            map(value => typeof value === 'string' ? value : value.detalle),
-            map(nombreFiltro => nombreFiltro ? this.filterAutocomplete(nombreFiltro, 'centros') : this.centrosAtencion.slice()),
-          );
-      }else{
-        this.centrosAtencion = [];
-      }
+
+      })
+      
     })
   }
 
@@ -234,6 +331,23 @@ export class BusquedaComponent implements OnInit {
       especialidad: this.especialidadSelected,
       centroAtencion: this.centroAtencionSelected
     })
+    this.emitterReadQuery(true)
   }
 
+  emitterReadQuery(status){
+    this.readQuery = status;
+    if(status){
+      this.emitReadQuery.emit(status)
+    }
+  }
+
+  async setDataQueryParams(){
+    let p = {};
+    await this.aRouter.queryParams.subscribe( params => {
+      if(!this.readQuery){
+        p = params;
+      }
+    })
+    return p;
+  }
 }

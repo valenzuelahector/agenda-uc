@@ -38,10 +38,14 @@
 	<img src="images/check-morado.svg" alt=""> HORA RESERVADA CON ÉXITO
 </div>
 
-<div class="reservaStepper">
+<div class="reservaStepper cloader">
+	<div class="container-loader" [ngClass]="{'readQuery' : !readQuery}" *ngIf="utils.progressBar || !readQuery">
+		<mat-spinner [diameter]="60"></mat-spinner>
+
+	</div>
 	<mat-tab-group dynamicHeight #tabGroup>
 	  <mat-tab label="Búsqueda">
-	    <app-busqueda #busqueda></app-busqueda>
+	    <app-busqueda #busqueda (emitReadQuery)="readQuerySetter($event)"></app-busqueda>
 	  </mat-tab>
 	  <mat-tab label="Selección">
 			<button mat-raised-button color="primary"  class="btn-ret" (click)="cambiarEtapa(0)" *ngIf="!reservaRealizada">Volver</button>

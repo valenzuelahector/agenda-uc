@@ -54,9 +54,9 @@
                             Elegir otro día
                           </button>
                         </p>
-                        <ng-container *ngFor="let cet of centrosProfesional[i];">
+                        <ng-container *ngFor="let cet of centrosProfesional[i]; let idx = index">
 
-                          <a class="item-hora" [ngClass]="{ 'active' : cet.habilitado}" (click)="cet.habilitado = (cet.habilitado) ? false : true">
+                          <a class="item-hora" [ngClass]="{ 'active' : cet.habilitado }" (click)="displayCentro(i, idx)">
                               <div class="centro-medico">
                                 <img src="/assets/images/ic-centro.svg">{{ cet.nombreCentro }}
                               </div>

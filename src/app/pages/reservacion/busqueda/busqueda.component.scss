@@ -1,4 +1,18 @@
 .picProfesional{padding:30px 16px; border-bottom: 1px solid #eee;}
+.container-query{
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: #fff;
+  z-index: 110;
+  .spin{
+    position: absolute;
+    left:50%;
+    top:50%;
+    margin-left:-35px;
+    margin-top: -35px
+  }
+}
 .detalleProfesional{ position: relative; padding-left: 70px;}
 .detalleProfesional.nopic{ padding-left:0px !important}
 .detalleProfesional img{width: 50px; position: absolute; left:0px; top:0px; border-radius: 100%; }

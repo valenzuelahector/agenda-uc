@@ -80,7 +80,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
               data['listaRecursos'][key]['cupos'] = (data['cuposProfesional'][val['idCorto']]) ? data['cuposProfesional'][val['idCorto']] : [];
               data['listaRecursos'][key] = this.crearCalendario(data['listaRecursos'][key], data['listaCentros'], data['listaDisponibilidades'])
             })
-            console.log(data['listaRecursos']);
+            
             this.recursos = data['listaRecursos'];
           }else{
             this.recursos = [];
@@ -104,6 +104,16 @@ export class SeleccionComponent implements OnInit, OnChanges {
    };
  }
 
+ displayCentro(idxCentro, idxItem){
+   let cet = this.centrosProfesional[idxCentro][idxItem];
+   if(Object.keys(this.centrosProfesional).length > 1){
+    this.centrosProfesional[idxCentro][idxItem]['habilitado'] = (cet.habilitado) ? false : true
+   }else if(Object.keys(this.centrosProfesional).length == 1){
+    this.centrosProfesional[idxCentro][idxItem]['habilitado'] = true;
+   }else{
+    this.centrosProfesional[idxCentro][idxItem]['habilitado'] = false;
+   }
+ }
 
   onSelect(event, i){
     this.selectedDate[i] = event;
@@ -111,77 +121,22 @@ export class SeleccionComponent implements OnInit, OnChanges {
     let idxFecha = fechaDisSel['year'] + "-" + fechaDisSel['month'] + '-' + fechaDisSel['day'];
     let centrosProfesionales = this.recursos[i]['fechasDisponibles'][idxFecha];
     let agrupCentros:any = {};
-  //  this.centrosProfesional[i] = this.recursos[i]['fechasDisponibles'][idxFecha];
+  
     centrosProfesionales.forEach((val, key) => {
       if(!agrupCentros[val['idCentro']]){
         agrupCentros[val['idCentro']] = {'nombreCentro' : val['nombreCentro'], cupos: [], habilitado: false}
       }
       agrupCentros[val['idCentro']]['cupos'].push(val)
     })
+
     this.centrosProfesional[i] = [];
+    let enableCentro = (Object.keys(agrupCentros).length == 1) ? true : false;
     Object.keys(agrupCentros).forEach(key => {
+      agrupCentros[key]['habilitado'] = enableCentro;
       this.centrosProfesional[i].push(agrupCentros[key]);
     })
   }
-/*
-  cargarCalendario(re, i){
 
-    this.getRecursos(re.id, i).then((dataRecurso)=> {
-
-      let fecha = new Date();
-      let f = null;
-
-      this.recursos[i]['fechasDisponibles'] = {};
-      this.recursos[i]['listaCentrosIdCorto'] = {};
-      dataRecurso['listaCentros'].forEach((val, key) => {
-        this.recursos[i]['listaCentrosIdCorto'][val['idCorto']] = val;
-      })
-
-      for(let day = 1; day <= this.maxNumDays; day++){
-
-        if(day == 1){
-           f = this.utils.trDateStr(fecha, 'json');
-        }else{
-          fecha.setDate( fecha.getDate() + 1);
-           f = this.utils.trDateStr(fecha, 'json');
-        }
-        this.recursos[i]['fechasDisponibles'][f.year + '-' + f.month + '-' + f.day] = [];
-        this.recursos[i]['cupos'].forEach((val, key) => {
-          let fechaEpoch = new Date(val['horaEpoch']*1000);
-          let u = this.utils.trDateStr(fechaEpoch, 'json');
-          val['fechaHora'] = fechaEpoch;
-          val['nombreCentro'] = (this.recursos[i]['listaCentrosIdCorto'][val['idCentro']]) ? this.recursos[i]['listaCentrosIdCorto'][val['idCentro']]['nombre'] : 'S/I';
-          if(f['year'] == u['year'] && f['month'] == u['month'] && f['day'] == u['day']){
-            this.recursos[i]['fechasDisponibles'][f.year + '-' + f.month + '-' + f.day].push(val)
-          }
-        })
-      }
-      console.log(this.recursos[i]['fechasDisponibles']);
-      this.datesToHighlight[i] = { dates:[], displayed: false, dateClass: null };
-      let proximaFecha:boolean = false;
-      let datesDisabled = [];
-
-      Object.keys(this.recursos[i]['fechasDisponibles']).forEach(key => {
-        if(this.recursos[i]['fechasDisponibles'][key].length == 0){
-          datesDisabled.push(key + 'T12:00:00.000Z');
-        }else if(!proximaFecha){
-          let count = 0;
-          this.recursos[i]['fechasDisponibles'][key].forEach((valDx, keyDx) => {
-              if(count == 0){
-                this.recursos[i]['proximaFecha'] = new Date(valDx['horaEpoch']*1000);
-                proximaFecha = true;
-              }
-              count++;
-          });
-        }
-      })
-
-      this.datesToHighlight[i]['dates'] = datesDisabled;
-      this.datesToHighlight[i]['dateClass'] = this.dateClass(datesDisabled);
-      this.datesToHighlight[i]['displayed'] = true;
-    })
-  }
-*/
   crearCalendario(dataRecurso:any, centros:any, disponibilidades:any){
 
       let fecha = new Date();

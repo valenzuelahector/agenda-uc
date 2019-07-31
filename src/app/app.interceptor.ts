@@ -9,7 +9,7 @@ import { tap } from "rxjs/internal/operators";
 export class Interceptor implements HttpInterceptor {
 
   public reqClone:any;
-
+  public clearProgBar:any;
   constructor(
     public utils: UtilsService,
     private dialogRef: MatDialog
@@ -19,6 +19,7 @@ export class Interceptor implements HttpInterceptor {
 
     setTimeout(() => {
       this.utils.showProgressBar();
+      clearTimeout(this.clearProgBar)
     }, 200);
 
     request = request.clone(this.reqClone);
@@ -27,16 +28,16 @@ export class Interceptor implements HttpInterceptor {
     return next.handle(request).pipe(
       tap(event => {
         if (event instanceof HttpResponse) {
-          setTimeout(() => {
-            this.utils.hideProgressBar();
-          }, 1500);
+         this.clearProgBar = setTimeout(() => {
+          this.utils.hideProgressBar();
+          }, 1200);
         }
       }, error => {
         this.dialogRef.closeAll();
         this.utils.mDialog("Error", "Se ha producido un error interno. Intente más tarde.", "message");
         setTimeout(() => {
           this.utils.hideProgressBar();
-        }, 1500);
+        }, 2500);
 
       })
     );
