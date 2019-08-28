@@ -7,4 +7,4 @@ const app_routes: Routes = [
   { path: '**', pathMatch: 'full', redirectTo: 'reservacion' }
 ];
 
-export const APP_ROUTING = RouterModule.forRoot(app_routes, { useHash: true, scrollPositionRestoration: 'enabled'  });
+export const APP_ROUTING = RouterModule.forRoot(app_routes, { useHash: false, scrollPositionRestoration: 'enabled'  });

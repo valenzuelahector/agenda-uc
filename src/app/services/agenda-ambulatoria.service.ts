@@ -70,6 +70,10 @@ export class AgendaAmbulatoriaService {
 
   getDatosProfesional(idProfesional:any){
     return this.http.get(ENV.baseApi + this.profRoute + '/Perfil?idProfesional=' + idProfesional + "&tipoIdProfesional=PRM");
-
   }
+
+  geReglasValidacion(query:any){
+    return this.http.get(this.baseApi + '/Agenda/CuposDisponibilidad?idCentro='+query.idCentro+'&fechaInicio='+query.fechaInicio+'&fechaTermino='+query.fechaTermino+'&idServicio='+query.idServicio+'&idPlanSalud=4c30555e-5ed3-418f-8f54-a91a00ace99b&idPaciente='+query.idPaciente+'&idDisponibilidad='+query.idDisponibilidad+'&idProfesional='+query.idProfesional+'&codCanal=PatientPortal')
+  }
+
 }

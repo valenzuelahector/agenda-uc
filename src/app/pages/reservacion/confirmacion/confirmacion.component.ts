@@ -36,7 +36,7 @@ export class ConfirmacionComponent implements OnInit, OnChanges {
       if(r){
 
         let fecha:any = this.utils.trDateStr(this.calendario.cupo.fechaHora, 'n');
-
+        console.log(this.calendario)
         this.agendaService.postCita({
           fechaInicioDesde: fecha,
           idCentro: this.calendario.cupo.idStrCentro,
@@ -48,6 +48,7 @@ export class ConfirmacionComponent implements OnInit, OnChanges {
           paisIdentificador: 'CL',
           idPlanCobertura: this.paciente.adicional.prevision.idPlan,
           idDisponibilidad: this.calendario.cupo.idStrDisponibilidad,
+          idTipoCita: this.calendario.cupo.idTipoCita.id
         }).subscribe(data => {
           if(data['statusCod'] == 'OK'){
             this.reservaFinalizada =  true;

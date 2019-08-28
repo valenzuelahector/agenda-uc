@@ -5390,7 +5390,6 @@ a.volver-hora:hover{
   font-weight: 600;
   color:#2A7DE1;
   display: block;
-  text-transform: uppercase;
     margin-bottom: 5px;
 
 }
@@ -5411,6 +5410,70 @@ a.volver-hora:hover{
   width: 170px;
   text-align: right;
   margin-right: 15px;
+}
+
+/*--FIN REGISTRO--*/
+.datos-reserva.datos-r2 .w-datos {
+    border: 2px solid #468fe5;
+    margin-bottom: 0;
+}
+
+.datos-reserva.datos-r2 .header-datos {
+    text-align: center;
+    background: #629fe9;
+    padding: 20px;
+    border: none;
+}
+.datos-reserva.datos-r2 .body-datos{
+    border:none;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+.datos-reserva.datos-r2 .body-datos [class^="col-"] {
+    padding: 20px;
+}
+.datos-reserva.datos-r2.datos-gracias .body-datos [class^="col-"] {
+    padding: 20px 10px;
+}
+.datos-reserva.datos-r2.datos-gracias .body-datos.b-d1 p {
+    padding-left: 162px;
+}
+.datos-reserva.datos-r2.datos-gracias .body-datos.b-d2 p {
+    padding-left: 130px;
+}
+.datos-reserva.datos-r2.datos-gracias .body-datos.b-d3 p {
+    padding-left: 90px;
+}
+.datos-reserva.datos-r2 .header-datos h4{
+    color: #fff;
+    font-size: 20px;
+}
+.datos-reserva.datos-r2 .body-datos p {
+    margin-bottom: 10px;
+    position: relative;
+    padding-left: 180px;
+}
+.datos-reserva.datos-r2 .body-datos p b {
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+.datos-reserva.datos-r2 .b-l {
+    border-left: 2px solid #468fe5;
+}
+.puntos-abajo.p2{
+    background: #f5f5f5;
+    text-align: center;
+    padding: 15px 15px 20px;
+    margin-bottom: 10px;
+}
+.puntos-abajo.p2 p{
+    display: inline;
+    margin-right: 10px;
+    font-size: 15px;
+}
+.puntos-abajo.p2 p span{
+    color: #802e87;
 }
 
 .mensaje-exito{

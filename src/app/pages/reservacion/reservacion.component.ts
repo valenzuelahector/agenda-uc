@@ -18,6 +18,7 @@ export class ReservacionComponent implements OnInit {
   public calendario:any;
   public reservaRealizada:boolean = false;
   public readQuery:boolean = false;
+  public reglasActuales:any = [];
 
   @ViewChild('tabGroup') tabGroup:any;
   @ViewChild('busqueda') busqueda:BusquedaComponent;
@@ -47,8 +48,14 @@ export class ReservacionComponent implements OnInit {
     })
 
     this.identificacion.datosPaciente.subscribe( data => {
-      this.cambiarEtapa(3);
-      this.paciente = data;
+      if(data.reglas && data.reglas.length > 0){
+        this.reglasActuales =  data.reglas;
+        this.cambiarEtapa(5);
+      }else{
+        this.cambiarEtapa(3);
+        this.paciente = data.paciente;
+      }
+
     })
 
     this.confirmacion.confirmarReserva.subscribe( data => {

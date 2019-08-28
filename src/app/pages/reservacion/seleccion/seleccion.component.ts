@@ -23,6 +23,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
   public maxNumDays:number = 90;
   public centrosProfesional:any = {};
   public loadedRecursos:boolean = false;
+  public tiposCitas:any = [];
 
   constructor(
     public agendaService:AgendaAmbulatoriaService,
@@ -46,6 +47,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
   }
 
   getRecursos(idProfesional = null, index = 0){
+
     return new Promise((resolve, reject ) => {
       this.fechaHoy = new Date();
       this.fechaLimite = new Date();
@@ -61,6 +63,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
       }).subscribe( data => {
 
         this.recursos = [];
+        this.tiposCitas = data['listaTiposDeCita'];
 
         if(idProfesional){
             this.recursos[index]['cupos'] =  (data['listaCupos']) ? data['listaCupos'] : [];
@@ -78,7 +81,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
 
             data['listaRecursos'].forEach((val, key) => {
               data['listaRecursos'][key]['cupos'] = (data['cuposProfesional'][val['idCorto']]) ? data['cuposProfesional'][val['idCorto']] : [];
-              data['listaRecursos'][key] = this.crearCalendario(data['listaRecursos'][key], data['listaCentros'], data['listaDisponibilidades'])
+              data['listaRecursos'][key] = this.crearCalendario(data['listaRecursos'][key], data['listaCentros'], data['listaDisponibilidades'], data['listaRecursos'])
             })
             
             this.recursos = data['listaRecursos'];
@@ -137,7 +140,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
     })
   }
 
-  crearCalendario(dataRecurso:any, centros:any, disponibilidades:any){
+  crearCalendario(dataRecurso:any, centros:any, disponibilidades:any, recursos:any){
 
       let fecha = new Date();
       let f = null;
@@ -145,6 +148,8 @@ export class SeleccionComponent implements OnInit, OnChanges {
       dataRecurso['fechasDisponibles'] = {};
       dataRecurso['listaCentrosIdCorto'] = {};
       dataRecurso['listaDisponibilidadesIdCorto'] = {};
+      dataRecurso['listaRecursosIdCorto'] = {};
+
 
       centros.forEach((val, key) => {
         dataRecurso['listaCentrosIdCorto'][val['idCorto']] = val;
@@ -152,6 +157,10 @@ export class SeleccionComponent implements OnInit, OnChanges {
 
       disponibilidades.forEach((val, key) => {
         dataRecurso['listaDisponibilidadesIdCorto'][val['idCorto']] = val;
+      })
+
+      recursos.forEach((val, key) => {
+        dataRecurso['listaRecursosIdCorto'][val['idCorto']] = val;
       })
 
       for(let day = 1; day <= this.maxNumDays; day++){
@@ -166,10 +175,13 @@ export class SeleccionComponent implements OnInit, OnChanges {
         dataRecurso['cupos'].forEach((val, key) => {
           let fechaEpoch = new Date(val['horaEpoch']*1000);
           let u = this.utils.trDateStr(fechaEpoch, 'json');
+          val['idTipoCita'] = this.getTipoCita(val['tiposDeCita'][0]);
           val['fechaHora'] = fechaEpoch;
           val['nombreCentro'] = (dataRecurso['listaCentrosIdCorto'][val['idCentro']]) ? dataRecurso['listaCentrosIdCorto'][val['idCentro']]['nombre'] : 'S/I';
           val['idStrCentro'] = (dataRecurso['listaCentrosIdCorto'][val['idCentro']]) ? dataRecurso['listaCentrosIdCorto'][val['idCentro']]['id'] : null;
           val['idStrDisponibilidad'] = (dataRecurso['listaDisponibilidadesIdCorto'][val['idDisponibilidad']]) ? dataRecurso['listaDisponibilidadesIdCorto'][val['idDisponibilidad']]['id'] : null;
+          val['idStrRecProfesional'] = (dataRecurso['listaRecursosIdCorto'][val['idRecurso']]) ? dataRecurso['listaRecursosIdCorto'][val['idRecurso']]['id'] : null;
+
           if(f['year'] == u['year'] && f['month'] == u['month'] && f['day'] == u['day']){
             dataRecurso['fechasDisponibles'][f.year + '-' + f.month + '-' + f.day].push(val)
           }
@@ -218,6 +230,17 @@ export class SeleccionComponent implements OnInit, OnChanges {
       }
 
     })
+  }
 
+  getTipoCita(idCorto){
+
+    let res = null;
+    this.tiposCitas.forEach((val, key) => {
+        if(val['idCorto'] == idCorto){
+          res = val;
+        }
+    })
+
+    return res;
   }
 }

@@ -41,11 +41,8 @@
                 <input matInput type="text" placeholder="Puede buscar por nombre o apellido" [formControl]="profesionalCtrl" [matAutocomplete]="auto" autocomplete="off">
                 <mat-icon matPrefix style="margin-right: 10px">school</mat-icon>
                 <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayTextAutocomplete" (optionSelected)="profesionalSelection($event)">
-                  <mat-option *ngFor="let prof of filterProfesionales | async" [value]="prof" class="picProfesional" matTooltip="{{prof.detalle}}"  matTooltipPosition="right">
-                    <div class="detalleProfesional">
-                      <img [src]="prof.urlImagenProfesional" *ngIf="prof.urlImagenProfesional" />
-                      {{ prof.detalle }}
-                    </div>
+                  <mat-option *ngFor="let prof of filterProfesionales | async" [value]="prof" matTooltip="{{prof.detalle}}"  matTooltipPosition="right">
+                    {{ prof.detalle }}
                   </mat-option>
                 </mat-autocomplete>
                 <button mat-button matSuffix mat-icon-button aria-label="Clear" (click)="clearSelection('profesional')" matTooltip="Limpiar Seleccion" *ngIf="profesionalCtrl.value">

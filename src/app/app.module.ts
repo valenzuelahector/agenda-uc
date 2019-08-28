@@ -22,6 +22,8 @@ import { AngularMaterialModule } from './app.material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MessageComponent } from './shared/components/modals/message/message.component';
 import { PerfilProfesionalComponent } from './shared/components/modals/perfil-profesional/perfil-profesional.component';
+import { ErrorValidacionComponent } from './pages/reservacion/error-validacion/error-validacion.component';
+import { ReservacionEfectuadaComponent } from './pages/reservacion/reservacion-efectuada/reservacion-efectuada.component';
 
 
 @NgModule({
@@ -35,7 +37,9 @@ import { PerfilProfesionalComponent } from './shared/components/modals/perfil-pr
     IdentificacionComponent,
     ConfirmacionComponent,
     MessageComponent,
-    PerfilProfesionalComponent
+    PerfilProfesionalComponent,
+    ErrorValidacionComponent,
+    ReservacionEfectuadaComponent
   ],
   imports: [
     BrowserModule,

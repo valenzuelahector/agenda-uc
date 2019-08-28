@@ -75,7 +75,7 @@ export class UtilsService {
     if(type == 'json'){
       return { year: year, month: month,  day : day, hour: hour, min : min, sec : sec }
     }
-    return  year + "-" + month + "-" + day + "T" + hour + ":" + min +":" + sec + "-03:00";
+    return  year + "-" + month + "-" + day + "T" + hour + ":" + min +":" + sec + "-04:00";
   }
 
   numberOnly(event, activate?: boolean): boolean {
