@@ -82,4 +82,14 @@ export class ReservacionComponent implements OnInit {
   readQuerySetter(event){
     this.readQuery = event;
   }
+
+  accionValidacionReglas(tipo:string){
+    if(tipo == 'NUEVO'){
+      this.nuevaReserva();
+      this.utils.resetPaciente();
+    }else{
+      this.reglasActuales = [];
+      this.cambiarEtapa(2)
+    }
+  }
 }

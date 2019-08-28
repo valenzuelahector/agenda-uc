@@ -61,6 +61,11 @@ export class IdentificacionComponent implements OnInit {
 
   ngOnInit() {
     this.getPlanesSalud();
+
+    this.utils.resetInfoPaciente.subscribe(r => {
+      console.log("sssss")
+      this.limpiarFormulario(true);
+    })
   }
 
   get revPacienteForm() {

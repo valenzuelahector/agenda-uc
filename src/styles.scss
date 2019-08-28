@@ -1844,12 +1844,12 @@ footer .m-footer .redes-footer a:hover img{
 .btn-gris{
     background:#455A64;
     border: 2px solid #455A64;
-    color: #fff;
+    color: #fff !important;
 }
 .btn-gris:hover{
     text-decoration: none;
-    color:#4C7183;
-    background: #fff;
+    color:#4C7183 !important;
+    background: #fff ;
 }
 .btn-blanco-morado{
     background: #fff;
@@ -6620,4 +6620,8 @@ margin-top: 0px;
 
 .menu-especialidades-y-servicio .mega-menu{
 width: 850px;
+}
+
+.hover{
+    cursor:pointer !important;
 }

@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnChanges, ViewChild } from '@angular/core';
 import { UtilsService } from 'src/app/services/utils.service';
-import { AgendaAmbulatoriaService } from  'src/app/services/agenda-ambulatoria.service';
+import { AgendaAmbulatoriaService } from 'src/app/services/agenda-ambulatoria.service';
 import { MatCalendarCellCssClasses } from '@angular/material';
 import { PerfilProfesionalComponent } from 'src/app/shared/components/modals/perfil-profesional/perfil-profesional.component';
 import { MatDialog } from '@angular/material';
@@ -12,43 +12,48 @@ import { MatDialog } from '@angular/material';
 })
 export class SeleccionComponent implements OnInit, OnChanges {
 
-  @Input() busquedaInicial:any;
-  @Output() calendario:EventEmitter<any> = new EventEmitter();
+  @Input() busquedaInicial: any;
+  @Output() calendario: EventEmitter<any> = new EventEmitter();
 
-  public recursos:any;
-  public fechaHoy:Date;
-  public fechaLimite:Date;
-  public datesToHighlight:any = {}
-  public selectedDate:any = {};
-  public maxNumDays:number = 90;
-  public centrosProfesional:any = {};
-  public loadedRecursos:boolean = false;
-  public tiposCitas:any = [];
+  public recursos: any;
+  public fechaHoy: Date;
+  public fechaLimite: Date;
+  public datesToHighlight: any = {}
+  public selectedDate: any = {};
+  public maxNumDays: number = 90;
+  public centrosProfesional: any = {};
+  public loadedRecursos: boolean = false;
+  public tiposCitas: any = [];
 
   constructor(
-    public agendaService:AgendaAmbulatoriaService,
-    public utils:UtilsService,
+    public agendaService: AgendaAmbulatoriaService,
+    public utils: UtilsService,
     public dialog: MatDialog
   ) { }
 
   ngOnInit() {
   }
 
-  ngOnChanges(){
-    if(this.busquedaInicial && this.busquedaInicial.especialidad){
+  ngOnChanges() {
+    if (this.busquedaInicial && this.busquedaInicial.especialidad) {
+      this.resetCalendario();
       this.getRecursos();
-    }else{
-      this.datesToHighlight = {};
-      this.selectedDate = {};
-      this.recursos = [];
-      this.centrosProfesional = {};
-      this.loadedRecursos = false;
+    } else {
+      this.resetCalendario();
     }
   }
 
-  getRecursos(idProfesional = null, index = 0){
+  resetCalendario() {
+    this.datesToHighlight = {};
+    this.selectedDate = {};
+    this.recursos = [];
+    this.centrosProfesional = {};
+    this.loadedRecursos = false;
+  }
 
-    return new Promise((resolve, reject ) => {
+  getRecursos(idProfesional = null, index = 0) {
+
+    return new Promise((resolve, reject) => {
       this.fechaHoy = new Date();
       this.fechaLimite = new Date();
       this.fechaLimite.setDate(this.fechaHoy.getDate() + 90);
@@ -56,24 +61,24 @@ export class SeleccionComponent implements OnInit, OnChanges {
       this.agendaService.getRecursos({
         idCentro: this.busquedaInicial.centroAtencion.idCentro,
         fechaInicio: this.utils.trDateStr(this.fechaHoy),
-        fechaTermino:this.utils.trDateStr(this.fechaLimite),
+        fechaTermino: this.utils.trDateStr(this.fechaLimite),
         idServicio: this.busquedaInicial.especialidad.idServicio,
         idPlanSalud: '4c30555e-5ed3-418f-8f54-a91a00ace99b',
         idProfesional: idProfesional
-      }).subscribe( data => {
+      }).subscribe(data => {
 
         this.recursos = [];
         this.tiposCitas = data['listaTiposDeCita'];
 
-        if(idProfesional){
-            this.recursos[index]['cupos'] =  (data['listaCupos']) ? data['listaCupos'] : [];
-        }else{
+        if (idProfesional) {
+          this.recursos[index]['cupos'] = (data['listaCupos']) ? data['listaCupos'] : [];
+        } else {
           data['cuposProfesional'] = {};
 
-          if(data['listaRecursos']){
+          if (data['listaRecursos']) {
 
             data['listaCupos'].forEach((valCupo, keyCupo) => {
-              if(!data['cuposProfesional'][valCupo['idRecurso']]){
+              if (!data['cuposProfesional'][valCupo['idRecurso']]) {
                 data['cuposProfesional'][valCupo['idRecurso']] = [];
               }
               data['cuposProfesional'][valCupo['idRecurso']].push(valCupo);
@@ -83,9 +88,9 @@ export class SeleccionComponent implements OnInit, OnChanges {
               data['listaRecursos'][key]['cupos'] = (data['cuposProfesional'][val['idCorto']]) ? data['cuposProfesional'][val['idCorto']] : [];
               data['listaRecursos'][key] = this.crearCalendario(data['listaRecursos'][key], data['listaCentros'], data['listaDisponibilidades'], data['listaRecursos'])
             })
-            
+
             this.recursos = data['listaRecursos'];
-          }else{
+          } else {
             this.recursos = [];
           }
         }
@@ -97,37 +102,37 @@ export class SeleccionComponent implements OnInit, OnChanges {
   }
 
   dateClass(datesDs) {
-   return (date: Date): MatCalendarCellCssClasses => {
-     let datesDisabled = JSON.parse(JSON.stringify(datesDs))
-     const highlightDate = datesDisabled
-       .map(strDate => new Date(strDate))
-       .some(d => d.getDate() === date.getDate() && d.getMonth() === date.getMonth() && d.getFullYear() === date.getFullYear());
+    return (date: Date): MatCalendarCellCssClasses => {
+      let datesDisabled = JSON.parse(JSON.stringify(datesDs))
+      const highlightDate = datesDisabled
+        .map(strDate => new Date(strDate))
+        .some(d => d.getDate() === date.getDate() && d.getMonth() === date.getMonth() && d.getFullYear() === date.getFullYear());
 
-     return highlightDate ? 'day-disabled' : '';
-   };
- }
+      return highlightDate ? 'day-disabled' : '';
+    };
+  }
 
- displayCentro(idxCentro, idxItem){
-   let cet = this.centrosProfesional[idxCentro][idxItem];
-   if(Object.keys(this.centrosProfesional).length > 1){
-    this.centrosProfesional[idxCentro][idxItem]['habilitado'] = (cet.habilitado) ? false : true
-   }else if(Object.keys(this.centrosProfesional).length == 1){
-    this.centrosProfesional[idxCentro][idxItem]['habilitado'] = true;
-   }else{
-    this.centrosProfesional[idxCentro][idxItem]['habilitado'] = false;
-   }
- }
+  displayCentro(idxCentro, idxItem) {
+    let cet = this.centrosProfesional[idxCentro][idxItem];
+    if (Object.keys(this.centrosProfesional).length > 1) {
+      this.centrosProfesional[idxCentro][idxItem]['habilitado'] = (cet.habilitado) ? false : true
+    } else if (Object.keys(this.centrosProfesional).length == 1) {
+      this.centrosProfesional[idxCentro][idxItem]['habilitado'] = true;
+    } else {
+      this.centrosProfesional[idxCentro][idxItem]['habilitado'] = false;
+    }
+  }
 
-  onSelect(event, i){
+  onSelect(event, i) {
     this.selectedDate[i] = event;
     let fechaDisSel = this.utils.trDateStr(event, 'json');
     let idxFecha = fechaDisSel['year'] + "-" + fechaDisSel['month'] + '-' + fechaDisSel['day'];
     let centrosProfesionales = this.recursos[i]['fechasDisponibles'][idxFecha];
-    let agrupCentros:any = {};
-  
+    let agrupCentros: any = {};
+
     centrosProfesionales.forEach((val, key) => {
-      if(!agrupCentros[val['idCentro']]){
-        agrupCentros[val['idCentro']] = {'nombreCentro' : val['nombreCentro'], cupos: [], habilitado: false}
+      if (!agrupCentros[val['idCentro']]) {
+        agrupCentros[val['idCentro']] = { 'nombreCentro': val['nombreCentro'], cupos: [], habilitado: false }
       }
       agrupCentros[val['idCentro']]['cupos'].push(val)
     })
@@ -140,105 +145,105 @@ export class SeleccionComponent implements OnInit, OnChanges {
     })
   }
 
-  crearCalendario(dataRecurso:any, centros:any, disponibilidades:any, recursos:any){
+  crearCalendario(dataRecurso: any, centros: any, disponibilidades: any, recursos: any) {
 
-      let fecha = new Date();
-      let f = null;
+    let fecha = new Date();
+    let f = null;
 
-      dataRecurso['fechasDisponibles'] = {};
-      dataRecurso['listaCentrosIdCorto'] = {};
-      dataRecurso['listaDisponibilidadesIdCorto'] = {};
-      dataRecurso['listaRecursosIdCorto'] = {};
+    dataRecurso['fechasDisponibles'] = {};
+    dataRecurso['listaCentrosIdCorto'] = {};
+    dataRecurso['listaDisponibilidadesIdCorto'] = {};
+    dataRecurso['listaRecursosIdCorto'] = {};
 
 
-      centros.forEach((val, key) => {
-        dataRecurso['listaCentrosIdCorto'][val['idCorto']] = val;
-      })
+    centros.forEach((val, key) => {
+      dataRecurso['listaCentrosIdCorto'][val['idCorto']] = val;
+    })
 
-      disponibilidades.forEach((val, key) => {
-        dataRecurso['listaDisponibilidadesIdCorto'][val['idCorto']] = val;
-      })
+    disponibilidades.forEach((val, key) => {
+      dataRecurso['listaDisponibilidadesIdCorto'][val['idCorto']] = val;
+    })
 
-      recursos.forEach((val, key) => {
-        dataRecurso['listaRecursosIdCorto'][val['idCorto']] = val;
-      })
+    recursos.forEach((val, key) => {
+      dataRecurso['listaRecursosIdCorto'][val['idCorto']] = val;
+    })
 
-      for(let day = 1; day <= this.maxNumDays; day++){
+    for (let day = 1; day <= this.maxNumDays; day++) {
 
-        if(day == 1){
-           f = this.utils.trDateStr(fecha, 'json');
-        }else{
-          fecha.setDate( fecha.getDate() + 1);
-           f = this.utils.trDateStr(fecha, 'json');
-        }
-        dataRecurso['fechasDisponibles'][f.year + '-' + f.month + '-' + f.day] = [];
-        dataRecurso['cupos'].forEach((val, key) => {
-          let fechaEpoch = new Date(val['horaEpoch']*1000);
-          let u = this.utils.trDateStr(fechaEpoch, 'json');
-          val['idTipoCita'] = this.getTipoCita(val['tiposDeCita'][0]);
-          val['fechaHora'] = fechaEpoch;
-          val['nombreCentro'] = (dataRecurso['listaCentrosIdCorto'][val['idCentro']]) ? dataRecurso['listaCentrosIdCorto'][val['idCentro']]['nombre'] : 'S/I';
-          val['idStrCentro'] = (dataRecurso['listaCentrosIdCorto'][val['idCentro']]) ? dataRecurso['listaCentrosIdCorto'][val['idCentro']]['id'] : null;
-          val['idStrDisponibilidad'] = (dataRecurso['listaDisponibilidadesIdCorto'][val['idDisponibilidad']]) ? dataRecurso['listaDisponibilidadesIdCorto'][val['idDisponibilidad']]['id'] : null;
-          val['idStrRecProfesional'] = (dataRecurso['listaRecursosIdCorto'][val['idRecurso']]) ? dataRecurso['listaRecursosIdCorto'][val['idRecurso']]['id'] : null;
-
-          if(f['year'] == u['year'] && f['month'] == u['month'] && f['day'] == u['day']){
-            dataRecurso['fechasDisponibles'][f.year + '-' + f.month + '-' + f.day].push(val)
-          }
-        })
+      if (day == 1) {
+        f = this.utils.trDateStr(fecha, 'json');
+      } else {
+        fecha.setDate(fecha.getDate() + 1);
+        f = this.utils.trDateStr(fecha, 'json');
       }
-      dataRecurso['datesToHighlight'] = { dates:[], displayed: false, dateClass: null };
-      let proximaFecha:boolean = false;
-      let datesDisabled = [];
+      dataRecurso['fechasDisponibles'][f.year + '-' + f.month + '-' + f.day] = [];
+      dataRecurso['cupos'].forEach((val, key) => {
+        let fechaEpoch = new Date(val['horaEpoch'] * 1000);
+        let u = this.utils.trDateStr(fechaEpoch, 'json');
+        val['idTipoCita'] = this.getTipoCita(val['tiposDeCita'][0]);
+        val['fechaHora'] = fechaEpoch;
+        val['nombreCentro'] = (dataRecurso['listaCentrosIdCorto'][val['idCentro']]) ? dataRecurso['listaCentrosIdCorto'][val['idCentro']]['nombre'] : 'S/I';
+        val['idStrCentro'] = (dataRecurso['listaCentrosIdCorto'][val['idCentro']]) ? dataRecurso['listaCentrosIdCorto'][val['idCentro']]['id'] : null;
+        val['idStrDisponibilidad'] = (dataRecurso['listaDisponibilidadesIdCorto'][val['idDisponibilidad']]) ? dataRecurso['listaDisponibilidadesIdCorto'][val['idDisponibilidad']]['id'] : null;
+        val['idStrRecProfesional'] = (dataRecurso['listaRecursosIdCorto'][val['idRecurso']]) ? dataRecurso['listaRecursosIdCorto'][val['idRecurso']]['id'] : null;
 
-      Object.keys(dataRecurso['fechasDisponibles']).forEach(key => {
-        if(dataRecurso['fechasDisponibles'][key].length == 0){
-          datesDisabled.push(key + 'T12:00:00.000Z');
-        }else if(!proximaFecha){
-          let count = 0;
-          dataRecurso['fechasDisponibles'][key].forEach((valDx, keyDx) => {
-              if(count == 0){
-                dataRecurso['proximaFecha'] = new Date(valDx['horaEpoch']*1000);
-                proximaFecha = true;
-              }
-              count++;
-          });
+        if (f['year'] == u['year'] && f['month'] == u['month'] && f['day'] == u['day']) {
+          dataRecurso['fechasDisponibles'][f.year + '-' + f.month + '-' + f.day].push(val)
         }
       })
+    }
+    dataRecurso['datesToHighlight'] = { dates: [], displayed: false, dateClass: null };
+    let proximaFecha: boolean = false;
+    let datesDisabled = [];
 
-      dataRecurso['datesToHighlight']['dates'] = datesDisabled;
-      dataRecurso['datesToHighlight']['dateClass'] = this.dateClass(datesDisabled);
-      dataRecurso['datesToHighlight']['displayed'] = true;
+    Object.keys(dataRecurso['fechasDisponibles']).forEach(key => {
+      if (dataRecurso['fechasDisponibles'][key].length == 0) {
+        datesDisabled.push(key + 'T12:00:00.000Z');
+      } else if (!proximaFecha) {
+        let count = 0;
+        dataRecurso['fechasDisponibles'][key].forEach((valDx, keyDx) => {
+          if (count == 0) {
+            dataRecurso['proximaFecha'] = new Date(valDx['horaEpoch'] * 1000);
+            proximaFecha = true;
+          }
+          count++;
+        });
+      }
+    })
 
-      return dataRecurso;
+    dataRecurso['datesToHighlight']['dates'] = datesDisabled;
+    dataRecurso['datesToHighlight']['dateClass'] = this.dateClass(datesDisabled);
+    dataRecurso['datesToHighlight']['displayed'] = true;
+
+    return dataRecurso;
   }
 
-  seleccionarHora(data){
+  seleccionarHora(data) {
     console.log(data);
     this.calendario.emit(data);
   }
 
-  verPerfil(re){
-    this.agendaService.getDatosProfesional(re.id).subscribe( data => {
-      if(data && data['statusCod'] && data['statusCod'] == 'OK'){
+  verPerfil(re) {
+    this.agendaService.getDatosProfesional(re.id).subscribe(data => {
+      if (data && data['statusCod'] && data['statusCod'] == 'OK') {
         let dialogRef = this.dialog.open(PerfilProfesionalComponent, {
-          width:'840px',
-          data: {profesionalData: data['datosProfesional'] }
+          width: '840px',
+          data: { profesionalData: data['datosProfesional'] }
         });
-      }else{
+      } else {
         this.utils.mDialog("Error", "No se puede mostrar el perfil. Intente más tarde", "error");
       }
 
     })
   }
 
-  getTipoCita(idCorto){
+  getTipoCita(idCorto) {
 
     let res = null;
     this.tiposCitas.forEach((val, key) => {
-        if(val['idCorto'] == idCorto){
-          res = val;
-        }
+      if (val['idCorto'] == idCorto) {
+        res = val;
+      }
     })
 
     return res;

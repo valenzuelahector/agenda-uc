@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-error-validacion',
@@ -7,9 +7,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ErrorValidacionComponent implements OnInit {
 
+  @Input() reglas:any = [];
+  @Output() emitAccionar:EventEmitter<any> = new EventEmitter();
+
   constructor() { }
 
   ngOnInit() {
   }
 
+  accionar(tipo:string){
+    this.emitAccionar.emit(tipo)
+  }
 }

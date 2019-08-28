@@ -11,6 +11,7 @@ export class UtilsService {
   public horizontalPosition: MatSnackBarHorizontalPosition = 'end';
   public verticalPosition: MatSnackBarVerticalPosition = 'bottom';
   public nuevaHora:EventEmitter<any> = new EventEmitter();
+  public resetInfoPaciente:EventEmitter<any> = new EventEmitter();
 
   constructor(
     public dialog: MatDialog,
@@ -98,5 +99,9 @@ export class UtilsService {
 
   reiniciarReserva(){
     this.nuevaHora.emit(true);
+  }
+
+  resetPaciente(){
+    this.resetInfoPaciente.emit(true);
   }
 }

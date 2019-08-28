@@ -67,7 +67,7 @@
       <app-reservacion-efectuada></app-reservacion-efectuada>    
     </mat-tab>
     <mat-tab label="Error">
-      <app-error-validacion></app-error-validacion>
+      <app-error-validacion [reglas]="reglasActuales" (emitAccionar)="accionValidacionReglas($event)"></app-error-validacion>
       
     </mat-tab>
   </mat-tab-group>
