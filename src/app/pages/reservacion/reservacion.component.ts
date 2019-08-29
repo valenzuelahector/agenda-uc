@@ -78,6 +78,7 @@ export class ReservacionComponent implements OnInit {
 
   nuevaReserva(){
     this.utils.reiniciarReserva();
+    this.utils.resetPaciente();
     this.busquedaInfo = null
     this.paciente = null;
     this.calendario = null
@@ -92,7 +93,6 @@ export class ReservacionComponent implements OnInit {
   accionValidacionReglas(tipo:string){
     if(tipo == 'NUEVO'){
       this.nuevaReserva();
-      this.utils.resetPaciente();
     }else{
       this.reglasActuales = [];
       this.cambiarEtapa(2)
