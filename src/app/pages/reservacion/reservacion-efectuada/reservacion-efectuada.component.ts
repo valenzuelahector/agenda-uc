@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
   selector: 'app-reservacion-efectuada',
@@ -7,6 +7,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ReservacionEfectuadaComponent implements OnInit {
 
+  @Input() paciente:any;
+  @Input() calendario:any;
+  @Input() busquedaInicial:any;
+  @Input() codCita:any;
+  @Input() valorConvenio:any;
+  
   constructor() { }
 
   ngOnInit() {

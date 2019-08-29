@@ -64,7 +64,7 @@
       </app-confirmacion>
     </mat-tab>
     <mat-tab label="ReservaRealizada">
-      <app-reservacion-efectuada></app-reservacion-efectuada>    
+      <app-reservacion-efectuada [busquedaInicial]="busquedaInfo" [calendario]="calendario" [paciente]="paciente" [codCita]="codCita" [valorConvenio]="valorConvenio"></app-reservacion-efectuada>    
     </mat-tab>
     <mat-tab label="Error">
       <app-error-validacion [reglas]="reglasActuales" (emitAccionar)="accionValidacionReglas($event)"></app-error-validacion>

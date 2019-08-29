@@ -175,7 +175,7 @@ export class IdentificacionComponent implements OnInit {
         idProfesional: this.calendario.cupo.idStrRecProfesional
         
       }).subscribe(data => {
-        this.datosPaciente.emit({paciente: this.paciente, reglas: data['listaMensajesDeRegla']});
+        this.datosPaciente.emit({paciente: this.paciente, reglas: data['listaMensajesDeRegla'], valorConvenio: data['listaCupos'][0]['valorConvenio']});
       })
    
     } else {
