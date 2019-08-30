@@ -43,11 +43,13 @@ export class AgendaAmbulatoriaService {
   }
 
   getRecursos(queryData:any){
+    console.log(queryData)
     let queryProfesional = (queryData.idProfesional) ? '&profesional=' + queryData.idProfesional : '';
     let queryCentro = (queryData.idCentro != 0) ? '&idCentro=' + queryData.idCentro : '&idCentro=';
+    let endpoint = (queryData.idProfesional) ? 'CuposProfFechas' : 'CuposEspecCentro';
 
     return this.http.get(this.baseApi +
-      '/Agenda/CuposEspecCentro?fechaInicio=' + queryData.fechaInicio +'&fechaTermino=' + queryData.fechaTermino +
+      '/Agenda/'+endpoint+'?fechaInicio=' + queryData.fechaInicio +'&fechaTermino=' + queryData.fechaTermino +
       '&idServicio=' + queryData.idServicio + '&idPlanSalud=' + queryData.idPlanSalud + queryProfesional  + queryCentro
   );
   }
