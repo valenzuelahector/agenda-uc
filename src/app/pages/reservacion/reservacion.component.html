@@ -18,7 +18,7 @@
         </a>
         <a class="item-paso" [ngClass]="{'activo' : curEtapa == 2 || paciente}">
           <figure matRipple>
-            <i class="fas fa-user-injured"></i>
+            <i class="fas fa-user"></i>
           </figure>
           <h4>Identificación</h4>
         </a>
@@ -60,7 +60,7 @@
     <mat-tab label="Confirmación">
       <button mat-raised-button color="primary" class="btn-ret" (click)="cambiarEtapa(2)"
         *ngIf="!reservaRealizada">Volver</button>
-      <app-confirmacion #confirmacion [busquedaInicial]="busquedaInfo" [calendario]="calendario" [paciente]="paciente">
+      <app-confirmacion #confirmacion [busquedaInicial]="busquedaInfo" [calendario]="calendario" [paciente]="paciente" [reservaRealizada]="reservaRealizada">
       </app-confirmacion>
     </mat-tab>
     <mat-tab label="ReservaRealizada">

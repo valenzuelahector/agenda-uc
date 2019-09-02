@@ -37,7 +37,12 @@ export class SeleccionComponent implements OnInit, OnChanges {
   ngOnChanges() {
     if (this.busquedaInicial && this.busquedaInicial.especialidad) {
       this.resetCalendario();
-      this.getRecursos();
+      if (this.busquedaInicial.profesional) {
+        this.getRecursos(this.busquedaInicial.profesional.idProfesional);
+      } else {
+        this.getRecursos();
+      }
+      console.log(this.busquedaInicial)
     } else {
       this.resetCalendario();
     }
@@ -59,6 +64,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
       this.fechaLimite.setDate(this.fechaHoy.getDate() + 90);
 
       this.agendaService.getRecursos({
+        todosCentro: (this.busquedaInicial.centroAtencion.codigo == 'todos') ? true : false,
         idCentro: this.busquedaInicial.centroAtencion.idCentro,
         fechaInicio: this.utils.trDateStr(this.fechaHoy),
         fechaTermino: this.utils.trDateStr(this.fechaLimite),
@@ -70,29 +76,25 @@ export class SeleccionComponent implements OnInit, OnChanges {
         this.recursos = [];
         this.tiposCitas = data['listaTiposDeCita'];
 
-        if (idProfesional) {
-          this.recursos[index]['cupos'] = (data['listaCupos']) ? data['listaCupos'] : [];
+        data['cuposProfesional'] = {};
+
+        if (data['listaRecursos']) {
+
+          data['listaCupos'].forEach((valCupo, keyCupo) => {
+            if (!data['cuposProfesional'][valCupo['idRecurso']]) {
+              data['cuposProfesional'][valCupo['idRecurso']] = [];
+            }
+            data['cuposProfesional'][valCupo['idRecurso']].push(valCupo);
+          })
+
+          data['listaRecursos'].forEach((val, key) => {
+            data['listaRecursos'][key]['cupos'] = (data['cuposProfesional'][val['idCorto']]) ? data['cuposProfesional'][val['idCorto']] : [];
+            data['listaRecursos'][key] = this.crearCalendario(data['listaRecursos'][key], data['listaCentros'], data['listaDisponibilidades'], data['listaRecursos'])
+          })
+
+          this.recursos = data['listaRecursos'];
         } else {
-          data['cuposProfesional'] = {};
-
-          if (data['listaRecursos']) {
-
-            data['listaCupos'].forEach((valCupo, keyCupo) => {
-              if (!data['cuposProfesional'][valCupo['idRecurso']]) {
-                data['cuposProfesional'][valCupo['idRecurso']] = [];
-              }
-              data['cuposProfesional'][valCupo['idRecurso']].push(valCupo);
-            })
-
-            data['listaRecursos'].forEach((val, key) => {
-              data['listaRecursos'][key]['cupos'] = (data['cuposProfesional'][val['idCorto']]) ? data['cuposProfesional'][val['idCorto']] : [];
-              data['listaRecursos'][key] = this.crearCalendario(data['listaRecursos'][key], data['listaCentros'], data['listaDisponibilidades'], data['listaRecursos'])
-            })
-
-            this.recursos = data['listaRecursos'];
-          } else {
-            this.recursos = [];
-          }
+          this.recursos = [];
         }
         this.loadedRecursos = true;
         resolve(data);

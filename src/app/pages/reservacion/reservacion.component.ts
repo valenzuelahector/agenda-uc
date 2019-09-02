@@ -48,11 +48,13 @@ export class ReservacionComponent implements OnInit {
     this.seleccion.calendario.subscribe( data => {
       this.cambiarEtapa(2);
       this.calendario = data;
+      console.log(this.calendario);
     })
 
     this.identificacion.datosPaciente.subscribe( data => {
       if(data.reglas && data.reglas.length > 0){
-        this.reglasActuales =  data.reglas;
+        console.log(this.calendario.cupo.reservable.reservable)
+        this.reglasActuales =  { reglas: data.reglas, calendario: this.calendario.cupo.reservable.reservable };
         this.cambiarEtapa(5);
       }else{
         this.cambiarEtapa(3);
@@ -60,7 +62,6 @@ export class ReservacionComponent implements OnInit {
         this.valorConvenio = data.valorConvenio;
 
       }
-
     })
 
     this.confirmacion.confirmarReserva.subscribe( data => {
@@ -92,11 +93,22 @@ export class ReservacionComponent implements OnInit {
   }
 
   accionValidacionReglas(tipo:string){
-    if(tipo == 'NUEVO'){
-      this.nuevaReserva();
-    }else{
-      this.reglasActuales = [];
-      this.cambiarEtapa(2)
+    switch(tipo){
+
+      case 'NUEVO' :
+        this.nuevaReserva();
+      break;
+
+      case 'VOLVER':
+        this.reglasActuales = [];
+        this.cambiarEtapa(2)
+      break;
+
+      case 'CONTINUAR':
+        this.reglasActuales = [];
+        this.cambiarEtapa(3)
+      break;
     }
+
   }
 }

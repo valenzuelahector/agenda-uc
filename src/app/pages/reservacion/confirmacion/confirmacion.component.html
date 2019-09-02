@@ -15,8 +15,8 @@
         <div class="col-lg-6 b-l">
           <p><b>Previsión:</b> {{ paciente.adicional.prevision.nombrePlan }}</p>
           <p><b>Hora de la cita:</b> {{ calendario.cupo.fechaHora | date:'dd/MM/yyyy HH:mm '}}</p>
-          <p><b>Ubicación:</b> {{ busquedaInicial.centroAtencion.nombre }}</p>
-          <p><b>Dirección del centro:</b>{{ busquedaInicial.centroAtencion.direccion?.calle }},
+          <p><b>Ubicación:</b> {{ calendario.cupo.nombreCentro }}</p>
+          <p *ngIf=""><b>Dirección del centro:</b>{{ busquedaInicial.centroAtencion.direccion?.calle }},
             {{ busquedaInicial.centroAtencion.direccion?.numero }},
             {{ busquedaInicial.centroAtencion.direccion?.comuna }}</p>
 
@@ -24,11 +24,12 @@
       </div>
     </div>
   </div>
+  <!-- 
   <div class="puntos-abajo p2">
     <p><span>(*)</span> Atiende pacientes mayores a 18 años</p>
     <p><span>(**)</span> El centro recibe bonos Isapre y pago privado.</p>
   </div>
-
+-->
   <!--
 		<div class="w-datos">
       <div class="header-datos">
@@ -59,7 +60,7 @@
       </div>
     </div>
 	-->
-  <div class="text-right" *ngIf="!reservaFinalizada">
+  <div class="text-right" *ngIf="!reservaFinalizada" style="margin-top:25px">
     <button mat-raised-button class="full-btn btn-morado" (click)="reservar()">RESERVAR</button>
   </div>
 </section>

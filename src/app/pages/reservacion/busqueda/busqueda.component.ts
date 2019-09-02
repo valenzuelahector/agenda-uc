@@ -124,6 +124,8 @@ export class BusquedaComponent implements OnInit {
             }
 
   
+        }else{
+          this.profesionales = [];
         }
         this.tipoConsulta = 'profesional';
 
@@ -183,8 +185,6 @@ export class BusquedaComponent implements OnInit {
         
         })  
 
-
-
       })
 
   }
@@ -227,7 +227,7 @@ export class BusquedaComponent implements OnInit {
 
   changeAreas(event){
     this.areaSelected =  event.value;
-    this.clearSelection('especialidad');
+    this.clearSelection('profesional');
     this.getEspecialidades('especialidad');
   }
 
@@ -246,8 +246,8 @@ export class BusquedaComponent implements OnInit {
     }
 
     if(tipo == 'especialidad'){
-      this.especialidadCtrl.setValue('');
       this.centroAtencionCtrl.setValue('');
+      this.especialidadCtrl.setValue('');
       this.especialidadCtrl.enable();
       this.centroAtencionCtrl.enable();
       this.especialidadSelected = null;
@@ -278,7 +278,22 @@ export class BusquedaComponent implements OnInit {
 
         let matCentro = null;
         let qp = params;
-
+        let region = (res['regiones'] && res['regiones'][0]) ? res['regiones'][0]['idRegion'] : null;
+        if (res['centros'].length >= 2) {
+          let objTodos = {
+            direccion: { calle: null, numero: null, piso: null, comuna: 'Región Metropolitana' },
+            horaApertura: null,
+            horaCierre: null,
+            idCentro: region,
+            idRegion: null,
+            latitud: null,
+            longitud: null,
+            nombre: "Todos",
+            codigo: 'todos',
+            detalle: 'Todos'
+          }
+          res['centros'].unshift(objTodos)
+        }
         if(res['centros'] && res['centros'].length > 0){
           res['centros'].forEach( (val, key)  => {
             res['centros'][key]['detalle'] = val['nombre'] + ' - ' + val['direccion']['comuna'];
@@ -286,10 +301,9 @@ export class BusquedaComponent implements OnInit {
               matCentro = res['centros'][key];
             }
           })
-          if(res['centros'].length >= 2){
-             res['centros'].unshift({idCentro: 0, nombre:'Todos', detalle: 'Todos'})
-          }
+
           this.centrosAtencion = res['centros'];
+          console.log(this.centrosAtencion)
           this.filterCentrosAtencion = this.centroAtencionCtrl.valueChanges.pipe(
               startWith<string | any>(''),
               map(value => typeof value === 'string' ? value : value.detalle),

@@ -116,6 +116,13 @@ export class IdentificacionComponent implements OnInit {
     })
     if (this.pacienteForm.valid) {
       let data = this.pacienteForm.getRawValue();
+
+      if (!this.utils.validateEmail(data.email)) {
+        this.utils.mDialog("Error", "El correo del Paciente tiene formato inválido.", "message");
+        return false;
+      }
+
+
       let f: any = this.utils.trDateStr(data['fecha_nacimiento'], 'json')
       data['fecha_nacimiento'] = f['year'] + "-" + f['month'] + "-" + f['day'];
       data['previsionObj'] = data['prevision'];
@@ -155,6 +162,12 @@ export class IdentificacionComponent implements OnInit {
 
   procesarPaciente() {
     if (this.busquedaPaciente.documento && this.busquedaPaciente.tipoDocumento && this.busquedaPaciente.telefono) {
+      
+      if(!this.utils.validateEmail(this.busquedaPaciente.correo)){
+        this.utils.mDialog("Error", "El correo del Paciente tiene formato inválido.", "message");
+        return false;
+      }
+
       this.paciente['adicional'] = this.busquedaPaciente;
 
       let duracion = this.calendario.cupo.duracion;

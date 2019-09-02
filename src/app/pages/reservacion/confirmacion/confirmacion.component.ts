@@ -14,7 +14,7 @@ export class ConfirmacionComponent implements OnInit, OnChanges {
   @Input() paciente:any;
   @Input() calendario:any;
   @Input() busquedaInicial:any;
-
+  @Input() reservaRealizada:boolean;
   @Output() confirmarReserva:EventEmitter<any> = new EventEmitter();
 
   constructor(

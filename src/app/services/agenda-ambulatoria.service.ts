@@ -45,7 +45,7 @@ export class AgendaAmbulatoriaService {
   getRecursos(queryData:any){
     console.log(queryData)
     let queryProfesional = (queryData.idProfesional) ? '&profesional=' + queryData.idProfesional : '';
-    let queryCentro = (queryData.idCentro != 0) ? '&idCentro=' + queryData.idCentro : '&idCentro=';
+    let queryCentro = (queryData.todosCentro) ? '&idRegion=' + queryData.idCentro : '&idCentro=' + queryData.idCentro;
     let endpoint = (queryData.idProfesional) ? 'CuposProfFechas' : 'CuposEspecCentro';
 
     return this.http.get(this.baseApi +

@@ -104,4 +104,13 @@ export class UtilsService {
   resetPaciente(){
     this.resetInfoPaciente.emit(true);
   }
+
+  validateEmail(correo) {
+    let re = /^([\da-z_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/;
+    if (!re.test(correo)) {
+      return false;
+    } else {
+      return true;
+    }
+  }
 }
