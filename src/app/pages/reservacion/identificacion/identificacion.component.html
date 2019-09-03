@@ -14,7 +14,7 @@
         <div class="col-md-4">
           <mat-form-field class="full bgwhite-input" appearance="fill" [color]="primary">
               <mat-label>Tipo de Documento</mat-label>
-              <mat-select [(ngModel)]="busquedaPaciente.tipoDocumento" [disabled]="!paciente && findPaciente">
+              <mat-select [(ngModel)]="busquedaPaciente.tipoDocumento" [disabled]="!paciente && findPaciente" (selectionChange)="busquedaPaciente.documentoFormateado = null">
                 <mat-option [value]="'RUN'">RUN</mat-option>
                 <mat-option [value]="'PAS'">PASAPORTE</mat-option>
               </mat-select>
@@ -24,7 +24,15 @@
         <div class="col-md-4">
           <mat-form-field class="full bgwhite-input" appearance="fill" [color]="primary">
               <mat-label>Indique su Identificación</mat-label>
-              <input matInput  maxlength="{{ (busquedaPaciente.tipoDocumento == 'RUN') ? 12 : 20" [(ngModel)]="busquedaPaciente.documento" placeholder="{{ (busquedaPaciente.tipoDocumento == 'RUN') ? 'RUN. Ej. 12345678-9' : 'Pasaporte'}}" autocomplete="off" [disabled]="!paciente && findPaciente"/>
+              <input matInput  
+                maxlength="{{ (busquedaPaciente.tipoDocumento == 'RUN') ? 12 : 20" 
+                [(ngModel)]="busquedaPaciente.documentoFormateado" 
+                (focusout)="formatRut()" 
+                (focusin)="restoreFormatRut()" 
+                (keypress)="this.utils.numberOnly($event, (busquedaPaciente.tipoDocumento == 'RUN'))" 
+                onpaste="return false;" 
+                placeholder="{{ (busquedaPaciente.tipoDocumento == 'RUN') ? 'Sólo numeros' : 'Pasaporte'}}" 
+                autocomplete="off" [disabled]="!paciente && findPaciente"/>
               <mat-icon matSuffix>chrome_reader_mode</mat-icon>
           </mat-form-field>
         </div>

@@ -24,6 +24,7 @@ import { MessageComponent } from './shared/components/modals/message/message.com
 import { PerfilProfesionalComponent } from './shared/components/modals/perfil-profesional/perfil-profesional.component';
 import { ErrorValidacionComponent } from './pages/reservacion/error-validacion/error-validacion.component';
 import { ReservacionEfectuadaComponent } from './pages/reservacion/reservacion-efectuada/reservacion-efectuada.component';
+import { RutFormaterDirective } from './shared/directives/rut-formater.directive';
 
 
 @NgModule({
@@ -39,7 +40,8 @@ import { ReservacionEfectuadaComponent } from './pages/reservacion/reservacion-e
     MessageComponent,
     PerfilProfesionalComponent,
     ErrorValidacionComponent,
-    ReservacionEfectuadaComponent
+    ReservacionEfectuadaComponent,
+    RutFormaterDirective
   ],
   imports: [
     BrowserModule,

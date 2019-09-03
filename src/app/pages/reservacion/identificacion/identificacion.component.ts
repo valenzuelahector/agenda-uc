@@ -27,6 +27,7 @@ export class IdentificacionComponent implements OnInit {
   public busquedaPaciente: any = {
     tipoDocumento: "RUN",
     documento: null,
+    documentoFormateado: null,
     prevision: null,
     telefono: null,
     correo: null
@@ -96,7 +97,7 @@ export class IdentificacionComponent implements OnInit {
     this.busquedaPaciente.documento = this.busquedaPaciente.documento.trim();
 
     if (this.busquedaPaciente.tipoDocumento == 'RUN' && !this.utils.validateRun(this.busquedaPaciente.documento.trim())) {
-      this.utils.mDialog("Error", "El RUN " + this.busquedaPaciente.documento + " no es válido. Verifique e intente nuevamente.", "message");
+      this.utils.mDialog("Error", "El RUN ingresado no es válido. Verifique e intente nuevamente.", "message");
       return false;
     }
 
@@ -154,6 +155,7 @@ export class IdentificacionComponent implements OnInit {
     this.busquedaPaciente = {
       tipoDocumento: "RUN",
       documento: null,
+      documentoFormateado:null,
       prevision: null,
       telefono: null,
       correo: null
@@ -194,6 +196,47 @@ export class IdentificacionComponent implements OnInit {
     } else {
       this.utils.mDialog("Error", "Debe completar los datos que se solicitan.", "message")
     }
-
   }
+
+  formatRut(){
+
+    this.busquedaPaciente.documentoFormateado = this.busquedaPaciente.documentoFormateado.trim();
+    let rut = this.busquedaPaciente.documentoFormateado;
+    if (rut && rut != "" && this.busquedaPaciente.tipoDocumento == 'RUN'){
+      let actual = rut.replace(/^0+/, "");
+      if (actual != '' && actual.length > 1) {
+        var sinPuntos = actual.replace(/\./g, "");
+        var actualLimpio = sinPuntos.replace(/-/g, "");
+        var inicio = actualLimpio.substring(0, actualLimpio.length - 1);
+        var rutPuntos = "";
+        var i = 0;
+        var j = 1;
+        for (i = inicio.length - 1; i >= 0; i--) {
+          var letra = inicio.charAt(i);
+          rutPuntos = letra + rutPuntos;
+          if (j % 3 == 0 && j <= inicio.length - 1) {
+            rutPuntos = "." + rutPuntos;
+          }
+          j++;
+        }
+        var dv = actualLimpio.substring(actualLimpio.length - 1);
+        rutPuntos = rutPuntos + "-" + dv;
+      }
+
+      this.busquedaPaciente.documentoFormateado = rutPuntos
+      this.busquedaPaciente.documento = this.utils.replaceAll(rutPuntos, ".", "");
+
+    }
+   
+  }
+
+  restoreFormatRut(){
+    if (this.busquedaPaciente.documentoFormateado && this.busquedaPaciente.documentoFormateado != "" && this.busquedaPaciente.tipoDocumento == 'RUN'){
+      let documento = this.busquedaPaciente.documentoFormateado.trim();
+      documento = this.utils.replaceAll(documento, ".", "");
+      documento = this.utils.replaceAll(documento, "-", "");
+      this.busquedaPaciente.documentoFormateado = documento;
+    }
+  }
+  
 }

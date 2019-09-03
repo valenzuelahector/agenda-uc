@@ -113,4 +113,8 @@ export class UtilsService {
       return true;
     }
   }
+
+  replaceAll(str, find, replace) {
+    return str.split(find).join(replace)
+  }
 }

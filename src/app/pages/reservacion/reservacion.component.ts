@@ -76,6 +76,8 @@ export class ReservacionComponent implements OnInit {
   cambiarEtapa(index:number){
     this.curEtapa = index;
     this.tabGroup.selectedIndex = this.curEtapa;
+    window.scrollTo(0, 0);
+
   }
 
   nuevaReserva(){

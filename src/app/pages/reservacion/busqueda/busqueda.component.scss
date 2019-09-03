@@ -33,3 +33,12 @@
     top: 50%;
     margin-top:-28px;
 }
+
+@media(max-width:720px){
+  .info-busqueda .full-btn{
+    position: initial !important;
+    display:block;
+    width:100%;
+    margin-top:20px;
+  }
+}

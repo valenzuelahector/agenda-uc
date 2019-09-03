@@ -9,8 +9,8 @@ $candy-app-warn:    mat-palette($mat-red);
 $candy-app-theme: mat-light-theme($candy-app-primary, $candy-app-accent, $candy-app-warn);
 @include angular-material-theme($candy-app-theme);
 
-body *{font-family: "Montserrat", sans-serif; font-weight: 500;}
-body { margin:0px !important}
+body *{font-family: "Montserrat", sans-serif; font-weight: 500; }
+body { margin:0px !important; overflow-x:hidden !important}
 .my-snackbar button span{color:#fff !important;}
 .cwarn{ padding: 20px;
     background: #fed377;

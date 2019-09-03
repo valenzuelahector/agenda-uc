@@ -13,7 +13,7 @@
               <p><b>Fecha:</b> {{ calendario.cupo.fechaHora | date:'dd/MM/yyyy'}}</p>
               <p><b>Hora:</b> {{ calendario.cupo.fechaHora | date:'HH:mm'}} Hrs</p>
               <p><b>Centro:</b> {{ calendario.cupo.nombreCentro }}</p>
-              <p><b>Ubicación:</b> {{ busquedaInicial.centroAtencion.direccion?.calle }},
+              <p *ngIf="busquedaInicial.centroAtencion.codigo != 'todos'"><b>Ubicación:</b> {{ busquedaInicial.centroAtencion.direccion?.calle }},
                 {{ busquedaInicial.centroAtencion.direccion?.numero }},
                 {{ busquedaInicial.centroAtencion.direccion?.comuna }}</p>
               <p><b>Formas de pago:</b> Bono Fonasa, Particular, Bono Isapre</p>
