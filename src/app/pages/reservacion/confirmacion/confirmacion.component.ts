@@ -9,12 +9,12 @@ import { UtilsService } from 'src/app/services/utils.service';
 })
 export class ConfirmacionComponent implements OnInit, OnChanges {
 
-  public reservaFinalizada:boolean = false;
+  //public reservaFinalizada:boolean = false;
 
   @Input() paciente:any;
   @Input() calendario:any;
   @Input() busquedaInicial:any;
-  @Input() reservaRealizada:boolean;
+  @Input() reservaFinalizada:boolean;
   @Output() confirmarReserva:EventEmitter<any> = new EventEmitter();
 
   constructor(

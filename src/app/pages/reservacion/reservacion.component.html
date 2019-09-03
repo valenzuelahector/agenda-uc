@@ -60,7 +60,7 @@
     <mat-tab label="Confirmación">
       <button mat-raised-button color="primary" class="btn-ret" (click)="cambiarEtapa(2)"
         *ngIf="!reservaRealizada">Volver</button>
-      <app-confirmacion #confirmacion [busquedaInicial]="busquedaInfo" [calendario]="calendario" [paciente]="paciente" [reservaRealizada]="reservaRealizada">
+      <app-confirmacion #confirmacion [busquedaInicial]="busquedaInfo" [calendario]="calendario" [paciente]="paciente" [reservaFinalizada]="reservaRealizada">
       </app-confirmacion>
     </mat-tab>
     <mat-tab label="ReservaRealizada">
