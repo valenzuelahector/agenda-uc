@@ -27,11 +27,10 @@
               <input matInput  
                 maxlength="{{ (busquedaPaciente.tipoDocumento == 'RUN') ? 12 : 20" 
                 [(ngModel)]="busquedaPaciente.documentoFormateado" 
-                (focusout)="formatRut()" 
+                (focusout)="setFormatRut()" 
                 (focusin)="restoreFormatRut()" 
-                (keypress)="this.utils.numberOnly($event, (busquedaPaciente.tipoDocumento == 'RUN'))" 
                 onpaste="return false;" 
-                placeholder="{{ (busquedaPaciente.tipoDocumento == 'RUN') ? 'Sólo numeros' : 'Pasaporte'}}" 
+                placeholder="{{ (busquedaPaciente.tipoDocumento == 'RUN') ? 'Rut sin puntos ni guión' : 'Pasaporte'}}" 
                 autocomplete="off" [disabled]="!paciente && findPaciente"/>
               <mat-icon matSuffix>chrome_reader_mode</mat-icon>
           </mat-form-field>
