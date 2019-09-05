@@ -130,11 +130,14 @@ export class IdentificacionComponent implements OnInit {
       data['prevision'] = data['prevision']['idPlan'];
       this.agendaService.postPaciente(data).subscribe(res => {
         if ((res['statusCode'] && res['statusCode'] == 'OK') || (res['statusCod'] && res['statusCod'] == 'OK')) {
+          this.limpiarFormulario();
+          this.busquedaPaciente.documento = data['identificador'];
+          this.busquedaPaciente.documentoFormateado = this.formatRut(data['identificador']);
+          this.busquedaPaciente.tipoDocumento = data['tipo_identificador']
           this.busquedaPaciente.correo = data['email'];
           this.busquedaPaciente.prevision = data['previsionObj'];
           this.busquedaPaciente.telefono = data['fono_movil'];
           this.buscarPaciente();
-          this.limpiarFormulario();
           this.utils.mDialog("Mensaje", "Paciente creado correctamente", "message");
 
         } else {
@@ -145,9 +148,14 @@ export class IdentificacionComponent implements OnInit {
   }
 
   limpiarFormulario(type = null) {
+
     if (!type) {
-      this.pacienteForm.reset();
-      this.formDirective.resetForm();
+      try {
+        this.pacienteForm.reset();
+        this.formDirective.resetForm();
+      } catch (error) {
+        console.log(error)
+      }
     }
 
     this.paciente = null;
@@ -155,7 +163,7 @@ export class IdentificacionComponent implements OnInit {
     this.busquedaPaciente = {
       tipoDocumento: "RUN",
       documento: null,
-      documentoFormateado:null,
+      documentoFormateado: null,
       prevision: null,
       telefono: null,
       correo: null
@@ -163,9 +171,10 @@ export class IdentificacionComponent implements OnInit {
   }
 
   procesarPaciente() {
-    if (this.busquedaPaciente.documento && this.busquedaPaciente.tipoDocumento && this.busquedaPaciente.telefono) {
-      
-      if(!this.utils.validateEmail(this.busquedaPaciente.correo)){
+
+    if (this.busquedaPaciente.documento && this.busquedaPaciente.prevision && this.busquedaPaciente.telefono && this.busquedaPaciente.correo) {
+
+      if (!this.utils.validateEmail(this.busquedaPaciente.correo)) {
         this.utils.mDialog("Error", "El correo del Paciente tiene formato inválido.", "message");
         return false;
       }
@@ -177,6 +186,7 @@ export class IdentificacionComponent implements OnInit {
       let fechaTermino = new Date(fecha);      
       fechaTermino.setDate(fechaTermino.getDate() + 90);
       fechaTermino.setMinutes(fechaTermino.getMinutes() + duracion - 60);
+
       let fTermino = this.utils.trDateStr(fechaTermino, 'n');
 
       this.agendaService.geReglasValidacion({
@@ -189,55 +199,60 @@ export class IdentificacionComponent implements OnInit {
         idPaciente: this.paciente.id,
         idDisponibilidad: this.calendario.cupo.idStrDisponibilidad,
         idProfesional: this.calendario.cupo.idStrRecProfesional
-        
+
       }).subscribe(data => {
-        this.datosPaciente.emit({paciente: this.paciente, reglas: data['listaMensajesDeRegla'], valorConvenio: data['listaCupos'][0]['valorConvenio']});
+        this.datosPaciente.emit({ paciente: this.paciente, reglas: data['listaMensajesDeRegla'], valorConvenio: data['listaCupos'][0]['valorConvenio'] });
       })
-   
+
     } else {
       this.utils.mDialog("Error", "Debe completar los datos que se solicitan.", "message")
     }
+
   }
 
-  formatRut(){
-
+  setFormatRut() {
     this.busquedaPaciente.documentoFormateado = this.busquedaPaciente.documentoFormateado.trim();
     let rut = this.busquedaPaciente.documentoFormateado;
-    if (rut && rut != "" && this.busquedaPaciente.tipoDocumento == 'RUN'){
-      let actual = rut.replace(/^0+/, "");
-      if (actual != '' && actual.length > 1) {
-        var sinPuntos = actual.replace(/\./g, "");
-        var actualLimpio = sinPuntos.replace(/-/g, "");
-        var inicio = actualLimpio.substring(0, actualLimpio.length - 1);
-        var rutPuntos = "";
-        var i = 0;
-        var j = 1;
-        for (i = inicio.length - 1; i >= 0; i--) {
-          var letra = inicio.charAt(i);
-          rutPuntos = letra + rutPuntos;
-          if (j % 3 == 0 && j <= inicio.length - 1) {
-            rutPuntos = "." + rutPuntos;
-          }
-          j++;
-        }
-        var dv = actualLimpio.substring(actualLimpio.length - 1);
-        rutPuntos = rutPuntos + "-" + dv;
-      }
-
-      this.busquedaPaciente.documentoFormateado = rutPuntos
-      this.busquedaPaciente.documento = this.utils.replaceAll(rutPuntos, ".", "");
-
+    if (rut && rut != "" && this.busquedaPaciente.tipoDocumento == 'RUN') {
+        let rutPuntos = this.formatRut(rut)
+        this.busquedaPaciente.documentoFormateado = rutPuntos
+        this.busquedaPaciente.documento = this.utils.replaceAll(rutPuntos, ".", "");
     }
-   
   }
 
-  restoreFormatRut(){
-    if (this.busquedaPaciente.documentoFormateado && this.busquedaPaciente.documentoFormateado != "" && this.busquedaPaciente.tipoDocumento == 'RUN'){
+  formatRut(rut) {
+    rut = rut.toUpperCase();
+    let actual = rut.replace(/^0+/, "");
+    if (actual != '' && actual.length > 1) {
+      var sinPuntos = actual.replace(/\./g, "");
+      var actualLimpio = sinPuntos.replace(/-/g, "");
+      var inicio = actualLimpio.substring(0, actualLimpio.length - 1);
+      var rutPuntos = "";
+      var i = 0;
+      var j = 1;
+      for (i = inicio.length - 1; i >= 0; i--) {
+        var letra = inicio.charAt(i);
+        rutPuntos = letra + rutPuntos;
+        if (j % 3 == 0 && j <= inicio.length - 1) {
+          rutPuntos = "." + rutPuntos;
+        }
+        j++;
+      }
+      var dv = actualLimpio.substring(actualLimpio.length - 1);
+      rutPuntos = rutPuntos + "-" + dv;
+    }
+
+    return rutPuntos;
+
+  }
+
+  restoreFormatRut() {
+    if (this.busquedaPaciente.documentoFormateado && this.busquedaPaciente.documentoFormateado != "" && this.busquedaPaciente.tipoDocumento == 'RUN') {
       let documento = this.busquedaPaciente.documentoFormateado.trim();
       documento = this.utils.replaceAll(documento, ".", "");
       documento = this.utils.replaceAll(documento, "-", "");
       this.busquedaPaciente.documentoFormateado = documento;
     }
   }
-  
+
 }
