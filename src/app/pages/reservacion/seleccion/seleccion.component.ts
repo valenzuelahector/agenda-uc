@@ -180,8 +180,10 @@ export class SeleccionComponent implements OnInit, OnChanges {
       }
       dataRecurso['fechasDisponibles'][f.year + '-' + f.month + '-' + f.day] = [];
       dataRecurso['cupos'].forEach((val, key) => {
+
         let fechaEpoch = new Date(val['horaEpoch'] * 1000);
         let u = this.utils.trDateStr(fechaEpoch, 'json');
+        
         val['idTipoCita'] = this.getTipoCita(val['tiposDeCita'][0]);
         val['fechaHora'] = fechaEpoch;
         val['nombreCentro'] = (dataRecurso['listaCentrosIdCorto'][val['idCentro']]) ? dataRecurso['listaCentrosIdCorto'][val['idCentro']]['nombre'] : 'S/I';
@@ -192,8 +194,10 @@ export class SeleccionComponent implements OnInit, OnChanges {
         if (f['year'] == u['year'] && f['month'] == u['month'] && f['day'] == u['day']) {
           dataRecurso['fechasDisponibles'][f.year + '-' + f.month + '-' + f.day].push(val)
         }
+
       })
     }
+
     dataRecurso['datesToHighlight'] = { dates: [], displayed: false, dateClass: null };
     let proximaFecha: boolean = false;
     let datesDisabled = [];

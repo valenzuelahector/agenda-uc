@@ -12,7 +12,7 @@
 					<h5>DOCTOR</h5>
 					<h3>{{ profesionalData.nombres }} {{ profesionalData.apellidoPaterno }} {{ profesionalData.apellidoMaterno }} </h3>
 					<div class="especialidad" style="margin-bottom:20px;">
-						<span *ngFor="let es of profesionalData.especialidadesPRM; let i = index;"> {{ es.nombreEspecialidadPRM }} {{ (profesionalData.especialidadesPRM.length != (i + 1) ) ? '/' : ''}}</span>
+						<span *ngFor="let es of profesionalData.especialidadesHCM; let i = index;"> {{ es.nombreEspecialidadHCM }} {{ (profesionalData.especialidadesHCM.length != (i + 1) ) ? '/' : ''}}</span>
 					</div>
 
 

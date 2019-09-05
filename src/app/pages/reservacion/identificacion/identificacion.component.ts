@@ -175,7 +175,8 @@ export class IdentificacionComponent implements OnInit {
       let duracion = this.calendario.cupo.duracion;
       let fecha: any = this.utils.trDateStr(this.calendario.cupo.fechaHora, 'n');
       let fechaTermino = new Date(fecha);      
-      fechaTermino.setMinutes(fechaTermino.getMinutes() + duracion);
+      fechaTermino.setDate(fechaTermino.getDate() + 90);
+      fechaTermino.setMinutes(fechaTermino.getMinutes() + duracion - 60);
       let fTermino = this.utils.trDateStr(fechaTermino, 'n');
 
       this.agendaService.geReglasValidacion({
