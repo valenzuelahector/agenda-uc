@@ -25,6 +25,7 @@ import { PerfilProfesionalComponent } from './shared/components/modals/perfil-pr
 import { ErrorValidacionComponent } from './pages/reservacion/error-validacion/error-validacion.component';
 import { ReservacionEfectuadaComponent } from './pages/reservacion/reservacion-efectuada/reservacion-efectuada.component';
 import { RutFormaterDirective } from './shared/directives/rut-formater.directive';
+import { OrderModule } from 'ngx-order-pipe';
 
 
 @NgModule({
@@ -51,7 +52,8 @@ import { RutFormaterDirective } from './shared/directives/rut-formater.directive
     HttpClientModule,
     APP_ROUTING,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    OrderModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: Interceptor, multi: true },

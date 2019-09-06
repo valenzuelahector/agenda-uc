@@ -123,6 +123,10 @@ export class IdentificacionComponent implements OnInit {
         return false;
       }
 
+      if (String(data.telefono).length != 11) {
+        this.utils.mDialog("Error", "El teléfono del paciente debe tener 11 caracteres en total.", "message");
+        return false;
+      }
 
       let f: any = this.utils.trDateStr(data['fecha_nacimiento'], 'json')
       data['fecha_nacimiento'] = f['year'] + "-" + f['month'] + "-" + f['day'];
@@ -179,6 +183,11 @@ export class IdentificacionComponent implements OnInit {
         return false;
       }
 
+      if (String(this.busquedaPaciente.telefono).length != 11){
+        this.utils.mDialog("Error", "El teléfono del paciente debe tener 11 caracteres en total.", "message");
+        return false;
+      }
+
       this.paciente['adicional'] = this.busquedaPaciente;
 
       let duracion = this.calendario.cupo.duracion;
@@ -205,7 +214,26 @@ export class IdentificacionComponent implements OnInit {
       })
 
     } else {
-      this.utils.mDialog("Error", "Debe completar los datos que se solicitan.", "message")
+
+      if (!this.busquedaPaciente.documento || this.busquedaPaciente.documento == '' ){
+        this.utils.mDialog("Error", "El número de documento es obligatorio.", "message");
+        return false;
+      }
+
+      if (!this.busquedaPaciente.prevision) {
+        this.utils.mDialog("Error", "La previsión es obligatorio.", "message");
+        return false;
+      }
+
+      if (!this.busquedaPaciente.telefono || this.busquedaPaciente.telefono == '') {
+        this.utils.mDialog("Error", "El teléfono es obligatorio.", "message");
+        return false;
+      }
+
+      if (!this.busquedaPaciente.correo || this.busquedaPaciente.correo == '') {
+        this.utils.mDialog("Error", "El correo es obligatorio.", "message");
+        return false;
+      }
     }
 
   }

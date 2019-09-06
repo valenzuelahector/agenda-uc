@@ -4,6 +4,7 @@ import { AgendaAmbulatoriaService } from 'src/app/services/agenda-ambulatoria.se
 import { MatCalendarCellCssClasses } from '@angular/material';
 import { PerfilProfesionalComponent } from 'src/app/shared/components/modals/perfil-profesional/perfil-profesional.component';
 import { MatDialog } from '@angular/material';
+import { OrderPipe } from 'ngx-order-pipe';
 
 @Component({
   selector: 'app-seleccion',
@@ -28,7 +29,8 @@ export class SeleccionComponent implements OnInit, OnChanges {
   constructor(
     public agendaService: AgendaAmbulatoriaService,
     public utils: UtilsService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    public orderPipe: OrderPipe
   ) { }
 
   ngOnInit() {
@@ -92,7 +94,8 @@ export class SeleccionComponent implements OnInit, OnChanges {
             data['listaRecursos'][key] = this.crearCalendario(data['listaRecursos'][key], data['listaCentros'], data['listaDisponibilidades'], data['listaRecursos'])
           })
 
-          this.recursos = data['listaRecursos'];
+
+          this.recursos = this.orderPipe.transform(data['listaRecursos'], 'proximaFechaEpoch') ;
         } else {
           this.recursos = [];
         }
@@ -210,6 +213,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
         dataRecurso['fechasDisponibles'][key].forEach((valDx, keyDx) => {
           if (count == 0) {
             dataRecurso['proximaFecha'] = new Date(valDx['horaEpoch'] * 1000);
+            dataRecurso['proximaFechaEpoch'] = valDx['horaEpoch'];
             proximaFecha = true;
           }
           count++;
