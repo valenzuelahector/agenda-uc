@@ -30,16 +30,17 @@ export class AgendaAmbulatoriaService {
     return this.http.get(this.baseApi + '/Servicios/Rel/Especialidades?idArea=' + idArea);
   }
 
-  getEspecialidadesByProfesional(idProfesional:string){
-    return this.http.get(this.baseApi + '/Servicios/Rel/Especialidades?idProfesional=' + idProfesional);
+  getEspecialidadesByProfesional(idProfesional: string, idArea:string){
+    return this.http.get(this.baseApi + '/Servicios/Rel/Especialidades?idProfesional=' + idProfesional + '&idArea=' + idArea);
   }
 
   getProfesionales(idArea:string){
     return this.http.get(this.baseApi + '/Profesionales?idArea=' + idArea);
   }
 
-  getCentrosByEspecialidad(idServicio:string){
-    return this.http.get(this.baseApi + '/Centros?idServicio=' + idServicio);
+  getCentrosByEspecialidad(idServicio:string, idArea:string, idProfesional = null){
+    let queryProfesional = (idProfesional) ? '&idProfesional=' + idProfesional : '';
+    return this.http.get(this.baseApi + '/Centros?idServicio=' + idServicio + '&idArea=' + idArea + queryProfesional);
   }
 
   getRecursos(queryData:any){
@@ -50,7 +51,7 @@ export class AgendaAmbulatoriaService {
 
     return this.http.get(this.baseApi +
       '/Agenda/'+endpoint+'?fechaInicio=' + queryData.fechaInicio +'&fechaTermino=' + queryData.fechaTermino +
-      '&idServicio=' + queryData.idServicio + '&idPlanSalud=' + queryData.idPlanSalud + queryProfesional  + queryCentro
+      '&idServicio=' + queryData.idServicio + '&codCanal=PatientPortal&idPlanSalud=' + queryData.idPlanSalud + queryProfesional  + queryCentro
   );
   }
 

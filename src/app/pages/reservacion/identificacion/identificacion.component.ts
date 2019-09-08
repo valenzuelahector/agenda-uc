@@ -124,7 +124,7 @@ export class IdentificacionComponent implements OnInit {
       }
 
       if (String(data.telefono).length != 11) {
-        this.utils.mDialog("Error", "El teléfono del paciente debe tener 11 caracteres en total.", "message");
+        this.utils.mDialog("Error", "Número de teléfono inválido. Debe tener 11 numeros.", "message");
         return false;
       }
 
@@ -184,7 +184,7 @@ export class IdentificacionComponent implements OnInit {
       }
 
       if (String(this.busquedaPaciente.telefono).length != 11){
-        this.utils.mDialog("Error", "El teléfono del paciente debe tener 11 caracteres en total.", "message");
+        this.utils.mDialog("Error", "Número de teléfono inválido. Debe tener 11 numeros.", "message");
         return false;
       }
 
@@ -193,8 +193,7 @@ export class IdentificacionComponent implements OnInit {
       let duracion = this.calendario.cupo.duracion;
       let fecha: any = this.utils.trDateStr(this.calendario.cupo.fechaHora, 'n');
       let fechaTermino = new Date(fecha);      
-      fechaTermino.setDate(fechaTermino.getDate() + 90);
-      fechaTermino.setMinutes(fechaTermino.getMinutes() + duracion - 60);
+      fechaTermino.setMinutes(fechaTermino.getMinutes() + duracion);
 
       let fTermino = this.utils.trDateStr(fechaTermino, 'n');
 
@@ -216,22 +215,22 @@ export class IdentificacionComponent implements OnInit {
     } else {
 
       if (!this.busquedaPaciente.documento || this.busquedaPaciente.documento == '' ){
-        this.utils.mDialog("Error", "El número de documento es obligatorio.", "message");
+        this.utils.mDialog("Error", "Debe ingresar el número de documento.", "message");
         return false;
       }
 
       if (!this.busquedaPaciente.prevision) {
-        this.utils.mDialog("Error", "La previsión es obligatorio.", "message");
+        this.utils.mDialog("Error", "Debe indicar la previsión.", "message");
         return false;
       }
 
       if (!this.busquedaPaciente.telefono || this.busquedaPaciente.telefono == '') {
-        this.utils.mDialog("Error", "El teléfono es obligatorio.", "message");
+        this.utils.mDialog("Error", "Debe ingresar el teléfono.", "message");
         return false;
       }
 
       if (!this.busquedaPaciente.correo || this.busquedaPaciente.correo == '') {
-        this.utils.mDialog("Error", "El correo es obligatorio.", "message");
+        this.utils.mDialog("Error", "Debe ingresar el correo.", "message");
         return false;
       }
     }

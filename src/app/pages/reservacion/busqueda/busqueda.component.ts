@@ -140,7 +140,7 @@ export class BusquedaComponent implements OnInit {
     this.tipoConsulta = tipo;
     let observer:any;
     if(tipo == 'profesional'){
-      observer = this.agendaService.getEspecialidadesByProfesional(this.profesionalSelected['idProfesional']);
+      observer = this.agendaService.getEspecialidadesByProfesional(this.profesionalSelected['idProfesional'], this.areaSelected['id']);
     }else{
       
       observer = this.agendaService.getEspecialidadesByGeneric(this.areaSelected['id']);
@@ -272,7 +272,8 @@ export class BusquedaComponent implements OnInit {
     this.especialidadCtrl.disable();
     this.especialidadSelected =  this.especialidadCtrl.value;
     this.centrosAtencion = [];
-    this.agendaService.getCentrosByEspecialidad(this.especialidadCtrl.value.idServicio).subscribe( res => {
+    let isProf = (this.profesionalSelected) ? this.profesionalSelected['idProfesional'] : null
+    this.agendaService.getCentrosByEspecialidad(this.especialidadCtrl.value.idServicio, this.areaSelected['id'], isProf).subscribe( res => {
 
       this.setDataQueryParams().then( params => {
 

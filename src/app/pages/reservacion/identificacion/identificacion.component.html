@@ -29,7 +29,6 @@
                 [(ngModel)]="busquedaPaciente.documentoFormateado" 
                 (focusout)="setFormatRut()" 
                 (focusin)="restoreFormatRut()" 
-                onpaste="return false;" 
                 placeholder="{{ (busquedaPaciente.tipoDocumento == 'RUN') ? 'Rut sin puntos ni guión' : 'Pasaporte'}}" 
                 autocomplete="off" [disabled]="!paciente && findPaciente"/>
               <mat-icon matSuffix>chrome_reader_mode</mat-icon>
@@ -103,9 +102,11 @@
                   <mat-label>Apellido Materno</mat-label>
                   <input matInput formControlName="apellido_materno" autocomplete="off" />
                   <mat-icon matSuffix>format_quote</mat-icon>
-                  <mat-error *ngIf="revPacienteForm.apellido_materno.errors">
+                  <!-- 
+                    <mat-error *ngIf="revPacienteForm.apellido_materno.errors">
                     <span *ngIf="revPacienteForm.apellido_materno.errors.required">Campo Obligatorio</span>
                   </mat-error>
+                  -->
               </mat-form-field>
             </div>
 
@@ -154,7 +155,7 @@
             <div class="col-md-4 field-margin">
               <mat-form-field class="full bgwhite-input" appearance="fill" [color]="primary">
                   <mat-label>Teléfono</mat-label>
-                  <input matInput placeholder="56912345678" formControlName="fono_movil" maxlength="11" required (keypress)="utils.numberOnly($event, true)" onpaste="return false;" autocomplete="off"/>
+                  <input matInput placeholder="56912345678" formControlName="fono_movil" maxlength="11" required (keypress)="utils.numberOnly($event, true)" autocomplete="off"/>
                   <mat-icon matSuffix>local_phone</mat-icon>
                   <mat-error *ngIf="revPacienteForm.fono_movil.errors">
                     <span *ngIf="revPacienteForm.fono_movil.errors.required">Campo Obligatorio</span>

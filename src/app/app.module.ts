@@ -3,7 +3,7 @@ import { APP_ROUTING } from './app.routing';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Interceptor } from './app.interceptor';
-import { MAT_DATE_LOCALE } from '@angular/material/core';
+import { MAT_DATE_LOCALE, DateAdapter } from '@angular/material/core';
 import { LOCALE_ID } from '@angular/core';
 import { registerLocaleData } from '@angular/common';
 import locale from '@angular/common/locales/es';
@@ -26,7 +26,7 @@ import { ErrorValidacionComponent } from './pages/reservacion/error-validacion/e
 import { ReservacionEfectuadaComponent } from './pages/reservacion/reservacion-efectuada/reservacion-efectuada.component';
 import { RutFormaterDirective } from './shared/directives/rut-formater.directive';
 import { OrderModule } from 'ngx-order-pipe';
-
+import { MyDateAdapter } from './dateAdapter';
 
 @NgModule({
   declarations: [
@@ -58,7 +58,8 @@ import { OrderModule } from 'ngx-order-pipe';
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: Interceptor, multi: true },
     { provide: MAT_DATE_LOCALE, useValue: 'es-CL' },
-    { provide: LOCALE_ID, useValue: 'es' }
+    { provide: LOCALE_ID, useValue: 'es' },
+    { provide: DateAdapter, useClass: MyDateAdapter },
   ],
   bootstrap: [AppComponent],
   entryComponents:[
