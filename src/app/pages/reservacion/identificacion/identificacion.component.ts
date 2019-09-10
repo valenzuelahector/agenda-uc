@@ -64,7 +64,6 @@ export class IdentificacionComponent implements OnInit {
     this.getPlanesSalud();
 
     this.utils.resetInfoPaciente.subscribe(r => {
-      console.log("sssss")
       this.limpiarFormulario(true);
     })
   }
@@ -122,8 +121,8 @@ export class IdentificacionComponent implements OnInit {
         this.utils.mDialog("Error", "El correo del Paciente tiene formato inválido.", "message");
         return false;
       }
-
-      if (String(data.telefono).length != 11) {
+     
+      if (String(data.fono_movil.trim()).length != 11) {
         this.utils.mDialog("Error", "Número de teléfono inválido. Debe tener 11 numeros.", "message");
         return false;
       }
@@ -183,7 +182,7 @@ export class IdentificacionComponent implements OnInit {
         return false;
       }
 
-      if (String(this.busquedaPaciente.telefono).length != 11){
+      if (String(this.busquedaPaciente.telefono).trim().length != 11){
         this.utils.mDialog("Error", "Número de teléfono inválido. Debe tener 11 numeros.", "message");
         return false;
       }

@@ -31,6 +31,11 @@ export class BusquedaComponent implements OnInit {
   public especialidadCtrl = new FormControl();
   public centroAtencionCtrl = new FormControl();
   public readQuery:boolean = false;
+
+  public loadedProf:boolean = false;
+  public loadedEsp: boolean = false;
+  public loadedCen: boolean = false;
+
   @Output() public emitReadQuery:EventEmitter<boolean> = new EventEmitter();
   @Output() public emitBusqueda:EventEmitter<any> = new EventEmitter();
 
@@ -92,6 +97,7 @@ export class BusquedaComponent implements OnInit {
 
   getProfesionales(){
     this.clearSelection('profesional')
+    this.loadedProf = false;
     this.agendaService.getProfesionales(this.areaSelected['id']).subscribe( res => {
       
       this.setDataQueryParams().then( params => {
@@ -109,11 +115,6 @@ export class BusquedaComponent implements OnInit {
           })
   
           this.profesionales = res['profesionales'];
-          this.filterProfesionales = this.profesionalCtrl.valueChanges.pipe(
-              startWith<string | any>(''),
-              map(value => typeof value === 'string' ? value : value.detalle),
-              map(nombreFiltro => nombreFiltro ? this.filterAutocomplete(nombreFiltro, 'profesionales') : this.profesionales.slice()),
-            );
 
             if(matchProfesional){
               this.profesionalCtrl.patchValue(matchProfesional);
@@ -127,7 +128,15 @@ export class BusquedaComponent implements OnInit {
         }else{
           this.profesionales = [];
         }
+
+        this.filterProfesionales = this.profesionalCtrl.valueChanges.pipe(
+          startWith<string | any>(''),
+          map(value => typeof value === 'string' ? value : value.detalle),
+          map(nombreFiltro => nombreFiltro ? this.filterAutocomplete(nombreFiltro, 'profesionales') : this.profesionales.slice()),
+        );
+
         this.tipoConsulta = 'profesional';
+        this.loadedProf = true;
 
       });
 
@@ -138,6 +147,8 @@ export class BusquedaComponent implements OnInit {
   getEspecialidades(tipo:string){
 
     this.tipoConsulta = tipo;
+    this.loadedEsp = false;
+
     let observer:any;
     if(tipo == 'profesional'){
       observer = this.agendaService.getEspecialidadesByProfesional(this.profesionalSelected['idProfesional'], this.areaSelected['id']);
@@ -165,12 +176,6 @@ export class BusquedaComponent implements OnInit {
   
             this.especialidades = res['especialidadesPorServicio'];
   
-            this.filterEspecialidades = this.especialidadCtrl.valueChanges.pipe(
-                startWith<string | any>(''),
-                map(value => typeof value === 'string' ? value : value.detalle),
-                map(nombreFiltro => nombreFiltro ? this.filterAutocomplete(nombreFiltro, 'especialidades') : this.especialidades.slice()),
-              );
-
             if(matEspecialidad){
               this.especialidadCtrl.patchValue(matEspecialidad);
               this.especialidadSelection(matEspecialidad);
@@ -182,7 +187,14 @@ export class BusquedaComponent implements OnInit {
             this.especialidades = [];
             this.emitterReadQuery(true)
           }
-        
+
+          this.filterEspecialidades = this.especialidadCtrl.valueChanges.pipe(
+            startWith<string | any>(''),
+            map(value => typeof value === 'string' ? value : value.detalle),
+            map(nombreFiltro => nombreFiltro ? this.filterAutocomplete(nombreFiltro, 'especialidades') : this.especialidades.slice()),
+          );
+          
+          this.loadedEsp = true;
         })  
 
       })
@@ -272,7 +284,9 @@ export class BusquedaComponent implements OnInit {
     this.especialidadCtrl.disable();
     this.especialidadSelected =  this.especialidadCtrl.value;
     this.centrosAtencion = [];
-    let isProf = (this.profesionalSelected) ? this.profesionalSelected['idProfesional'] : null
+    let isProf = (this.profesionalSelected) ? this.profesionalSelected['idProfesional'] : null;
+    this.loadedCen = false;
+
     this.agendaService.getCentrosByEspecialidad(this.especialidadCtrl.value.idServicio, this.areaSelected['id'], isProf).subscribe( res => {
 
       this.setDataQueryParams().then( params => {
@@ -304,12 +318,6 @@ export class BusquedaComponent implements OnInit {
           })
 
           this.centrosAtencion = res['centros'];
-          console.log(this.centrosAtencion)
-          this.filterCentrosAtencion = this.centroAtencionCtrl.valueChanges.pipe(
-              startWith<string | any>(''),
-              map(value => typeof value === 'string' ? value : value.detalle),
-              map(nombreFiltro => nombreFiltro ? this.filterAutocomplete(nombreFiltro, 'centros') : this.centrosAtencion.slice()),
-            );
 
             if(matCentro){
               this.centroAtencionCtrl.patchValue(matCentro);
@@ -323,6 +331,13 @@ export class BusquedaComponent implements OnInit {
           this.readQuery = true;
         }
 
+        this.filterCentrosAtencion = this.centroAtencionCtrl.valueChanges.pipe(
+          startWith<string | any>(''),
+          map(value => typeof value === 'string' ? value : value.detalle),
+          map(nombreFiltro => nombreFiltro ? this.filterAutocomplete(nombreFiltro, 'centros') : this.centrosAtencion.slice()),
+        );
+        
+        this.loadedCen = true;
       })
       
     })
@@ -369,5 +384,18 @@ export class BusquedaComponent implements OnInit {
       }
     })
     return p;
+  }
+
+  cambiarTipoBusqueda(tipo){
+
+    this.clearSelection('profesional');
+
+    if(tipo == 'especialidad'){
+      this.getEspecialidades('especialidad')
+    }
+
+    if(tipo == 'profesional'){
+      this.getProfesionales();
+    }
   }
 }
