@@ -5562,6 +5562,7 @@ a.volver-hora:hover{
     }
     .btns-barra-menu a.atencion{
         font-size: 9px;
+        display:none !important
     }
     header.fixed .btns-barra-menu .botones-head a{
         font-size: 10px;
@@ -5592,7 +5593,7 @@ a.volver-hora:hover{
         display: none;
     }
     .btns-barra-menu .botones-head{
-        display: block;
+        display: none !important;
         padding-top: 4px;
     }
     .btns-barra-menu .botones-head a.reserva{
