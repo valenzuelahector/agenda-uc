@@ -5645,6 +5645,7 @@ a.volver-hora:hover{
         opacity: 0;
         padding: 40px 60px;
         transition:cubic-bezier(.77,0,.175,1) .5s;
+        display:none !important
     }
     .menu-mobile.visible{
         right: 0;
@@ -6448,7 +6449,7 @@ a.volver-hora:hover{
       padding: 20px 20px 10px;
     }
     .busqueda-reserva{
-      padding: 40px 0px;
+      padding: 40px 20px;
     }
     .cuadro-reserva .seleccionar-area label{
       margin-bottom: 10px;
