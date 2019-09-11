@@ -32,8 +32,6 @@ export class ConfirmacionComponent implements OnInit, OnChanges {
   }
 
   reservar(){
-    this.utils.mDialog("Confirmación", "¿Está seguro que desea confirmar la reserva?", "confirm").subscribe(r => {
-      if(r){
 
         let fecha:any = this.utils.trDateStr(this.calendario.cupo.fechaHora, 'n');
         console.log(this.calendario)
@@ -57,7 +55,5 @@ export class ConfirmacionComponent implements OnInit, OnChanges {
             this.utils.mDialog("Error", data['usrMsg'], "message");
           }
         })
-      }
-    })
   }
 }

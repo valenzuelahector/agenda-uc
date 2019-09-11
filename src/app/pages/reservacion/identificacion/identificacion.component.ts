@@ -39,7 +39,7 @@ export class IdentificacionComponent implements OnInit {
     identificador: new FormControl('', [Validators.required]),
     nombre: new FormControl('', Validators.required),
     apellido_paterno: new FormControl('', Validators.required),
-    apellido_materno: new FormControl(''),
+    apellido_materno: new FormControl('', Validators.required),
     email: new FormControl('', [Validators.email]),
     sexo: new FormControl('', Validators.required),
     fecha_nacimiento: new FormControl('', Validators.required),

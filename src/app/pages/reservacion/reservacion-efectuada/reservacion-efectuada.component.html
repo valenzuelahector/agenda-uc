@@ -17,7 +17,7 @@
                 {{ busquedaInicial.centroAtencion.direccion?.numero }},
                 {{ busquedaInicial.centroAtencion.direccion?.comuna }}</p>
               <p><b>Formas de pago:</b> Bono Fonasa, Particular, Bono Isapre</p>
-              <p><b>Valor Convenio:</b> ${{ valorConvenio }} <span>(*)</span></p>
+              <p *ngIf="valorConvenio > 0 "><b>Valor Convenio:</b> ${{ valorConvenio }} <span>(*)</span></p>
             </div>
           </div>
         </div>

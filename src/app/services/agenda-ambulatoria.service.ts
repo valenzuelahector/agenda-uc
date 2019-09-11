@@ -8,7 +8,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 export class AgendaAmbulatoriaService {
 
   public servRoute:string = '/agendaambulatoria-test'
-  public profRoute:string = '/profesionales-test'
+  public profRoute:string = '/profesionales-pre'
   public baseApi:string;
   public httpOptions: any;
 

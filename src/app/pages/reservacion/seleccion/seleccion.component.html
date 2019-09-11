@@ -39,13 +39,13 @@
 							</figure>
 							<div class="txt-doc">
 								<h4>{{ re.nombre }}</h4>
-								<p>Especialidad del Médico</p>
-								<button class="ver-perfil full-btn" mat-stroked-button (click)="verPerfil(re)">Ver
+								<!-- <p>Especialidad del Médico</p> -->
+								<button style="margin:20px 0px" class="ver-perfil full-btn" mat-stroked-button (click)="verPerfil(re)">Ver
 									perfil
 									<i class="fa fa-angle-right" aria-hidden="true"></i>
 								</button>
-								<p class="small" *ngIf="re.propiedadesDinamicas?.informacionAdicional">*
-									{{ re.propiedadesDinamicas?.informacionAdicional }}</p>
+								<p class="small" *ngIf="re?.informacionAdicional" style="margin-top:0px;">
+									{{ re?.informacionAdicional }}</p>
 							</div>
 						</div>
 					</div>

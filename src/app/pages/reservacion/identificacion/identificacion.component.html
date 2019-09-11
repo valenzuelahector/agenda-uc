@@ -100,13 +100,11 @@
             <div class="col-md-4 field-margin">
               <mat-form-field class="full bgwhite-input" appearance="fill" [color]="primary">
                   <mat-label>Apellido Materno</mat-label>
-                  <input matInput formControlName="apellido_materno" autocomplete="off" />
+                  <input matInput formControlName="apellido_materno" required autocomplete="off" />
                   <mat-icon matSuffix>format_quote</mat-icon>
-                  <!-- 
                     <mat-error *ngIf="revPacienteForm.apellido_materno.errors">
                     <span *ngIf="revPacienteForm.apellido_materno.errors.required">Campo Obligatorio</span>
                   </mat-error>
-                  -->
               </mat-form-field>
             </div>
 
