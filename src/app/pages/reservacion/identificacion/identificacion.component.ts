@@ -61,7 +61,7 @@ export class IdentificacionComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.getPlanesSalud();
+    //this.getPlanesSalud();
 
     this.utils.resetInfoPaciente.subscribe(r => {
       this.limpiarFormulario(true);
@@ -72,8 +72,8 @@ export class IdentificacionComponent implements OnInit {
     return this.pacienteForm.controls;
   }
 
-  getPlanesSalud() {
-    this.agendaService.getPlanesSalud().subscribe(data => {
+  getPlanesSalud(idPaciente, data = null) {
+    this.agendaService.getPlanesSalud(idPaciente, data).subscribe(data => {
       if (data['statusCod'] == 'OK') {
         data['companias'].forEach((val, key) => {
           val['planes'].forEach((valp, keyp) => {
@@ -103,6 +103,9 @@ export class IdentificacionComponent implements OnInit {
     this.agendaService.getPaciente(this.busquedaPaciente.documento, this.busquedaPaciente.tipoDocumento).subscribe(res => {
       if (res['listaPacientes'] && res['listaPacientes'][0]) {
         this.paciente = res['listaPacientes'][0];
+        this.getPlanesSalud(this.paciente.id);
+      }else{
+        this.getPlanesSalud(null, this.busquedaPaciente);
       }
       this.findPaciente = true;
     })
@@ -157,7 +160,6 @@ export class IdentificacionComponent implements OnInit {
         this.pacienteForm.reset();
         this.formDirective.resetForm();
       } catch (error) {
-        console.log(error)
       }
     }
 
@@ -205,7 +207,8 @@ export class IdentificacionComponent implements OnInit {
         idServicio: this.busquedaInicial.especialidad.idServicio,
         idPaciente: this.paciente.id,
         idDisponibilidad: this.calendario.cupo.idStrDisponibilidad,
-        idProfesional: this.calendario.cupo.idStrRecProfesional
+        idProfesional: this.calendario.cupo.idStrRecProfesional,
+        idPlanSalud: this.busquedaPaciente.prevision.id
 
       }).subscribe(data => {
         this.datosPaciente.emit({ paciente: this.paciente, reglas: data['listaMensajesDeRegla'], valorConvenio: data['listaCupos'][0]['valorConvenio'] });

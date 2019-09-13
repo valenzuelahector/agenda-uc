@@ -44,7 +44,6 @@ export class SeleccionComponent implements OnInit, OnChanges {
       } else {
         this.getRecursos();
       }
-      console.log(this.busquedaInicial)
     } else {
       this.resetCalendario();
     }
@@ -229,7 +228,6 @@ export class SeleccionComponent implements OnInit, OnChanges {
   }
 
   seleccionarHora(data) {
-    console.log(data);
     this.calendario.emit(data);
   }
 

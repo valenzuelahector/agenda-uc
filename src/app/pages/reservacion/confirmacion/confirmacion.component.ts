@@ -26,15 +26,12 @@ export class ConfirmacionComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges() {
-    console.log(this.paciente);
-    console.log(this.calendario);
-    console.log(this.busquedaInicial);
   }
 
   reservar(){
 
         let fecha:any = this.utils.trDateStr(this.calendario.cupo.fechaHora, 'n');
-        console.log(this.calendario)
+
         this.agendaService.postCita({
           fechaInicioDesde: fecha,
           idCentro: this.calendario.cupo.idStrCentro,

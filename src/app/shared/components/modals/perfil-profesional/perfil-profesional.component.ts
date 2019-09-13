@@ -16,7 +16,6 @@ export class PerfilProfesionalComponent implements OnInit {
   constructor(@Inject(MAT_DIALOG_DATA) public data: {profesionalData:any}){
 
     this.profesionalData = data.profesionalData;
-    console.log(data);
 
   }
 

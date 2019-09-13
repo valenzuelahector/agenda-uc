@@ -44,7 +44,7 @@ export class AgendaAmbulatoriaService {
   }
 
   getRecursos(queryData:any){
-    console.log(queryData)
+
     let queryProfesional = (queryData.idProfesional) ? '&profesional=' + queryData.idProfesional : '';
     let queryCentro = (queryData.todosCentro) ? '&idRegion=' + queryData.idCentro : '&idCentro=' + queryData.idCentro;
     let endpoint = (queryData.idProfesional) ? 'CuposProfFechas' : 'CuposEspecCentro';
@@ -67,8 +67,12 @@ export class AgendaAmbulatoriaService {
     return this.http.post(this.baseApi + '/Citas', data, this.httpOptions);
   }
 
-  getPlanesSalud(){
-    return this.http.get(this.baseApi + '/PlanesDeSalud');
+  getPlanesSalud(idPaciente, data = null){
+    let queryString = (idPaciente) ? 
+                      'idPaciente=' + idPaciente : 
+                      'tipoIdPaciente=' + data['tipoDocumento'] + '&idPaciente=' + data['documento'] + '&paisIdentificador=CL'
+    
+                      return this.http.get(this.baseApi + '/PlanesDeSalud?' + queryString);
   }
 
   getDatosProfesional(idProfesional:any){
@@ -76,7 +80,7 @@ export class AgendaAmbulatoriaService {
   }
 
   geReglasValidacion(query:any){
-    return this.http.get(this.baseApi + '/Agenda/CuposDisponibilidad?idCentro='+query.idCentro+'&fechaInicio='+query.fechaInicio+'&fechaTermino='+query.fechaTermino+'&idServicio='+query.idServicio+'&idPlanSalud=4c30555e-5ed3-418f-8f54-a91a00ace99b&idPaciente='+query.idPaciente+'&idDisponibilidad='+query.idDisponibilidad+'&idProfesional='+query.idProfesional+'&codCanal=PatientPortal')
+    return this.http.get(this.baseApi + '/Agenda/CuposDisponibilidad?idCentro=' + query.idCentro + '&fechaInicio=' + query.fechaInicio + '&fechaTermino=' + query.fechaTermino + '&idServicio=' + query.idServicio + '&idPlanSalud=' + query.idPlanSalud + '&idPaciente='+query.idPaciente+'&idDisponibilidad='+query.idDisponibilidad+'&idProfesional='+query.idProfesional+'&codCanal=PatientPortal')
   }
 
 }

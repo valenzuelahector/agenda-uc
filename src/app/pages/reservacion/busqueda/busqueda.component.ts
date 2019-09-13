@@ -348,13 +348,11 @@ export class BusquedaComponent implements OnInit {
     this.profesionalCtrl.disable();
     this.profesionalSelected =  this.profesionalCtrl.value;
     this.getEspecialidades('profesional');
-    console.log(this.profesionalSelected)
 
   }
 
   centroAtencionSelection(event) {
     this.centroAtencionCtrl.disable();
-    console.log(this.profesionalSelected)
     this.centroAtencionSelected =  this.centroAtencionCtrl.value;
   }
 
