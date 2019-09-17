@@ -38,9 +38,9 @@
                 [formControl]="profesionalCtrl" [matAutocomplete]="auto" autocomplete="off">
               <mat-icon matPrefix style="margin-right: 10px">school</mat-icon>
               <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayTextAutocomplete"
-                (optionSelected)="profesionalSelection($event)">
+                (optionSelected)="profesionalSelection($event)" matNativeControl >
                 <mat-option *ngFor="let prof of filterProfesionales | async" [value]="prof"
-                  matTooltip="{{prof.detalle}}" matTooltipPosition="right">
+                   matTooltipPosition="right">
                   {{ prof.detalle }}
                 </mat-option>
               </mat-autocomplete>
@@ -61,7 +61,7 @@
               <mat-icon matPrefix style="margin-right: 10px">accessible</mat-icon>
               <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayTextAutocomplete"
                 (optionSelected)="especialidadSelection($event)">
-                <mat-option *ngFor="let esp of filterEspecialidades | async" [value]="esp" matTooltip="{{esp.detalle}}"
+                <mat-option *ngFor="let esp of filterEspecialidades | async" [value]="esp"
                   matTooltipPosition="right">
                   {{ esp.detalle }}
                 </mat-option>
@@ -80,7 +80,7 @@
                 [formControl]="centroAtencionCtrl" [matAutocomplete]="auto" autocomplete="off">
               <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayTextAutocomplete"
                 (optionSelected)="centroAtencionSelection($event)">
-                <mat-option *ngFor="let cet of filterCentrosAtencion | async" [value]="cet" matTooltip="{{cet.detalle}}"
+                <mat-option *ngFor="let cet of filterCentrosAtencion | async" [value]="cet"
                   matTooltipPosition="right">
                   {{ cet.detalle }}
                 </mat-option>

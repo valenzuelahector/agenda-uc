@@ -100,6 +100,11 @@ export class IdentificacionComponent implements OnInit {
       return false;
     }
 
+    if (this.busquedaPaciente.tipoDocumento == 'PAS' && this.busquedaPaciente.documento.trim().length > 15) {
+      this.utils.mDialog("Error", "El número de pasaporte debe tener máximo 15 caracteres.", "message");
+      return false;
+    }
+
     this.agendaService.getPaciente(this.busquedaPaciente.documento, this.busquedaPaciente.tipoDocumento).subscribe(res => {
       if (res['listaPacientes'] && res['listaPacientes'][0]) {
         this.paciente = res['listaPacientes'][0];
@@ -240,13 +245,20 @@ export class IdentificacionComponent implements OnInit {
   }
 
   setFormatRut() {
-    this.busquedaPaciente.documentoFormateado = this.busquedaPaciente.documentoFormateado.trim();
-    let rut = this.busquedaPaciente.documentoFormateado;
-    if (rut && rut != "" && this.busquedaPaciente.tipoDocumento == 'RUN') {
+    this.busquedaPaciente.documentoFormateado = (this.busquedaPaciente.documentoFormateado) ?
+      this.busquedaPaciente.documentoFormateado.trim() : null;
+
+    if (this.busquedaPaciente.tipoDocumento == 'RUN'){
+      let rut = this.busquedaPaciente.documentoFormateado;
+      if (rut && rut != "") {
         let rutPuntos = this.formatRut(rut)
         this.busquedaPaciente.documentoFormateado = rutPuntos
         this.busquedaPaciente.documento = this.utils.replaceAll(rutPuntos, ".", "");
+      }
+    }else{
+      this.busquedaPaciente.documento = this.busquedaPaciente.documentoFormateado;
     }
+    
   }
 
   formatRut(rut) {

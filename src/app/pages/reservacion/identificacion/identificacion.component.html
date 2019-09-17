@@ -25,7 +25,7 @@
           <mat-form-field class="full bgwhite-input" appearance="fill" [color]="primary">
               <mat-label>Indique su Identificación</mat-label>
               <input matInput  
-                maxlength="{{ (busquedaPaciente.tipoDocumento == 'RUN') ? 12 : 20" 
+                maxlength="{{ (busquedaPaciente.tipoDocumento == 'PAS') ? 15 : NULL }}" 
                 [(ngModel)]="busquedaPaciente.documentoFormateado" 
                 (focusout)="setFormatRut()" 
                 (focusin)="restoreFormatRut()" 
@@ -103,7 +103,7 @@
                   <input matInput formControlName="apellido_materno" required autocomplete="off" />
                   <mat-icon matSuffix>format_quote</mat-icon>
                     <mat-error *ngIf="revPacienteForm.apellido_materno.errors">
-                    <span *ngIf="revPacienteForm.apellido_materno.errors.required">Campo Obligatorio</span>
+                    <span *ngIf="revPacienteForm.apellido_materno.errors.required">Campo Obligatoriom, si no tiene ingrese un punto (.)</span>
                   </mat-error>
               </mat-form-field>
             </div>

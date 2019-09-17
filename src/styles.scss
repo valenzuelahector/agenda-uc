@@ -3672,7 +3672,7 @@ section.s-m{
     font-size: 16px;
     font-weight: 300;
     color:#802E87;
-    border:1px solid #802E87;
+    /*border:1px solid #802E87;*/
     border-radius: 4px;
     display: inline-block;
     padding: 3px 10px;
@@ -5562,7 +5562,7 @@ a.volver-hora:hover{
     }
     .btns-barra-menu a.atencion{
         font-size: 9px;
-        display:none !important
+       // display:none !important
     }
     header.fixed .btns-barra-menu .botones-head a{
         font-size: 10px;
@@ -5593,7 +5593,7 @@ a.volver-hora:hover{
         display: none;
     }
     .btns-barra-menu .botones-head{
-        display: none !important;
+     //   display: none !important;
         padding-top: 4px;
     }
     .btns-barra-menu .botones-head a.reserva{
@@ -5631,7 +5631,7 @@ a.volver-hora:hover{
         color: #455a64;
         font-size: 22px;
         margin-left: 10px;
-        display: none;
+    //    display: none;
     }
 
     .menu-mobile{
@@ -5646,7 +5646,7 @@ a.volver-hora:hover{
         opacity: 0;
         padding: 40px 60px;
         transition:cubic-bezier(.77,0,.175,1) .5s;
-        display:none !important
+        display:none
     }
     .menu-mobile.visible{
         right: 0;
@@ -5881,7 +5881,7 @@ a.volver-hora:hover{
       display: block;
     }
     .w-pasos{
-      margin-top: 40px;
+      margin: 40px auto !important;
     }
     .item-doc .box-doc{
       margin-bottom: 30px;

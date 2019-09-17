@@ -7,6 +7,8 @@ import { MAT_DATE_LOCALE, DateAdapter } from '@angular/material/core';
 import { LOCALE_ID } from '@angular/core';
 import { registerLocaleData } from '@angular/common';
 import locale from '@angular/common/locales/es';
+import { FlexLayoutModule } from '@angular/flex-layout';
+
 registerLocaleData(locale, 'es');
 import { NgModule } from '@angular/core';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -53,7 +55,8 @@ import { MyDateAdapter } from './dateAdapter';
     APP_ROUTING,
     FormsModule,
     ReactiveFormsModule,
-    OrderModule
+    OrderModule,
+    FlexLayoutModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: Interceptor, multi: true },

@@ -3,26 +3,26 @@
     <div class="flex-container header-reserva">
       <h2 class="titulo-2 azul"><i class="far fa-clock"></i> RESERVA DE HORAS</h2>
 
-      <div class="w-pasos" *ngIf=" tabGroup">
-        <a class="item-paso" [ngClass]="{'activo' : curEtapa == 0 || busquedaInfo }">
+      <div class="w-pasos" *ngIf=" tabGroup" fxLayout="row wrap" fxLayoutAlign="space-between" fxLayoutGap="10px">
+        <a class="item-paso" [ngClass]="{'activo' : curEtapa == 0 || busquedaInfo }" fxFlex="80px">
           <figure matRipple>
             <i class="fas fa-user-md"></i>
           </figure>
           <h4>Búsqueda</h4>
         </a>
-        <a class="item-paso" [ngClass]="{'activo' : curEtapa == 1 || calendario}">
+        <a class="item-paso" [ngClass]="{'activo' : curEtapa == 1 || calendario}" fxFlex="80px">
           <figure matRipple>
             <i class="far fa-calendar-alt"></i>
           </figure>
           <h4>Selección</h4>
         </a>
-        <a class="item-paso" [ngClass]="{'activo' : curEtapa == 2 || paciente}">
+        <a class="item-paso" [ngClass]="{'activo' : curEtapa == 2 || paciente}" fxFlex="80px">
           <figure matRipple>
             <i class="fas fa-user"></i>
           </figure>
           <h4>Identificación</h4>
         </a>
-        <a class="item-paso" [ngClass]="{'activo' : reservaRealizada}">
+        <a class="item-paso" [ngClass]="{'activo' : reservaRealizada}" fxFlex="80px">
           <figure matRipple>
             <i class="fas fa-check"></i>
           </figure>
