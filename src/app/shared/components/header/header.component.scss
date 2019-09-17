@@ -324,6 +324,7 @@ header.fixed{
     left: 0;
     width: 100%;
     padding: 0;
+    z-index: 1000;
 }
 .head-top{
     transition:cubic-bezier(.77,0,.175,1) .5s;
@@ -1126,7 +1127,16 @@ header.fixed .botones-head a.reserva{
 
    }
 }
+ .brr{
+        display: none !important
+     }
  @media (max-width: 640px) {
+     .atencion{
+         padding: 12px 10px !important;
+     }
+     .brr{
+        display: initial !important
+     }
    .wrap{
        padding: 0 20px;
    }
@@ -1187,7 +1197,7 @@ header.fixed .botones-head a.reserva{
        display: none;
    }
    header.fixed .botones-head a.reserva{
-       display: none;
+    //   display: none;
    }
  
    .btn-menu{
