@@ -5899,7 +5899,9 @@ a.volver-hora:hover{
 }
 
 @media (max-width: 768px) {
-
+    .w-pasos .item-paso h4{
+        font-size: 11px !important;
+    }
     .animated,
     .animated-delay1,
     .animated-delay2,
