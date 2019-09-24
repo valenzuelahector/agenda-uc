@@ -12,10 +12,10 @@
 					<div class="id-num-der">
 						<h4>Mesa Central</h4>
 						<h3><img src="assets/images/ic-tel.svg" alt=""> 22 676 7000</h3>
-						<a matRipple class="c-btn btn-blanco-gris hover" (click)="accionar('VOLVER')"><img src="assets/images/ic-back.svg" alt="">VOLVER</a>
+						<a matRipple class="c-btn btn-blanco-gris hover" (click)="accionar('VOLVER')">VOLVER</a>
 						<a matRipple class="c-btn hover" [ngClass]="{ 'btn-blanco-gris' : reglas.reservable , 'btn-gris' : !reglas.reservable }" (click)="accionar('NUEVO')">NUEVA RESERVA</a>
 						<a matRipple class="c-btn btn-gris hover" (click)="accionar('CONTINUAR')" *ngIf="reglas.reservable">
-							<img src="assets/images/ic-back.svg" alt="">CONTINUAR
+							CONTINUAR
 						</a>
 
 					</div>

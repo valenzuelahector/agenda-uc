@@ -53,7 +53,9 @@ export class ReservacionComponent implements OnInit {
       
 
       if(data.reglas && data.reglas.length > 0){
-        this.reglasActuales = { reglas: data.reglas, reservable: this.calendario.cupo.reservable.reservable };
+        console.log(this.calendario)
+        this.reglasActuales = { reglas: data.reglas, reservable: data.reservable };
+        console.log(this.reglasActuales)
         if(this.reglasActuales.reservable){
           this.paciente = data.paciente;
           this.valorConvenio = data.valorConvenio;

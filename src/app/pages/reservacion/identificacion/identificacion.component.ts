@@ -216,7 +216,19 @@ export class IdentificacionComponent implements OnInit {
         idPlanSalud: this.busquedaPaciente.prevision.id
 
       }).subscribe(data => {
-        this.datosPaciente.emit({ paciente: this.paciente, reglas: data['listaMensajesDeRegla'], valorConvenio: data['listaCupos'][0]['valorConvenio'] });
+        
+        let reglas:any = [];
+        let valorConvenio:any = false;
+        let reservable:any = false;
+
+        if(data['listaMensajesDeRegla'] && data['listaCupos'][0]){
+          reglas = data['listaMensajesDeRegla'];
+          valorConvenio = data['listaCupos'][0]['valorConvenio'];
+          reservable = data['listaCupos'][0]['reservable']['reservable']
+        }
+
+        this.datosPaciente.emit({ paciente: this.paciente, reglas: reglas, valorConvenio: valorConvenio, reservable: reservable });
+        
       })
 
     } else {
