@@ -9,20 +9,20 @@
 			</div>
 			<div class="col-md-8">
 				<div class="texto-ficha">
-					<h5>DOCTOR</h5>
+					<h5>{{ profesionalData.tratamiento }}</h5>
 					<h3>{{ profesionalData.nombres }} {{ profesionalData.apellidoPaterno }} {{ profesionalData.apellidoMaterno }} </h3>
 					<div class="especialidad" style="margin-bottom:20px;">
 						<span *ngFor="let es of profesionalData.especialidadesHCM; let i = index;"> {{ es.nombreEspecialidadHCM }} {{ (profesionalData.especialidadesHCM.length != (i + 1) ) ? '/' : ''}}</span>
 					</div>
-
+					<p>{{ profesionalData.descripcion }}</p>
 					<div class="items-ficha">
 						<div class="item-ficha">
 							<h4>Áreas</h4>
 							<p>{{ profesionalData.areasDeInteres }}</p>
 						</div>
 						<div class="item-ficha">
-							<h4>Grado</h4>
-							<p>{{ profesionalData.gradoAcademico}}</p>
+							<h4>Cargo Académico</h4>
+							<p>{{ profesionalData.cargoAcademico }}</p>
 						</div>
 						<div class="item-ficha atiende">
 							<h4>Atiende en:</h4>
