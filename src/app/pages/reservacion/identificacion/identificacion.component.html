@@ -103,7 +103,7 @@
                   <input matInput formControlName="apellido_materno" required autocomplete="off" />
                   <mat-icon matSuffix>format_quote</mat-icon>
                     <mat-error *ngIf="revPacienteForm.apellido_materno.errors">
-                    <span *ngIf="revPacienteForm.apellido_materno.errors.required">Campo Obligatorio, si no tiene ingrese un punto (.)</span>
+                    <span *ngIf="revPacienteForm.apellido_materno.errors.required" style="font-size: 10px !important;">Campo Obligatorio, si no tiene ingrese un punto (.)</span>
                   </mat-error>
               </mat-form-field>
             </div>

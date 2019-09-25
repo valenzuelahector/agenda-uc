@@ -58,7 +58,7 @@
               <input matInput type="text"
                 placeholder="Puede buscar por {{ tipoConsulta == 'especialidad' ? 'especialidad o servicio' : 'nombre'}}"
                 [formControl]="especialidadCtrl" [matAutocomplete]="auto" autocomplete="off">
-              <mat-icon matPrefix style="margin-right: 10px">accessible</mat-icon>
+              <mat-icon matPrefix style="margin-right: 10px">add_to_photos</mat-icon>
               <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayTextAutocomplete"
                 (optionSelected)="especialidadSelection($event)">
                 <mat-option *ngFor="let esp of filterEspecialidades | async" [value]="esp"
@@ -75,7 +75,7 @@
           <div class="col-lg-6 col-md-12" *ngIf="especialidadSelected && centrosAtencion.length > 0 && loadedCen">
             <mat-form-field class="full" appearance="fill" [color]="primary">
               <mat-label>Seleccione un Centro de Atención</mat-label>
-              <mat-icon matPrefix style="margin-right: 10px">local_hospital</mat-icon>
+              <mat-icon matPrefix style="margin-right: 10px">apartment</mat-icon>
               <input matInput type="text" placeholder="Puede buscar por nombre del Centro"
                 [formControl]="centroAtencionCtrl" [matAutocomplete]="auto" autocomplete="off">
               <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayTextAutocomplete"
