@@ -16,6 +16,7 @@ export class ConfirmacionComponent implements OnInit, OnChanges {
   @Input() busquedaInicial:any;
   @Input() reservaFinalizada:boolean;
   @Output() confirmarReserva:EventEmitter<any> = new EventEmitter();
+  @Input() mensajes:any = [];
 
   constructor(
     public agendaService:AgendaAmbulatoriaService,

@@ -19,6 +19,7 @@ export class ReservacionComponent implements OnInit {
   public reservaRealizada:boolean = false;
   public readQuery:boolean = false;
   public reglasActuales:any = [];
+  public mensajesActuales:any = [];
   public codCita:number;
   public valorConvenio:number;
 
@@ -51,9 +52,8 @@ export class ReservacionComponent implements OnInit {
 
     this.identificacion.datosPaciente.subscribe( data => {
       
-
+      this.mensajesActuales = data.mensajes;
       if(data.reglas && data.reglas.length > 0){
-        console.log(this.calendario)
         this.reglasActuales = { reglas: data.reglas, reservable: data.reservable };
         console.log(this.reglasActuales)
         if(this.reglasActuales.reservable){

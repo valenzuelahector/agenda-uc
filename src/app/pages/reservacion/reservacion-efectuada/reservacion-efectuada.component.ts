@@ -12,7 +12,8 @@ export class ReservacionEfectuadaComponent implements OnInit {
   @Input() busquedaInicial:any;
   @Input() codCita:any;
   @Input() valorConvenio:any;
-  
+  @Input() mensajes:any = [];
+
   constructor() { }
 
   ngOnInit() {

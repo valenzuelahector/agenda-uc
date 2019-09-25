@@ -24,6 +24,11 @@
       </div>
     </div>
   </div>
+  <div class="puntos-abajo p2">
+      <ng-container *ngFor="let msj of mensajes">
+          <div [innerHTML]="msj['mensaje']['contenido']" *ngIf="msj['mensaje']['mostrar']" ></div>
+      </ng-container>
+    </div>
   <!-- 
   <div class="puntos-abajo p2">
     <p><span>(*)</span> Atiende pacientes mayores a 18 años</p>

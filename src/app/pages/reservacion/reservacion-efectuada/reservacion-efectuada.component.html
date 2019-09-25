@@ -16,7 +16,7 @@
               <p *ngIf="busquedaInicial.centroAtencion.codigo != 'todos'"><b>Ubicación:</b> {{ busquedaInicial.centroAtencion.direccion?.calle }},
                 {{ busquedaInicial.centroAtencion.direccion?.numero }},
                 {{ busquedaInicial.centroAtencion.direccion?.comuna }}</p>
-              <p><b>Formas de pago:</b> Bono Fonasa, Particular, Bono Isapre</p>
+              <!-- <p><b>Formas de pago:</b> Bono Fonasa, Particular, Bono Isapre</p> -->
               <p *ngIf="valorConvenio > 0 "><b>Valor Convenio:</b> ${{ valorConvenio }} <span>(*)</span></p>
             </div>
           </div>
@@ -52,7 +52,9 @@
   </div>
 </div>
 <div class="puntos-abajo p2">
-  <p><span>(*)</span>Valor Referencial, el cual no contempla la bonificación correspondiente por la cobertura de su plan de salud</p>
+  <ng-container *ngFor="let msj of mensajes">
+      <div [innerHTML]="msj['mensaje']['contenido']" *ngIf="msj['mensaje']['mostrar']" ></div>
+  </ng-container>
 </div>
 </section>
 

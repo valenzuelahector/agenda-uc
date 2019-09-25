@@ -8,6 +8,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 export class ErrorValidacionComponent implements OnInit {
 
   @Input() reglas:any = {};
+  @Input() mensajes:any = [];
   @Output() emitAccionar:EventEmitter<any> = new EventEmitter();
 
   constructor() { }

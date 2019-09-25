@@ -227,8 +227,18 @@ export class IdentificacionComponent implements OnInit {
           reservable = data['listaCupos'][0]['reservable']['reservable']
         }
 
-        this.datosPaciente.emit({ paciente: this.paciente, reglas: reglas, valorConvenio: valorConvenio, reservable: reservable });
-        
+        this.agendaService.getMensajes({
+          ResourceId: this.calendario.recurso.id,
+          CenterId: this.calendario.cupo.idStrCentro,
+          ServiceId: this.busquedaInicial.especialidad.idServicio,
+          Channel: 'PatientPortal'
+        }).subscribe( dt => {
+
+          let mensajes = (dt && dt['mensajes']) ? dt['mensajes'] : [];
+          this.datosPaciente.emit({ paciente: this.paciente, reglas: reglas, valorConvenio: valorConvenio, reservable: reservable, mensajes: mensajes });
+
+        })
+         
       })
 
     } else {

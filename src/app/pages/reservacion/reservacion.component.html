@@ -59,18 +59,18 @@
       </app-identificacion>
     </mat-tab>
     <mat-tab label="Error">
-      <app-error-validacion [reglas]="reglasActuales" (emitAccionar)="accionValidacionReglas($event)">
+      <app-error-validacion [reglas]="reglasActuales" [mensajes]="mensajesActuales" (emitAccionar)="accionValidacionReglas($event)">
       </app-error-validacion>
     </mat-tab>
     <mat-tab label="Confirmación">
       <button mat-raised-button color="primary" class="btn-ret" (click)="cambiarEtapa(2)"
         *ngIf="!reservaRealizada">Volver</button>
-      <app-confirmacion #confirmacion [busquedaInicial]="busquedaInfo" [calendario]="calendario" [paciente]="paciente"
+      <app-confirmacion #confirmacion [busquedaInicial]="busquedaInfo" [mensajes]="mensajesActuales" [calendario]="calendario" [paciente]="paciente"
         [reservaFinalizada]="reservaRealizada">
       </app-confirmacion>
     </mat-tab>
     <mat-tab label="ReservaRealizada">
-      <app-reservacion-efectuada [busquedaInicial]="busquedaInfo" [calendario]="calendario" [paciente]="paciente"
+      <app-reservacion-efectuada [busquedaInicial]="busquedaInfo" [mensajes]="mensajesActuales" [calendario]="calendario" [paciente]="paciente"
         [codCita]="codCita" [valorConvenio]="valorConvenio"></app-reservacion-efectuada>
     </mat-tab>
 

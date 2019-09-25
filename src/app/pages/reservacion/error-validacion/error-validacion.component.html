@@ -6,6 +6,10 @@
 					<div class="busqueda-hora title-id">
 						<h4>Información</h4>
 						<p *ngFor="let regla of reglas.reglas"><b>- {{ regla.nombre }}.</b></p>
+						<h4>Observaciones</h4>
+						<ng-container *ngFor="let msj of mensajes">
+							<div [innerHTML]="msj['mensaje']['contenido']" *ngIf="msj['mensaje']['mostrar']" ></div>
+						</ng-container>
 					</div>
 				</div>
 				<div class="col-lg-5">
