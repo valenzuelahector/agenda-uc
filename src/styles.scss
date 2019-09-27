@@ -5882,7 +5882,8 @@ a.volver-hora:hover{
       display: block;
     }
     .w-pasos{
-      margin: 40px auto !important;
+      /* margin: 40px auto !important; */
+      margin: 40px auto 20px !important;
     }
     .item-doc .box-doc{
       margin-bottom: 30px;
@@ -6039,7 +6040,7 @@ a.volver-hora:hover{
         font-size: 40px;
     }
     .titulo-2{
-        font-size: 30px;
+        font-size: 25px;
     }
     .titulo-3{
         font-size: 24px;
@@ -6470,6 +6471,8 @@ a.volver-hora:hover{
     .w-pasos:after{
       display: none;
     }
+  
+
     .resultados-para .cuadro-res{
       display: block;
       text-align: left;
@@ -6630,3 +6633,44 @@ width: 850px;
 .hover{
     cursor:pointer !important;
 }
+
+@media (max-width: 480px)
+{
+.w-pasos {
+    margin-bottom: 20px !important;
+    }
+}
+@media (max-width: 400px) {
+    .header-reserva h2 {
+      font-size: 22px;
+    }
+    .content.wrap.cloader {
+      padding: 0;
+    }
+    .w-pasos {
+      flex-wrap: nowrap;
+    }
+    .item-paso {
+      min-width: 0 !important;
+      max-width: 100% !important;
+    }
+    .w-pasos .item-paso figure {
+      width: 50px;
+      height: 50px;
+    }
+  }
+  @media (max-width: 300px) {
+    .w-pasos .item-paso h4 {
+      font-size: 10px!important;
+    }
+  }
+  @media (max-width: 991px) {
+    section.w-reservas {
+      margin-bottom: 0;
+    }
+  }
+  @media (max-width: 991px){
+    .header-reserva {
+      margin-bottom: 0px;
+    }
+  }
