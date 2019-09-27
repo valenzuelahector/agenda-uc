@@ -8,6 +8,6 @@ export const environment = {
 
 export const ENV = {
   baseApi: 'https://apigw.ucchristus.cl',
-  servRoute: '/agendaambulatoria-test',
-  profRoute: '/profesionales-pre'
+  servRoute: '/agendaambulatoria-prod',
+  profRoute: '/profesionales-prod'
 }
