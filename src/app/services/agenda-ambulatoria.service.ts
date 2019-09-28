@@ -26,16 +26,19 @@ export class AgendaAmbulatoriaService {
     return this.http.get(this.baseApi + '/Areas');
   }
 
-  getEspecialidadesByGeneric(idArea:any){
-    return this.http.get(this.baseApi + '/Servicios/Rel/Especialidades?idArea=' + idArea);
+  getEspecialidadesByGeneric(idArea:any, filtro:any = null){
+    let keyf = (filtro) ? '&filtro=' + filtro : '';
+    return this.http.get(this.baseApi + '/Servicios/Rel/Especialidades?idArea=' + idArea + keyf);
   }
 
-  getEspecialidadesByProfesional(idProfesional: string, idArea:string){
-    return this.http.get(this.baseApi + '/Servicios/Rel/Especialidades?idProfesional=' + idProfesional + '&idArea=' + idArea);
+  getEspecialidadesByProfesional(idProfesional: string, idArea:string, filtro:any = null){
+    let keyf = (filtro) ? '&filtro=' + filtro : '';
+    return this.http.get(this.baseApi + '/Servicios/Rel/Especialidades?idProfesional=' + idProfesional + '&idArea=' + idArea + keyf);
   }
 
-  getProfesionales(idArea:string){
-    return this.http.get(this.baseApi + '/Profesionales?idArea=' + idArea);
+  getProfesionales(idArea:string, filtro:any = null){
+    let keyf = (filtro) ? '&patronNombre=' + filtro : '';
+    return this.http.get(this.baseApi + '/Profesionales?idArea=' + idArea + keyf);
   }
 
   getCentrosByEspecialidad(idServicio:string, idArea:string, idProfesional = null){

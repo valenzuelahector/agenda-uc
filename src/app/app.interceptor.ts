@@ -16,11 +16,13 @@ export class Interceptor implements HttpInterceptor {
   ) { }
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-
-    setTimeout(() => {
-      this.utils.showProgressBar();
-      clearTimeout(this.clearProgBar)
-    }, 200);
+    
+    if(request.url.indexOf('/Servicios/Rel/Especialidades') < 0 && request.url.indexOf('/Profesionales?idArea') < 0){
+      setTimeout(() => {
+        this.utils.showProgressBar();
+        clearTimeout(this.clearProgBar)
+      }, 200);
+    }
 
     request = request.clone(this.reqClone);
 

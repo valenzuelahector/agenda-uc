@@ -37,20 +37,24 @@
               <input matInput type="text" placeholder="Puede buscar por nombre o apellido"
                 [formControl]="profesionalCtrl" [matAutocomplete]="auto" autocomplete="off">
               <mat-icon matPrefix style="margin-right: 10px">school</mat-icon>
+              <mat-spinner [diameter]="30" matSuffix *ngIf="loadingProfesionales"></mat-spinner>
               <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayTextAutocomplete"
-                (optionSelected)="profesionalSelection($event)" matNativeControl >
-                <mat-option *ngFor="let prof of filterProfesionales | async" [value]="prof"
+                (optionSelected)="profesionalSelection($event)" >
+                <mat-option *ngFor="let prof of filterProfesionales" [value]="prof"
                    matTooltipPosition="right">
                   {{ prof.detalle }}
                 </mat-option>
+                <mat-option *ngIf="!filterProfesionales || filterProfesionales == 0" [value]="null" matTooltipPosition="right">
+                  No se encontraron profesionales
+                </mat-option>
               </mat-autocomplete>
               <button mat-button matSuffix mat-icon-button aria-label="Clear" (click)="clearSelection('profesional')"
-                matTooltip="Limpiar Seleccion" *ngIf="profesionalCtrl.value">
+                matTooltip="Limpiar Seleccion" *ngIf="profesionalCtrl.value && profesionalCtrl.value.idProfesional && !loadingProfesionales">
                 <mat-icon>close</mat-icon>
               </button>
             </mat-form-field>
           </div>
-
+  
           <div class="col-lg-6 col-md-12"
             *ngIf="((tipoConsulta == 'especialidad' && especialidades.length > 0) || (tipoConsulta == 'profesional' && profesionalSelected && especialidades.length > 0)) && loadedEsp">
             <mat-form-field class="full" appearance="fill" [color]="primary">
@@ -59,15 +63,20 @@
                 placeholder="Puede buscar por {{ tipoConsulta == 'especialidad' ? 'especialidad o servicio' : 'nombre'}}"
                 [formControl]="especialidadCtrl" [matAutocomplete]="auto" autocomplete="off">
               <mat-icon matPrefix style="margin-right: 10px">add_to_photos</mat-icon>
-              <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayTextAutocomplete"
+              <mat-spinner [diameter]="30" matSuffix *ngIf="loadingEspecialidades"></mat-spinner>
+              <mat-autocomplete #auto="matAutocomplete"  [displayWith]="displayTextAutocomplete"
                 (optionSelected)="especialidadSelection($event)">
-                <mat-option *ngFor="let esp of filterEspecialidades | async" [value]="esp"
+                <div class="layerl" *ngIf="loadingEspecialidades"></div>
+                <mat-option *ngFor="let esp of filterEspecialidades" [value]="esp"
                   matTooltipPosition="right">
                   {{ esp.detalle }}
                 </mat-option>
+                <mat-option *ngIf="!filterEspecialidades || filterEspecialidades == 0" [value]="null" matTooltipPosition="right">
+                  No se encontraron especialidades
+                </mat-option>
               </mat-autocomplete>
               <button mat-button matSuffix mat-icon-button aria-label="Clear" (click)="clearSelection('especialidad')"
-                matTooltip="Limpiar Seleccion" *ngIf="especialidadCtrl.value">
+                matTooltip="Limpiar Seleccion" *ngIf="especialidadCtrl.value && especialidadCtrl.value.idEspecialidad && !loadingEspecialidades">
                 <mat-icon>close</mat-icon>
               </button>
             </mat-form-field>
@@ -90,6 +99,27 @@
                 <mat-icon>close</mat-icon>
               </button>
             </mat-form-field>
+          </div>
+
+          <div class="col-lg-6 col-md-12" *ngIf="tipoConsulta == 'profesional' && !loadedProf" >
+              <p class="nores" style="position: relative; padding-left:70px;">              
+                <mat-spinner [diameter]="40" style="position: absolute; left:15px; top:10px;"></mat-spinner>
+                Cargando, por favor espere... 
+              </p>
+          </div>
+
+          <div class="col-lg-6 col-md-12" *ngIf="tipoConsulta == 'especialidad' && !loadedEsp" >
+              <p class="nores" style="position: relative; padding-left:70px;">              
+                <mat-spinner [diameter]="40" style="position: absolute; left:15px; top:10px;"></mat-spinner>
+                Cargando, por favor espere... 
+              </p>
+          </div>
+
+          <div class="col-lg-6 col-md-12" *ngIf="tipoConsulta == 'profesional' && profesionalSelected && !loadedEsp" >
+              <p class="nores" style="position: relative; padding-left:70px;">              
+                <mat-spinner [diameter]="40" style="position: absolute; left:15px; top:10px;"></mat-spinner>
+                Cargando, por favor espere... 
+              </p>
           </div>
 
           <div class="col-lg-6 col-md-12" *ngIf="tipoConsulta == 'profesional' && profesionales.length == 0 && loadedProf">
