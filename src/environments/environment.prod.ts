@@ -9,5 +9,6 @@ export const environment = {
 export const ENV = {
   baseApi: 'https://apigw.ucchristus.cl',
   servRoute: '/agendaambulatoria-prod',
-  profRoute: '/profesionales-prod'
+  profRoute: '/profesionales-prod',
+  idPlanSaludInit: '4c30555e-5ed3-418f-8f54-a91a00ace99b'
 }

@@ -5,6 +5,7 @@ import { MatCalendarCellCssClasses } from '@angular/material';
 import { PerfilProfesionalComponent } from 'src/app/shared/components/modals/perfil-profesional/perfil-profesional.component';
 import { MatDialog } from '@angular/material';
 import { OrderPipe } from 'ngx-order-pipe';
+import { ENV } from 'src/environments/environment';
 
 @Component({
   selector: 'app-seleccion',
@@ -70,7 +71,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
         fechaInicio: this.utils.trDateStr(this.fechaHoy),
         fechaTermino: this.utils.trDateStr(this.fechaLimite),
         idServicio: this.busquedaInicial.especialidad.idServicio,
-        idPlanSalud: '4c30555e-5ed3-418f-8f54-a91a00ace99b',
+        idPlanSalud: ENV.idPlanSaludInit,
         idProfesional: idProfesional
       }).subscribe(data => {
 

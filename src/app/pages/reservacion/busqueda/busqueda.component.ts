@@ -5,6 +5,7 @@ import { map, startWith, debounceTime, tap, switchMap, finalize } from 'rxjs/ope
 import { Observable, Observer } from 'rxjs';
 import { UtilsService } from 'src/app/services/utils.service';
 import { ActivatedRoute } from '@angular/router';
+import { OrderPipe } from 'ngx-order-pipe';
 
 @Component({
   selector: 'app-busqueda',
@@ -45,7 +46,8 @@ export class BusquedaComponent implements OnInit {
   constructor(
     public agendaService: AgendaAmbulatoriaService,
     public utils: UtilsService,
-    public aRouter: ActivatedRoute
+    public aRouter: ActivatedRoute,
+    public orderPipe: OrderPipe
   ) { }
 
   ngOnInit() {
@@ -112,16 +114,17 @@ export class BusquedaComponent implements OnInit {
 
         if (res['profesionales'] && res['profesionales'].length > 0) {
           res['profesionales'].forEach((val, key) => {
-            res['profesionales'][key]['detalle'] = val['nombreProfesional'];
 
+            res['profesionales'][key]['detalle'] = val['nombreProfesional'];
             if (qp['profesional'] == val['idProfesional']) {
               matchProfesional = val;
             }
           })
-
-          this.profesionales = res['profesionales'];
-          this.filterProfesionales = res['profesionales'];
-
+          
+          
+          this.profesionales = this.orderPipe.transform(res['profesionales'], 'detalle');
+          this.filterProfesionales = this.orderPipe.transform(res['profesionales'], 'detalle');
+          
           if (matchProfesional) {
             this.profesionalCtrl.patchValue(matchProfesional);
             this.profesionalSelection(matchProfesional);
