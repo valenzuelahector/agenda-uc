@@ -12,7 +12,6 @@ export const ENV = {
   servRoute: '/agendaambulatoria-test',
   profRoute: '/profesionales-pre',
   idPlanSaludInit: '4c30555e-5ed3-418f-8f54-a91a00ace99b'
-
 }
 
 /*

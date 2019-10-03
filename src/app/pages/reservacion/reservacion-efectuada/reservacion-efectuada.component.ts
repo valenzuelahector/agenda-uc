@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-reservacion-efectuada',
@@ -14,7 +15,9 @@ export class ReservacionEfectuadaComponent implements OnInit {
   @Input() valorConvenio:any;
   @Input() mensajes:any = [];
 
-  constructor() { }
+  constructor(    
+    public sanitizer:DomSanitizer
+    ) { }
 
   ngOnInit() {
   }

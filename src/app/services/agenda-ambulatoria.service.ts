@@ -26,9 +26,11 @@ export class AgendaAmbulatoriaService {
     return this.http.get(this.baseApi + '/Areas');
   }
 
-  getEspecialidadesByGeneric(idArea:any, filtro:any = null){
+  getEspecialidadesByGeneric(idArea:any, filtro:any = null, idServicio:string = null){
     let keyf = (filtro) ? '&filtro=' + filtro : '';
-    return this.http.get(this.baseApi + '/Servicios/Rel/Especialidades?idArea=' + idArea + keyf);
+    let ids = (idServicio) ? '&idServicio=' + idServicio : '';
+
+    return this.http.get(this.baseApi + '/Servicios/Rel/Especialidades?idArea=' + idArea + keyf + ids);
   }
 
   getEspecialidadesByProfesional(idProfesional: string, idArea:string, filtro:any = null){
@@ -36,9 +38,11 @@ export class AgendaAmbulatoriaService {
     return this.http.get(this.baseApi + '/Servicios/Rel/Especialidades?idProfesional=' + idProfesional + '&idArea=' + idArea + keyf);
   }
 
-  getProfesionales(idArea:string, filtro:any = null){
+  getProfesionales(idArea:string, filtro:any = null, idProfesional:string = null){
     let keyf = (filtro) ? '&patronNombre=' + filtro : '';
-    return this.http.get(this.baseApi + '/Profesionales?idArea=' + idArea + keyf);
+    let idp = (idProfesional) ? '&idProfesional=' + idProfesional : '';
+
+    return this.http.get(this.baseApi + '/Profesionales?idArea=' + idArea + keyf + idp);
   }
 
   getCentrosByEspecialidad(idServicio:string, idArea:string, idProfesional = null){

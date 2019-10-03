@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnChanges } from '@angular/core';
 import { AgendaAmbulatoriaService } from  'src/app/services/agenda-ambulatoria.service';
 import { UtilsService } from 'src/app/services/utils.service';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-confirmacion',
@@ -20,10 +21,12 @@ export class ConfirmacionComponent implements OnInit, OnChanges {
 
   constructor(
     public agendaService:AgendaAmbulatoriaService,
-    public utils:UtilsService
+    public utils:UtilsService,
+    public sanitizer:DomSanitizer
   ) { }
 
   ngOnInit() {
+   
   }
 
   ngOnChanges() {

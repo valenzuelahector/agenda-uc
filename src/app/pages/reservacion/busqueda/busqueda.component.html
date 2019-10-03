@@ -48,7 +48,7 @@
                   No se encontraron profesionales
                 </mat-option>
               </mat-autocomplete>
-              <button mat-button matSuffix mat-icon-button aria-label="Clear" (click)="clearSelection('profesional')"
+              <button mat-button matSuffix mat-icon-button aria-label="Clear" (click)="clearSelection('profesional', true)"
                 matTooltip="Limpiar Seleccion" *ngIf="profesionalCtrl.value && profesionalCtrl.value.idProfesional && !loadingProfesionales">
                 <mat-icon>close</mat-icon>
               </button>
@@ -75,7 +75,7 @@
                   No se encontraron especialidades
                 </mat-option>
               </mat-autocomplete>
-              <button mat-button matSuffix mat-icon-button aria-label="Clear" (click)="clearSelection('especialidad')"
+              <button mat-button matSuffix mat-icon-button aria-label="Clear" (click)="clearSelection('especialidad', true)"
                 matTooltip="Limpiar Seleccion" *ngIf="especialidadCtrl.value && especialidadCtrl.value.idEspecialidad && !loadingEspecialidades">
                 <mat-icon>close</mat-icon>
               </button>

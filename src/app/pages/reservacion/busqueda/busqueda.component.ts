@@ -40,6 +40,12 @@ export class BusquedaComponent implements OnInit {
   public loadingEspecialidades: boolean = false;
   public loadingProfesionales: boolean = false;
 
+  public loadedByUrlEspecialidades: boolean = false;
+  public loadedByUrlProfesionales: boolean = false;
+
+  public needLoadInitEspecialidades:boolean = false;
+  public needLoadInitProfesionales:boolean = false;
+
   @Output() public emitReadQuery: EventEmitter<boolean> = new EventEmitter();
   @Output() public emitBusqueda: EventEmitter<any> = new EventEmitter();
 
@@ -101,16 +107,28 @@ export class BusquedaComponent implements OnInit {
   }
 
   getProfesionales() {
-    this.clearSelection('profesional')
-    
-    this.tipoConsulta = 'profesional';
-    this.loadedProf = false;
-    this.agendaService.getProfesionales(this.areaSelected['id']).subscribe(res => {
 
-      this.setDataQueryParams().then(params => {
+    this.setDataQueryParams().then(params => {
+
+      let qp = params;
+
+      this.tipoConsulta = 'profesional';
+      this.loadedProf = false;
+
+      let idProfesional = (!this.loadedByUrlProfesionales) ? qp['profesional'] : null;
+      this.loadedByUrlProfesionales = true;
+
+      if(idProfesional){
+        this.needLoadInitProfesionales = true;
+      }
+
+      this.agendaService.getProfesionales(this.areaSelected['id'], null, idProfesional).subscribe(res => {
+
+        this.clearSelection('profesional')
+
+        this.profesionalCtrl.reset();
 
         let matchProfesional = null;
-        let qp = params;
 
         if (res['profesionales'] && res['profesionales'].length > 0) {
           res['profesionales'].forEach((val, key) => {
@@ -120,15 +138,13 @@ export class BusquedaComponent implements OnInit {
               matchProfesional = val;
             }
           })
-          
-          
+
           this.profesionales = this.orderPipe.transform(res['profesionales'], 'detalle');
           this.filterProfesionales = this.orderPipe.transform(res['profesionales'], 'detalle');
-          
+
           if (matchProfesional) {
             this.profesionalCtrl.patchValue(matchProfesional);
             this.profesionalSelection(matchProfesional);
-            this.getEspecialidades('profesional');
           } else {
             this.emitterReadQuery(true)
           }
@@ -137,7 +153,6 @@ export class BusquedaComponent implements OnInit {
           this.profesionales = [];
         }
 
-        this.profesionalCtrl.reset();
         this.profesionalCtrl.valueChanges.pipe(
           debounceTime(500),
           tap(() => {
@@ -175,39 +190,52 @@ export class BusquedaComponent implements OnInit {
 
         this.loadedProf = true;
 
-      });
 
+      })
 
     })
+
+
   }
 
   getEspecialidades(tipo: string) {
 
-    this.tipoConsulta = tipo;
-    this.loadedEsp = false;
+    this.setDataQueryParams().then(params => {
 
-    let observer: any;
-    if (tipo == 'profesional') {
-      observer = this.agendaService.getEspecialidadesByProfesional(this.profesionalSelected['idProfesional'], this.areaSelected['id']);
-    } else {
-      observer = this.agendaService.getEspecialidadesByGeneric(this.areaSelected['id']);
-      this.clearSelection('especialidad');
-    }
+      let qp = params;
 
-    this.loadingEspecialidades = true;
+      this.tipoConsulta = tipo;
+      this.loadedEsp = false;
 
-    observer.subscribe(res => {
+      let observer: any;
+      if (tipo == 'profesional') {
+        observer = this.agendaService.getEspecialidadesByProfesional(this.profesionalSelected['idProfesional'], this.areaSelected['id']);
+      } else {
+        let idServicio = (!this.loadedByUrlEspecialidades) ? qp['especialidad'] : null;
 
-      this.setDataQueryParams().then(params => {
+        if(idServicio){
+          this.needLoadInitEspecialidades = true;
+        }
 
+        observer = this.agendaService.getEspecialidadesByGeneric(this.areaSelected['id'], null, idServicio);
+
+        this.clearSelection('especialidad');
+
+      }
+
+      this.loadedByUrlEspecialidades = true;
+      this.loadingEspecialidades = true;
+
+      observer.subscribe(res => {
+
+        this.especialidadCtrl.reset();
         let matEspecialidad = null;
-        let qp = params;
 
         if (res['especialidadesPorServicio'] && res['especialidadesPorServicio'].length > 0) {
           res['especialidadesPorServicio'].forEach((val, key) => {
             res['especialidadesPorServicio'][key]['detalle'] = val['nombreEspecialidad'] + " - " + val['nombreServicio'];
 
-            if (qp['especialidad'] && qp['especialidad'] == val['idEspecialidad']) {
+            if (qp['especialidad'] && qp['especialidad'] == val['idServicio']) {
               matEspecialidad = val;
             }
           })
@@ -226,7 +254,7 @@ export class BusquedaComponent implements OnInit {
           this.especialidades = [];
           this.emitterReadQuery(true)
         }
-        this.especialidadCtrl.reset();
+
         this.especialidadCtrl.valueChanges.pipe(
           debounceTime(500),
           tap(() => {
@@ -268,12 +296,12 @@ export class BusquedaComponent implements OnInit {
 
         this.loadedEsp = true;
         this.loadingEspecialidades = false;
+
+      }, () => {
+        this.loadingEspecialidades = false;
       })
 
-    }, () => {
-      this.loadingEspecialidades = false;
     })
-
   }
 
   filterAutocomplete(nombreFiltro: string, tipoAutoComplete: string): any[] {
@@ -318,7 +346,7 @@ export class BusquedaComponent implements OnInit {
     this.getEspecialidades('especialidad');
   }
 
-  clearSelection(tipo: string) {
+  clearSelection(tipo: string, fromForm:boolean = false) {
 
     if (tipo == 'profesional') {
       this.profesionalCtrl.setValue('');
@@ -330,6 +358,12 @@ export class BusquedaComponent implements OnInit {
       this.profesionalSelected = null;
       this.especialidadSelected = null;
       this.centroAtencionSelected = null;
+
+      if(this.needLoadInitProfesionales && fromForm){
+        this.getProfesionales();
+        this.needLoadInitProfesionales = false;
+      }
+
     }
 
     if (tipo == 'especialidad') {
@@ -340,6 +374,11 @@ export class BusquedaComponent implements OnInit {
       this.especialidadSelected = null;
       this.centroAtencionSelected = null;
       this.filterEspecialidades = this.especialidades;
+
+      if(this.needLoadInitEspecialidades && fromForm){
+        this.getEspecialidades('especialidad');
+        this.needLoadInitEspecialidades = false;
+      }
     }
 
     if (tipo == 'centros') {
@@ -358,9 +397,11 @@ export class BusquedaComponent implements OnInit {
 
   especialidadSelection(event) {
 
-    if (!event.option.value) {
+    if (event.option && !event.option.value) {
       return false;
     }
+
+    console.log("In!!!!", this.especialidadCtrl.value)
     this.especialidadCtrl.disable();
     this.especialidadSelected = this.especialidadCtrl.value;
     this.centrosAtencion = [];

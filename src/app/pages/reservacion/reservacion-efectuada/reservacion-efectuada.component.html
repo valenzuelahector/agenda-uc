@@ -51,9 +51,9 @@
     </div>
   </div>
 </div>
-<div class="puntos-abajo p2">
+<div class="puntos-abajo p2" *ngIf="mensajes.length > 0">
   <ng-container *ngFor="let msj of mensajes">
-      <div [innerHTML]="msj['mensaje']['contenido']" *ngIf="msj['mensaje']['mostrar']" ></div>
+      <div [innerHTML]="sanitizer.bypassSecurityTrustHtml(msj['mensaje']['contenido'])" *ngIf="msj['mensaje']['mostrar']" ></div>
   </ng-container>
 </div>
 </section>
