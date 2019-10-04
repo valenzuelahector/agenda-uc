@@ -64,7 +64,8 @@ export class SeleccionComponent implements OnInit, OnChanges {
       this.fechaHoy = new Date();
       this.fechaLimite = new Date();
       this.fechaLimite.setDate(this.fechaHoy.getDate() + 90);
-
+      console.log(this.fechaHoy)
+      console.log(this.fechaLimite)
       this.agendaService.getRecursos({
         todosCentro: (this.busquedaInicial.centroAtencion.codigo == 'todos') ? true : false,
         idCentro: this.busquedaInicial.centroAtencion.idCentro,
@@ -173,14 +174,15 @@ export class SeleccionComponent implements OnInit, OnChanges {
       dataRecurso['listaRecursosIdCorto'][val['idCorto']] = val;
     })
 
-    for (let day = 1; day <= this.maxNumDays; day++) {
+    for (let day = 0; day <= this.maxNumDays; day++) {
 
-      if (day == 1) {
+      if (day == 0) {
         f = this.utils.trDateStr(fecha, 'json');
       } else {
         fecha.setDate(fecha.getDate() + 1);
         f = this.utils.trDateStr(fecha, 'json');
       }
+
       dataRecurso['fechasDisponibles'][f.year + '-' + f.month + '-' + f.day] = [];
       dataRecurso['cupos'].forEach((val, key) => {
 
