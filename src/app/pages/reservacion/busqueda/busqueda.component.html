@@ -34,7 +34,7 @@
           <div class="col-lg-6 col-md-12" *ngIf="tipoConsulta == 'profesional' && profesionales.length > 0 && loadedProf">
             <mat-form-field class="full" appearance="fill" [color]="primary">
               <mat-label>Seleccione un Profesional</mat-label>
-              <input matInput type="text" placeholder="Puede buscar por nombre o apellido"
+              <input matInput type="text" placeholder="Escriba para filtrar  por nombre y apellido"
                 [formControl]="profesionalCtrl" [matAutocomplete]="auto" autocomplete="off">
               <mat-icon matPrefix style="margin-right: 10px">school</mat-icon>
               <mat-spinner [diameter]="30" matSuffix *ngIf="loadingProfesionales"></mat-spinner>
@@ -60,7 +60,7 @@
             <mat-form-field class="full" appearance="fill" [color]="primary">
               <mat-label>Seleccione una Especialidad</mat-label>
               <input matInput type="text"
-                placeholder="Puede buscar por {{ tipoConsulta == 'especialidad' ? 'especialidad o servicio' : 'nombre'}}"
+                placeholder="Escriba para filtrar por {{ tipoConsulta == 'especialidad' ? 'especialidad o servicio' : 'nombre'}}"
                 [formControl]="especialidadCtrl" [matAutocomplete]="auto" autocomplete="off">
               <mat-icon matPrefix style="margin-right: 10px">add_to_photos</mat-icon>
               <mat-spinner [diameter]="30" matSuffix *ngIf="loadingEspecialidades"></mat-spinner>
