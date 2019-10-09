@@ -77,7 +77,7 @@ export class BusquedaComponent implements OnInit {
 
           res['areas'].forEach((val, key) => {
             if ((val['nombre'].toLowerCase() == 'consultas' && !qp['area']) ||
-              (qp['area'] && qp['area'] == val['id'])) {
+              (qp['area'] && qp['area'].toLowerCase() == val['id'].toLowerCase())) {
               this.areaSelected = val;
             }
           })
@@ -93,7 +93,7 @@ export class BusquedaComponent implements OnInit {
 
           this.clearSelection('profesional');
 
-          if (qp['tipo'] && qp['tipo'] == 'profesional') {
+          if (qp['tipo'] && qp['tipo'].toLowerCase() == 'profesional') {
             this.getProfesionales();
           } else {
             this.getEspecialidades('especialidad');
@@ -135,7 +135,7 @@ export class BusquedaComponent implements OnInit {
           res['profesionales'].forEach((val, key) => {
 
             res['profesionales'][key]['detalle'] = val['nombreProfesional'];
-            if (qp['profesional'] == val['idProfesional']) {
+            if (qp['profesional'] && qp['profesional'].toLowerCase() == val['idProfesional'].toLowerCase()) {
               matchProfesional = val;
             }
           })
@@ -236,7 +236,7 @@ export class BusquedaComponent implements OnInit {
           res['especialidadesPorServicio'].forEach((val, key) => {
             res['especialidadesPorServicio'][key]['detalle'] = val['nombreEspecialidad'] + " - " + val['nombreServicio'];
 
-            if (qp['especialidad'] && qp['especialidad'] == val['idServicio']) {
+            if (qp['especialidad'] && qp['especialidad'].toLowerCase() == val['idServicio'].toLowerCase()) {
               matEspecialidad = val;
             }
           })
@@ -402,7 +402,6 @@ export class BusquedaComponent implements OnInit {
       return false;
     }
 
-    console.log("In!!!!", this.especialidadCtrl.value)
     this.especialidadCtrl.disable();
     this.especialidadSelected = this.especialidadCtrl.value;
     this.centrosAtencion = [];
@@ -443,7 +442,7 @@ export class BusquedaComponent implements OnInit {
         if (res['centros'] && res['centros'].length > 0) {
           res['centros'].forEach((val, key) => {
             res['centros'][key]['detalle'] = val['nombre'] + ' - ' + val['direccion']['comuna'];
-            if (qp['centro'] && qp['centro'] == val['idCentro']) {
+            if (qp['centro'] && qp['centro'].toLowerCase() == val['idCentro'].toLowerCase()) {
               matCentro = res['centros'][key];
             }
           })
