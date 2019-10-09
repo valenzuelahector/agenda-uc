@@ -64,8 +64,6 @@ export class SeleccionComponent implements OnInit, OnChanges {
       this.fechaHoy = new Date();
       this.fechaLimite = new Date();
       this.fechaLimite.setDate(this.fechaHoy.getDate() + 90);
-      console.log(this.fechaHoy)
-      console.log(this.fechaLimite)
       this.agendaService.getRecursos({
         todosCentro: (this.busquedaInicial.centroAtencion.codigo == 'todos') ? true : false,
         idCentro: this.busquedaInicial.centroAtencion.idCentro,

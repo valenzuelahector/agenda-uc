@@ -137,7 +137,7 @@
             <div class="col-md-4 field-margin">
               <mat-form-field class="full bgwhite-input" appearance="fill" [color]="primary">
                   <mat-label>Prevision</mat-label>
-                  <mat-select formControlName="prevision" required>
+                  <mat-select formControlName="prevision">
                     <mat-optgroup *ngFor="let com of planesSalud" [label]="com.nombreCompania">
                       <mat-option *ngFor="let plan of com.planes" [value]="plan">
                         {{plan.nombrePlan}}

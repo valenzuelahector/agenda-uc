@@ -6,6 +6,7 @@ import { Observable, Observer } from 'rxjs';
 import { UtilsService } from 'src/app/services/utils.service';
 import { ActivatedRoute } from '@angular/router';
 import { OrderPipe } from 'ngx-order-pipe';
+import { ENV } from 'src/environments/environment';
 
 @Component({
   selector: 'app-busqueda',
@@ -415,6 +416,15 @@ export class BusquedaComponent implements OnInit {
         let matCentro = null;
         let qp = params;
         let region = (res['regiones'] && res['regiones'][0]) ? res['regiones'][0]['idRegion'] : null;
+
+        res['centros'].forEach((val, key) => {
+          ENV.idCentrosNoDisponibles.forEach((v, k) => {
+            if(val['idCentro'] == v){
+              res['centros'].splice(key, 1);
+            }
+          })
+        })
+        
         if (res['centros'].length >= 2) {
           let objTodos = {
             direccion: { calle: null, numero: null, piso: null, comuna: 'Región Metropolitana' },

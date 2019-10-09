@@ -4,6 +4,7 @@ import { SeleccionComponent } from './seleccion/seleccion.component';
 import { IdentificacionComponent } from './identificacion/identificacion.component';
 import { ConfirmacionComponent } from './confirmacion/confirmacion.component';
 import { UtilsService } from 'src/app/services/utils.service';
+import { ENV } from 'src/environments/environment';
 
 @Component({
   selector: 'app-reservacion',
@@ -55,7 +56,6 @@ export class ReservacionComponent implements OnInit {
       this.mensajesActuales = data.mensajes;
       if(data.reglas && data.reglas.length > 0){
         this.reglasActuales = { reglas: data.reglas, reservable: data.reservable };
-        console.log(this.reglasActuales)
         if(this.reglasActuales.reservable){
           this.paciente = data.paciente;
           this.valorConvenio = data.valorConvenio;

@@ -46,7 +46,7 @@ export class IdentificacionComponent implements OnInit {
     fono_movil: new FormControl('', Validators.required),
     tipo_identificador: new FormControl('', Validators.required),
     pais_emisor_identificador: new FormControl('', Validators.required),
-    prevision: new FormControl('', Validators.required),
+    prevision: new FormControl('',),
     fono_fijo: new FormControl(''),
     dir_calle: new FormControl(''),
     dir_numero: new FormControl(''),
@@ -138,7 +138,8 @@ export class IdentificacionComponent implements OnInit {
       let f: any = this.utils.trDateStr(data['fecha_nacimiento'], 'json')
       data['fecha_nacimiento'] = f['year'] + "-" + f['month'] + "-" + f['day'];
       data['previsionObj'] = data['prevision'];
-      data['prevision'] = data['prevision']['idPlan'];
+      data['prevision'] = (data['prevision']) ? data['prevision']['idPlan'] : null;
+      
       this.agendaService.postPaciente(data).subscribe(res => {
         if ((res['statusCode'] && res['statusCode'] == 'OK') || (res['statusCod'] && res['statusCod'] == 'OK')) {
           this.limpiarFormulario();
