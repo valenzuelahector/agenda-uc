@@ -106,7 +106,9 @@ export class UtilsService {
   }
 
   validateEmail(correo) {
-    let re = /^([\da-z_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/;
+    //let re = /^([\da-z_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$
+
+    let re = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
     if (!re.test(correo)) {
       return false;
     } else {
