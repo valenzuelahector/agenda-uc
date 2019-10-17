@@ -424,8 +424,10 @@ export class BusquedaComponent implements OnInit {
           })
         })
         
+        let objTodos:any;
+
         if (res['centros'].length >= 2) {
-          let objTodos = {
+          objTodos = {
             direccion: { calle: null, numero: null, piso: null, comuna: 'Región Metropolitana' },
             horaApertura: null,
             horaCierre: null,
@@ -439,6 +441,7 @@ export class BusquedaComponent implements OnInit {
           }
           res['centros'].unshift(objTodos)
         }
+
         if (res['centros'] && res['centros'].length > 0) {
           res['centros'].forEach((val, key) => {
             res['centros'][key]['detalle'] = val['nombre'] + ' - ' + val['direccion']['comuna'];
@@ -454,8 +457,19 @@ export class BusquedaComponent implements OnInit {
             this.centroAtencionSelection(matCentro);
             this.buscarHora();
           } else {
+            
+            if(res['centros'].length == 1){
+              this.centroAtencionCtrl.patchValue(res['centros'][0]);
+              this.centroAtencionSelection(res['centros'][0]);
+            }else if(objTodos){
+              this.centroAtencionCtrl.patchValue(objTodos);
+              this.centroAtencionSelection(objTodos);
+            }
+
             this.emitterReadQuery(true)
           }
+
+
         } else {
           this.centrosAtencion = [];
           this.readQuery = true;
