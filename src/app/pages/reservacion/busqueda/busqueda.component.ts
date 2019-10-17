@@ -7,6 +7,9 @@ import { UtilsService } from 'src/app/services/utils.service';
 import { ActivatedRoute } from '@angular/router';
 import { OrderPipe } from 'ngx-order-pipe';
 import { ENV } from 'src/environments/environment';
+import gtag, { install } from 'ga-gtag';
+
+install('UA-143119471-2');
 
 @Component({
   selector: 'app-busqueda',
@@ -405,6 +408,9 @@ export class BusquedaComponent implements OnInit {
     this.especialidadCtrl.disable();
     this.especialidadSelected = this.especialidadCtrl.value;
     this.centrosAtencion = [];
+    console.log(this.especialidadSelected['nombreEspecialidad'])
+    gtag('event', 'Especialidad', { 'event_category': 'Reserva de Hora', 'event_label': this.especialidadSelected['nombreEspecialidad'], 'value' : '0' });
+
     let isProf = (this.profesionalSelected) ? this.profesionalSelected['idProfesional'] : null;
     this.loadedCen = false;
 
@@ -491,6 +497,8 @@ export class BusquedaComponent implements OnInit {
   profesionalSelection(event) {
     this.profesionalCtrl.disable();
     this.profesionalSelected = this.profesionalCtrl.value;
+    gtag('event', 'Profesional', { 'event_category': 'Reserva de Hora', 'event_label': this.profesionalSelected['nombreProfesional'], 'value' : '0' });
+
     this.getEspecialidades('profesional');
 
   }
