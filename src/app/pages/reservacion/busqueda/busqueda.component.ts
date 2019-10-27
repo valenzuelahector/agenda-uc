@@ -20,26 +20,36 @@ export class BusquedaComponent implements OnInit {
 
   public areas: any = []
   public especialidades: any = [];
+  public realEspecialidades:any = [];
   public profesionales: any = [];
+  public servicios:any = [];
+
+
   public filterEspecialidades: Observable<any[]>;
   public filterCentrosAtencion: Observable<any[]>;
   public filterProfesionales: Observable<any[]>;;
+  public filterServicios: Observable<any[]>;;
 
   public centrosAtencion: any = [];
   public areaSelected: any;
   public profesionalSelected: any;
   public especialidadSelected: any;
   public centroAtencionSelected: any;
+  public servicioSelected:any;
+
   public tipoConsulta: string = "especialidad";
 
   public profesionalCtrl = new FormControl();
   public especialidadCtrl = new FormControl();
   public centroAtencionCtrl = new FormControl();
+  public servicioCtrl = new FormControl();
+
   public readQuery: boolean = false;
 
   public loadedProf: boolean = false;
   public loadedEsp: boolean = false;
   public loadedCen: boolean = false;
+  public loadedServ: boolean = false;
 
   public loadingEspecialidades: boolean = false;
   public loadingProfesionales: boolean = false;
@@ -202,10 +212,42 @@ export class BusquedaComponent implements OnInit {
 
   }
 
+  distinctEspecialidades(data){
+
+    let servicios = {};
+    let especialidades = {};
+
+    if(data['especialidadesPorServicio'] && data['especialidadesPorServicio'].length > 0){
+      data['especialidadesPorServicio'].forEach((val, key) => {
+        if(!servicios[val['idEspecialidad']]){
+          servicios[val['idEspecialidad']] = [];
+        }
+        servicios[val['idEspecialidad']].push({ nombreServicio: val['nombreServicio'], idServicio : val['idServicio'], detalle: val['nombreServicio'],  nombreEspecialidad: val['nombreEspecialidad'], });
+        especialidades[val['idEspecialidad']] = { nombreEspecialidad: val['nombreEspecialidad'], idEspecialidad: val['idEspecialidad'], servicios: []};
+      }) 
+  
+      Object.keys(especialidades).forEach((val, key) => {
+        Object.keys(servicios).forEach((valS, keyS) => {
+          if(val == valS){
+            especialidades[valS]['servicios'] = servicios[valS]
+          }
+        })
+      })
+
+      data['especialidadesPorServicio'] = [];
+
+      Object.keys(especialidades).forEach((val, key) => {
+        data['especialidadesPorServicio'].push(especialidades[val]);
+      })
+
+    }
+
+    return data;
+  }
+
   getEspecialidades(tipo: string) {
 
     this.setDataQueryParams().then(params => {
-
       let qp = params;
 
       this.tipoConsulta = tipo;
@@ -215,14 +257,17 @@ export class BusquedaComponent implements OnInit {
       if (tipo == 'profesional') {
         observer = this.agendaService.getEspecialidadesByProfesional(this.profesionalSelected['idProfesional'], this.areaSelected['id']);
       } else {
-        let idServicio = (!this.loadedByUrlEspecialidades) ? qp['especialidad'] : null;
 
+        let idServicio = null;
+
+        if(!this.loadedByUrlEspecialidades){
+          idServicio = (this.tipoConsulta == 'especialidad') ? qp['servicio'] : qp['especialidad'];
+        }
+        
         if(idServicio){
           this.needLoadInitEspecialidades = true;
         }
-
         observer = this.agendaService.getEspecialidadesByGeneric(this.areaSelected['id'], null, idServicio);
-
         this.clearSelection('especialidad');
 
       }
@@ -234,13 +279,22 @@ export class BusquedaComponent implements OnInit {
 
         this.especialidadCtrl.reset();
         let matEspecialidad = null;
+        if(tipo == 'especialidad'){
+          res = this.distinctEspecialidades(res);
+        }
 
         if (res['especialidadesPorServicio'] && res['especialidadesPorServicio'].length > 0) {
           res['especialidadesPorServicio'].forEach((val, key) => {
-            res['especialidadesPorServicio'][key]['detalle'] = val['nombreEspecialidad'] + " - " + val['nombreServicio'];
 
-            if (qp['especialidad'] && qp['especialidad'].toLowerCase() == val['idServicio'].toLowerCase()) {
-              matEspecialidad = val;
+            if(tipo == 'especialidad'){
+              res['especialidadesPorServicio'][key]['detalle'] = val['nombreEspecialidad'];
+            }else{
+              res['especialidadesPorServicio'][key]['detalle'] = val['nombreEspecialidad'] + " - " + val['nombreServicio'];
+            }
+
+            if ((tipo == 'profesional' && qp['especialidad'] && qp['especialidad'].toLowerCase() == val['idServicio'].toLowerCase()) ||
+                (tipo == 'especialidad' && qp['especialidad'] && qp['especialidad'].toLowerCase() == val['idEspecialidad'].toLowerCase())) {
+                 matEspecialidad = val;
             }
           })
 
@@ -249,7 +303,7 @@ export class BusquedaComponent implements OnInit {
 
           if (matEspecialidad) {
             this.especialidadCtrl.patchValue(matEspecialidad);
-            this.especialidadSelection(matEspecialidad);
+            this.especialidadSelection(matEspecialidad, tipo);
           } else {
             this.emitterReadQuery(true)
           }
@@ -269,7 +323,7 @@ export class BusquedaComponent implements OnInit {
             if (!value || value['idEspecialidad'] || value == "" || value.length < 3) {
               return Observable.create((observer: Observer<any>) => {
                 if (value == "" || value.length < 3) {
-                  observer.next({ especialidadesPorServicio: this.especialidades });
+                  observer.next({ especialidadesPorServicio: this.especialidades, noHttp: true });
                 } else {
                   observer.next([])
                 }
@@ -284,9 +338,19 @@ export class BusquedaComponent implements OnInit {
           })
         )
           .subscribe(data => {
+
+            if(this.tipoConsulta == 'especialidad' && !data['noHttp']){
+              data = this.distinctEspecialidades(data);
+            }
+
             if (data['especialidadesPorServicio']) {
+
               data['especialidadesPorServicio'].forEach((val, key) => {
-                data['especialidadesPorServicio'][key]['detalle'] = val['nombreEspecialidad'] + " - " + val['nombreServicio'];
+                if(this.tipoConsulta == 'especialidad'){
+                  data['especialidadesPorServicio'][key]['detalle'] = val['nombreEspecialidad'];
+                }else{
+                  data['especialidadesPorServicio'][key]['detalle'] = val['nombreEspecialidad'] + " - " + val['nombreServicio'];
+                }
               })
               this.filterEspecialidades = data['especialidadesPorServicio'];
             } else {
@@ -333,6 +397,13 @@ export class BusquedaComponent implements OnInit {
           return ((detalle.indexOf(filterValue) >= 0))
         })
         break;
+      
+      case 'servicios':
+        return this.servicios.filter(option => {
+          let detalle = option.detalle.toLowerCase();
+          return ((detalle.indexOf(filterValue) >= 0))
+        })
+        break;
 
       default:
         return [];
@@ -356,11 +427,14 @@ export class BusquedaComponent implements OnInit {
       this.profesionalCtrl.setValue('');
       this.especialidadCtrl.setValue('');
       this.centroAtencionCtrl.setValue('');
+      this.servicioCtrl.setValue('');
       this.profesionalCtrl.enable();
       this.especialidadCtrl.enable();
+      this.servicioCtrl.enable();
       this.centroAtencionCtrl.enable();
       this.profesionalSelected = null;
       this.especialidadSelected = null;
+      this.servicioSelected = null;
       this.centroAtencionSelected = null;
 
       if(this.needLoadInitProfesionales && fromForm){
@@ -372,17 +446,27 @@ export class BusquedaComponent implements OnInit {
 
     if (tipo == 'especialidad') {
       this.centroAtencionCtrl.setValue('');
+      this.servicioCtrl.setValue('');
       this.especialidadCtrl.setValue('');
       this.especialidadCtrl.enable();
+      this.servicioCtrl.enable();
       this.centroAtencionCtrl.enable();
       this.especialidadSelected = null;
+      this.servicioSelected = null;
       this.centroAtencionSelected = null;
       this.filterEspecialidades = this.especialidades;
 
       if(this.needLoadInitEspecialidades && fromForm){
+        console.log("carga")
         this.getEspecialidades('especialidad');
         this.needLoadInitEspecialidades = false;
       }
+    }
+
+    if (tipo == 'servicio') {
+      this.servicioCtrl.setValue('');
+      this.servicioCtrl.enable();
+      this.servicioSelected = null;
     }
 
     if (tipo == 'centros') {
@@ -399,22 +483,12 @@ export class BusquedaComponent implements OnInit {
     })
   }
 
-  especialidadSelection(event) {
-
-    if (event.option && !event.option.value) {
-      return false;
-    }
-
-    this.especialidadCtrl.disable();
-    this.especialidadSelected = this.especialidadCtrl.value;
-    this.centrosAtencion = [];
-    console.log(this.especialidadSelected['nombreEspecialidad'])
-    gtag('event', 'Especialidad', { 'event_category': 'Reserva de Hora', 'event_label': this.especialidadSelected['nombreEspecialidad'], 'value' : '0' });
+  getCentros(idServicio){
 
     let isProf = (this.profesionalSelected) ? this.profesionalSelected['idProfesional'] : null;
+    this.centrosAtencion = [];
     this.loadedCen = false;
-
-    this.agendaService.getCentrosByEspecialidad(this.especialidadCtrl.value.idServicio, this.areaSelected['id'], isProf).subscribe(res => {
+    this.agendaService.getCentrosByEspecialidad(idServicio, this.areaSelected['id'], isProf).subscribe(res => {
 
       this.setDataQueryParams().then(params => {
 
@@ -494,13 +568,78 @@ export class BusquedaComponent implements OnInit {
 
   }
 
+  getServicios(){
+
+    let listServ = this.especialidadCtrl.value.servicios;
+    this.servicios = (listServ && listServ.length > 0) ? listServ : [];
+    
+    this.setDataQueryParams().then(params => {
+
+      let matServicio = null;
+      let qp = params;
+      
+      if (this.servicios.length > 0) {
+        
+        this.servicios.forEach((val, key) => {
+          if (qp['servicio'] && qp['servicio'].toLowerCase() == val['idServicio'].toLowerCase()) {
+            matServicio = val;
+          }
+        })
+        if (matServicio) {
+          this.servicioCtrl.patchValue(matServicio);
+          this.servicioSelection(matServicio);
+        } else {
+          this.emitterReadQuery(true)
+        }
+
+
+      } else {
+        this.readQuery = true;
+      }
+
+      this.filterServicios = this.servicioCtrl.valueChanges.pipe(
+        startWith<string | any>(''),
+        map(value => typeof value === 'string' ? value : value.detalle),
+        map(nombreFiltro => nombreFiltro ? this.filterAutocomplete(nombreFiltro, 'servicios') : this.servicios.slice()),
+      );
+
+      this.loadedServ = true;
+
+    });
+    
+  }
+
+  especialidadSelection(event , tipo = null) {
+
+    if (event.option && !event.option.value) {
+      return false;
+    }
+
+    this.especialidadCtrl.disable();
+    this.especialidadSelected = this.especialidadCtrl.value;
+    gtag('event', 'Especialidad', { 'event_category': 'Reserva de Hora', 'event_label': this.especialidadSelected['nombreEspecialidad'], 'value' : '0' });
+
+    if(tipo == 'especialidad'){
+      this.getServicios()
+    }else{
+      this.getCentros(this.especialidadCtrl.value.idServicio);
+    }
+
+  }
+
+
+  servicioSelection(event){
+    this.servicioCtrl.disable();
+    this.servicioSelected = this.servicioCtrl.value;
+    this.getCentros(this.servicioCtrl.value.idServicio);
+  }
+
+
   profesionalSelection(event) {
     this.profesionalCtrl.disable();
     this.profesionalSelected = this.profesionalCtrl.value;
     gtag('event', 'Profesional', { 'event_category': 'Reserva de Hora', 'event_label': this.profesionalSelected['nombreProfesional'], 'value' : '0' });
-
     this.getEspecialidades('profesional');
-
   }
 
   centroAtencionSelection(event) {
@@ -509,6 +648,12 @@ export class BusquedaComponent implements OnInit {
   }
 
   buscarHora() {
+
+    if(this.tipoConsulta == 'especialidad'){
+      this.especialidadSelected['idServicio'] = this.servicioSelected['idServicio'];
+      this.especialidadSelected['nombreServicio'] = this.servicioSelected['nombreServicio'];
+    }
+ 
 
     this.emitBusqueda.emit({
       area: this.areaSelected,
