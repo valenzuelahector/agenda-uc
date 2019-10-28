@@ -616,6 +616,7 @@ export class BusquedaComponent implements OnInit {
     }
 
     this.especialidadCtrl.disable();
+    console.log()
     this.especialidadSelected = this.especialidadCtrl.value;
     gtag('event', 'Especialidad', { 'event_category': 'Reserva de Hora', 'event_label': this.especialidadSelected['nombreEspecialidad'], 'value' : '0' });
 
