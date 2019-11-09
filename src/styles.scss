@@ -4963,7 +4963,8 @@ width: 200px;
 }
 .item-doc .box-doc figure img{
   border-radius: 100%;
-  width: 200px;
+  width: 100%;
+    max-width: 200px;
   display: block;
   margin: 20px auto;;
 }
@@ -6674,5 +6675,12 @@ width: 850px;
   @media (max-width: 991px){
     .header-reserva {
       margin-bottom: 0px;
+    }
+  }
+
+
+  @media(max-width:640px){
+    .item-doc .box-doc .txt-doc h4{
+        margin-top: 35px
     }
   }
