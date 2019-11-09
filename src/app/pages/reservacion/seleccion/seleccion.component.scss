@@ -55,14 +55,22 @@
 ::ng-deep .calendario  .mat-calendar-table .mat-calendar-table-header tr:first-child th{
   background: #2A7DE1;
   color: #fff !important;
-  padding: 12px;
+  padding: 7px 12px;
+  border-right: 1px solid #fff;
+}
+
+::ng-deep .calendario  .mat-calendar-table .mat-calendar-table-header tr:first-child th:last-child{
+  border-right: none !important;
+
 }
 
 ::ng-deep .calendario .mat-calendar-header{
     background: #E1EBF8;
-    padding-bottom: 20px !important;
+    padding: 20px !important;
+    border-top-right-radius: 8px;
+    border-top-left-radius: 8px;
     .mat-calendar-controls{
-      margin-bottom: 0px;
+      margin: 0px;
     }
 }
 
@@ -83,6 +91,8 @@
 
 ::ng-deep .calendario .mat-calendar-body-cell {
   border:1px solid #ccc;
+  padding: 23px 0px !important;
+  background:#b467bb
 }
 
 ::ng-deep .calendario .mat-calendar-body-disabled, ::ng-deep .calendario .day-disabled, ::ng-deep .calendario .day-disabled .mat-calendar-body-selected{
@@ -103,12 +113,13 @@
   left: 0px !important;
   width: 100% !important;
   height:100% !important;
-  border:0px !important
+  border:0px !important; 
+  color:#fff
 }
 
 ::ng-deep .calendario .mat-calendar * {
   font-family: "Montserrat", sans-serif; font-weight: 500;
-  font-size: 18px !important;
+  font-size: 16px !important;
 }
 
 ::ng-deep .calendario .mat-calendar-next-button, ::ng-deep .calendario .mat-calendar-previous-button{
@@ -119,4 +130,11 @@
 
 ::ng-deep .calendario .mat-calendar-next-button[disabled], ::ng-deep .calendario .mat-calendar-previous-button[disabled]{
 opacity: 0.5 !important;
+}
+
+.spec{
+  display: block;
+    font-weight: bold;
+    font-size: 20px;
+    margin-top: 5px;
 }

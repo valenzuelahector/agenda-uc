@@ -2,7 +2,15 @@
 	<div class="resultados-para">
 		<div>
 			<h5>Resultados para:</h5>
-			<h3>{{ busquedaInicial.especialidad.detalle }}</h3>
+			<h3 *ngIf="!busquedaInicial.profesional">
+				{{ busquedaInicial.especialidad.nombreEspecialidad }}
+				<span class="spec">{{ busquedaInicial.especialidad.nombreServicio }}</span>
+			</h3>
+			<h3 *ngIf="busquedaInicial.profesional">
+				{{ busquedaInicial.profesional.nombreProfesional }}
+				<span class="spec">{{ busquedaInicial.especialidad.nombreEspecialidad }} - {{ busquedaInicial.especialidad.nombreServicio }}</span>
+			</h3>
+
 			<div class="cuadro-res">
 				<div class="item-res">
 					<img src="/assets/images/ic-area.svg" alt="">
@@ -34,19 +42,24 @@
 				<div class="row">
 					<div class="col-lg-6">
 						<div class="box-doc">
-							<figure>
-								<img [src]="re?.urlImagenProfesional" alt="">
-							</figure>
-							<div class="txt-doc">
-								<h4>{{ re.nombre }}</h4>
-								<!-- <p>Especialidad del Médico</p> -->
-								<button style="margin:20px 0px" class="ver-perfil full-btn" mat-stroked-button (click)="verPerfil(re)">Ver
-									perfil
-									<i class="fa fa-angle-right" aria-hidden="true"></i>
-								</button>
-								<p class="small" *ngIf="re?.informacionAdicional" style="margin-top:0px;">
-									{{ re?.informacionAdicional }}</p>
+							<div fxLayout="row" style="margin-top:90px">
+								<figure fxFlex="230px">
+									<img [src]="re?.urlImagenProfesional" alt="">
+								</figure>
+								<div class="txt-doc" fxFlex="100%">
+									<h4>{{ re.nombre }}</h4>
+									<!-- <p>Especialidad del Médico</p> -->
+									<button style="margin:20px 0px" class="ver-perfil full-btn" mat-stroked-button
+										(click)="verPerfil(re)">Ver
+										perfil
+										<i class="fa fa-angle-right" aria-hidden="true"></i>
+									</button>
+									<p class="small" *ngIf="re?.informacionAdicional" style="margin-top:0px;">
+										{{ re?.informacionAdicional }}</p>
+								</div>
 							</div>
+
+
 						</div>
 					</div>
 					<div class="col-lg-6">

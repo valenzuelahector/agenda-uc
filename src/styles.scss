@@ -4958,27 +4958,28 @@ padding-top: 0px;
   padding: 4px;
   border-radius: 100%;
   display: inline-block;
-  width: 100%;
+width: 200px;
 
 }
 .item-doc .box-doc figure img{
   border-radius: 100%;
-  width: 100%;
-  max-width: 200px;
-  margin: 0px auto 25px auto;
+  width: 200px;
   display: block;
+  margin: 20px auto;;
 }
 .item-doc .box-doc .txt-doc{
   width: 100%;
   padding-left: 20px;
   display: block;
-  text-align: center;
+  text-align: left;
 }
 .item-doc .box-doc .txt-doc h4{
-  font-size: 22px;
+  font-size: 18px;
   color:#2A7DE1;
   font-weight: 500;
   margin: 0;
+  text-align: left;;
+  margin-top: 70px;
 }
 .item-doc .box-doc .txt-doc p{
   font-size: 16px;
@@ -4991,6 +4992,7 @@ padding-top: 0px;
   background: #802E87;
   font-size: 16px;
   color: #fff !important;
+  padding: 5px 16px !important;
 }
 .item-doc .box-doc .txt-doc p.small{
   color:#A8A8A8;

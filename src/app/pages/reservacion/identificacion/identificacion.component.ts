@@ -116,6 +116,24 @@ export class IdentificacionComponent implements OnInit {
     })
   }
 
+
+  eventEnter(event, action){
+    if(event.keyCode == 13){
+
+      switch(action){
+
+        case 'buscarPaciente': 
+          this.setFormatRut();
+          this.buscarPaciente(); 
+        break;
+
+        case 'procesarPaciente': 
+          this.procesarPaciente(); 
+        break;
+      }
+    }
+  }
+
   guardarPaciente() {
     this.pacienteForm.patchValue({
       identificador: this.busquedaPaciente.documento,
@@ -150,7 +168,7 @@ export class IdentificacionComponent implements OnInit {
           this.busquedaPaciente.prevision = data['previsionObj'];
           this.busquedaPaciente.telefono = data['fono_movil'];
           this.buscarPaciente();
-          this.utils.mDialog("Mensaje", "Paciente creado correctamente", "message");
+       //   this.utils.mDialog("Mensaje", "Paciente creado correctamente", "message");
 
         } else {
           this.utils.mDialog("Error", "No se pudo guardar la información requerida. Detalle: " + res['statusDesc'], "message")

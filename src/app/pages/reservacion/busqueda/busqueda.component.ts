@@ -305,8 +305,17 @@ export class BusquedaComponent implements OnInit {
             this.especialidadCtrl.patchValue(matEspecialidad);
             this.especialidadSelection(matEspecialidad, tipo);
           } else {
+
+            if(tipo == 'profesional'){
+              if(res['especialidadesPorServicio'].length == 1){
+                this.especialidadCtrl.patchValue(res['especialidadesPorServicio'][0]);
+                this.especialidadSelection(res['especialidadesPorServicio'][0]);
+              }
+            }
+            
             this.emitterReadQuery(true)
           }
+
 
         } else {
           this.especialidades = [];
@@ -530,6 +539,8 @@ export class BusquedaComponent implements OnInit {
             }
           })
 
+          res['centros'] = this.orderPipe.transform(res['centros'], 'detalle');
+
           this.centrosAtencion = res['centros'];
 
           if (matCentro) {
@@ -585,9 +596,10 @@ export class BusquedaComponent implements OnInit {
             matServicio = val;
           }
         })
-        if (matServicio) {
-          this.servicioCtrl.patchValue(matServicio);
-          this.servicioSelection(matServicio);
+        if (matServicio || this.servicios.length == 1) {
+          let mServ = (this.servicios.length == 1) ? this.servicios[0] : matServicio ;
+          this.servicioCtrl.patchValue(mServ);
+          this.servicioSelection(mServ);
         } else {
           this.emitterReadQuery(true)
         }
@@ -662,6 +674,13 @@ export class BusquedaComponent implements OnInit {
       especialidad: this.especialidadSelected,
       centroAtencion: this.centroAtencionSelected
     })
+/*
+    console.log({
+      area: this.areaSelected,
+      profesional: this.profesionalSelected,
+      especialidad: this.especialidadSelected,
+      centroAtencion: this.centroAtencionSelected
+    })*/
     this.emitterReadQuery(true)
   }
 
