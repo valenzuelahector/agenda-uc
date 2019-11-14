@@ -6,6 +6,7 @@ import { PerfilProfesionalComponent } from 'src/app/shared/components/modals/per
 import { MatDialog } from '@angular/material';
 import { OrderPipe } from 'ngx-order-pipe';
 import { ENV } from 'src/environments/environment';
+import gtag, { install } from 'ga-gtag';
 
 @Component({
   selector: 'app-seleccion',
@@ -128,6 +129,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
   }
 
   onSelect(event, i) {
+
     this.selectedDate[i] = event;
     let fechaDisSel = this.utils.trDateStr(event, 'json');
     let idxFecha = fechaDisSel['year'] + "-" + fechaDisSel['month'] + '-' + fechaDisSel['day'];
@@ -147,6 +149,8 @@ export class SeleccionComponent implements OnInit, OnChanges {
       agrupCentros[key]['habilitado'] = enableCentro;
       this.centrosProfesional[i].push(agrupCentros[key]);
     })
+    gtag('event', 'Clic', { 'event_category': 'Reserva de Hora', 'event_label': 'Paso2:Selección-Calendario'});
+
   }
 
   crearCalendario(dataRecurso: any, centros: any, disponibilidades: any, recursos: any) {
@@ -230,6 +234,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
 
   seleccionarHora(data) {
     this.calendario.emit(data);
+    gtag('event', 'Clic', { 'event_category': 'Reserva de Hora', 'event_label': 'Paso2:Selección-Hora'});
   }
 
   verPerfil(re) {

@@ -9,7 +9,7 @@ import { OrderPipe } from 'ngx-order-pipe';
 import { ENV } from 'src/environments/environment';
 import gtag, { install } from 'ga-gtag';
 
-install('UA-143119471-2');
+//install('UA-143119471-2');
 
 @Component({
   selector: 'app-busqueda',

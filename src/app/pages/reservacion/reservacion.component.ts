@@ -5,6 +5,9 @@ import { IdentificacionComponent } from './identificacion/identificacion.compone
 import { ConfirmacionComponent } from './confirmacion/confirmacion.component';
 import { UtilsService } from 'src/app/services/utils.service';
 import { ENV } from 'src/environments/environment';
+import gtag, { install } from 'ga-gtag';
+
+install('UA-143119471-2');
 
 @Component({
   selector: 'app-reservacion',

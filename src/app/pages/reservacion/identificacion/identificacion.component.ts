@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild, Output, EventEmitter, Input } from '@angu
 import { UtilsService } from 'src/app/services/utils.service';
 import { AgendaAmbulatoriaService } from 'src/app/services/agenda-ambulatoria.service';
 import { FormControl, FormGroup, Validators, FormGroupDirective } from '@angular/forms'
+import gtag, { install } from 'ga-gtag';
 
 @Component({
   selector: 'app-identificacion',
@@ -87,6 +88,7 @@ export class IdentificacionComponent implements OnInit {
   }
 
   buscarPaciente() {
+
     this.findPaciente = false;
     if (!this.busquedaPaciente.documento || !this.busquedaPaciente.documento) {
       this.utils.mDialog("Error", "El número de documento es requerido", "message");
@@ -114,6 +116,10 @@ export class IdentificacionComponent implements OnInit {
       }
       this.findPaciente = true;
     })
+
+
+    gtag('event', 'Clic', { 'event_category': 'Reserva de Hora', 'event_label': 'Paso3:Identificación-Buscar'});
+
   }
 
 
@@ -282,6 +288,8 @@ export class IdentificacionComponent implements OnInit {
         return false;
       }
     }
+
+    gtag('event', 'Clic', { 'event_category': 'Reserva de Hora', 'event_label': 'Paso3:Identificación-Siguiente'});
 
   }
 
