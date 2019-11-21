@@ -136,6 +136,10 @@ export class IdentificacionComponent implements OnInit {
         case 'procesarPaciente': 
           this.procesarPaciente(); 
         break;
+
+        case 'guardarPaciente':
+          this.guardarPaciente()
+        break;
       }
     }
   }

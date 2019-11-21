@@ -80,7 +80,7 @@
 
       <div *ngIf="!paciente && findPaciente">
         <p>Por favor ingrese sus datos para otorgarle un mejor servicio</p>
-        <form [formGroup]="pacienteForm" (ngSubmit)="guardarPaciente()" #formDirective="ngForm">
+        <form [formGroup]="pacienteForm" #formDirective="ngForm"                 (keyup)="eventEnter($event, 'buscarPaciente')"        >
           <div class="row" style="margin-top:20px;">
             <div class="col-md-4 field-margin">
                 <mat-form-field class="full bgwhite-input" appearance="fill" [color]="primary">
@@ -181,8 +181,10 @@
             <div class="col-md-4 field-margin">
               <button mat-raised-button color="primary" class="full-btn" (click)="guardarPaciente()">Guardar</button>
             </div>
+  
           </div>
         </form>
+
 
       </div>
 
