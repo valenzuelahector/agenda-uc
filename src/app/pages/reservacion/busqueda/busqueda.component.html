@@ -81,28 +81,29 @@
               </button>
             </mat-form-field>
           </div>
-          <div class="col-lg-6 col-md-12"
-            *ngIf="(tipoConsulta == 'especialidad' && especialidadSelected) && loadedServ">
-            <mat-form-field class="full" appearance="fill" [color]="primary">
-              <mat-label>Seleccione un Servicio</mat-label>
-              <input matInput type="text"
-                placeholder="Puede buscar por nombre del Servicio"
-                [formControl]="servicioCtrl" [matAutocomplete]="auto" autocomplete="off">
-              <mat-icon matPrefix style="margin-right: 10px">add_to_photos</mat-icon>
-              <mat-autocomplete #auto="matAutocomplete"  [displayWith]="displayTextAutocomplete"
-                (optionSelected)="servicioSelection($event)">
-                <mat-option *ngFor="let serv of filterServicios | async" [value]="serv"
-                matTooltipPosition="right">
-                {{ serv.nombreServicio }}
-              </mat-option>
 
-              </mat-autocomplete>
-              <button mat-button matSuffix mat-icon-button aria-label="Clear" (click)="clearSelection('servicio', true)"
-                matTooltip="Limpiar Seleccion" *ngIf="servicioCtrl.value && servicioCtrl.value.idServicio">
-                <mat-icon>close</mat-icon>
-              </button>
-            </mat-form-field>
-          </div>
+          <div class="col-lg-6 col-md-12"
+          *ngIf="(tipoConsulta == 'especialidad' && especialidadSelected) && loadedServ">
+          <mat-form-field class="full" appearance="fill" [color]="primary">
+            <mat-label>Seleccione Área de Interés</mat-label>
+            <input matInput type="text"
+              placeholder="Puede buscar por nombre del Servicio"
+              [formControl]="servicioCtrl" [matAutocomplete]="auto" autocomplete="off">
+            <mat-icon matPrefix style="margin-right: 10px">add_to_photos</mat-icon>
+            <mat-autocomplete #auto="matAutocomplete"  [displayWith]="displayTextAutocomplete"
+              (optionSelected)="servicioSelection($event)">
+              <mat-option *ngFor="let serv of filterServicios | async" [value]="serv"
+              matTooltipPosition="right">
+              {{ serv.nombreServicio }}
+            </mat-option>
+
+            </mat-autocomplete>
+            <button mat-button matSuffix mat-icon-button aria-label="Clear" (click)="clearSelection('servicio', true)"
+              matTooltip="Limpiar Seleccion" *ngIf="servicioCtrl.value && servicioCtrl.value.idServicio">
+              <mat-icon>close</mat-icon>
+            </button>
+          </mat-form-field>
+        </div>
 
           <div class="col-lg-6 col-md-12" *ngIf="((especialidadSelected && tipoConsulta == 'profesional') || (servicioSelected && tipoConsulta == 'especialidad')) && centrosAtencion.length > 0 && loadedCen">
             <mat-form-field class="full" appearance="fill" [color]="primary">
@@ -123,6 +124,9 @@
               </button>
             </mat-form-field>
           </div>
+          
+
+          
 
           <div class="col-lg-6 col-md-12" *ngIf="tipoConsulta == 'profesional' && !loadedProf" >
               <p class="nores" style="position: relative; padding-left:70px;">              
@@ -161,7 +165,7 @@
 
           <div class="col-lg-6 col-md-12"
             *ngIf="especialidadSelected && centrosAtencion.length == 0 && loadedCen">
-            <p class="nores">No existen Centros Médicos disponibles </p>
+            <p class="nores">Sin disponibilidad vía web. Llámanos al 226767000</p>
           </div>
         </div>
       </div>
