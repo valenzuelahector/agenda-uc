@@ -128,8 +128,13 @@ export class SeleccionComponent implements OnInit, OnChanges {
     }
   }
 
-  onSelect(event, i) {
+  eligeOtroDia(i){
+    this.selectedDate[i] = null; 
+    this.centrosProfesional[i] = null
+  }
 
+  onSelect(event, i) {
+    console.log("ONSELECT")
     this.selectedDate[i] = event;
     let fechaDisSel = this.utils.trDateStr(event, 'json');
     let idxFecha = fechaDisSel['year'] + "-" + fechaDisSel['month'] + '-' + fechaDisSel['day'];
