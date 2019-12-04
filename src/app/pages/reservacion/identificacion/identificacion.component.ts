@@ -152,7 +152,8 @@ export class IdentificacionComponent implements OnInit {
     })
     if (this.pacienteForm.valid) {
       let data = this.pacienteForm.getRawValue();
-
+      console.log(this.utils.validateEmail(data.email));
+      console.log(data)
       if (!this.utils.validateEmail(data.email)) {
         this.utils.mDialog("Error", "El correo del Paciente tiene formato inválido.", "message");
         return false;
