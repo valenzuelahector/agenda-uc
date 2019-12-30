@@ -74,6 +74,9 @@ export class SeleccionComponent implements OnInit, OnChanges {
     let today = new Date();
     let min = today;
     let max = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+    max.setHours(max.getHours() + 23);
+    max.setMinutes(max.getMinutes() + 59)
+    max.setSeconds(max.getSeconds() + 59)
 
     this.navigationDate['min'] = min;
     this.navigationDate['max'] = max;
@@ -172,11 +175,12 @@ export class SeleccionComponent implements OnInit, OnChanges {
   }
 
   determinarMesSinCupo(){
+    console.log(this.navigationDate)
     this.recursos.forEach((val, key) => {
       let posee = false;
       let listFechaDis = Object.keys(val['fechasDisponibles']);
       listFechaDis.forEach(k => {
-        let fechaEvaluar = new Date(k + "T00:00:00");
+        let fechaEvaluar = new Date(k + "T23:59:59");
         if(fechaEvaluar.getTime() >= this.navigationDate['min'].getTime() &&
             fechaEvaluar.getTime() <= this.navigationDate['max'].getTime()  &&
             val['fechasDisponibles'][k].length > 0

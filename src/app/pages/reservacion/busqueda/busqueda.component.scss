@@ -56,3 +56,12 @@
   height: 100%;
   z-index: 10;
 }
+
+
+::ng-deep .mat-select-panel mat-option.mat-option {
+  height: unset !important;
+}
+
+::ng-deep .mat-select-panel .mat-option-text {
+  white-space: normal !important;
+}
