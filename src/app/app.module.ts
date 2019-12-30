@@ -29,6 +29,7 @@ import { ReservacionEfectuadaComponent } from './pages/reservacion/reservacion-e
 import { RutFormaterDirective } from './shared/directives/rut-formater.directive';
 import { OrderModule } from 'ngx-order-pipe';
 import { MyDateAdapter } from './dateAdapter';
+import { DaysOfWeekComponent } from './shared/components/days-of-week/days-of-week.component';
 
 @NgModule({
   declarations: [
@@ -44,7 +45,8 @@ import { MyDateAdapter } from './dateAdapter';
     PerfilProfesionalComponent,
     ErrorValidacionComponent,
     ReservacionEfectuadaComponent,
-    RutFormaterDirective
+    RutFormaterDirective,
+    DaysOfWeekComponent
   ],
   imports: [
     BrowserModule,
