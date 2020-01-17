@@ -34,7 +34,7 @@ export class IdentificacionComponent implements OnInit {
     correo: null
   }
 
-  @ViewChild("formDirective", { static: false }) formDirective: FormGroupDirective;
+  @ViewChild("formDirective") formDirective: FormGroupDirective;
 
   public pacienteForm = new FormGroup({
     identificador: new FormControl('', [Validators.required]),

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, OnChanges, ViewChild, HostListener } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnChanges, ViewChild } from '@angular/core';
 import { UtilsService } from 'src/app/services/utils.service';
 import { AgendaAmbulatoriaService } from 'src/app/services/agenda-ambulatoria.service';
 import { MatCalendarCellCssClasses } from '@angular/material';
@@ -7,7 +7,6 @@ import { MatDialog } from '@angular/material';
 import { OrderPipe } from 'ngx-order-pipe';
 import { ENV } from 'src/environments/environment';
 import gtag, { install } from 'ga-gtag';
-import * as $ from 'jquery';
 
 @Component({
   selector: 'app-seleccion',
@@ -28,15 +27,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
   public centrosProfesional: any = {};
   public loadedRecursos: boolean = false;
   public tiposCitas: any = [];
-  public dayWeekFixed = false;
-  public counterLoader = 0;
-  public displayCalendar: boolean = true;
-  public contadorMeses = 1;
-  public enableScroll:boolean = false;
-  public navigationDate = {
-    min: null,
-    max: null
-  }
+
   constructor(
     public agendaService: AgendaAmbulatoriaService,
     public utils: UtilsService,
@@ -47,40 +38,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
   ngOnInit() {
   }
 
-  getOffsetTop(element) {
-    let offsetTop = 0;
-    while (element) {
-      offsetTop += element.offsetTop;
-      element = element.offsetParent;
-    }
-    return offsetTop;
-  }
-
-  @HostListener('window:scroll', ['$event'])
-  onScroll(event) {
-    if(this.enableScroll){
-      let wPos = window.scrollY;
-      let dayWeekPos = this.getOffsetTop((<HTMLElement>document.getElementById('dayWeek')));
-      this.dayWeekFixed = (wPos >= dayWeekPos) ? true : false
-    }
-
-  }
-
   ngOnChanges() {
-    this.navigationDate = { min: null, max:null };
-    this.counterLoader = 0;
-    this.displayCalendar = true;
-
-    let today = new Date();
-    let min = today;
-    let max = new Date(today.getFullYear(), today.getMonth() + 1, 0);
-    max.setHours(max.getHours() + 23);
-    max.setMinutes(max.getMinutes() + 59)
-    max.setSeconds(max.getSeconds() + 59)
-
-    this.navigationDate['min'] = min;
-    this.navigationDate['max'] = max;
-
     if (this.busquedaInicial && this.busquedaInicial.especialidad) {
       this.resetCalendario();
       if (this.busquedaInicial.profesional) {
@@ -99,109 +57,14 @@ export class SeleccionComponent implements OnInit, OnChanges {
     this.recursos = [];
     this.centrosProfesional = {};
     this.loadedRecursos = false;
-    this.enableScroll = false;
   }
 
-  async navigateMonth(action) {
-
-    this.displayCalendar = false;
-    let today = new Date();
-    let min = this.navigationDate['min']
-    let newMin;
-    let newMax;
-
-    switch (action) {
-      case 'next':
-        this.contadorMeses++;
-        min.setMonth(min.getMonth() + 1);
-        newMin = new Date(min.getFullYear(), min.getMonth(), 1);
-        newMax = new Date(min.getFullYear(), min.getMonth() + 1, 0);
-        newMax.setHours(newMax.getHours() + 23);
-        newMax.setMinutes(newMax.getMinutes() + 59)
-        newMax.setSeconds(newMax.getSeconds() + 59)
-
-        if (this.counterLoader < 3) {
-          this.counterLoader++;
-          if (this.busquedaInicial.profesional) {
-            this.getRecursos(this.busquedaInicial.profesional.idProfesional, true);
-          } else {
-            this.getRecursos(null, true);
-          }
-        }else{
-          this.utils.showProgressBar();
-          setTimeout(() => {
-            this.utils.hideProgressBar();
-          }, 2000);
-        }
-
-        break;
-
-      case 'prev':
-        this.contadorMeses--;
-        min.setMonth(min.getMonth() - 1);
-        newMin = new Date(min.getFullYear(), min.getMonth(), (this.contadorMeses == 1) ? today.getDate() : 1);
-        newMax = new Date(min.getFullYear(), min.getMonth() + 1, 0)
-        newMax.setHours(newMax.getHours() + 23);
-        newMax.setMinutes(newMax.getMinutes() + 59)
-        newMax.setSeconds(newMax.getSeconds() + 59);
-
-        this.utils.showProgressBar();
-        setTimeout(() => {
-          this.utils.hideProgressBar();
-        }, 2000);
-
-        break;
-    }
-
-    this.navigationDate['min'] = newMin;
-    this.navigationDate['max'] = newMax;
-    this.conciliarDateDisabled();
-    this.determinarMesSinCupo()
-
-    setTimeout(() => {
-      this.displayCalendar = true;
-    }, 500);
-
-    this.goTop();
-
-  }
-
-  goTop(){
-
-    let dayWeekPos = this.getOffsetTop((<HTMLElement>document.getElementById('dayWeek')));
-    $("body, html").animate({
-        scrollTop: dayWeekPos + "px"
-    }, 500)
-  }
-
-  determinarMesSinCupo(){
-    console.log(this.navigationDate)
-    this.recursos.forEach((val, key) => {
-      let posee = false;
-      let listFechaDis = Object.keys(val['fechasDisponibles']);
-      listFechaDis.forEach(k => {
-        let fechaEvaluar = new Date(k + "T23:59:59");
-        if(fechaEvaluar.getTime() >= this.navigationDate['min'].getTime() &&
-            fechaEvaluar.getTime() <= this.navigationDate['max'].getTime()  &&
-            val['fechasDisponibles'][k].length > 0
-            ){
-              posee = true;
-        }
-      })
-      this.recursos[key]['poseeMes'] = posee;
-    })
-  }
-
-  getRecursos(idProfesional = null, next = false) {
+  getRecursos(idProfesional = null, index = 0) {
 
     return new Promise((resolve, reject) => {
-
       this.fechaHoy = new Date();
       this.fechaLimite = new Date();
-      this.fechaHoy.setDate(this.fechaHoy.getDate() + ( this.counterLoader * this.maxNumDays))
-      this.fechaLimite.setDate(this.fechaHoy.getDate() + ( this.counterLoader * this.maxNumDays) + this.maxNumDays);
-      this.fechaLimite = new Date(this.fechaLimite.getFullYear(), this.fechaLimite.getMonth() + 1, 0);
-
+      this.fechaLimite.setDate(this.fechaHoy.getDate() + 90);
       this.agendaService.getRecursos({
         todosCentro: (this.busquedaInicial.centroAtencion.codigo == 'todos') ? true : false,
         idCentro: this.busquedaInicial.centroAtencion.idCentro,
@@ -212,6 +75,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
         idProfesional: idProfesional
       }).subscribe(data => {
 
+        this.recursos = [];
         this.tiposCitas = data['listaTiposDeCita'];
 
         data['cuposProfesional'] = {};
@@ -230,68 +94,16 @@ export class SeleccionComponent implements OnInit, OnChanges {
             data['listaRecursos'][key] = this.crearCalendario(data['listaRecursos'][key], data['listaCentros'], data['listaDisponibilidades'], data['listaRecursos'])
           })
 
-          this.enableScroll = true;
-          let listRe = this.orderPipe.transform(data['listaRecursos'], 'proximaFechaEpoch');
-          this.conciliarDataRecursos(listRe, this.fechaHoy, this.fechaLimite);
+
+          this.recursos = this.orderPipe.transform(data['listaRecursos'], 'proximaFechaEpoch') ;
+        } else {
+          this.recursos = [];
         }
-
-        this.enableScroll = true;
         this.loadedRecursos = true;
-
         resolve(data);
       })
     })
 
-  }
-  
-  conciliarDateDisabled(){
-
-    this.recursos.forEach((val, key) => {
-      let dateDisabled = this.recursos[key]['datesToHighlight']['dates'];
-      this.recursos[key]['datesToHighlight']['dates'] = dateDisabled;
-      this.recursos[key]['datesToHighlight']['dateClass'] = this.dateClass(dateDisabled);
-    })
-  }
-
-  conciliarDataRecursos(recursosProcesados, desde, hasta): void {
-    
-    recursosProcesados.forEach((valRe, keyRe) => {
-      console.log(valRe['datesToHighlight'])
-      var foundInRe = false;
-      this.recursos.forEach((valRee, keyRee) => {
-        if (valRe['id'] == valRee['id']) {
-          foundInRe = true;
-          this.recursos[keyRee]['cupos'] = valRee['cupos'].concat(valRe['cupos'])
-          Object.keys(valRe['fechasDisponibles']).forEach(keyr => {
-            let fechaEvaluar = new Date(keyr)
-            if(fechaEvaluar.getTime() >= desde.getTime() && fechaEvaluar.getTime() <= hasta.getTime()){
-              this.recursos[keyRee]['fechasDisponibles'][keyr] = valRe['fechasDisponibles'][keyr];
-            }
-          })
-
-          this.recursos[keyRee]['datesToHighlight']['dates'] = [];
-          let dateDisabled = [];
-          Object.keys(this.recursos[keyRee]['fechasDisponibles']).forEach( key => {
-              let itm = this.recursos[keyRee]['fechasDisponibles'];
-              if(itm[key].length == 0){
-                dateDisabled.push(key + "T12:00:00.000Z")
-              }
-          })
-
-          this.recursos[keyRee]['datesToHighlight']['dates'] = dateDisabled;
-          this.recursos[keyRee]['datesToHighlight']['dateClass'] = this.dateClass(dateDisabled);
-        }
-      })
-
-      if (!foundInRe) {
-        valRe['disponibleDesde'] = desde;
-        valRe['disponibleHasta'] = hasta;
-        this.recursos.push(valRe)
-      }
-
-      this.determinarMesSinCupo();
-
-    })
   }
 
   dateClass(datesDs) {
@@ -316,12 +128,13 @@ export class SeleccionComponent implements OnInit, OnChanges {
     }
   }
 
-  eligeOtroDia(i) {
-    this.selectedDate[i] = null;
+  eligeOtroDia(i){
+    this.selectedDate[i] = null; 
     this.centrosProfesional[i] = null
   }
 
   onSelect(event, i) {
+    console.log("ONSELECT")
     this.selectedDate[i] = event;
     let fechaDisSel = this.utils.trDateStr(event, 'json');
     let idxFecha = fechaDisSel['year'] + "-" + fechaDisSel['month'] + '-' + fechaDisSel['day'];
@@ -337,12 +150,11 @@ export class SeleccionComponent implements OnInit, OnChanges {
 
     this.centrosProfesional[i] = [];
     let enableCentro = (Object.keys(agrupCentros).length == 1) ? true : false;
-
     Object.keys(agrupCentros).forEach(key => {
       agrupCentros[key]['habilitado'] = enableCentro;
       this.centrosProfesional[i].push(agrupCentros[key]);
     })
-    gtag('event', 'Clic', { 'event_category': 'Reserva de Hora', 'event_label': 'Paso2:Selección-Calendario' });
+    gtag('event', 'Clic', { 'event_category': 'Reserva de Hora', 'event_label': 'Paso2:Selección-Calendario'});
 
   }
 
@@ -369,7 +181,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
       dataRecurso['listaRecursosIdCorto'][val['idCorto']] = val;
     })
 
-    for (let day = 0; day <= 400; day++) {
+    for (let day = 0; day <= this.maxNumDays; day++) {
 
       if (day == 0) {
         f = this.utils.trDateStr(fecha, 'json');
@@ -383,7 +195,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
 
         let fechaEpoch = new Date(val['horaEpoch'] * 1000);
         let u = this.utils.trDateStr(fechaEpoch, 'json');
-
+        
         val['idTipoCita'] = this.getTipoCita(val['tiposDeCita'][0]);
         val['fechaHora'] = fechaEpoch;
         val['nombreCentro'] = (dataRecurso['listaCentrosIdCorto'][val['idCentro']]) ? dataRecurso['listaCentrosIdCorto'][val['idCentro']]['nombre'] : 'S/I';
@@ -418,16 +230,16 @@ export class SeleccionComponent implements OnInit, OnChanges {
       }
     })
 
-    dataRecurso['datesToHighlight']['displayed'] = true;
     dataRecurso['datesToHighlight']['dates'] = datesDisabled;
     dataRecurso['datesToHighlight']['dateClass'] = this.dateClass(datesDisabled);
+    dataRecurso['datesToHighlight']['displayed'] = true;
 
     return dataRecurso;
   }
 
   seleccionarHora(data) {
     this.calendario.emit(data);
-    gtag('event', 'Clic', { 'event_category': 'Reserva de Hora', 'event_label': 'Paso2:Selección-Hora' });
+    gtag('event', 'Clic', { 'event_category': 'Reserva de Hora', 'event_label': 'Paso2:Selección-Hora'});
   }
 
   verPerfil(re) {

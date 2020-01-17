@@ -32,7 +32,7 @@ export class Interceptor implements HttpInterceptor {
         if (event instanceof HttpResponse) {
          this.clearProgBar = setTimeout(() => {
           this.utils.hideProgressBar();
-          }, 2500);
+          }, 1200);
         }
       }, error => {
         this.dialogRef.closeAll();

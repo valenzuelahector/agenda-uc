@@ -6,7 +6,6 @@ import { ConfirmacionComponent } from './confirmacion/confirmacion.component';
 import { UtilsService } from 'src/app/services/utils.service';
 import { ENV } from 'src/environments/environment';
 import gtag, { install } from 'ga-gtag';
-import * as $ from 'jquery';
 
 install('UA-143119471-2');
 
@@ -28,11 +27,11 @@ export class ReservacionComponent implements OnInit {
   public codCita:number;
   public valorConvenio:number;
 
-  @ViewChild('tabGroup', { static: true }) tabGroup:any;
-  @ViewChild('busqueda', { static: true }) busqueda:BusquedaComponent;
-  @ViewChild('seleccion', { static: true }) seleccion:SeleccionComponent;
-  @ViewChild('identificacion', { static: true }) identificacion:IdentificacionComponent;
-  @ViewChild('confirmacion', { static: true }) confirmacion:ConfirmacionComponent;
+  @ViewChild('tabGroup') tabGroup:any;
+  @ViewChild('busqueda') busqueda:BusquedaComponent;
+  @ViewChild('seleccion') seleccion:SeleccionComponent;
+  @ViewChild('identificacion') identificacion:IdentificacionComponent;
+  @ViewChild('confirmacion') confirmacion:ConfirmacionComponent;
 
   constructor(
     public utils:UtilsService
@@ -84,7 +83,8 @@ export class ReservacionComponent implements OnInit {
   cambiarEtapa(index:number){
     this.curEtapa = index;
     this.tabGroup.selectedIndex = this.curEtapa;
-    window.scrollTo(0,0)
+    window.scrollTo(0, 0);
+
   }
 
   nuevaReserva(){
