@@ -201,6 +201,14 @@ export class SeleccionComponent implements OnInit, OnChanges {
       this.fechaHoy.setDate(this.fechaHoy.getDate() + ( this.counterLoader * this.maxNumDays))
       this.fechaLimite.setDate(this.fechaHoy.getDate() + ( this.counterLoader * this.maxNumDays) + this.maxNumDays);
       this.fechaLimite = new Date(this.fechaLimite.getFullYear(), this.fechaLimite.getMonth() + 1, 0);
+      this.fechaLimite.setHours(this.fechaLimite.getHours() + 23);
+      this.fechaLimite.setMinutes(this.fechaLimite.getMinutes() + 59);
+      this.fechaLimite.setSeconds(this.fechaLimite.getSeconds() + 59);
+
+      if(this.counterLoader > 0){
+          this.fechaHoy = new Date(this.fechaLimite.getFullYear(), this.fechaLimite.getMonth() - 2, 1);
+      }
+
 
       this.agendaService.getRecursos({
         todosCentro: (this.busquedaInicial.centroAtencion.codigo == 'todos') ? true : false,
@@ -238,7 +246,13 @@ export class SeleccionComponent implements OnInit, OnChanges {
         this.enableScroll = true;
         this.loadedRecursos = true;
 
+        setTimeout(()=> {
+          this.utils.hideProgressBar();
+        },3000)
+        
         resolve(data);
+
+
       })
     })
 
