@@ -239,7 +239,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
 
         data['cuposProfesional'] = {};
 
-        if (data['listaRecursos']) {
+        if (data['listaRecursos'] && data['listaRecursos'].length > 0) {
 
           data['listaCupos'].forEach((valCupo, keyCupo) => {
             if (!data['cuposProfesional'][valCupo['idRecurso']]) {
