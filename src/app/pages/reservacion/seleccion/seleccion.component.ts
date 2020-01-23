@@ -196,7 +196,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
     let recursos = [];
     if(data['listaRecursos']){
       data['listaRecursos'].forEach((val, key) => {
-        if(val['esProfesional']){
+        if(val['tipoRecurso'].toLowerCase() != 'room'){
           recursos.push(val);
         }
       })
