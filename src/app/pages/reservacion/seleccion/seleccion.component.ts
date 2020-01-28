@@ -193,6 +193,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
   }
 
   filtrarRecursosSoloProfesional(data){
+    
     let recursos = [];
     if(data['listaRecursos']){
       data['listaRecursos'].forEach((val, key) => {
