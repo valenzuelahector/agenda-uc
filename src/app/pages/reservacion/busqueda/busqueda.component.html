@@ -104,9 +104,7 @@
             </div>
           </div>
 
-          
-
-          <div class="col-lg-6 col-md-12" *ngIf="((especialidadSelected && tipoConsulta == 'profesional') || (servicioSelected && tipoConsulta == 'especialidad')) && centrosAtencion.length > 0 && loadedCen">
+          <div class="col-lg-6 col-md-12" *ngIf="((especialidadSelected && tipoConsulta == 'profesional') || (servicioSelected && tipoConsulta == 'especialidad')) && centrosAtencion.length > 0 && loadedCen" [hidden]="areaSelected.nombre.toLowerCase() === 'telemedicina'">
             <mat-form-field class="full" appearance="fill" [color]="primary">
               <mat-label>Seleccione un Centro de Atención</mat-label>
               <mat-icon matPrefix style="margin-right: 10px">apartment</mat-icon>
@@ -174,14 +172,14 @@
   </div>
 </div>
 
-<p class="info-busqueda bg-purple" *ngIf="profesionalSelected || especialidadSelected || centroAtencionSelected">
+<p class="info-busqueda bg-purple" *ngIf="profesionalSelected || especialidadSelected || centroAtencionSelected" [ngClass]="{ padTelm : areaSelected.nombre.toLowerCase() === 'telemedicina' }">
   <span *ngIf="profesionalSelected"> Profesional: <b>{{ profesionalSelected.nombreProfesional }}</b></span>
   <span *ngIf="especialidadSelected"> Especialidad: <b>{{ especialidadSelected.nombreEspecialidad }}</b>
       <b *ngIf="(tipoConsulta == 'especialidad' && servicioSelected) || (tipoConsulta == 'profesional' && especialidadSelected)">
         - {{ (tipoConsulta == 'especialidad') ? servicioSelected.nombreServicio : especialidadSelected.nombreServicio }}
       </b>
   </span>
-  <span *ngIf="centroAtencionSelected"> Centro de Atención: <b>{{ centroAtencionSelected.nombreEspecialidad }} -
+  <span *ngIf="centroAtencionSelected && areaSelected.nombre.toLowerCase() !== 'telemedicina'"> Centro de Atención: <b>{{ centroAtencionSelected.nombreEspecialidad }} -
       {{ centroAtencionSelected.nombre }}</b> </span>
   <button mat-raised-button class="full-btn" *ngIf="especialidadSelected && centroAtencionSelected"
     (click)="buscarHora()">BUSCAR HORA</button>

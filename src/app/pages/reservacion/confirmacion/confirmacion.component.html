@@ -15,7 +15,7 @@
         <div class="col-lg-6 b-l no-left-line">
           <p><b>Previsión:</b> {{ paciente.adicional.prevision.nombrePlan }}</p>
           <p><b>Hora de la cita:</b> {{ calendario.cupo.fechaHora | date:'dd/MM/yyyy HH:mm '}}</p>
-          <p><b>Ubicación:</b> {{ calendario.cupo.nombreCentro }}</p>
+          <p *ngIf="busquedaInicial.area.nombre.toLowerCase() !== 'telemedicina'"><b>Ubicación:</b> {{ calendario.cupo.nombreCentro }}</p>
           <p *ngIf="busquedaInicial.centroAtencion.codigo != 'todos'"><b>Dirección del centro:</b>{{ busquedaInicial.centroAtencion.direccion?.calle }},
             {{ busquedaInicial.centroAtencion.direccion?.numero }},
             {{ busquedaInicial.centroAtencion.direccion?.comuna }}</p>

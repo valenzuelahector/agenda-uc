@@ -78,21 +78,41 @@ export class BusquedaComponent implements OnInit {
     })
   }
 
+  getParamsArea(){
+    return new Promise((resolve, reject) => {
+      this.aRouter.params.subscribe( params => {
+        resolve(params)
+      })
+    })
+  }
+
   getAreas() {
     this.agendaService.getAreas().subscribe(res => {
 
       if (res['areas'] && res['areas'].length > 0) {
         this.areas = res['areas'];
 
-        this.setDataQueryParams().then(params => {
+        this.setDataQueryParams().then(async params => {
           let qp = params;
           this.areaSelected = {};
+          let paramArea = await this.getParamsArea();
 
           res['areas'].forEach((val, key) => {
-            if ((val['nombre'].toLowerCase() == 'consultas' && !qp['area']) ||
-              (qp['area'] && qp['area'].toLowerCase() == val['id'].toLowerCase())) {
-              this.areaSelected = val;
+            let setParamArea = false;
+            if(paramArea && paramArea['area'] && val['nombre'].toLowerCase() === paramArea['area'].toLowerCase()){
+                this.areaSelected = val;
+                setParamArea = true;
             }
+
+            if ( 
+                (
+                  (val['nombre'].toLowerCase() == 'consultas' && !qp['area']) || 
+                  (qp['area'] && qp['area'].toLowerCase() == val['id'].toLowerCase())
+                ) && !setParamArea 
+              ) {
+                this.areaSelected = val;
+              }
+
           })
 
           if (!this.areaSelected.id) {
@@ -515,7 +535,7 @@ export class BusquedaComponent implements OnInit {
         
         let objTodos:any;
 
-        if (res['centros'].length >= 2) {
+        if (res['centros'].length >= 2 || this.areaSelected.nombre.toLowerCase() === 'telemedicina') {
           objTodos = {
             direccion: { calle: null, numero: null, piso: null, comuna: 'Región Metropolitana' },
             horaApertura: null,

@@ -4,6 +4,7 @@ import { ReservacionComponent } from './pages/reservacion/reservacion.component'
 
 const app_routes: Routes = [
   { path: '', component: ReservacionComponent },
+  { path: ':area', component: ReservacionComponent },
   { path: '**', pathMatch: 'full', redirectTo: '' }
 ];
 

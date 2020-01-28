@@ -32,14 +32,14 @@ export class Interceptor implements HttpInterceptor {
         if (event instanceof HttpResponse) {
          this.clearProgBar = setTimeout(() => {
           this.utils.hideProgressBar();
-          }, 2500);
+          }, 3000);
         }
       }, error => {
         this.dialogRef.closeAll();
         this.utils.mDialog("Error", "Se ha producido un error interno. Intente más tarde.", "message");
         setTimeout(() => {
           this.utils.hideProgressBar();
-        }, 2500);
+        }, 3000);
 
       })
     );
