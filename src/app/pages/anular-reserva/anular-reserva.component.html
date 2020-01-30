@@ -1,0 +1,51 @@
+<section class="w-reservas">
+  <div>
+    <div class="flex-container header-reserva">
+      <h2 class="titulo-2 azul"><i class="far fa-clock"></i> ANULAR HORAS</h2>
+    </div>
+
+  </div>
+</section>
+
+
+<div class="reservaStepper cloader">
+  <div class="container-loader" *ngIf="utils.progressBar">
+    <div class="cmatspin">
+      <mat-spinner [diameter]="60"></mat-spinner>
+    </div>
+
+  </div>
+  <mat-tab-group dynamicHeight #tabGroup>
+
+    <mat-tab label="Búsqueda de Citas">
+      <app-buscar-cita></app-buscar-cita>
+    </mat-tab>
+
+    <mat-tab label="Listado de Citas">
+      <app-listado-citas></app-listado-citas>
+    </mat-tab>
+    <mat-tab label="Identificación">
+      <app-detalle-cita></app-detalle-cita>
+    </mat-tab>
+
+    <mat-tab label="Confirmación">
+      <app-confirmacion-anulacion-reserva></app-confirmacion-anulacion-reserva>
+    </mat-tab>
+
+
+  </mat-tab-group>
+</div>
+
+<div class="mesa-central" *ngIf="reservaRealizada">
+  <div class="row">
+    <div class="col-lg-6">
+      <h4>Mesa Central</h4>
+      <h3><img src="assets/images/ic-tel.svg" alt=""> 22 676 7000</h3>
+    </div>
+    <div class="col-lg-6">
+      <div class="btns-mesa">
+        <button mat-raised-button color="primary" (click)="nuevaReserva()">TOMAR OTRA HORA</button>
+      </div>
+    </div>
+  </div>
+</div>

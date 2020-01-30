@@ -1,0 +1,40 @@
+<div class="contenido-anular">
+  <div class="card-horas">
+
+    <div class="row" style="margin-top:20px;">
+      <div class="col-md-4 field-margin">
+        <mat-form-field class="full bgwhite-input" appearance="outline" [color]="primary">
+          <mat-label>RUT del Paciente</mat-label>
+          <input matInput maxlength="{{ (busquedaPaciente.tipoDocumento == 'PAS') ? 15 : NULL }}"
+            [(ngModel)]="busquedaPaciente.documentoFormateado" (focusout)="setFormatRut()"
+            (focusin)="restoreFormatRut()" (keyup)="eventEnter($event, 'buscarPaciente')"
+            placeholder="Rut sin puntos ni guión" autocomplete="off" />
+          <mat-icon matSuffix>chrome_reader_mode</mat-icon>
+        </mat-form-field>
+      </div>
+      <div class="col-md-4 field-margin">
+        <mat-form-field class="full bgwhite-input" appearance="outline" [color]="primary" (click)="picker.open()">
+          <mat-label>Fecha de la Reserva</mat-label>
+          <input matInput  [matDatepicker]="picker" [max]="today" readonly required
+            placeholder="Fecha de la cita" autocomplete="off" />
+            <mat-icon matSuffix>calendar_today</mat-icon>
+            <mat-datepicker #picker></mat-datepicker>
+
+        </mat-form-field>
+      </div>
+      <div class="col-md-4 field-margin">
+        <div class="form-group">
+          <button mat-stroked-button class="btn-azul custom-btn">BUSCAR</button>
+        </div>
+      </div>
+      <div class="col-md-8"></div>
+      <div class="col-md-4">
+        <div class="card-horas-bottom">
+          <a [routerLink]="['/']" class="reservar-hora">RESERVAR HORA</a>
+        </div>
+      </div>
+    </div>
+    
+
+  </div>
+</div>

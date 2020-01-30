@@ -173,7 +173,7 @@ export class IdentificacionComponent implements OnInit {
         if ((res['statusCode'] && res['statusCode'] == 'OK') || (res['statusCod'] && res['statusCod'] == 'OK')) {
           this.limpiarFormulario();
           this.busquedaPaciente.documento = data['identificador'];
-          this.busquedaPaciente.documentoFormateado = this.formatRut(data['identificador']);
+          this.busquedaPaciente.documentoFormateado = this.utils.formatRut(data['identificador']);
           this.busquedaPaciente.tipoDocumento = data['tipo_identificador']
           this.busquedaPaciente.correo = data['email'];
           this.busquedaPaciente.prevision = data['previsionObj'];
@@ -305,7 +305,7 @@ export class IdentificacionComponent implements OnInit {
     if (this.busquedaPaciente.tipoDocumento == 'RUN'){
       let rut = this.busquedaPaciente.documentoFormateado;
       if (rut && rut != "") {
-        let rutPuntos = this.formatRut(rut)
+        let rutPuntos = this.utils.formatRut(rut)
         this.busquedaPaciente.documentoFormateado = rutPuntos
         this.busquedaPaciente.documento = this.utils.replaceAll(rutPuntos, ".", "");
       }
@@ -313,32 +313,6 @@ export class IdentificacionComponent implements OnInit {
       this.busquedaPaciente.documento = this.busquedaPaciente.documentoFormateado;
     }
     
-  }
-
-  formatRut(rut) {
-    rut = rut.toUpperCase();
-    let actual = rut.replace(/^0+/, "");
-    if (actual != '' && actual.length > 1) {
-      var sinPuntos = actual.replace(/\./g, "");
-      var actualLimpio = sinPuntos.replace(/-/g, "");
-      var inicio = actualLimpio.substring(0, actualLimpio.length - 1);
-      var rutPuntos = "";
-      var i = 0;
-      var j = 1;
-      for (i = inicio.length - 1; i >= 0; i--) {
-        var letra = inicio.charAt(i);
-        rutPuntos = letra + rutPuntos;
-        if (j % 3 == 0 && j <= inicio.length - 1) {
-          rutPuntos = "." + rutPuntos;
-        }
-        j++;
-      }
-      var dv = actualLimpio.substring(actualLimpio.length - 1);
-      rutPuntos = rutPuntos + "-" + dv;
-    }
-
-    return rutPuntos;
-
   }
 
   restoreFormatRut() {

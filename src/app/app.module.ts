@@ -30,6 +30,11 @@ import { RutFormaterDirective } from './shared/directives/rut-formater.directive
 import { OrderModule } from 'ngx-order-pipe';
 import { MyDateAdapter } from './dateAdapter';
 import { DaysOfWeekComponent } from './shared/components/days-of-week/days-of-week.component';
+import { AnularReservaComponent } from './pages/anular-reserva/anular-reserva.component';
+import { BuscarCitaComponent } from './pages/anular-reserva/buscar-cita/buscar-cita.component';
+import { ListadoCitasComponent } from './pages/anular-reserva/listado-citas/listado-citas.component';
+import { DetalleCitaComponent } from './pages/anular-reserva/detalle-cita/detalle-cita.component';
+import { ConfirmacionAnulacionReservaComponent } from './pages/anular-reserva/confirmacion-anulacion-reserva/confirmacion-anulacion-reserva.component';
 
 @NgModule({
   declarations: [
@@ -46,7 +51,12 @@ import { DaysOfWeekComponent } from './shared/components/days-of-week/days-of-we
     ErrorValidacionComponent,
     ReservacionEfectuadaComponent,
     RutFormaterDirective,
-    DaysOfWeekComponent
+    DaysOfWeekComponent,
+    AnularReservaComponent,
+    BuscarCitaComponent,
+    ListadoCitasComponent,
+    DetalleCitaComponent,
+    ConfirmacionAnulacionReservaComponent
   ],
   imports: [
     BrowserModule,

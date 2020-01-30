@@ -1,0 +1,18 @@
+::ng-deep .mat-form-field-wrapper{
+    padding:0px !important;
+    background:#fff;
+}
+
+.custom-btn{
+    padding: 8px 0px;
+    width: 100%;
+    min-width: 240px;
+    margin: 0 auto;
+    margin-top: 7px;
+    display: block;
+
+    &:hover{
+        background:#2a7de1 !important;
+        color:#fff !important
+    }
+}
