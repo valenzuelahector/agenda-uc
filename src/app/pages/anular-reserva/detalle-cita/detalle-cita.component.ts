@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-detalle-cita',
@@ -6,10 +6,19 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./detalle-cita.component.scss']
 })
 export class DetalleCitaComponent implements OnInit {
+  
+  @Input() public dataAnularCita:any = {};
+  @Output() public emitAnular:EventEmitter<any> = new EventEmitter();
 
+  
   constructor() { }
 
   ngOnInit() {
   }
+
+  anular(){
+    this.emitAnular.emit(this.dataAnularCita['detalleCitaSeleccionada']);
+  }
+  
 
 }

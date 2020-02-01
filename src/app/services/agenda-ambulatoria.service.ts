@@ -94,4 +94,11 @@ export class AgendaAmbulatoriaService {
     return this.http.get(this.baseApi + '/Mensajes?idProfesional=' + data.ResourceId + '&idCentro=' + data.CenterId + '&idServicio=' + data.ServiceId + '&codCanal=PatientPortal')
   }
 
+  buscarCita(data){
+    return this.http.get(this.baseApi + '/Citas/Lista?idPaciente='+data.idPaciente+'&tipoIdPaciente='+data.tipoIdPaciente+'&paisIdentificador=CL&fechaCita='+data.fechaCita);
+  }
+
+  cambiarEstadoCita(data){
+    return this.http.put(this.baseApi + '/Citas', data, this.httpOptions);
+  }
 }

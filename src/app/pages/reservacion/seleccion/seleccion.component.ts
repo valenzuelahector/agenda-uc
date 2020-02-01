@@ -32,7 +32,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
   public counterLoader = 0;
   public displayCalendar: boolean = true;
   public contadorMeses = 1;
-  public enableScroll:boolean = false;
+  public enableScroll: boolean = false;
   public navigationDate = {
     min: null,
     max: null
@@ -58,7 +58,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
 
   @HostListener('window:scroll', ['$event'])
   onScroll(event) {
-    if(this.enableScroll){
+    if (this.enableScroll) {
       let wPos = window.scrollY;
       let dayWeekPos = this.getOffsetTop((<HTMLElement>document.getElementById('dayWeek')));
       this.dayWeekFixed = (wPos >= dayWeekPos) ? true : false
@@ -67,30 +67,33 @@ export class SeleccionComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges() {
-    this.navigationDate = { min: null, max:null };
-    this.counterLoader = 0;
-    this.displayCalendar = true;
+    if (this.busquedaInicial) {
+      this.navigationDate = { min: null, max: null };
+      this.counterLoader = 0;
+      this.displayCalendar = true;
 
-    let today = new Date();
-    let min = today;
-    let max = new Date(today.getFullYear(), today.getMonth() + 1, 0);
-    max.setHours(max.getHours() + 23);
-    max.setMinutes(max.getMinutes() + 59)
-    max.setSeconds(max.getSeconds() + 59)
+      let today = new Date();
+      let min = today;
+      let max = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+      max.setHours(max.getHours() + 23);
+      max.setMinutes(max.getMinutes() + 59)
+      max.setSeconds(max.getSeconds() + 59)
 
-    this.navigationDate['min'] = min;
-    this.navigationDate['max'] = max;
+      this.navigationDate['min'] = min;
+      this.navigationDate['max'] = max;
 
-    if (this.busquedaInicial && this.busquedaInicial.especialidad) {
-      this.resetCalendario();
-      if (this.busquedaInicial.profesional) {
-        this.getRecursos(this.busquedaInicial.profesional.idProfesional);
+      if (this.busquedaInicial && this.busquedaInicial.especialidad) {
+        this.resetCalendario();
+        if (this.busquedaInicial.profesional) {
+          this.getRecursos(this.busquedaInicial.profesional.idProfesional);
+        } else {
+          this.getRecursos();
+        }
       } else {
-        this.getRecursos();
+        this.resetCalendario();
       }
-    } else {
-      this.resetCalendario();
     }
+
   }
 
   resetCalendario() {
@@ -103,6 +106,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
   }
 
   async navigateMonth(action) {
+    console.log(this.navigationDate)
 
     this.displayCalendar = false;
     let today = new Date();
@@ -127,7 +131,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
           } else {
             this.getRecursos(null, true);
           }
-        }else{
+        } else {
           this.utils.showProgressBar();
           setTimeout(() => {
             this.utils.hideProgressBar();
@@ -166,38 +170,38 @@ export class SeleccionComponent implements OnInit, OnChanges {
 
   }
 
-  goTop(){
+  goTop() {
 
     let dayWeekPos = this.getOffsetTop((<HTMLElement>document.getElementById('dayWeek')));
     $("body, html").animate({
-        scrollTop: dayWeekPos + "px"
+      scrollTop: dayWeekPos + "px"
     }, 500)
   }
 
-  determinarMesSinCupo(){
+  determinarMesSinCupo() {
     console.log(this.navigationDate)
     this.recursos.forEach((val, key) => {
       let posee = false;
       let listFechaDis = Object.keys(val['fechasDisponibles']);
       listFechaDis.forEach(k => {
         let fechaEvaluar = new Date(k + "T23:59:59");
-        if(fechaEvaluar.getTime() >= this.navigationDate['min'].getTime() &&
-            fechaEvaluar.getTime() <= this.navigationDate['max'].getTime()  &&
-            val['fechasDisponibles'][k].length > 0
-            ){
-              posee = true;
+        if (fechaEvaluar.getTime() >= this.navigationDate['min'].getTime() &&
+          fechaEvaluar.getTime() <= this.navigationDate['max'].getTime() &&
+          val['fechasDisponibles'][k].length > 0
+        ) {
+          posee = true;
         }
       })
       this.recursos[key]['poseeMes'] = posee;
     })
   }
 
-  filtrarRecursosSoloProfesional(data){
-    
+  filtrarRecursosSoloProfesional(data) {
+
     let recursos = [];
-    if(data['listaRecursos']){
+    if (data['listaRecursos']) {
       data['listaRecursos'].forEach((val, key) => {
-        if(val['tipoRecurso'].toLowerCase() != 'room'){
+        if (val['tipoRecurso'].toLowerCase() != 'room') {
           recursos.push(val);
         }
       })
@@ -213,15 +217,15 @@ export class SeleccionComponent implements OnInit, OnChanges {
 
       this.fechaHoy = new Date();
       this.fechaLimite = new Date();
-      this.fechaHoy.setDate(this.fechaHoy.getDate() + ( this.counterLoader * this.maxNumDays))
-      this.fechaLimite.setDate(this.fechaHoy.getDate() + ( this.counterLoader * this.maxNumDays) + this.maxNumDays);
+      this.fechaHoy.setDate(this.fechaHoy.getDate() + (this.counterLoader * this.maxNumDays))
+      this.fechaLimite.setDate(this.fechaHoy.getDate() + (this.counterLoader * this.maxNumDays) + this.maxNumDays);
       this.fechaLimite = new Date(this.fechaLimite.getFullYear(), this.fechaLimite.getMonth() + 1, 0);
       this.fechaLimite.setHours(this.fechaLimite.getHours() + 23);
       this.fechaLimite.setMinutes(this.fechaLimite.getMinutes() + 59);
       this.fechaLimite.setSeconds(this.fechaLimite.getSeconds() + 59);
 
-      if(this.counterLoader > 0){
-          this.fechaHoy = new Date(this.fechaLimite.getFullYear(), this.fechaLimite.getMonth() - 2, 1);
+      if (this.counterLoader > 0) {
+        this.fechaHoy = new Date(this.fechaLimite.getFullYear(), this.fechaLimite.getMonth() - 2, 1);
       }
 
 
@@ -262,10 +266,10 @@ export class SeleccionComponent implements OnInit, OnChanges {
         this.enableScroll = true;
         this.loadedRecursos = true;
 
-        setTimeout(()=> {
+        setTimeout(() => {
           this.utils.hideProgressBar();
-        },3000)
-        
+        }, 3000)
+
         resolve(data);
 
 
@@ -273,8 +277,8 @@ export class SeleccionComponent implements OnInit, OnChanges {
     })
 
   }
-  
-  conciliarDateDisabled(){
+
+  conciliarDateDisabled() {
 
     this.recursos.forEach((val, key) => {
       let dateDisabled = this.recursos[key]['datesToHighlight']['dates'];
@@ -284,7 +288,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
   }
 
   conciliarDataRecursos(recursosProcesados, desde, hasta): void {
-    
+
     recursosProcesados.forEach((valRe, keyRe) => {
       console.log(valRe['datesToHighlight'])
       var foundInRe = false;
@@ -294,18 +298,18 @@ export class SeleccionComponent implements OnInit, OnChanges {
           this.recursos[keyRee]['cupos'] = valRee['cupos'].concat(valRe['cupos'])
           Object.keys(valRe['fechasDisponibles']).forEach(keyr => {
             let fechaEvaluar = new Date(keyr)
-            if(fechaEvaluar.getTime() >= desde.getTime() && fechaEvaluar.getTime() <= hasta.getTime()){
+            if (fechaEvaluar.getTime() >= desde.getTime() && fechaEvaluar.getTime() <= hasta.getTime()) {
               this.recursos[keyRee]['fechasDisponibles'][keyr] = valRe['fechasDisponibles'][keyr];
             }
           })
 
           this.recursos[keyRee]['datesToHighlight']['dates'] = [];
           let dateDisabled = [];
-          Object.keys(this.recursos[keyRee]['fechasDisponibles']).forEach( key => {
-              let itm = this.recursos[keyRee]['fechasDisponibles'];
-              if(itm[key].length == 0){
-                dateDisabled.push(key + "T12:00:00.000Z")
-              }
+          Object.keys(this.recursos[keyRee]['fechasDisponibles']).forEach(key => {
+            let itm = this.recursos[keyRee]['fechasDisponibles'];
+            if (itm[key].length == 0) {
+              dateDisabled.push(key + "T12:00:00.000Z")
+            }
           })
 
           this.recursos[keyRee]['datesToHighlight']['dates'] = dateDisabled;
@@ -322,6 +326,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
       this.determinarMesSinCupo();
 
     })
+
   }
 
   dateClass(datesDs) {

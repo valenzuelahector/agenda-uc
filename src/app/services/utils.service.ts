@@ -1,6 +1,7 @@
 import { Injectable, Output, EventEmitter } from '@angular/core';
 import { MatDialog, MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material';
 import { MessageComponent } from 'src/app/shared/components/modals/message/message.component';
+import { ConfirmarAnularReservaComponent } from '../shared/components/modals/confirmar-anular-reserva/confirmar-anular-reserva.component';
 
 @Injectable({
   providedIn: 'root'
@@ -76,7 +77,8 @@ export class UtilsService {
     if(type == 'json'){
       return { year: year, month: month,  day : day, hour: hour, min : min, sec : sec }
     }
-    return  year + "-" + month + "-" + day + "T" + hour + ":" + min +":" + sec + "-04:00";
+    let timeZone = (new Date).getTimezoneOffset() / 60;
+    return  year + "-" + month + "-" + day + "T" + hour + ":" + min +":" + sec + "-0"+timeZone+":00";
   }
 
   numberOnly(event, activate?: boolean): boolean {

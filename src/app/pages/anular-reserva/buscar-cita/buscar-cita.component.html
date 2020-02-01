@@ -2,35 +2,45 @@
   <div class="card-horas">
 
     <div class="row" style="margin-top:20px;">
-      <div class="col-md-4 field-margin">
+      <div class="col-md-4 inpute">
         <mat-form-field class="full bgwhite-input" appearance="outline" [color]="primary">
-          <mat-label>RUT del Paciente</mat-label>
-          <input matInput maxlength="{{ (busquedaPaciente.tipoDocumento == 'PAS') ? 15 : NULL }}"
+          <mat-label>Tipo de Documento *</mat-label>
+          <mat-select [(ngModel)]="busquedaPaciente.tipoDocumento" (selectionChange)="busquedaPaciente.documentoFormateado = null">
+            <mat-option [value]="'RUN'">RUN</mat-option>
+            <mat-option [value]="'PAS'">PASAPORTE</mat-option>
+          </mat-select>
+          <mat-icon matSuffix>list</mat-icon>
+        </mat-form-field>
+      </div>
+      <div class="col-md-4 field-margin inpute">
+        <mat-form-field class="full bgwhite-input" appearance="outline" [color]="primary">
+          <mat-label>{{ (busquedaPaciente.tipoDocumento == 'RUN') ? 'RUT' : 'Pasaporte'}} del Paciente *</mat-label>
+          <input matInput maxlength="{{ (busquedaPaciente.tipoDocumento == 'PAS') ? 15 : NULL }}" 
             [(ngModel)]="busquedaPaciente.documentoFormateado" (focusout)="setFormatRut()"
-            (focusin)="restoreFormatRut()" (keyup)="eventEnter($event, 'buscarPaciente')"
-            placeholder="Rut sin puntos ni guión" autocomplete="off" />
+            (focusin)="restoreFormatRut()" 
+            placeholder="{{ (busquedaPaciente.tipoDocumento == 'RUN') ? 'Rut sin puntos ni guión' : 'Pasaporte'}}" 
+            autocomplete="off" />
           <mat-icon matSuffix>chrome_reader_mode</mat-icon>
         </mat-form-field>
       </div>
-      <div class="col-md-4 field-margin">
+      <div class="col-md-4 field-margin inpute">
         <mat-form-field class="full bgwhite-input" appearance="outline" [color]="primary" (click)="picker.open()">
-          <mat-label>Fecha de la Reserva</mat-label>
-          <input matInput  [matDatepicker]="picker" [max]="today" readonly required
-            placeholder="Fecha de la cita" autocomplete="off" />
+          <mat-label>Fecha de la Reserva *</mat-label>
+          <input matInput  [(ngModel)]="busquedaPaciente.fechaCita" [matDatepicker]="picker" readonly  placeholder="Fecha de la cita" autocomplete="off" />
             <mat-icon matSuffix>calendar_today</mat-icon>
             <mat-datepicker #picker></mat-datepicker>
-
         </mat-form-field>
       </div>
-      <div class="col-md-4 field-margin">
-        <div class="form-group">
-          <button mat-stroked-button class="btn-azul custom-btn">BUSCAR</button>
+      <div class="col-md-2">
+        <div class="card-horas-bottom">
+          <a [routerLink]="['/']" class="reservar-hora" matRipple>RESERVAR HORA</a>
         </div>
       </div>
-      <div class="col-md-8"></div>
-      <div class="col-md-4">
-        <div class="card-horas-bottom">
-          <a [routerLink]="['/']" class="reservar-hora">RESERVAR HORA</a>
+      <div class="col-md-6"></div>
+  
+      <div class="col-md-4 field-margin">
+        <div class="form-group">
+          <button mat-stroked-button class="btn-azul custom-btn" (click)="buscarCita()">BUSCAR</button>
         </div>
       </div>
     </div>

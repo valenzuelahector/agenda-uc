@@ -5,7 +5,7 @@
       <div *ngIf="paciente">
         <div *ngIf="paciente">
           <div class="row">
-            <div class="col-md-9"><p class="datos-usuario">{{ paciente.nombreCompleto }} | RUT: {{ paciente.numeroDocumentoFormateado }}</p></div>
+            <div class="col-md-9"><p class="datos-usuario">{{ paciente.nombreCompleto }} | {{ busquedaPaciente.tipoDocumento == 'PAS' ? 'Pasaporte' : 'RUT' }}: {{ paciente.numeroDocumentoFormateado }}</p></div>
             <div class="col-md-3"> <button mat-raised-button color="warn" class="full-btn full" (click)="limpiarFormulario(true)" style="margin-top:14px;">Nuevo Paciente</button></div>
           </div>
         </div>

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-listado-citas',
@@ -7,9 +7,20 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ListadoCitasComponent implements OnInit {
 
+  @Input() public dataAnularCita:any;
+  @Output() public emitVerDetalle:EventEmitter<any> = new EventEmitter();
+  @Output() public emitAnular:EventEmitter<any> = new EventEmitter();
+  
   constructor() { }
 
   ngOnInit() {
   }
 
+  verDetalle(data){
+    this.emitVerDetalle.emit(data);
+  }
+
+  anular(data){
+    this.emitAnular.emit(data);
+  }
 }

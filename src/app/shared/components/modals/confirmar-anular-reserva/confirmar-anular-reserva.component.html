@@ -1,0 +1,14 @@
+<mat-dialog-content>
+    <div class="cntmodal">
+        <h3>¿Deseas anular la hora reservada con el Dr(a). {{ cita?.RecursosCita[0]?.Recurso.Nombre }} 
+            el {{ cita?.FechaHoraDesde | date:'longDate' }} a las {{ cita?.FechaHoraDesde | date:'HH:mm' }} hrs. ?</h3>
+        <div class="btns" style="margin-top: 15px; text-align: center;" *ngIf="curTab != 0">
+            <button mat-stroked-button class="btn-azul cus-pad" style="margin-right: 15px;" (click)="actionAnular(true)">
+                <mat-icon class="icon-cus-pad">check</mat-icon>CONFIRMAR
+              </button>
+            <button mat-stroked-button class="btn-blanco cus-pad" (click)="actionAnular(false)">
+              <mat-icon class="icon-cus-pad">close</mat-icon>CANCELAR
+            </button>
+          </div>
+    </div>
+</mat-dialog-content>

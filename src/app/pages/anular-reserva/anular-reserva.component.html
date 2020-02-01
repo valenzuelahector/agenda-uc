@@ -7,33 +7,40 @@
   </div>
 </section>
 
-
 <div class="reservaStepper cloader">
   <div class="container-loader" *ngIf="utils.progressBar">
     <div class="cmatspin">
       <mat-spinner [diameter]="60"></mat-spinner>
     </div>
-
   </div>
+
   <mat-tab-group dynamicHeight #tabGroup>
 
     <mat-tab label="Búsqueda de Citas">
-      <app-buscar-cita></app-buscar-cita>
+      <h4 class="txttil">Buscar Cíta Médica</h4>
+      <app-buscar-cita (emitBusquedaCita)="avanzarEtapa($event, 'buscarCita')"></app-buscar-cita>
     </mat-tab>
 
     <mat-tab label="Listado de Citas">
-      <app-listado-citas></app-listado-citas>
+      <h4 class="txttil">Citas Médicas Disponibles</h4>
+      <app-listado-citas [dataAnularCita]="dataAnularCita" (emitVerDetalle)="avanzarEtapa($event, 'detalleCita')" (emitAnular)="anularReserva($event)">
+      </app-listado-citas>
     </mat-tab>
     <mat-tab label="Identificación">
-      <app-detalle-cita></app-detalle-cita>
+      <h4 class="txttil">Detalle de Cita Médica</h4>
+      <app-detalle-cita [dataAnularCita]="dataAnularCita" (emitAnular)="anularReserva($event)"></app-detalle-cita>
     </mat-tab>
 
     <mat-tab label="Confirmación">
-      <app-confirmacion-anulacion-reserva></app-confirmacion-anulacion-reserva>
+      <app-confirmacion-anulacion-reserva [respuestaAnular]="respuestaAnular"></app-confirmacion-anulacion-reserva>
     </mat-tab>
 
-
   </mat-tab-group>
+  <div class="botones" style="margin-top: 15px;" *ngIf="curTab != 0">
+    <button mat-stroked-button class="btn-azul cus-pad" (click)="volver()">
+      <mat-icon class="icon-cus-pad">keyboard_backspace</mat-icon>Volver
+    </button>
+  </div>
 </div>
 
 <div class="mesa-central" *ngIf="reservaRealizada">

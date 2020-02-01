@@ -35,6 +35,7 @@ import { BuscarCitaComponent } from './pages/anular-reserva/buscar-cita/buscar-c
 import { ListadoCitasComponent } from './pages/anular-reserva/listado-citas/listado-citas.component';
 import { DetalleCitaComponent } from './pages/anular-reserva/detalle-cita/detalle-cita.component';
 import { ConfirmacionAnulacionReservaComponent } from './pages/anular-reserva/confirmacion-anulacion-reserva/confirmacion-anulacion-reserva.component';
+import { ConfirmarAnularReservaComponent } from './shared/components/modals/confirmar-anular-reserva/confirmar-anular-reserva.component';
 
 @NgModule({
   declarations: [
@@ -56,7 +57,8 @@ import { ConfirmacionAnulacionReservaComponent } from './pages/anular-reserva/co
     BuscarCitaComponent,
     ListadoCitasComponent,
     DetalleCitaComponent,
-    ConfirmacionAnulacionReservaComponent
+    ConfirmacionAnulacionReservaComponent,
+    ConfirmarAnularReservaComponent
   ],
   imports: [
     BrowserModule,
@@ -79,7 +81,8 @@ import { ConfirmacionAnulacionReservaComponent } from './pages/anular-reserva/co
   bootstrap: [AppComponent],
   entryComponents:[
       MessageComponent,
-      PerfilProfesionalComponent
+      PerfilProfesionalComponent,
+      ConfirmarAnularReservaComponent
   ]
 })
 export class AppModule { }

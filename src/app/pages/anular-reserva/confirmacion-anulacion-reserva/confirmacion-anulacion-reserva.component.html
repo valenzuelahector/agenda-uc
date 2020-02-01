@@ -1,4 +1,7 @@
-<div class="card-mensaje card-mensaje--success">
-    <img src="/assets/images/ic2.svg" alt="">
-    <h2>¡La hora ha sido anulada con éxito!</h2>
+<div *ngIf="respuestaAnular?.message && respuestaAnular?.code">
+  <div class="card-mensaje"
+    [ngClass]="{ 'card-mensaje--success' : respuestaAnular?.code == 'OK', 'card-mensaje--danger' : respuestaAnular?.code == 'ERROR'}">
+    <img [src]="respuestaAnular?.code == 'OK' ? '/assets/images/ic2.svg' : '/assets/images/ic1.svg'" alt="">
+    <h2 class="textcard">{{ respuestaAnular?.message }}!</h2>
   </div>
+</div>

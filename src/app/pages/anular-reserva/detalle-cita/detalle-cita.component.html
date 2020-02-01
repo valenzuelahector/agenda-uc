@@ -1,32 +1,32 @@
-<div class="contenido-anular">
+<div class="contenido-anular" *ngIf="dataAnularCita?.detalleCitaSeleccionada">
     <div class="datos-paciente">
       <div class="item size-1">
-        <p><b>Nombre paciente:</b> Camilo Inostroza</p>
+        <p><b>Nombre paciente:</b> {{ dataAnularCita?.paciente.nombreCompleto }}</p>
       </div>
       <div class="item size-2">
-        <p><b>RUT:</b> 13.245.677-K</p>
+        <p><b>RUT:</b> {{ dataAnularCita?.paciente.numeroDocumentoFormateado }}</p>
       </div>
       <div class="item size-1">
-        <p><b>Fecha de reserva:</b> 23-08-2020</p>
+        <p><b>Fecha de reserva:</b> {{ dataAnularCita?.dataBusqueda.fechaCita | date:'dd/MM/yyyy' }}</p>
       </div>
       <div class="item size-3">
-        <p><b>Hora:</b> 17:40 Hrs</p>
+        <p><b>Hora:</b> {{ dataAnularCita?.detalleCitaSeleccionada.FechaHoraDesde | date:'HH:mm' }} Hrs.</p>
       </div>
       <div class="item size-4">
-        <p><b>Profesional:</b>  <span>Jose Antonio Castro</span></p>
+        <p><b>Profesional:</b>  <span> {{ dataAnularCita?.detalleCitaSeleccionada.RecursosCita[0]?.Recurso.Nombre }}</span></p>
       </div>
       <div class="item size-1">
-        <p><b>Centro:</b> Edificio Médico Alcántara</p>
+        <p><b>Centro:</b> {{ dataAnularCita?.detalleCitaSeleccionada.Centro.Nombre }}</p>
       </div>
       <div class="item size-2">
-        <p><b>Ubicación:</b> Av. Apoquindo, 3990, Las Condes,  Región Metropolitana.</p>
+        <p><b>Ubicación:</b> 
+            {{ dataAnularCita?.detalleCitaSeleccionada.Centro.Direccion.Calle }}, 
+            {{ dataAnularCita?.detalleCitaSeleccionada.Centro.Direccion.NumeroCalle }}, 
+            {{ dataAnularCita?.detalleCitaSeleccionada.Centro.Direccion.Localidad }}.</p>
       </div>
     </div>
 
     <div class="card-horas-bottom">
-      <a href="#" class="anular-hora">ANULAR</a>
-      <a href="#" class="volver">
-        <img src="images/flecha-left.svg" alt=""> VOLVER
-      </a>
+      <button mat-stroked-button class="anular-hora"(click)="anular()">ANULAR</button>
     </div>
 </div>
