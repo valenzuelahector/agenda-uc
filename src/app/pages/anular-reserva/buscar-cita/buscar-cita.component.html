@@ -3,7 +3,7 @@
 
     <div class="row" style="margin-top:20px;">
       <div class="col-md-4 inpute">
-        <mat-form-field class="full bgwhite-input" appearance="outline" [color]="primary">
+        <mat-form-field class="full bgwhite-input" appearance="outline">
           <mat-label>Tipo de Documento *</mat-label>
           <mat-select [(ngModel)]="busquedaPaciente.tipoDocumento" (selectionChange)="busquedaPaciente.documentoFormateado = null">
             <mat-option [value]="'RUN'">RUN</mat-option>
@@ -13,9 +13,9 @@
         </mat-form-field>
       </div>
       <div class="col-md-4 field-margin inpute">
-        <mat-form-field class="full bgwhite-input" appearance="outline" [color]="primary">
+        <mat-form-field class="full bgwhite-input" appearance="outline">
           <mat-label>{{ (busquedaPaciente.tipoDocumento == 'RUN') ? 'RUT' : 'Pasaporte'}} del Paciente *</mat-label>
-          <input matInput maxlength="{{ (busquedaPaciente.tipoDocumento == 'PAS') ? 15 : NULL }}" 
+          <input matInput maxlength="{{ (busquedaPaciente.tipoDocumento == 'PAS') ? 15 : null }}" 
             [(ngModel)]="busquedaPaciente.documentoFormateado" (focusout)="setFormatRut()"
             (focusin)="restoreFormatRut()" 
             placeholder="{{ (busquedaPaciente.tipoDocumento == 'RUN') ? 'Rut sin puntos ni guión' : 'Pasaporte'}}" 
@@ -24,7 +24,7 @@
         </mat-form-field>
       </div>
       <div class="col-md-4 field-margin inpute">
-        <mat-form-field class="full bgwhite-input" appearance="outline" [color]="primary" (click)="picker.open()">
+        <mat-form-field class="full bgwhite-input" appearance="outline" (click)="picker.open()">
           <mat-label>Fecha de la Reserva *</mat-label>
           <input matInput  [(ngModel)]="busquedaPaciente.fechaCita" [matDatepicker]="picker" readonly  placeholder="Fecha de la cita" autocomplete="off" />
             <mat-icon matSuffix>calendar_today</mat-icon>
