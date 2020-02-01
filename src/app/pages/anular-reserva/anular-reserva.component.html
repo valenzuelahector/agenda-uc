@@ -36,9 +36,12 @@
     </mat-tab>
 
   </mat-tab-group>
-  <div class="botones" style="margin-top: 15px;" *ngIf="curTab != 0">
-    <button mat-stroked-button class="btn-azul cus-pad" (click)="volver()">
+  <div class="botones" style="margin-top: 15px;" *ngIf="curTab != 0 && !utils.progressBar">
+    <button mat-stroked-button class="btn-azul cus-pad" style="float:left" (click)="volver()">
       <mat-icon class="icon-cus-pad">keyboard_backspace</mat-icon>Volver
+    </button>
+    <button mat-stroked-button class="btn-azul cus-pad" style="float:right" *ngIf="dataAnularCita['detalleCitaSeleccionada'] && curTab == 2" (click)="anularReserva(dataAnularCita['detalleCitaSeleccionada'])">
+      <mat-icon class="icon-cus-pad">check</mat-icon>Anular
     </button>
   </div>
 </div>

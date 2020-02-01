@@ -2,6 +2,7 @@ import { Injectable, Output, EventEmitter } from '@angular/core';
 import { MatDialog, MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material';
 import { MessageComponent } from 'src/app/shared/components/modals/message/message.component';
 import { ConfirmarAnularReservaComponent } from '../shared/components/modals/confirmar-anular-reserva/confirmar-anular-reserva.component';
+import { Subject, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -13,6 +14,7 @@ export class UtilsService {
   public verticalPosition: MatSnackBarVerticalPosition = 'bottom';
   public nuevaHora:EventEmitter<any> = new EventEmitter();
   public resetInfoPaciente:EventEmitter<any> = new EventEmitter();
+  public emitClearBusquedaAnular = new Subject<any>();
 
   constructor(
     public dialog: MatDialog,
@@ -140,6 +142,14 @@ export class UtilsService {
 
     return rutPuntos;
 
+  }
+
+  getEmitClearBusquedaAnular() : Observable<any>{
+    return this.emitClearBusquedaAnular.asObservable();
+  }
+
+  setEmitClearBusquedaAnular(){
+    this.emitClearBusquedaAnular.next(true)
   }
 
 }

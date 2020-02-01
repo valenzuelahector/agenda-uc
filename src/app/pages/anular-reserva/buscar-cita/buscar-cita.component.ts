@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, ViewChild, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { FormGroupDirective } from '@angular/forms';
 import { UtilsService } from 'src/app/services/utils.service';
 import { AgendaAmbulatoriaService } from 'src/app/services/agenda-ambulatoria.service';
@@ -8,12 +8,13 @@ import { AgendaAmbulatoriaService } from 'src/app/services/agenda-ambulatoria.se
   templateUrl: './buscar-cita.component.html',
   styleUrls: ['./buscar-cita.component.scss', './../anular-reserva.component.scss']
 })
-export class BuscarCitaComponent implements OnInit {
+export class BuscarCitaComponent implements OnInit, OnDestroy {
 
   @ViewChild("formDirective", { static: false }) formDirective: FormGroupDirective;
   
   @Output() public emitBusquedaCita:EventEmitter<any> = new EventEmitter();
 
+  public clearBusqueda;
   public today = new Date();
   public busquedaPaciente: any = {
     tipoDocumento: "RUN",
@@ -29,6 +30,19 @@ export class BuscarCitaComponent implements OnInit {
 
   ngOnInit() {
 
+    this.clearBusqueda = this.utils.getEmitClearBusquedaAnular().subscribe( res => {
+      this.busquedaPaciente = {
+        tipoDocumento: "RUN",
+        documento: null,
+        documentoFormateado: null,
+        fechaCita: null
+      }
+    });
+    
+  }
+
+  ngOnDestroy(){
+    this.clearBusqueda.unsubscribe();
   }
 
   setFormatRut() {

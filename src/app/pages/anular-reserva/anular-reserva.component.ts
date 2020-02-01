@@ -39,7 +39,6 @@ export class AnularReservaComponent implements OnInit {
 
       case 'buscarCita':
         this.dataAnularCita = { ...data }
-        console.log(this.dataAnularCita)
         this.tabGroup.selectedIndex = 1;
         this.curTab = 1;
 
@@ -53,8 +52,8 @@ export class AnularReservaComponent implements OnInit {
       break;
 
       case 'error':
-        console.log(data)
-        this.respuestaAnular = {
+
+      this.respuestaAnular = {
           code: 'ERROR',
           message: data['message']
         }
@@ -67,15 +66,17 @@ export class AnularReservaComponent implements OnInit {
   }
 
   volver(){
-    console.log(this.curTab)
+
     if(this.curTab == 3){
       this.curTab = 0;
       this.dataAnularCita = {};
       this.respuestaAnular = {};
+      this.utils.setEmitClearBusquedaAnular();
     }else{
       this.curTab--;
     }
     this.tabGroup.selectedIndex = this.curTab;
+
   }
 
   anularReserva(data){

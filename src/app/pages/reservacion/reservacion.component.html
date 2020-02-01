@@ -55,7 +55,7 @@
       <app-seleccion #seleccion [busquedaInicial]="busquedaInfo"></app-seleccion>
     </mat-tab>
     <mat-tab label="Identificación">
-      <button mat-stroked-button class="btn-azul cus-pad" (click)="cambiarEtapa(1)"
+      <button mat-stroked-button class="btn-azul cus-pad" style="margin-bottom:20px" (click)="cambiarEtapa(1)"
         *ngIf="!reservaRealizada"><mat-icon class="icon-cus-pad">keyboard_backspace</mat-icon>Volver</button>
       <app-identificacion #identificacion [busquedaInicial]="busquedaInfo" [calendario]="calendario">
       </app-identificacion>
@@ -65,7 +65,7 @@
       </app-error-validacion>
     </mat-tab>
     <mat-tab label="Confirmación">
-      <button mat-stroked-button class="btn-azul cus-pad" (click)="cambiarEtapa(2)"
+      <button mat-stroked-button class="btn-azul cus-pad" style="margin-bottom:20px" (click)="cambiarEtapa(2)"
         *ngIf="!reservaRealizada"><mat-icon class="icon-cus-pad">keyboard_backspace</mat-icon>Volver</button>
       <app-confirmacion #confirmacion [busquedaInicial]="busquedaInfo" [mensajes]="mensajesActuales" [calendario]="calendario" [paciente]="paciente"
         [reservaFinalizada]="reservaRealizada">
