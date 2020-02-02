@@ -37,8 +37,9 @@
 
   </mat-tab-group>
   <div class="botones" style="margin-top: 15px;" *ngIf="curTab != 0 && !utils.progressBar">
-    <button mat-stroked-button class="btn-azul cus-pad" style="float:left" (click)="volver()">
-      <mat-icon class="icon-cus-pad">keyboard_backspace</mat-icon>Volver
+    <button mat-stroked-button class="btn-azul cus-pad" [ngClass]="{'leftBtn' : curTab != 3, 'centerBtn' : curTab == 3 }" (click)="volver()">
+      <mat-icon class="icon-cus-pad">keyboard_backspace</mat-icon>Volver 
+      <span *ngIf="curTab == 3">al Inicio</span>
     </button>
     <button mat-stroked-button class="btn-azul cus-pad" style="float:right" *ngIf="dataAnularCita['detalleCitaSeleccionada'] && curTab == 2" (click)="anularReserva(dataAnularCita['detalleCitaSeleccionada'])">
       <mat-icon class="icon-cus-pad">check</mat-icon>Anular
