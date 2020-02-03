@@ -11,6 +11,8 @@ export class ListadoCitasComponent implements OnInit {
   @Output() public emitVerDetalle:EventEmitter<any> = new EventEmitter();
   @Output() public emitAnular:EventEmitter<any> = new EventEmitter();
   
+  public todayTime = (new Date()).getTime();
+
   constructor() { }
 
   ngOnInit() {

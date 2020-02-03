@@ -31,7 +31,7 @@
                     <td>{{ cita.Centro.Nombre }}</td>
                     <td>
                         <div class="botones">
-                            <button mat-stroked-button class="btn-azul cus-pad" style="margin-right: 10px;" (click)="anular(cita)">ANULAR</button>
+                            <button mat-stroked-button class="btn-azul cus-pad" style="margin-right: 10px;" (click)="anular(cita)" [disabled]="todayTime > cita.fechaTime">ANULAR</button>
                             <button mat-stroked-button class="btn-blanco cus-pad" (click)="verDetalle(cita)">DETALLE</button>
                         </div>
                     </td>

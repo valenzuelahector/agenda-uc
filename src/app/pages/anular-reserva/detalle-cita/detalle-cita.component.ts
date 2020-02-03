@@ -10,6 +10,7 @@ export class DetalleCitaComponent implements OnInit {
   @Input() public dataAnularCita:any = {};
   @Output() public emitAnular:EventEmitter<any> = new EventEmitter();
 
+
   
   constructor() { }
 

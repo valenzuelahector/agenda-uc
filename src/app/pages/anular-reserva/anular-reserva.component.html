@@ -41,7 +41,7 @@
       <mat-icon class="icon-cus-pad">keyboard_backspace</mat-icon>Volver 
       <span *ngIf="curTab == 3">al Inicio</span>
     </button>
-    <button mat-stroked-button class="btn-azul cus-pad" style="float:right" *ngIf="dataAnularCita['detalleCitaSeleccionada'] && curTab == 2" (click)="anularReserva(dataAnularCita['detalleCitaSeleccionada'])">
+    <button mat-stroked-button class="btn-azul cus-pad" style="float:right" [disabled]="todayTime > dataAnularCita['detalleCitaSeleccionada'].fechaTime" *ngIf="dataAnularCita['detalleCitaSeleccionada'] && curTab == 2" (click)="anularReserva(dataAnularCita['detalleCitaSeleccionada'])">
       <mat-icon class="icon-cus-pad">check</mat-icon>Anular
     </button>
   </div>

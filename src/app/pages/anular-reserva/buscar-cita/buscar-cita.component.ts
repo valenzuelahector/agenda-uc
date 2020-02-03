@@ -107,6 +107,11 @@ export class BuscarCitaComponent implements OnInit, OnDestroy {
       let busquedaCita;
 
       if(data && data['citas'] && data['citas'].length > 0){
+
+        data['citas'].forEach( (val, key) => {
+          data['citas'][key]['fechaTime'] = (new Date(val['FechaHoraDesde'])).getTime();
+        })
+        
         response = data['citas'];
         paciente = await this.getPaciente(formData['documento'], formData['tipoDocumento']);
         busquedaCita = {

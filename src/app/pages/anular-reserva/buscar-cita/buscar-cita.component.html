@@ -26,7 +26,7 @@
       <div class="col-md-4 field-margin inpute">
         <mat-form-field class="full bgwhite-input" appearance="fill" (click)="picker.open()">
           <mat-label>Fecha de la Reserva *</mat-label>
-          <input matInput  [(ngModel)]="busquedaPaciente.fechaCita" [matDatepicker]="picker" readonly  placeholder="Fecha de la cita" autocomplete="off" tabindex="2" />
+          <input matInput  [(ngModel)]="busquedaPaciente.fechaCita" [min]="today" [matDatepicker]="picker" readonly  placeholder="Fecha de la cita" autocomplete="off" tabindex="2" />
             <mat-icon matSuffix>calendar_today</mat-icon>
             <mat-datepicker #picker></mat-datepicker>
         </mat-form-field>

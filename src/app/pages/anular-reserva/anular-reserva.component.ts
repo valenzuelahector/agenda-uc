@@ -16,6 +16,7 @@ export class AnularReservaComponent implements OnInit {
   public respuestaAnular = {};
   public dataAnularCita:any = {};
   public curTab:number = 0;
+  public todayTime = (new Date()).getTime();
 
   constructor(
     public utils:UtilsService,
