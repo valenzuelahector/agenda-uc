@@ -104,7 +104,8 @@
             </div>
           </div>
 
-          <div class="col-lg-6 col-md-12" *ngIf="((especialidadSelected && tipoConsulta == 'profesional') || (servicioSelected && tipoConsulta == 'especialidad')) && centrosAtencion.length > 0 && loadedCen" [hidden]="areaSelected.nombre.toLowerCase() === 'telemedicina'">
+          <div class="col-lg-6 col-md-12" *ngIf="((especialidadSelected && tipoConsulta == 'profesional') || (servicioSelected && tipoConsulta == 'especialidad')) && centrosAtencion.length > 0 && loadedCen" 
+            [hidden]="utils.slugify(areaSelected.nombre, '-') === 'telemedicina' || utils.slugify(areaSelected.nombre, '-') === 'consulta-medica-virtual'">
             <mat-form-field class="full" appearance="fill" [color]="primary">
               <mat-label>Seleccione un Centro de Atención</mat-label>
               <mat-icon matPrefix style="margin-right: 10px">apartment</mat-icon>
@@ -172,14 +173,16 @@
   </div>
 </div>
 
-<p class="info-busqueda bg-purple" *ngIf="profesionalSelected || especialidadSelected || centroAtencionSelected" [ngClass]="{ padTelm : areaSelected.nombre.toLowerCase() === 'telemedicina' }">
+<p class="info-busqueda bg-purple" *ngIf="profesionalSelected || especialidadSelected || centroAtencionSelected" 
+[ngClass]="{ padTelm : utils.slugify(areaSelected.nombre, '-') === 'telemedicina' ||
+ utils.slugify(areaSelected.nombre, '-') === 'consulta-medica-virtual' }">
   <span *ngIf="profesionalSelected"> Profesional: <b>{{ profesionalSelected.nombreProfesional }}</b></span>
   <span *ngIf="especialidadSelected"> Especialidad: <b>{{ especialidadSelected.nombreEspecialidad }}</b>
       <b *ngIf="(tipoConsulta == 'especialidad' && servicioSelected) || (tipoConsulta == 'profesional' && especialidadSelected)">
         - {{ (tipoConsulta == 'especialidad') ? servicioSelected.nombreServicio : especialidadSelected.nombreServicio }}
       </b>
   </span>
-  <span *ngIf="centroAtencionSelected && areaSelected.nombre.toLowerCase() !== 'telemedicina'"> Centro de Atención: <b>{{ centroAtencionSelected.nombreEspecialidad }} -
+  <span *ngIf="centroAtencionSelected && utils.slugify(areaSelected.nombre, '-') !== 'telemedicina' && utils.slugify(areaSelected.nombre, '-') !== 'consulta-medica-virtual'"> Centro de Atención: <b>{{ centroAtencionSelected.nombreEspecialidad }} -
       {{ centroAtencionSelected.nombre }}</b> </span>
   <button mat-raised-button class="full-btn" *ngIf="especialidadSelected && centroAtencionSelected"
     (click)="buscarHora()">BUSCAR HORA</button>

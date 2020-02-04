@@ -16,7 +16,8 @@
 					<img src="/assets/images/ic-area.svg" alt="">
 					<p><b>Área Médica:</b> {{ busquedaInicial.area.nombre }}</p>
 				</div>
-				<div class="item-res" *ngIf="busquedaInicial.area.nombre.toLowerCase() !== 'telemedicina'">
+				<div class="item-res" *ngIf="utils.slugify(busquedaInicial.area.nombre, '-') !== 'telemedicina'
+				&& utils.slugify(busquedaInicial.area.nombre, '-') !== 'consulta-medica-virtual'">
 					<img src="/assets/images/ic-clinica.svg" alt="">
 					<p><b>Clínica/Centro:</b> {{ busquedaInicial.centroAtencion.nombre }} </p>
 				</div>
@@ -80,7 +81,8 @@
 											*ngIf="selectedDate[i] && centrosProfesional[i] && centrosProfesional[i].length > 0">
 											<p class="header-sel-hora">
 												Seleccione 
-												<span *ngIf="busquedaInicial.area.nombre.toLowerCase() !== 'telemedicina'">un Centro y </span>
+												<span *ngIf="utils.slugify(busquedaInicial.area.nombre, '-') !== 'telemedicina'
+													&& utils.slugify(busquedaInicial.area.nombre, '-') !== 'consulta-medica-virtual'">un Centro y </span>
 												una Hora Disponible para el {{ selectedDate[i] | date:'dd/MM/yyyy'}}
 												<button mat-stroked-button (click)="eligeOtroDia(i)"
 													color="primary">
@@ -90,7 +92,8 @@
 											<ng-container *ngFor="let cet of centrosProfesional[i]; let idx = index">
 	
 												<a class="item-hora" [ngClass]="{ 'active' : cet.habilitado }"
-													(click)="displayCentro(i, idx)" *ngIf="busquedaInicial.area.nombre.toLowerCase() !== 'telemedicina'">
+													(click)="displayCentro(i, idx)" *ngIf="utils.slugify(busquedaInicial.area.nombre, '-') !== 'telemedicina'
+													&& utils.slugify(busquedaInicial.area.nombre, '-') !== 'consulta-medica-virtual'">
 													<div class="centro-medico">
 														<img src="/assets/images/ic-centro.svg">{{ cet.nombreCentro }}
 													</div>

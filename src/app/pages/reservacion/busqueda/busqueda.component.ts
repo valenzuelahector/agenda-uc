@@ -99,7 +99,7 @@ export class BusquedaComponent implements OnInit {
 
           res['areas'].forEach((val, key) => {
             let setParamArea = false;
-            if(paramArea && paramArea['area'] && val['nombre'].toLowerCase() === paramArea['area'].toLowerCase()){
+            if(paramArea && paramArea['area'] && this.utils.slugify(val['nombre'], "-") === this.utils.slugify(paramArea['area'], "-")){
                 this.areaSelected = val;
                 setParamArea = true;
             }
