@@ -535,7 +535,7 @@ export class BusquedaComponent implements OnInit {
         
         let objTodos:any;
 
-        if (res['centros'].length >= 2 || this.areaSelected.nombre.toLowerCase() === 'telemedicina') {
+        if (res['centros'].length >= 2 || this.utils.slugify(this.areaSelected.nombre, "-") === 'telemedicina' || this.utils.slugify(this.areaSelected.nombre, "-") === 'consulta-medica-virtual') {
           objTodos = {
             direccion: { calle: null, numero: null, piso: null, comuna: 'Región Metropolitana' },
             horaApertura: null,
