@@ -123,11 +123,6 @@ export class SeleccionComponent implements OnInit, OnChanges {
         if (this.counterLoader < 3 && !this.busquedaInicial.profesional) {
           this.counterLoader++;
           this.getRecursos(null, true);
-        /*  if (this.busquedaInicial.profesional) {
-            this.getRecursos(this.busquedaInicial.profesional.idProfesional, true);
-          } else {
-            this.getRecursos(null, true);
-          }*/
         }else{
           this.utils.showProgressBar();
           setTimeout(() => {
