@@ -120,13 +120,14 @@ export class SeleccionComponent implements OnInit, OnChanges {
         newMax.setMinutes(newMax.getMinutes() + 59)
         newMax.setSeconds(newMax.getSeconds() + 59)
 
-        if (this.counterLoader < 3) {
+        if (this.counterLoader < 3 && !this.busquedaInicial.profesional) {
           this.counterLoader++;
-          if (this.busquedaInicial.profesional) {
+          this.getRecursos(null, true);
+        /*  if (this.busquedaInicial.profesional) {
             this.getRecursos(this.busquedaInicial.profesional.idProfesional, true);
           } else {
             this.getRecursos(null, true);
-          }
+          }*/
         }else{
           this.utils.showProgressBar();
           setTimeout(() => {
@@ -213,14 +214,20 @@ export class SeleccionComponent implements OnInit, OnChanges {
 
       this.fechaHoy = new Date();
       this.fechaLimite = new Date();
-      this.fechaHoy.setDate(this.fechaHoy.getDate() + ( this.counterLoader * this.maxNumDays))
-      this.fechaLimite.setDate(this.fechaHoy.getDate() + ( this.counterLoader * this.maxNumDays) + this.maxNumDays);
-      this.fechaLimite = new Date(this.fechaLimite.getFullYear(), this.fechaLimite.getMonth() + 1, 0);
+
+      if(!idProfesional){
+        this.fechaHoy.setDate(this.fechaHoy.getDate() + ( this.counterLoader * this.maxNumDays));
+        this.fechaLimite.setDate(this.fechaHoy.getDate() + ( this.counterLoader * this.maxNumDays) + this.maxNumDays);
+        this.fechaLimite = new Date(this.fechaLimite.getFullYear(), this.fechaLimite.getMonth() + 1, 0);
+      }else{
+        this.fechaLimite = new Date(this.fechaLimite.getFullYear(), this.fechaLimite.getMonth() + 12, 0);
+      }
+      
       this.fechaLimite.setHours(this.fechaLimite.getHours() + 23);
       this.fechaLimite.setMinutes(this.fechaLimite.getMinutes() + 59);
       this.fechaLimite.setSeconds(this.fechaLimite.getSeconds() + 59);
 
-      if(this.counterLoader > 0){
+      if(this.counterLoader > 0 && !idProfesional){
           this.fechaHoy = new Date(this.fechaLimite.getFullYear(), this.fechaLimite.getMonth() - 2, 1);
       }
 
