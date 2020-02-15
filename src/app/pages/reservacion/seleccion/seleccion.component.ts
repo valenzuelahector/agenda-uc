@@ -213,11 +213,6 @@ export class SeleccionComponent implements OnInit, OnChanges {
 
       this.fechaHoy = new Date();
       this.fechaLimite = new Date();
-<<<<<<< HEAD
-      this.fechaHoy.setDate(this.fechaHoy.getDate() + (this.counterLoader * this.maxNumDays))
-      this.fechaLimite.setDate(this.fechaHoy.getDate() + (this.counterLoader * this.maxNumDays) + this.maxNumDays);
-      this.fechaLimite = new Date(this.fechaLimite.getFullYear(), this.fechaLimite.getMonth() + 1, 0);
-=======
 
       if(!idProfesional){
         this.fechaHoy.setDate(this.fechaHoy.getDate() + ( this.counterLoader * this.maxNumDays));
@@ -227,18 +222,12 @@ export class SeleccionComponent implements OnInit, OnChanges {
         this.fechaLimite = new Date(this.fechaLimite.getFullYear(), this.fechaLimite.getMonth() + 12, 0);
       }
       
->>>>>>> develop
       this.fechaLimite.setHours(this.fechaLimite.getHours() + 23);
       this.fechaLimite.setMinutes(this.fechaLimite.getMinutes() + 59);
       this.fechaLimite.setSeconds(this.fechaLimite.getSeconds() + 59);
 
-<<<<<<< HEAD
-      if (this.counterLoader > 0) {
-        this.fechaHoy = new Date(this.fechaLimite.getFullYear(), this.fechaLimite.getMonth() - 2, 1);
-=======
       if(this.counterLoader > 0 && !idProfesional){
           this.fechaHoy = new Date(this.fechaLimite.getFullYear(), this.fechaLimite.getMonth() - 2, 1);
->>>>>>> develop
       }
 
 
