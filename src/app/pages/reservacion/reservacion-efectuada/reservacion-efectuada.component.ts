@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
+import { UtilsService } from 'src/app/services/utils.service';
 
 @Component({
   selector: 'app-reservacion-efectuada',
@@ -16,7 +17,8 @@ export class ReservacionEfectuadaComponent implements OnInit {
   @Input() mensajes:any = [];
 
   constructor(    
-    public sanitizer:DomSanitizer
+    public sanitizer:DomSanitizer,
+    public utils:UtilsService
     ) { }
 
   ngOnInit() {
