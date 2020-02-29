@@ -27,11 +27,11 @@ export class ReservacionComponent implements OnInit {
   public codCita:number;
   public valorConvenio:number;
 
-  @ViewChild('tabGroup') tabGroup:any;
-  @ViewChild('busqueda') busqueda:BusquedaComponent;
-  @ViewChild('seleccion') seleccion:SeleccionComponent;
-  @ViewChild('identificacion') identificacion:IdentificacionComponent;
-  @ViewChild('confirmacion') confirmacion:ConfirmacionComponent;
+  @ViewChild('tabGroup', { static: false }) tabGroup:any;
+  @ViewChild('busqueda', { static: false }) busqueda:BusquedaComponent;
+  @ViewChild('seleccion', { static: false }) seleccion:SeleccionComponent;
+  @ViewChild('identificacion', { static: false }) identificacion:IdentificacionComponent;
+  @ViewChild('confirmacion', { static: false }) confirmacion:ConfirmacionComponent;
 
   constructor(
     public utils:UtilsService
