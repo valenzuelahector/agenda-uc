@@ -16,7 +16,8 @@
 					<img src="/assets/images/ic-area.svg" alt="">
 					<p><b>Área Médica:</b> {{ busquedaInicial.area.nombre }}</p>
 				</div>
-				<div class="item-res">
+				<div class="item-res" *ngIf="utils.slugify(busquedaInicial.area.nombre, '-') !== 'telemedicina'
+				&& utils.slugify(busquedaInicial.area.nombre, '-') !== 'consulta-medica-virtual'">
 					<img src="/assets/images/ic-clinica.svg" alt="">
 					<p><b>Clínica/Centro:</b> {{ busquedaInicial.centroAtencion.nombre }} </p>
 				</div>
