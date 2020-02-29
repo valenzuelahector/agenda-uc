@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { BusquedaComponent } from './busqueda/busqueda.component';
 import { SeleccionComponent } from './seleccion/seleccion.component';
 import { IdentificacionComponent } from './identificacion/identificacion.component';
@@ -14,7 +14,7 @@ install('UA-143119471-2');
   templateUrl: './reservacion.component.html',
   styleUrls: ['./reservacion.component.scss']
 })
-export class ReservacionComponent implements OnInit {
+export class ReservacionComponent implements OnInit, AfterViewInit {
 
   public curEtapa: number = 0;
   public busquedaInfo: any;
@@ -39,7 +39,8 @@ export class ReservacionComponent implements OnInit {
 
   }
 
-  ngOnInit() {
+  ngAfterViewInit(){
+
     this.cambiarEtapa(0);
 
     this.busqueda.emitBusqueda.subscribe(data => {
@@ -78,6 +79,11 @@ export class ReservacionComponent implements OnInit {
         this.codCita = data['data']['codCita']
       }
     })
+    
+  }
+
+  ngOnInit() {
+    
   }
 
   cambiarEtapa(index: number) {
