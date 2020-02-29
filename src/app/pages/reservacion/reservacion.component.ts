@@ -16,25 +16,25 @@ install('UA-143119471-2');
 })
 export class ReservacionComponent implements OnInit {
 
-  public curEtapa:number = 0;
-  public busquedaInfo:any;
-  public paciente:any;
-  public calendario:any;
-  public reservaRealizada:boolean = false;
-  public readQuery:boolean = false;
-  public reglasActuales:any = [];
-  public mensajesActuales:any = [];
-  public codCita:number;
-  public valorConvenio:number;
+  public curEtapa: number = 0;
+  public busquedaInfo: any;
+  public paciente: any;
+  public calendario: any;
+  public reservaRealizada: boolean = false;
+  public readQuery: boolean = false;
+  public reglasActuales: any = [];
+  public mensajesActuales: any = [];
+  public codCita: number;
+  public valorConvenio: number;
 
-  @ViewChild('tabGroup', { static: false }) tabGroup:any;
-  @ViewChild('busqueda', { static: false }) busqueda:BusquedaComponent;
-  @ViewChild('seleccion', { static: false }) seleccion:SeleccionComponent;
-  @ViewChild('identificacion', { static: false }) identificacion:IdentificacionComponent;
-  @ViewChild('confirmacion', { static: false }) confirmacion:ConfirmacionComponent;
+  @ViewChild('tabGroup', { static: false }) tabGroup: any;
+  @ViewChild('busqueda', { static: false }) busqueda: BusquedaComponent;
+  @ViewChild('seleccion', { static: false }) seleccion: SeleccionComponent;
+  @ViewChild('identificacion', { static: false }) identificacion: IdentificacionComponent;
+  @ViewChild('confirmacion', { static: false }) confirmacion: ConfirmacionComponent;
 
   constructor(
-    public utils:UtilsService
+    public utils: UtilsService
   ) {
 
   }
@@ -42,37 +42,37 @@ export class ReservacionComponent implements OnInit {
   ngOnInit() {
     this.cambiarEtapa(0);
 
-    this.busqueda.emitBusqueda.subscribe( data => {
-      if(data && data.area && data.especialidad && data.centroAtencion){
+    this.busqueda.emitBusqueda.subscribe(data => {
+      if (data && data.area && data.especialidad && data.centroAtencion) {
         this.busquedaInfo = data;
         this.cambiarEtapa(1);
       }
     })
 
-    this.seleccion.calendario.subscribe( data => {
+    this.seleccion.calendario.subscribe(data => {
       this.cambiarEtapa(2);
       this.calendario = data;
     })
 
-    this.identificacion.datosPaciente.subscribe( data => {
-      
+    this.identificacion.datosPaciente.subscribe(data => {
+
       this.mensajesActuales = data.mensajes;
-      if(data.reglas && data.reglas.length > 0){
+      if (data.reglas && data.reglas.length > 0) {
         this.reglasActuales = { reglas: data.reglas, reservable: data.reservable };
-        if(this.reglasActuales.reservable){
+        if (this.reglasActuales.reservable) {
           this.paciente = data.paciente;
           this.valorConvenio = data.valorConvenio;
         }
         this.cambiarEtapa(3);
-      }else{
+      } else {
         this.paciente = data.paciente;
         this.valorConvenio = data.valorConvenio;
         this.cambiarEtapa(4);
       }
     })
 
-    this.confirmacion.confirmarReserva.subscribe( data => {
-      if(data['response']){
+    this.confirmacion.confirmarReserva.subscribe(data => {
+      if (data['response']) {
         this.cambiarEtapa(5);
         this.reservaRealizada = true;
         this.codCita = data['data']['codCita']
@@ -80,14 +80,14 @@ export class ReservacionComponent implements OnInit {
     })
   }
 
-  cambiarEtapa(index:number){
+  cambiarEtapa(index: number) {
     this.curEtapa = index;
     this.tabGroup.selectedIndex = this.curEtapa;
     window.scrollTo(0, 0);
 
   }
 
-  nuevaReserva(){
+  nuevaReserva() {
     this.utils.reiniciarReserva();
     this.utils.resetPaciente();
     this.busquedaInfo = null
@@ -96,27 +96,27 @@ export class ReservacionComponent implements OnInit {
     this.reservaRealizada = null;
     this.cambiarEtapa(0);
   }
-  
-  readQuerySetter(event){
+
+  readQuerySetter(event) {
     this.readQuery = event;
   }
 
-  accionValidacionReglas(tipo:string){
-    switch(tipo){
+  accionValidacionReglas(tipo: string) {
+    switch (tipo) {
 
-      case 'NUEVO' :
+      case 'NUEVO':
         this.nuevaReserva();
-      break;
+        break;
 
       case 'VOLVER':
         this.reglasActuales = [];
         this.cambiarEtapa(2)
-      break;
+        break;
 
       case 'CONTINUAR':
         this.reglasActuales = [];
         this.cambiarEtapa(4)
-      break;
+        break;
     }
 
   }
