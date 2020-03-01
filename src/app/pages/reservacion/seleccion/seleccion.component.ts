@@ -59,6 +59,21 @@ export class SeleccionComponent implements OnInit, OnChanges {
     this.loadedRecursos = false;
   }
 
+  filtrarRecursosSoloProfesional(data) {
+
+    let recursos = [];
+    if (data['listaRecursos']) {
+      data['listaRecursos'].forEach((val, key) => {
+        if (val['tipoRecurso'].toLowerCase() != 'room') {
+          recursos.push(val);
+        }
+      })
+    }
+
+    data['listaRecursos'] = recursos;
+    return data;
+  }
+  
   getRecursos(idProfesional = null, index = 0) {
 
     return new Promise((resolve, reject) => {
@@ -76,6 +91,8 @@ export class SeleccionComponent implements OnInit, OnChanges {
       }).subscribe(data => {
 
         this.recursos = [];
+
+        data = this.filtrarRecursosSoloProfesional(data);
         this.tiposCitas = data['listaTiposDeCita'];
 
         data['cuposProfesional'] = {};
