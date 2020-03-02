@@ -47,7 +47,7 @@ export class IdentificacionComponent implements OnInit {
     fono_movil: new FormControl('', Validators.required),
     tipo_identificador: new FormControl('', Validators.required),
     pais_emisor_identificador: new FormControl('', Validators.required),
-    prevision: new FormControl('',),
+    prevision: new FormControl(''),
     fono_fijo: new FormControl(''),
     dir_calle: new FormControl(''),
     dir_numero: new FormControl(''),
@@ -110,36 +110,38 @@ export class IdentificacionComponent implements OnInit {
     this.agendaService.getPaciente(this.busquedaPaciente.documento, this.busquedaPaciente.tipoDocumento).subscribe(res => {
       if (res['listaPacientes'] && res['listaPacientes'][0]) {
         this.paciente = res['listaPacientes'][0];
+        this.busquedaPaciente.telefono = res['listaPacientes'][0]['numeroTelefonoPrincipal'];
+        this.busquedaPaciente.correo = res['listaPacientes'][0]['email'];
         this.getPlanesSalud(this.paciente.id);
-      }else{
+      } else {
         this.getPlanesSalud(null, this.busquedaPaciente);
       }
       this.findPaciente = true;
     })
 
 
-    gtag('event', 'Clic', { 'event_category': 'Reserva de Hora', 'event_label': 'Paso3:Identificación-Buscar'});
+    gtag('event', 'Clic', { 'event_category': 'Reserva de Hora', 'event_label': 'Paso3:Identificación-Buscar' });
 
   }
 
 
-  eventEnter(event, action){
-    if(event.keyCode == 13){
+  eventEnter(event, action) {
+    if (event.keyCode == 13) {
 
-      switch(action){
+      switch (action) {
 
-        case 'buscarPaciente': 
+        case 'buscarPaciente':
           this.setFormatRut();
-          this.buscarPaciente(); 
-        break;
+          this.buscarPaciente();
+          break;
 
-        case 'procesarPaciente': 
-          this.procesarPaciente(); 
-        break;
+        case 'procesarPaciente':
+          this.procesarPaciente();
+          break;
 
         case 'guardarPaciente':
           this.guardarPaciente()
-        break;
+          break;
       }
     }
   }
@@ -151,14 +153,13 @@ export class IdentificacionComponent implements OnInit {
       pais_emisor_identificador: 'CL'
     })
     if (this.pacienteForm.valid) {
+
       let data = this.pacienteForm.getRawValue();
-      console.log(this.utils.validateEmail(data.email));
-      console.log(data)
       if (!this.utils.validateEmail(data.email)) {
         this.utils.mDialog("Error", "El correo del Paciente tiene formato inválido.", "message");
         return false;
       }
-     
+
       if (String(data.fono_movil.trim()).length != 11) {
         this.utils.mDialog("Error", "Número de teléfono inválido. Debe tener 11 numeros.", "message");
         return false;
@@ -168,18 +169,16 @@ export class IdentificacionComponent implements OnInit {
       data['fecha_nacimiento'] = f['year'] + "-" + f['month'] + "-" + f['day'];
       data['previsionObj'] = data['prevision'];
       data['prevision'] = (data['prevision']) ? data['prevision']['idPlan'] : null;
-      
+
       this.agendaService.postPaciente(data).subscribe(res => {
         if ((res['statusCode'] && res['statusCode'] == 'OK') || (res['statusCod'] && res['statusCod'] == 'OK')) {
           this.limpiarFormulario();
           this.busquedaPaciente.documento = data['identificador'];
           this.busquedaPaciente.documentoFormateado = this.formatRut(data['identificador']);
           this.busquedaPaciente.tipoDocumento = data['tipo_identificador']
-          this.busquedaPaciente.correo = data['email'];
           this.busquedaPaciente.prevision = data['previsionObj'];
-          this.busquedaPaciente.telefono = data['fono_movil'];
           this.buscarPaciente();
-       //   this.utils.mDialog("Mensaje", "Paciente creado correctamente", "message");
+          //   this.utils.mDialog("Mensaje", "Paciente creado correctamente", "message");
 
         } else {
           this.utils.mDialog("Error", "No se pudo guardar la información requerida. Detalle: " + res['statusDesc'], "message")
@@ -210,25 +209,59 @@ export class IdentificacionComponent implements OnInit {
     }
   }
 
-  procesarPaciente() {
+  procesarDatosBusqCliente() {
+
+    let hasUpd = { telefono: false, correo: false };
+    let dataUpd = { idPRM: this.paciente.id };
+    console.log(this.paciente)
+    console.log(this.busquedaPaciente)
+    if (this.paciente.email !== this.busquedaPaciente.correo) {
+      dataUpd['correo'] = this.busquedaPaciente.correo;
+      hasUpd['correo'] = true;
+    }
+
+    if (this.paciente.numeroTelefonoPrincipal !== this.busquedaPaciente.telefono) {
+      dataUpd['telefono'] = this.busquedaPaciente.telefono;
+      hasUpd['telefono'] = true;
+    }
+
+   return { dataUpd, hasUpd };
+
+  }
+  updDatosBusqCliente(data){
+    return new Promise((resolve, reject) => {
+      this.agendaService.putPaciente(data).subscribe( res => {
+        console.log(res);
+        resolve(true)
+      })
+    })
+  }
+
+  async procesarPaciente() {
 
     if (this.busquedaPaciente.documento && this.busquedaPaciente.prevision && this.busquedaPaciente.telefono && this.busquedaPaciente.correo) {
 
-      if (!this.utils.validateEmail(this.busquedaPaciente.correo)) {
+      let updInfo = this.procesarDatosBusqCliente();
+      console.log(updInfo)
+      if (!this.utils.validateEmail(this.busquedaPaciente.correo) && updInfo['hasUpd']['correo']) {
         this.utils.mDialog("Error", "El correo del Paciente tiene formato inválido.", "message");
         return false;
       }
 
-      if (String(this.busquedaPaciente.telefono).trim().length != 11){
+      if (String(this.busquedaPaciente.telefono).trim().length != 11 && updInfo['hasUpd']['telefono']) {
         this.utils.mDialog("Error", "Número de teléfono inválido. Debe tener 11 numeros.", "message");
         return false;
+      }
+
+      if(updInfo['hasUpd']['correo'] || updInfo['hasUpd']['telefono']){
+        let respUpdB = await this.updDatosBusqCliente(updInfo['dataUpd']);
       }
 
       this.paciente['adicional'] = this.busquedaPaciente;
 
       let duracion = this.calendario.cupo.duracion;
       let fecha: any = this.utils.trDateStr(this.calendario.cupo.fechaHora, 'n');
-      let fechaTermino = new Date(fecha);      
+      let fechaTermino = new Date(fecha);
       fechaTermino.setMinutes(fechaTermino.getMinutes() + duracion);
 
       let fTermino = this.utils.trDateStr(fechaTermino, 'n');
@@ -246,12 +279,12 @@ export class IdentificacionComponent implements OnInit {
         idPlanSalud: this.busquedaPaciente.prevision.id
 
       }).subscribe(data => {
-        
-        let reglas:any = [];
-        let valorConvenio:any = false;
-        let reservable:any = false;
 
-        if(data['listaMensajesDeRegla'] && data['listaCupos'][0]){
+        let reglas: any = [];
+        let valorConvenio: any = false;
+        let reservable: any = false;
+
+        if (data['listaMensajesDeRegla'] && data['listaCupos'][0]) {
           reglas = data['listaMensajesDeRegla'];
           valorConvenio = data['listaCupos'][0]['valorConvenio'];
           reservable = data['listaCupos'][0]['reservable']['reservable']
@@ -262,18 +295,18 @@ export class IdentificacionComponent implements OnInit {
           CenterId: this.calendario.cupo.idStrCentro,
           ServiceId: this.busquedaInicial.especialidad.idServicio,
           Channel: 'PatientPortal'
-        }).subscribe( dt => {
+        }).subscribe(dt => {
 
           let mensajes = (dt && dt['mensajes']) ? dt['mensajes'] : [];
           this.datosPaciente.emit({ paciente: this.paciente, reglas: reglas, valorConvenio: valorConvenio, reservable: reservable, mensajes: mensajes });
 
         })
-         
+
       })
 
     } else {
 
-      if (!this.busquedaPaciente.documento || this.busquedaPaciente.documento == '' ){
+      if (!this.busquedaPaciente.documento || this.busquedaPaciente.documento == '') {
         this.utils.mDialog("Error", "Debe ingresar el número de documento.", "message");
         return false;
       }
@@ -294,7 +327,7 @@ export class IdentificacionComponent implements OnInit {
       }
     }
 
-    gtag('event', 'Clic', { 'event_category': 'Reserva de Hora', 'event_label': 'Paso3:Identificación-Siguiente'});
+    gtag('event', 'Clic', { 'event_category': 'Reserva de Hora', 'event_label': 'Paso3:Identificación-Siguiente' });
 
   }
 
@@ -302,17 +335,17 @@ export class IdentificacionComponent implements OnInit {
     this.busquedaPaciente.documentoFormateado = (this.busquedaPaciente.documentoFormateado) ?
       this.busquedaPaciente.documentoFormateado.trim() : null;
 
-    if (this.busquedaPaciente.tipoDocumento == 'RUN'){
+    if (this.busquedaPaciente.tipoDocumento == 'RUN') {
       let rut = this.busquedaPaciente.documentoFormateado;
       if (rut && rut != "") {
         let rutPuntos = this.formatRut(rut)
         this.busquedaPaciente.documentoFormateado = rutPuntos
         this.busquedaPaciente.documento = this.utils.replaceAll(rutPuntos, ".", "");
       }
-    }else{
+    } else {
       this.busquedaPaciente.documento = this.busquedaPaciente.documentoFormateado;
     }
-    
+
   }
 
   formatRut(rut) {

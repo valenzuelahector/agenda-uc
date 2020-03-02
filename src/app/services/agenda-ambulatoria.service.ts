@@ -70,6 +70,10 @@ export class AgendaAmbulatoriaService {
     return this.http.post(this.baseApi + '/Pacientes', data, this.httpOptions);
   }
 
+  putPaciente(data:any){
+    return this.http.put(this.baseApi + '/Pacientes', data, this.httpOptions);
+  }
+
   postCita(data:any){
     return this.http.post(this.baseApi + '/Citas', data, this.httpOptions);
   }
