@@ -174,15 +174,9 @@
   </div>
 </div>
 
-<<<<<<< HEAD
 <p class="info-busqueda bg-purple" *ngIf="profesionalSelected || especialidadSelected || centroAtencionSelected" 
 [ngClass]="{ padTelm : utils.slugify(areaSelected.nombre, '-') === 'telemedicina' ||
  utils.slugify(areaSelected.nombre, '-') === 'consulta-medica-virtual' }">
-=======
-<p class="info-busqueda bg-purple" *ngIf="profesionalSelected || especialidadSelected || centroAtencionSelected"
-  [ngClass]="{ padTelm : utils.slugify(areaSelected.nombre, '-') === 'telemedicina' ||
-  utils.slugify(areaSelected.nombre, '-') === 'consulta-medica-virtual' }">
->>>>>>> master
   <span *ngIf="profesionalSelected"> Profesional: <b>{{ profesionalSelected.nombreProfesional }}</b></span>
   <span *ngIf="especialidadSelected"> Especialidad: <b>{{ especialidadSelected.nombreEspecialidad }}</b>
     <b

@@ -43,7 +43,6 @@
 				(navigate)="navigateMonth($event)">
 			</app-days-of-week>
 		</div>
-
 		<div class="content-res">
 			<ng-container *ngFor="let re of recursos; let i = index">
 				<div class="item-doc">
@@ -66,9 +65,9 @@
 											{{ re?.informacionAdicional }}</p>
 									</div>
 								</div>
+	
+	
 							</div>
-
-
 						</div>
 						<div class="col-lg-6">
 							<div class="cal-doc calendario" data-rel="cal3">
@@ -99,29 +98,39 @@
 														<img src="/assets/images/ic-centro.svg">{{ cet.nombreCentro }}
 													</div>
 												</a>
+	
+												<ng-container *ngIf="cet.habilitado">
+													<a class="item-hora" *ngFor="let cupo of cet.cupos"
+														(click)="seleccionarHora({fecha: selectedDate[i], cupo : cupo, recurso:re})">
+														<div class="hora">{{ cupo.fechaHora | date:'HH:mm' }}</div>
+													</a>
+												</ng-container>
 											</ng-container>
-										</ng-container>
-
+	
+										</div>
+									</div>
+	
+									<div *ngIf="re.datesToHighlight && re.datesToHighlight['displayed']">
+										<div *ngIf="!displayCalendar" style="height:283px"></div>
+										<mat-calendar *ngIf="displayCalendar" [minDate]="navigationDate['min']" [maxDate]="navigationDate['max']"
+											[dateClass]="re.datesToHighlight.dateClass" [selected]="selectedDate[i]"
+											(selectedChange)="onSelect($event, i)"></mat-calendar>
+										<div class="datos-horas">
+											<p class="sinHorasMes" *ngIf="!re.poseeMes">El profesional no tiene horas disponibles en el mes.</p>
+											<p *ngIf="!re.proximaFecha">No existen horas disponibles.</p>
+											<p *ngIf="re.proximaFecha">Próxima hora disponible:
+												<span>{{ re.proximaFecha | date:'EEEE dd/MM/yyyy HH:mm'}}</span></p>
+										</div>
 									</div>
 								</div>
-
-								<div *ngIf="re.datesToHighlight && re.datesToHighlight['displayed']">
-									<mat-calendar [minDate]="re.proximaFecha" [maxDate]="fechaLimite"
-										[dateClass]="re.datesToHighlight.dateClass" [selected]="selectedDate[i]"
-										(selectedChange)="onSelect($event, i)"></mat-calendar>
-									<div class="datos-horas">
-										<p *ngIf="re.proximaFecha">Próxima hora disponible:
-											<span>{{ re.proximaFecha | date:'EEEE dd/MM/yyyy HH:mm'}}</span></p>
-										<p *ngIf="!re.proximaFecha">No existen horas disponibles.</p>
-									</div>
-								</div>
+								<div class="clear"></div>
 							</div>
-							<div class="clear"></div>
+	
 						</div>
-
 					</div>
 				</div>
-			</div>
+			</ng-container>
+
 		</div>
 	</section>
 </div>
