@@ -22,7 +22,7 @@ export class DaysOfWeekComponent implements OnInit, OnChanges {
   @Output() navigate:EventEmitter<any> = new EventEmitter();
 
   constructor() { }
-/**/ 
+
   ngOnInit() {
   }
 
