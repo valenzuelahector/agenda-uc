@@ -58,7 +58,8 @@ import { ConfirmarAnularReservaComponent } from './shared/components/modals/conf
     ListadoCitasComponent,
     DetalleCitaComponent,
     ConfirmacionAnulacionReservaComponent,
-    ConfirmarAnularReservaComponent
+    ConfirmarAnularReservaComponent,
+    RutFormaterDirective
   ],
   imports: [
     BrowserModule,
