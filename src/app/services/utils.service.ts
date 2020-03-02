@@ -10,8 +10,8 @@ export class UtilsService {
   public progressBar: boolean = false;
   public horizontalPosition: MatSnackBarHorizontalPosition = 'end';
   public verticalPosition: MatSnackBarVerticalPosition = 'bottom';
-  public nuevaHora:EventEmitter<any> = new EventEmitter();
-  public resetInfoPaciente:EventEmitter<any> = new EventEmitter();
+  public nuevaHora: EventEmitter<any> = new EventEmitter();
+  public resetInfoPaciente: EventEmitter<any> = new EventEmitter();
 
   constructor(
     public dialog: MatDialog,
@@ -65,19 +65,36 @@ export class UtilsService {
     return S ? S - 1 : 'K';
   }
 
-  trDateStr(date: Date, type = 'string'){
+  trDateStr(date: Date, type = 'string', compensacion = null) {
 
     let year = date.getFullYear();
-    let month = ((date.getMonth() + 1) < 10) ? "0" + (date.getMonth() + 1) : date.getMonth() + 1 ;
+    let month = ((date.getMonth() + 1) < 10) ? "0" + (date.getMonth() + 1) : date.getMonth() + 1;
     let day = (date.getDate() < 10) ? "0" + date.getDate() : date.getDate();
     let hour = (date.getHours() < 10) ? "0" + date.getHours() : date.getHours();
     let min = (date.getMinutes() < 10) ? "0" + date.getMinutes() : date.getMinutes();
     let sec = (date.getSeconds() < 10) ? "0" + date.getSeconds() : date.getSeconds();
-    if(type == 'json'){
-      return { year: year, month: month,  day : day, hour: hour, min : min, sec : sec }
+    
+    if (type == 'json') {
+      return { year: year, month: month, day: day, hour: hour, min: min, sec: sec }
     }
-    return  year + "-" + month + "-" + day + "T" + hour + ":" + min +":" + sec + "-04:00";
+
+    let sign = null;
+    let time = null;
+
+    if (!compensacion) {
+      sign = '-';
+      time = '00:00'
+    } else {
+      let timeZone = compensacion / 60;
+      sign = (timeZone < 0) ? '-' : '+';
+      timeZone = (timeZone < 0) ? timeZone * -1 : timeZone;
+      time = (timeZone > 9) ? timeZone + ':00' : '0' + timeZone + ':00';
+    }
+
+
+    return year + "-" + month + "-" + day + "T" + hour + ":" + min + ":" + sec + sign + time;
   }
+
 
   numberOnly(event, activate?: boolean): boolean {
     if (activate != undefined && !activate) {
@@ -97,11 +114,11 @@ export class UtilsService {
     return f1 && f2 && f1.id === f2.id;
   }
 
-  reiniciarReserva(){
+  reiniciarReserva() {
     this.nuevaHora.emit(true);
   }
 
-  resetPaciente(){
+  resetPaciente() {
     this.resetInfoPaciente.emit(true);
   }
 
