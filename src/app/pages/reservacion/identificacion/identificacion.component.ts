@@ -258,13 +258,12 @@ export class IdentificacionComponent implements OnInit {
       }
 
       this.paciente['adicional'] = this.busquedaPaciente;
-
       let duracion = this.calendario.cupo.duracion;
-      let fecha: any = this.utils.trDateStr(this.calendario.cupo.fechaHora, 'n');
-      let fechaTermino = new Date(fecha);
+      let fecha: any = this.utils.trDateStr(this.calendario.cupo.fechaHora, 'n', this.calendario.cupo.compensacion);
+      let fechaTermino = new Date(fecha);      
       fechaTermino.setMinutes(fechaTermino.getMinutes() + duracion);
 
-      let fTermino = this.utils.trDateStr(fechaTermino, 'n');
+      let fTermino = this.utils.trDateStr(fechaTermino, 'n', this.calendario.cupo.compensacion);
 
       this.agendaService.geReglasValidacion({
 
