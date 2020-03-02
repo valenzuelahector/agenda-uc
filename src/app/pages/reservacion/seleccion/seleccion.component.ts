@@ -175,7 +175,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
   }
 
   determinarMesSinCupo() {
-
+    console.log(this.navigationDate)
     this.recursos.forEach((val, key) => {
       let posee = false;
       let listFechaDis = Object.keys(val['fechasDisponibles']);
@@ -188,6 +188,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
           posee = true;
         }
       })
+      this.recursos[key]['poseeMes'] = posee;
     })
   }
 
@@ -209,6 +210,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
   getRecursos(idProfesional = null, next = false) {
 
     return new Promise((resolve, reject) => {
+
       this.fechaHoy = new Date();
       this.fechaLimite = new Date();
 
@@ -258,11 +260,12 @@ export class SeleccionComponent implements OnInit, OnChanges {
             data['listaRecursos'][key] = this.crearCalendario(data['listaRecursos'][key], data['listaCentros'], data['listaDisponibilidades'], data['listaRecursos'])
           })
 
-
-          this.recursos = this.orderPipe.transform(data['listaRecursos'], 'proximaFechaEpoch') ;
-        } else {
-          this.recursos = [];
+          this.enableScroll = true;
+          let listRe = this.orderPipe.transform(data['listaRecursos'], 'proximaFechaEpoch');
+          this.conciliarDataRecursos(listRe, this.fechaHoy, this.fechaLimite);
         }
+
+        this.enableScroll = true;
         this.loadedRecursos = true;
 
         setTimeout(() => {
@@ -350,13 +353,12 @@ export class SeleccionComponent implements OnInit, OnChanges {
     }
   }
 
-  eligeOtroDia(i){
-    this.selectedDate[i] = null; 
+  eligeOtroDia(i) {
+    this.selectedDate[i] = null;
     this.centrosProfesional[i] = null
   }
 
   onSelect(event, i) {
-    console.log("ONSELECT")
     this.selectedDate[i] = event;
     let fechaDisSel = this.utils.trDateStr(event, 'json');
     let idxFecha = fechaDisSel['year'] + "-" + fechaDisSel['month'] + '-' + fechaDisSel['day'];
@@ -372,11 +374,12 @@ export class SeleccionComponent implements OnInit, OnChanges {
 
     this.centrosProfesional[i] = [];
     let enableCentro = (Object.keys(agrupCentros).length == 1) ? true : false;
+
     Object.keys(agrupCentros).forEach(key => {
       agrupCentros[key]['habilitado'] = enableCentro;
       this.centrosProfesional[i].push(agrupCentros[key]);
     })
-    gtag('event', 'Clic', { 'event_category': 'Reserva de Hora', 'event_label': 'Paso2:Selección-Calendario'});
+    gtag('event', 'Clic', { 'event_category': 'Reserva de Hora', 'event_label': 'Paso2:Selección-Calendario' });
 
   }
 
@@ -403,7 +406,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
       dataRecurso['listaRecursosIdCorto'][val['idCorto']] = val;
     })
 
-    for (let day = 0; day <= this.maxNumDays; day++) {
+    for (let day = 0; day <= 400; day++) {
 
       if (day == 0) {
         f = this.utils.trDateStr(fecha, 'json');
@@ -417,7 +420,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
 
         let fechaEpoch = new Date(val['horaEpoch'] * 1000);
         let u = this.utils.trDateStr(fechaEpoch, 'json');
-        
+
         val['idTipoCita'] = this.getTipoCita(val['tiposDeCita'][0]);
         val['fechaHora'] = fechaEpoch;
         val['nombreCentro'] = (dataRecurso['listaCentrosIdCorto'][val['idCentro']]) ? dataRecurso['listaCentrosIdCorto'][val['idCentro']]['nombre'] : 'S/I';
@@ -452,16 +455,16 @@ export class SeleccionComponent implements OnInit, OnChanges {
       }
     })
 
+    dataRecurso['datesToHighlight']['displayed'] = true;
     dataRecurso['datesToHighlight']['dates'] = datesDisabled;
     dataRecurso['datesToHighlight']['dateClass'] = this.dateClass(datesDisabled);
-    dataRecurso['datesToHighlight']['displayed'] = true;
 
     return dataRecurso;
   }
 
   seleccionarHora(data) {
     this.calendario.emit(data);
-    gtag('event', 'Clic', { 'event_category': 'Reserva de Hora', 'event_label': 'Paso2:Selección-Hora'});
+    gtag('event', 'Clic', { 'event_category': 'Reserva de Hora', 'event_label': 'Paso2:Selección-Hora' });
   }
 
   verPerfil(re) {
