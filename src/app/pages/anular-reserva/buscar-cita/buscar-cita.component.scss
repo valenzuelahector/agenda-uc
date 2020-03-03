@@ -19,8 +19,20 @@
     }
 }
 
+.res-mob-btn{
+    display: none !important;
+}
+
 @media(max-width:768px){
     .custom-btn, .card-horas-bottom a.reservar-hora{
         max-width: initial !important;
+    }
+
+    .res-desk-btn{
+        display: none !important;
+    }
+
+    .res-mob-btn{
+        display: block !important;
     }
 }

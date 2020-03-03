@@ -1,10 +1,10 @@
 <div class="contenido-anular" *ngIf="dataAnularCita?.detalleCitaSeleccionada">
     <div class="datos-paciente">
       <div class="item size-1">
-        <p><b>Nombre paciente:</b> {{ dataAnularCita?.paciente.nombreCompleto }}</p>
+        <p><b>RUT:</b> {{ dataAnularCita?.paciente.numeroDocumentoFormateado }}</p>
       </div>
       <div class="item size-2">
-        <p><b>RUT:</b> {{ dataAnularCita?.paciente.numeroDocumentoFormateado }}</p>
+        <p><b>Nombre paciente:</b> {{ dataAnularCita?.paciente.nombreCompleto }}</p>
       </div>
       <div class="item size-1">
         <p><b>Fecha de reserva:</b> {{ dataAnularCita?.dataBusqueda.fechaCita | date:'dd/MM/yyyy' }}</p>
@@ -14,6 +14,9 @@
       </div>
       <div class="item size-4">
         <p><b>Profesional:</b>  <span> {{ dataAnularCita?.detalleCitaSeleccionada.RecursosCita[0]?.Recurso.Nombre }}</span></p>
+      </div>
+      <div class="item size-1" style="width: 100%;border-right: none;">
+        <p><b>Especialidad:</b><span> {{ dataAnularCita?.detalleCitaSeleccionada.Servicio.NombreEspecialidad }}</span></p>
       </div>
       <div class="item size-1">
         <p><b>Centro:</b> {{ dataAnularCita?.detalleCitaSeleccionada.Centro.Nombre }}</p>

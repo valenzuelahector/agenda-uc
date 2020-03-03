@@ -152,3 +152,33 @@
    .cus-pad{
     padding: 0px 15px !important;
    }
+
+   .table-responsive{
+
+    display: none;
+
+    .tb-container{
+      background: #eee;
+      border-radius: 8px;
+      padding: 25px;
+      
+      b{
+        margin-bottom: 5px !important;
+        display: block;
+        font-weight: bolder !important;
+      }
+    }
+
+    .cus-pad{
+      padding: 0px 25px !important;
+    }
+   }
+
+   @media (max-width: 768px) {
+    .table-responsive{
+      display: block !important;
+    }
+    .htb{
+      display: none !important;
+    }
+   }
