@@ -31,11 +31,13 @@
             <mat-datepicker #picker></mat-datepicker>
         </mat-form-field>
       </div>
-      <div class="col-md-4 col-sm-12 col-xs-12">
+
+      <div class="res-desk-btn col-md-4 col-sm-12 col-xs-12">
         <div class="card-horas-bottom" style="text-align: left;">
           <a [routerLink]="['/']" class="reservar-hora" matRipple>RESERVAR HORA</a>
         </div>
       </div>
+
       <div class="col-md-4 col-sm-12 col-xs-12"></div>
   
       <div class="col-md-4 col-sm-12 col-xs-12 field-margin">
@@ -43,6 +45,13 @@
           <button mat-stroked-button class="btn-azul custom-btn" (click)="buscarCita()">BUSCAR</button>
         </div>
       </div>
+
+      <div class="res-mob-btn col-sm-12 col-xs-12">
+        <div class="card-horas-bottom" style="text-align: left;">
+          <a [routerLink]="['/']" class="reservar-hora" matRipple>RESERVAR HORA</a>
+        </div>
+      </div>
+
     </div>
     
 

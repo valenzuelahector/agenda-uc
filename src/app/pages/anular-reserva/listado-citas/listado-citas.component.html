@@ -12,7 +12,7 @@
         </div>
     </div>
 
-    <div class="w-table">
+    <div class="w-table htb">
         <table class="horas">
             <thead>
                 <tr>
@@ -40,4 +40,23 @@
         </table>
     </div>
 
+    <div class="table-responsive">
+        <div class="tb-container" *ngFor="let cita of dataAnularCita.citas">
+            <div fxLayout="row wrap" fxLayoutAlign="space-between">
+                <div class="itm" fxFlex="49%"><b>Hora</b></div>
+                <div class="itm" fxFlex="49%">{{ cita.FechaHoraDesde | date:'HH:mm' }}</div>
+                <div class="itm" fxFlex="49%"><b>Datos del Profesional:</b></div>
+                <div class="itm" fxFlex="49%">{{ cita.RecursosCita[0]?.Recurso.Nombre }}</div>
+                <div class="itm" fxFlex="49%"><b>Especialidad</b></div>
+                <div class="itm" fxFlex="49%">{{ cita.Servicio.NombreEspecialidad }}</div>
+                <div class="itm" fxFlex="49%"><b>Centro</b></div>
+                <div class="itm" fxFlex="49%">{{ cita.Centro.Nombre }}</div>
+                <div fxFlex="100%">
+                    <div style="margin-top:20px !important">
+                        <button mat-stroked-button class="btn-azul cus-pad" style="margin: 0px auto !important; display:block" (click)="anular(cita)" [disabled]="todayTime > cita.fechaTime">ANULAR</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
