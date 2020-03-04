@@ -85,8 +85,8 @@ p b{
 }
 
 .wrap{
-    width: 90%;
-    max-width: 1300px;
+    max-width: 100%;
+    width: 1180px;
     margin: 0 auto;
     padding: 0 40px;
 }
@@ -6345,10 +6345,10 @@ a.volver-hora:hover{
         font-size: 14px;
     }
     .botones-head a.mi-pagina{
-        display: none;
+        /* display: none; */
     }
     header.fixed .botones-head a.reserva{
-        display: none;
+        /* display: none; */
     }
 
     .item-campana .bg-campana{
@@ -6643,6 +6643,7 @@ width: 850px;
     margin-bottom: 20px !important;
     }
 }
+
 @media (max-width: 400px) {
     .header-reserva h2 {
       font-size: 22px;
