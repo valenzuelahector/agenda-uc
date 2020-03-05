@@ -49,6 +49,17 @@
     width: 41%;
     border-right: none;
   }
+
+  .datos-paciente .item.size-half {
+    width: 50%;
+    border-right: 1px solid #B9C6D7;
+  }
+
+  .datos-paciente .item.size-half-noborder {
+    width: 50%;
+    border-right: none !important;
+  }
+  
   
   .datos-paciente .item p{
     font-size: 1rem;
@@ -207,8 +218,10 @@
     .datos-paciente .item.size-1,
     .datos-paciente .item.size-2,
     .datos-paciente .item.size-3,
+    .datos-paciente .item.size-half,
+    .datos-paciente .item.item.size-half-noborder,
     .datos-paciente .item.size-4 {
-      width: 100%;
+      width: 100% !important;
       border-right: none;
     }
    }
