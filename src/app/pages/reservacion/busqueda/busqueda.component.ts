@@ -516,7 +516,7 @@ export class BusquedaComponent implements OnInit {
 
     let centroPrioritario = ENV.idCentroPrioritario;
     let centros = [];
-
+    let centroTodos = null;
     for(let centro of data){
       if(centro['codigo'] !== 'todos'){
         if(centroPrioritario === centro['idCentro']){
@@ -524,11 +524,13 @@ export class BusquedaComponent implements OnInit {
         }else{
           centros.push(centro);
         }
+      }else{
+        centroTodos = centro;
       }
     }
 
     if(data.length >= 2 ){
-      centros.unshift(data[0]);
+      centros.unshift(centroTodos);
     }
 
     return centros;
