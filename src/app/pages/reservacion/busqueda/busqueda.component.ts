@@ -512,6 +512,28 @@ export class BusquedaComponent implements OnInit {
     })
   }
 
+  priorizarCentro(data){
+
+    let centroPrioritario = ENV.idCentroPrioritario;
+    let centros = [];
+
+    for(let centro of data){
+      if(centro['codigo'] !== 'todos'){
+        if(centroPrioritario === centro['idCentro']){
+          centros.unshift(centro);
+        }else{
+          centros.push(centro);
+        }
+      }
+    }
+
+    if(data.length >= 2 ){
+      centros.unshift(data[0]);
+    }
+
+    return centros;
+  }
+
   getCentros(idServicio){
 
     let isProf = (this.profesionalSelected) ? this.profesionalSelected['idProfesional'] : null;
@@ -548,7 +570,9 @@ export class BusquedaComponent implements OnInit {
             codigo: 'todos',
             detalle: 'Todos'
           }
-          res['centros'].unshift(objTodos)
+
+          res['centros'].unshift(objTodos);
+
         }
 
         if (res['centros'] && res['centros'].length > 0) {
@@ -561,7 +585,7 @@ export class BusquedaComponent implements OnInit {
 
           res['centros'] = this.orderPipe.transform(res['centros'], 'detalle');
 
-          this.centrosAtencion = res['centros'];
+          this.centrosAtencion = this.priorizarCentro(res['centros']);
 
           if (matCentro) {
             this.centroAtencionCtrl.patchValue(matCentro);
