@@ -6350,6 +6350,20 @@ a.volver-hora:hover{
     header.fixed .botones-head a.reserva{
         /* display: none; */
     }
+   
+    .btns-barra-menu .botones-head {
+        position: relative;
+    }
+    a.reserva.mob.mi-pagina.btn-portal {
+        padding: 8px;
+        height: 33px;
+        font-size: 7px;
+    }
+    a.reserva.mob.btn-reserva {
+        padding: 8px;
+        height: 33px;
+        font-size: 7px;
+    }
 
     .item-campana .bg-campana{
         opacity: 0.3;
