@@ -16,6 +16,7 @@ import gtag, { install } from 'ga-gtag';
 export class SeleccionComponent implements OnInit, OnChanges {
 
   @Input() busquedaInicial: any;
+  @Input() reloadBusqueda:number = 0;
   @Output() calendario: EventEmitter<any> = new EventEmitter();
 
   public recursos: any;
@@ -27,6 +28,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
   public centrosProfesional: any = {};
   public loadedRecursos: boolean = false;
   public tiposCitas: any = [];
+  public emitterReloadBusqueda:any;
 
   constructor(
     public agendaService: AgendaAmbulatoriaService,

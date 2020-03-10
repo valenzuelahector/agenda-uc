@@ -29,6 +29,7 @@ import { ReservacionEfectuadaComponent } from './pages/reservacion/reservacion-e
 import { RutFormaterDirective } from './shared/directives/rut-formater.directive';
 import { OrderModule } from 'ngx-order-pipe';
 import { MyDateAdapter } from './dateAdapter';
+import { ErrorReservaComponent } from './shared/components/modals/error-reserva/error-reserva.component';
 
 @NgModule({
   declarations: [
@@ -44,7 +45,8 @@ import { MyDateAdapter } from './dateAdapter';
     PerfilProfesionalComponent,
     ErrorValidacionComponent,
     ReservacionEfectuadaComponent,
-    RutFormaterDirective
+    RutFormaterDirective,
+    ErrorReservaComponent
   ],
   imports: [
     BrowserModule,
@@ -67,7 +69,8 @@ import { MyDateAdapter } from './dateAdapter';
   bootstrap: [AppComponent],
   entryComponents:[
       MessageComponent,
-      PerfilProfesionalComponent
+      PerfilProfesionalComponent,
+      ErrorReservaComponent
   ]
 })
 export class AppModule { }

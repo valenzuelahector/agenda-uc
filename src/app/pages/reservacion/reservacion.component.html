@@ -51,8 +51,8 @@
     </mat-tab>
     <mat-tab label="Selección">
       <button mat-raised-button color="primary" class="btn-ret" (click)="cambiarEtapa(0)"
-        *ngIf="!reservaRealizada">Volver</button>
-      <app-seleccion #seleccion [busquedaInicial]="busquedaInfo"></app-seleccion>
+        *ngIf="!reservaRealizada" >Volver</button>
+      <app-seleccion #seleccion [busquedaInicial]="busquedaInfo" [reloadBusqueda]="reloadNumber"></app-seleccion>
     </mat-tab>
     <mat-tab label="Identificación">
       <button mat-raised-button color="primary" class="btn-ret" (click)="cambiarEtapa(1)"

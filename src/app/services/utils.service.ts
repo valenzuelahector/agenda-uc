@@ -1,6 +1,7 @@
 import { Injectable, Output, EventEmitter } from '@angular/core';
 import { MatDialog, MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material';
 import { MessageComponent } from 'src/app/shared/components/modals/message/message.component';
+import { Subject, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +13,7 @@ export class UtilsService {
   public verticalPosition: MatSnackBarVerticalPosition = 'bottom';
   public nuevaHora:EventEmitter<any> = new EventEmitter();
   public resetInfoPaciente:EventEmitter<any> = new EventEmitter();
+  public reloadBusqueda:any = new Subject();
 
   constructor(
     public dialog: MatDialog,
@@ -65,18 +67,34 @@ export class UtilsService {
     return S ? S - 1 : 'K';
   }
 
-  trDateStr(date: Date, type = 'string'){
+  trDateStr(date: Date, type = 'string', compensacion = null) {
 
     let year = date.getFullYear();
-    let month = ((date.getMonth() + 1) < 10) ? "0" + (date.getMonth() + 1) : date.getMonth() + 1 ;
+    let month = ((date.getMonth() + 1) < 10) ? "0" + (date.getMonth() + 1) : date.getMonth() + 1;
     let day = (date.getDate() < 10) ? "0" + date.getDate() : date.getDate();
     let hour = (date.getHours() < 10) ? "0" + date.getHours() : date.getHours();
     let min = (date.getMinutes() < 10) ? "0" + date.getMinutes() : date.getMinutes();
     let sec = (date.getSeconds() < 10) ? "0" + date.getSeconds() : date.getSeconds();
-    if(type == 'json'){
-      return { year: year, month: month,  day : day, hour: hour, min : min, sec : sec }
+    
+    if (type == 'json') {
+      return { year: year, month: month, day: day, hour: hour, min: min, sec: sec }
     }
-    return  year + "-" + month + "-" + day + "T" + hour + ":" + min +":" + sec + "-03:00";
+
+    let sign = null;
+    let time = null;
+
+    if (!compensacion) {
+      sign = '-';
+      time = '00:00'
+    } else {
+      let timeZone = compensacion / 60;
+      sign = (timeZone < 0) ? '-' : '+';
+      timeZone = (timeZone < 0) ? timeZone * -1 : timeZone;
+      time = (timeZone > 9) ? timeZone + ':00' : '0' + timeZone + ':00';
+    }
+
+
+    return year + "-" + month + "-" + day + "T" + hour + ":" + min + ":" + sec + sign + time;
   }
 
   numberOnly(event, activate?: boolean): boolean {
@@ -135,5 +153,12 @@ export class UtilsService {
       .replace(/-/g, separator);
   }
 
+  setReloadBusqueda(){
+    this.reloadBusqueda.next(true)
+  }
+
+  getReloadBusqueda(): Observable<any> {
+    return this.reloadBusqueda.asObservable();
+  }
   
 }

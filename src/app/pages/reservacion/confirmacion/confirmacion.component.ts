@@ -3,6 +3,8 @@ import { AgendaAmbulatoriaService } from  'src/app/services/agenda-ambulatoria.s
 import { UtilsService } from 'src/app/services/utils.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import gtag, { install } from 'ga-gtag';
+import { ErrorReservaComponent } from 'src/app/shared/components/modals/error-reserva/error-reserva.component';
+import { MatDialog } from '@angular/material';
 
 @Component({
   selector: 'app-confirmacion',
@@ -23,7 +25,8 @@ export class ConfirmacionComponent implements OnInit, OnChanges {
   constructor(
     public agendaService:AgendaAmbulatoriaService,
     public utils:UtilsService,
-    public sanitizer:DomSanitizer
+    public sanitizer:DomSanitizer,
+    public dialog: MatDialog,
   ) { }
 
   ngOnInit() {
@@ -35,7 +38,7 @@ export class ConfirmacionComponent implements OnInit, OnChanges {
 
   reservar(){
 
-    let fecha:any = this.utils.trDateStr(this.calendario.cupo.fechaHora, 'n');
+    let fecha:any = this.utils.trDateStr(this.calendario.cupo.fechaHora, 'n', this.calendario.cupo.compensacion);
 
     this.agendaService.postCita({
       fechaInicioDesde: fecha,
@@ -54,11 +57,27 @@ export class ConfirmacionComponent implements OnInit, OnChanges {
         this.reservaFinalizada =  true;
         this.confirmarReserva.emit({response: true, data:data});
       }else{
-        this.utils.mDialog("Error", data['usrMsg'], "message");
+        this.errReserva(data['statusDesc']);
       }
     })
 
     gtag('event', 'Clic', { 'event_category': 'Reserva de Hora', 'event_label': 'Paso4:Confirmación'});
 
   }
+
+  errReserva(message){
+
+    let msg = (message) ? message : 'Se ha producido un error. ¿Que desea hacer?';
+
+    let dialogRef = this.dialog.open(ErrorReservaComponent, {
+      width: '400px',
+      data: { message : msg },
+      autoFocus: false
+    });
+
+    dialogRef.componentInstance.dialogEvent.subscribe((result) => {
+      this.utils.setReloadBusqueda();
+    })
+  }
 }
+
