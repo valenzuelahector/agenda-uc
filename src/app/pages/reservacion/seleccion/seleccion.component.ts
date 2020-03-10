@@ -17,6 +17,7 @@ import * as $ from 'jquery';
 export class SeleccionComponent implements OnInit, OnChanges {
 
   @Input() busquedaInicial: any;
+  @Input() reloadBusqueda:number = 0;
   @Output() calendario: EventEmitter<any> = new EventEmitter();
 
   public recursos: any;
@@ -28,6 +29,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
   public centrosProfesional: any = {};
   public loadedRecursos: boolean = false;
   public tiposCitas: any = [];
+<<<<<<< HEAD
   public dayWeekFixed = false;
   public counterLoader = 0;
   public displayCalendar: boolean = true;
@@ -37,6 +39,10 @@ export class SeleccionComponent implements OnInit, OnChanges {
     min: null,
     max: null
   }
+=======
+  public emitterReloadBusqueda:any;
+
+>>>>>>> zona-horaria-error
   constructor(
     public agendaService: AgendaAmbulatoriaService,
     public utils: UtilsService,

@@ -15,6 +15,7 @@ export class UtilsService {
   public nuevaHora:EventEmitter<any> = new EventEmitter();
   public resetInfoPaciente:EventEmitter<any> = new EventEmitter();
   public emitClearBusquedaAnular = new Subject<any>();
+  public reloadBusqueda:any = new Subject();
 
   constructor(
     public dialog: MatDialog,
@@ -189,4 +190,12 @@ export class UtilsService {
       .replace(/-/g, separator);
   }
 
+  setReloadBusqueda(){
+    this.reloadBusqueda.next(true)
+  }
+
+  getReloadBusqueda(): Observable<any> {
+    return this.reloadBusqueda.asObservable();
+  }
+  
 }

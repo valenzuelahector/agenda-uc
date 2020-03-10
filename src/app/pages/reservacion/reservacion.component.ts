@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
 import { BusquedaComponent } from './busqueda/busqueda.component';
 import { SeleccionComponent } from './seleccion/seleccion.component';
 import { IdentificacionComponent } from './identificacion/identificacion.component';
@@ -14,7 +14,7 @@ install('UA-143119471-2');
   templateUrl: './reservacion.component.html',
   styleUrls: ['./reservacion.component.scss']
 })
-export class ReservacionComponent implements OnInit, AfterViewInit {
+export class ReservacionComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public curEtapa: number = 0;
   public busquedaInfo: any;
@@ -26,6 +26,8 @@ export class ReservacionComponent implements OnInit, AfterViewInit {
   public mensajesActuales: any = [];
   public codCita: number;
   public valorConvenio: number;
+  public emitterReloadBusqueda:any;
+  public reloadNumber = 0;
 
   @ViewChild('tabGroup', { static: false }) tabGroup: any;
   @ViewChild('busqueda', { static: false }) busqueda: BusquedaComponent;
@@ -84,6 +86,15 @@ export class ReservacionComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     
+    this.emitterReloadBusqueda = this.utils.getReloadBusqueda().subscribe( r => {
+      this.cambiarEtapa(1);
+      this.reloadNumber = Math.floor(Math.random() * Math.floor(9999999));
+    })
+
+  }
+
+  ngOnDestroy(){
+    this.emitterReloadBusqueda.unsubscribe();
   }
 
   cambiarEtapa(index: number) {

@@ -36,6 +36,7 @@ import { ListadoCitasComponent } from './pages/anular-reserva/listado-citas/list
 import { DetalleCitaComponent } from './pages/anular-reserva/detalle-cita/detalle-cita.component';
 import { ConfirmacionAnulacionReservaComponent } from './pages/anular-reserva/confirmacion-anulacion-reserva/confirmacion-anulacion-reserva.component';
 import { ConfirmarAnularReservaComponent } from './shared/components/modals/confirmar-anular-reserva/confirmar-anular-reserva.component';
+import { ErrorReservaComponent } from './shared/components/modals/error-reserva/error-reserva.component';
 
 @NgModule({
   declarations: [
@@ -59,7 +60,8 @@ import { ConfirmarAnularReservaComponent } from './shared/components/modals/conf
     DetalleCitaComponent,
     ConfirmacionAnulacionReservaComponent,
     ConfirmarAnularReservaComponent,
-    RutFormaterDirective
+    RutFormaterDirective,
+    ErrorReservaComponent
   ],
   imports: [
     BrowserModule,
@@ -83,7 +85,8 @@ import { ConfirmarAnularReservaComponent } from './shared/components/modals/conf
   entryComponents:[
       MessageComponent,
       PerfilProfesionalComponent,
-      ConfirmarAnularReservaComponent
+      ConfirmarAnularReservaComponent,
+      ErrorReservaComponent
   ]
 })
 export class AppModule { }
