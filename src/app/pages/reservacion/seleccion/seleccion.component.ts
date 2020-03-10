@@ -29,7 +29,6 @@ export class SeleccionComponent implements OnInit, OnChanges {
   public centrosProfesional: any = {};
   public loadedRecursos: boolean = false;
   public tiposCitas: any = [];
-<<<<<<< HEAD
   public dayWeekFixed = false;
   public counterLoader = 0;
   public displayCalendar: boolean = true;
@@ -39,10 +38,8 @@ export class SeleccionComponent implements OnInit, OnChanges {
     min: null,
     max: null
   }
-=======
   public emitterReloadBusqueda:any;
 
->>>>>>> zona-horaria-error
   constructor(
     public agendaService: AgendaAmbulatoriaService,
     public utils: UtilsService,
