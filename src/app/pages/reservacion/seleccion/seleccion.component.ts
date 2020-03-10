@@ -38,7 +38,6 @@ export class SeleccionComponent implements OnInit, OnChanges {
     min: null,
     max: null
   }
-  public emitterReloadBusqueda:any;
 
   constructor(
     public agendaService: AgendaAmbulatoriaService,

@@ -50,15 +50,9 @@
       <app-busqueda #busqueda (emitReadQuery)="readQuerySetter($event)"></app-busqueda>
     </mat-tab>
     <mat-tab label="Selección">
-<<<<<<< HEAD
       <button mat-stroked-button class="btn-azul cus-pad" (click)="cambiarEtapa(0)"
         *ngIf="!reservaRealizada"><mat-icon class="icon-cus-pad">keyboard_backspace</mat-icon>Volver</button>
-      <app-seleccion #seleccion [busquedaInicial]="busquedaInfo"></app-seleccion>
-=======
-      <button mat-raised-button color="primary" class="btn-ret" (click)="cambiarEtapa(0)"
-        *ngIf="!reservaRealizada" >Volver</button>
       <app-seleccion #seleccion [busquedaInicial]="busquedaInfo" [reloadBusqueda]="reloadNumber"></app-seleccion>
->>>>>>> zona-horaria-error
     </mat-tab>
     <mat-tab label="Identificación">
       <button mat-stroked-button class="btn-azul cus-pad" style="margin-bottom:20px" (click)="cambiarEtapa(1)"
