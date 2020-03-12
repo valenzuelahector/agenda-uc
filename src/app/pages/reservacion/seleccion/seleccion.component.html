@@ -91,7 +91,7 @@
 											<ng-container *ngIf="cet.habilitado">
 												<a class="item-hora" *ngFor="let cupo of cet.cupos"
 													(click)="seleccionarHora({fecha: selectedDate[i], cupo : cupo, recurso:re})">
-													<div class="hora">{{ cupo.fechaHoraDisplay }}</div>
+													<div class="hora">{{ cupo.fechaHora | toLocalScl: cupo.compensacion : 'HH:mm'  }}</div>
 												</a>
 											</ng-container>
 										</ng-container>
@@ -105,7 +105,7 @@
 										(selectedChange)="onSelect($event, i)"></mat-calendar>
 									<div class="datos-horas">
 										<p *ngIf="re.proximaFecha">Próxima hora disponible:
-											<span>{{ re.proximaFecha | date:'EEEE dd/MM/yyyy HH:mm'}}</span></p>
+											<span>{{ re.proximaFecha | toLocalScl: re.compensacion : 'dddd DD/MM/YYYY [a las] HH:mm'}}</span></p>
 										<p *ngIf="!re.proximaFecha">No existen horas disponibles.</p>
 									</div>
 								</div>

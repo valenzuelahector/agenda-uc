@@ -30,6 +30,7 @@ import { RutFormaterDirective } from './shared/directives/rut-formater.directive
 import { OrderModule } from 'ngx-order-pipe';
 import { MyDateAdapter } from './dateAdapter';
 import { ErrorReservaComponent } from './shared/components/modals/error-reserva/error-reserva.component';
+import { ToLocalSclPipe } from './to-local-scl.pipe';
 
 @NgModule({
   declarations: [
@@ -46,7 +47,8 @@ import { ErrorReservaComponent } from './shared/components/modals/error-reserva/
     ErrorValidacionComponent,
     ReservacionEfectuadaComponent,
     RutFormaterDirective,
-    ErrorReservaComponent
+    ErrorReservaComponent,
+    ToLocalSclPipe,
   ],
   imports: [
     BrowserModule,

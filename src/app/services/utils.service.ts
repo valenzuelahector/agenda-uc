@@ -4,7 +4,7 @@ import { MessageComponent } from 'src/app/shared/components/modals/message/messa
 import { Subject, Observable } from 'rxjs';
 import * as moment from 'moment';
 import 'moment-timezone';
-import 'moment/locale/pt-br';
+import 'moment/locale/es';
 
 @Injectable({
   providedIn: 'root'

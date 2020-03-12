@@ -10,8 +10,8 @@
           <div class="row">
             <div class="col-lg-12">
               <!-- <p><b>Id Reserva:</b> {{ codCita }}</p> -->
-              <p><b>Fecha:</b> {{ calendario.cupo.fechaHora | date:'dd/MM/yyyy'}}</p>
-              <p><b>Hora:</b> {{ calendario.cupo.fechaHora | date:'HH:mm'}} Hrs</p>
+              <p><b>Fecha:</b> {{ calendario.cupo.fechaHora | toLocalScl: calendario.cupo.compensacion : 'DD/MM/YYYY'}}</p>
+              <p><b>Hora:</b>  {{ calendario.cupo.fechaHora | toLocalScl: calendario.cupo.compensacion : 'HH:mm'}} Hrs</p>
               <p><b>Centro:</b> {{ calendario.cupo.nombreCentro }}</p>
               <p *ngIf="busquedaInicial.centroAtencion.codigo != 'todos' && utils.slugify(busquedaInicial.area.nombre, '-') !== 'telemedicina'
               && utils.slugify(busquedaInicial.area.nombre, '-') !== 'consulta-medica-virtual'"><b>Ubicación:</b> {{ busquedaInicial.centroAtencion.direccion?.calle }},

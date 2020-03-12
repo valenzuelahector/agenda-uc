@@ -157,7 +157,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
   }
 
   onSelect(event, i) {
-    console.log("ONSELECT")
+
     this.selectedDate[i] = event;
     let fechaDisSel = this.utils.trDateStr(event, 'json');
     let idxFecha = fechaDisSel['year'] + "-" + fechaDisSel['month'] + '-' + fechaDisSel['day'];
@@ -225,8 +225,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
 
         u = this.utils.toStringDateJson(u);
         val['idTipoCita'] = this.getTipoCita(val['tiposDeCita'][0]);
-        val['fechaHora'] = this.utils.toLocalScl(fechaEpoch, compensacion);
-        val['fechaHoraDisplay'] = this.utils.toLocalScl(fechaEpoch, compensacion, 'HH:mm');
+        val['fechaHora'] = fechaEpoch;
         val['nombreCentro'] = (dataRecurso['listaCentrosIdCorto'][val['idCentro']]) ? dataRecurso['listaCentrosIdCorto'][val['idCentro']]['nombre'] : 'S/I';
         val['idStrCentro'] = (dataRecurso['listaCentrosIdCorto'][val['idCentro']]) ? dataRecurso['listaCentrosIdCorto'][val['idCentro']]['id'] : null;
         val['idStrDisponibilidad'] = (dataRecurso['listaDisponibilidadesIdCorto'][val['idDisponibilidad']]) ? dataRecurso['listaDisponibilidadesIdCorto'][val['idDisponibilidad']]['id'] : null;
@@ -250,8 +249,9 @@ export class SeleccionComponent implements OnInit, OnChanges {
         let count = 0;
         dataRecurso['fechasDisponibles'][key].forEach((valDx, keyDx) => {
           if (count == 0) {
-            dataRecurso['proximaFecha'] = this.utils.toLocalScl(new Date(valDx['horaEpoch'] * 1000), compensacion) ;
+            dataRecurso['proximaFecha'] = new Date(valDx['horaEpoch'] * 1000) ;
             dataRecurso['proximaFechaEpoch'] = valDx['horaEpoch'];
+            dataRecurso['compensacion'] = compensacion;
             proximaFecha = true;
           }
           count++;
