@@ -91,7 +91,7 @@
 											<ng-container *ngIf="cet.habilitado">
 												<a class="item-hora" *ngFor="let cupo of cet.cupos"
 													(click)="seleccionarHora({fecha: selectedDate[i], cupo : cupo, recurso:re})">
-													<div class="hora">{{ cupo.fechaHora | date:'HH:mm' }}</div>
+													<div class="hora">{{ cupo.fechaHoraDisplay }}</div>
 												</a>
 											</ng-container>
 										</ng-container>

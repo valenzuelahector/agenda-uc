@@ -7,6 +7,8 @@ import { MatDialog } from '@angular/material';
 import { OrderPipe } from 'ngx-order-pipe';
 import { ENV } from 'src/environments/environment';
 import gtag, { install } from 'ga-gtag';
+import * as moment from 'moment';
+import 'moment-timezone';
 
 @Component({
   selector: 'app-seleccion',
@@ -82,11 +84,13 @@ export class SeleccionComponent implements OnInit, OnChanges {
       this.fechaHoy = new Date();
       this.fechaLimite = new Date();
       this.fechaLimite.setDate(this.fechaHoy.getDate() + 90);
+      console.log(this.fechaHoy);
+      console.log(this.fechaLimite)
       this.agendaService.getRecursos({
         todosCentro: (this.busquedaInicial.centroAtencion.codigo == 'todos') ? true : false,
         idCentro: this.busquedaInicial.centroAtencion.idCentro,
-        fechaInicio: this.utils.trDateStr(this.fechaHoy),
-        fechaTermino: this.utils.trDateStr(this.fechaLimite),
+        fechaInicio: this.utils.toLocalScl(this.fechaHoy),
+        fechaTermino: this.utils.toLocalScl(this.fechaLimite),
         idServicio: this.busquedaInicial.especialidad.idServicio,
         idPlanSalud: ENV.idPlanSaludInit,
         idProfesional: idProfesional
@@ -179,8 +183,10 @@ export class SeleccionComponent implements OnInit, OnChanges {
 
   crearCalendario(dataRecurso: any, centros: any, disponibilidades: any, recursos: any) {
 
+    let compensacion = dataRecurso['cupos'].length > 0 ? dataRecurso['cupos'][0]['compensacion'] : -180;
     let fecha = new Date();
     let f = null;
+    console.log(compensacion)
 
     dataRecurso['fechasDisponibles'] = {};
     dataRecurso['listaCentrosIdCorto'] = {};
@@ -203,20 +209,24 @@ export class SeleccionComponent implements OnInit, OnChanges {
     for (let day = 0; day <= this.maxNumDays; day++) {
 
       if (day == 0) {
-        f = this.utils.trDateStr(fecha, 'json');
+        f = this.utils.toLocalScl(fecha, compensacion);
       } else {
         fecha.setDate(fecha.getDate() + 1);
-        f = this.utils.trDateStr(fecha, 'json');
+        f = this.utils.toLocalScl(fecha, compensacion);
       }
+
+      f = this.utils.toStringDateJson(f);
 
       dataRecurso['fechasDisponibles'][f.year + '-' + f.month + '-' + f.day] = [];
       dataRecurso['cupos'].forEach((val, key) => {
 
         let fechaEpoch = new Date(val['horaEpoch'] * 1000);
-        let u = this.utils.trDateStr(fechaEpoch, 'json');
-        
+        let u:any = this.utils.toLocalScl(fechaEpoch, compensacion);
+
+        u = this.utils.toStringDateJson(u);
         val['idTipoCita'] = this.getTipoCita(val['tiposDeCita'][0]);
-        val['fechaHora'] = fechaEpoch;
+        val['fechaHora'] = this.utils.toLocalScl(fechaEpoch, compensacion);
+        val['fechaHoraDisplay'] = this.utils.toLocalScl(fechaEpoch, compensacion, 'HH:mm');
         val['nombreCentro'] = (dataRecurso['listaCentrosIdCorto'][val['idCentro']]) ? dataRecurso['listaCentrosIdCorto'][val['idCentro']]['nombre'] : 'S/I';
         val['idStrCentro'] = (dataRecurso['listaCentrosIdCorto'][val['idCentro']]) ? dataRecurso['listaCentrosIdCorto'][val['idCentro']]['id'] : null;
         val['idStrDisponibilidad'] = (dataRecurso['listaDisponibilidadesIdCorto'][val['idDisponibilidad']]) ? dataRecurso['listaDisponibilidadesIdCorto'][val['idDisponibilidad']]['id'] : null;
@@ -240,7 +250,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
         let count = 0;
         dataRecurso['fechasDisponibles'][key].forEach((valDx, keyDx) => {
           if (count == 0) {
-            dataRecurso['proximaFecha'] = new Date(valDx['horaEpoch'] * 1000);
+            dataRecurso['proximaFecha'] = this.utils.toLocalScl(new Date(valDx['horaEpoch'] * 1000), compensacion) ;
             dataRecurso['proximaFechaEpoch'] = valDx['horaEpoch'];
             proximaFecha = true;
           }

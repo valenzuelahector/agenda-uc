@@ -2,6 +2,9 @@ import { Injectable, Output, EventEmitter } from '@angular/core';
 import { MatDialog, MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material';
 import { MessageComponent } from 'src/app/shared/components/modals/message/message.component';
 import { Subject, Observable } from 'rxjs';
+import * as moment from 'moment';
+import 'moment-timezone';
+import 'moment/locale/pt-br';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +21,8 @@ export class UtilsService {
   constructor(
     public dialog: MatDialog,
     public snackBar: MatSnackBar,
-  ) { }
+  ) { 
+  }
 
   showProgressBar() {
     this.progressBar = true;
@@ -161,4 +165,17 @@ export class UtilsService {
     return this.reloadBusqueda.asObservable();
   }
   
+  toLocalScl(date, utc = -180, format = null){
+    let dt = moment(date).utcOffset(utc).format(format);
+    return dt;
+  }
+
+  toStringDateJson(dateString){
+    let d = dateString.split("T")[0].split("-");
+    return {
+      year: d[0],
+      month: d[1],
+      day: d[2]
+    }
+  }
 }
