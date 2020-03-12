@@ -84,8 +84,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
       this.fechaHoy = new Date();
       this.fechaLimite = new Date();
       this.fechaLimite.setDate(this.fechaHoy.getDate() + 90);
-      console.log(this.fechaHoy);
-      console.log(this.fechaLimite)
+      
       this.agendaService.getRecursos({
         todosCentro: (this.busquedaInicial.centroAtencion.codigo == 'todos') ? true : false,
         idCentro: this.busquedaInicial.centroAtencion.idCentro,
@@ -216,13 +215,11 @@ export class SeleccionComponent implements OnInit, OnChanges {
       }
 
       f = this.utils.toStringDateJson(f);
-
       dataRecurso['fechasDisponibles'][f.year + '-' + f.month + '-' + f.day] = [];
       dataRecurso['cupos'].forEach((val, key) => {
 
         let fechaEpoch = new Date(val['horaEpoch'] * 1000);
         let u:any = this.utils.toLocalScl(fechaEpoch, compensacion);
-
         u = this.utils.toStringDateJson(u);
         val['idTipoCita'] = this.getTipoCita(val['tiposDeCita'][0]);
         val['fechaHora'] = fechaEpoch;
@@ -250,6 +247,8 @@ export class SeleccionComponent implements OnInit, OnChanges {
         dataRecurso['fechasDisponibles'][key].forEach((valDx, keyDx) => {
           if (count == 0) {
             dataRecurso['proximaFecha'] = new Date(valDx['horaEpoch'] * 1000) ;
+            let k:string = this.utils.toLocalScl(dataRecurso['proximaFecha'], compensacion, 'YYYY-MM-DD HH:mm:ss');
+            dataRecurso['proximaFechaDate'] = new Date(k);
             dataRecurso['proximaFechaEpoch'] = valDx['horaEpoch'];
             dataRecurso['compensacion'] = compensacion;
             proximaFecha = true;

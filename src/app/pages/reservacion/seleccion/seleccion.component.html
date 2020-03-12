@@ -100,7 +100,7 @@
 								</div>
 
 								<div *ngIf="re.datesToHighlight && re.datesToHighlight['displayed']">
-									<mat-calendar [minDate]="re.proximaFecha" [maxDate]="fechaLimite"
+									<mat-calendar [minDate]="re.proximaFechaDate" [maxDate]="fechaLimite"
 										[dateClass]="re.datesToHighlight.dateClass" [selected]="selectedDate[i]"
 										(selectedChange)="onSelect($event, i)"></mat-calendar>
 									<div class="datos-horas">
