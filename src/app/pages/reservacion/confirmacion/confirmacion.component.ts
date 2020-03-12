@@ -38,7 +38,7 @@ export class ConfirmacionComponent implements OnInit, OnChanges {
 
   reservar(){
 
-    let fecha:any = this.utils.trDateStr(this.calendario.cupo.fechaHora, 'n', this.calendario.cupo.compensacion);
+    let fecha:any = this.utils.toLocalScl(this.calendario.cupo.fechaHora, this.calendario.cupo.compensacion);
 
     this.agendaService.postCita({
       fechaInicioDesde: fecha,
@@ -57,7 +57,7 @@ export class ConfirmacionComponent implements OnInit, OnChanges {
         this.reservaFinalizada =  true;
         this.confirmarReserva.emit({response: true, data:data});
       }else{
-        this.errReserva(data['statusDesc']);
+        this.errReserva(data['usrMsg']);
       }
     })
 

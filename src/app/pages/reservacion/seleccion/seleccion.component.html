@@ -82,7 +82,7 @@
 											<p class="header-sel-hora">
 												Seleccione 
 												<span *ngIf="utils.slugify(busquedaInicial.area.nombre, '-') !== 'telemedicina'
-													&& utils.slugify(busquedaInicial.area.nombre, '-') !== 'consulta-medica-virtual'">un Centro y </span>
+													&& utils.slugify(busquedaInicial.area.nombre, '-') !== 'consulta-medica-virtual'" style="font-weight: bold !important;" >un Centro y </span>
 												una Hora Disponible para el {{ selectedDate[i] | date:'dd/MM/yyyy'}}
 												<button mat-stroked-button (click)="eligeOtroDia(i)"
 													color="primary">
@@ -102,7 +102,7 @@
 												<ng-container *ngIf="cet.habilitado">
 													<a class="item-hora" *ngFor="let cupo of cet.cupos"
 														(click)="seleccionarHora({fecha: selectedDate[i], cupo : cupo, recurso:re})">
-														<div class="hora">{{ cupo.fechaHora | date:'HH:mm' }}</div>
+														<div class="hora">{{ cupo.fechaHora | toLocalScl: cupo.compensacion : 'HH:mm' }}</div>
 													</a>
 												</ng-container>
 											</ng-container>
@@ -119,7 +119,7 @@
 											<p class="sinHorasMes" *ngIf="!re.poseeMes">El profesional no tiene horas disponibles en el mes.</p>
 											<p *ngIf="!re.proximaFecha">No existen horas disponibles.</p>
 											<p *ngIf="re.proximaFecha">Próxima hora disponible:
-												<span>{{ re.proximaFecha | date:'EEEE dd/MM/yyyy HH:mm'}}</span></p>
+												<span>{{ re.proximaFecha | toLocalScl: re.compensacion : 'dddd DD/MM/YYYY [a las] HH:mm'}}</span></p>
 										</div>
 									</div>
 								</div>

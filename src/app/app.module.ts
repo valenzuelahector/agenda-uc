@@ -37,6 +37,7 @@ import { DetalleCitaComponent } from './pages/anular-reserva/detalle-cita/detall
 import { ConfirmacionAnulacionReservaComponent } from './pages/anular-reserva/confirmacion-anulacion-reserva/confirmacion-anulacion-reserva.component';
 import { ConfirmarAnularReservaComponent } from './shared/components/modals/confirmar-anular-reserva/confirmar-anular-reserva.component';
 import { ErrorReservaComponent } from './shared/components/modals/error-reserva/error-reserva.component';
+import { ToLocalSclPipe } from './to-local-scl.pipe';
 
 @NgModule({
   declarations: [
@@ -61,7 +62,8 @@ import { ErrorReservaComponent } from './shared/components/modals/error-reserva/
     ConfirmacionAnulacionReservaComponent,
     ConfirmarAnularReservaComponent,
     RutFormaterDirective,
-    ErrorReservaComponent
+    ErrorReservaComponent,
+    ToLocalSclPipe,
   ],
   imports: [
     BrowserModule,

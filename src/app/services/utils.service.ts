@@ -3,6 +3,9 @@ import { MatDialog, MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerti
 import { MessageComponent } from 'src/app/shared/components/modals/message/message.component';
 import { ConfirmarAnularReservaComponent } from '../shared/components/modals/confirmar-anular-reserva/confirmar-anular-reserva.component';
 import { Subject, Observable } from 'rxjs';
+import * as moment from 'moment';
+import 'moment-timezone';
+import 'moment/locale/es';
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +23,8 @@ export class UtilsService {
   constructor(
     public dialog: MatDialog,
     public snackBar: MatSnackBar,
-  ) { }
+  ) { 
+  }
 
   showProgressBar() {
     this.progressBar = true;
@@ -198,4 +202,17 @@ export class UtilsService {
     return this.reloadBusqueda.asObservable();
   }
   
+  toLocalScl(date, utc = -180, format = null){
+    let dt = moment(date).utcOffset(utc).format(format);
+    return dt;
+  }
+
+  toStringDateJson(dateString){
+    let d = dateString.split("T")[0].split("-");
+    return {
+      year: d[0],
+      month: d[1],
+      day: d[2]
+    }
+  }
 }
