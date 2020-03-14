@@ -102,7 +102,7 @@
 												<ng-container *ngIf="cet.habilitado">
 													<a class="item-hora" *ngFor="let cupo of cet.cupos"
 														(click)="seleccionarHora({fecha: selectedDate[i], cupo : cupo, recurso:re})">
-														<div class="hora">{{ cupo.fechaHora | toLocalScl: cupo.compensacion : 'HH:mm' }}</div>
+														<div class="hora">{{ cupo.fechaHora | toLocalScl: compensacion : 'HH:mm' }}</div>
 													</a>
 												</ng-container>
 											</ng-container>
@@ -112,14 +112,14 @@
 	
 									<div *ngIf="re.datesToHighlight && re.datesToHighlight['displayed']">
 										<div *ngIf="!displayCalendar" style="height:283px"></div>
-										<mat-calendar *ngIf="displayCalendar" [minDate]="navigationDate['min']" [maxDate]="navigationDate['max']"
+										<mat-calendar *ngIf="displayCalendar" [minDate]="setNavigationDate['min']" [maxDate]="setNavigationDate['max']"
 											[dateClass]="re.datesToHighlight.dateClass" [selected]="selectedDate[i]"
 											(selectedChange)="onSelect($event, i)"></mat-calendar>
 										<div class="datos-horas">
 											<p class="sinHorasMes" *ngIf="!re.poseeMes">El profesional no tiene horas disponibles en el mes.</p>
 											<p *ngIf="!re.proximaFecha">No existen horas disponibles.</p>
 											<p *ngIf="re.proximaFecha">Próxima hora disponible:
-												<span>{{ re.proximaFecha | toLocalScl: re.compensacion : 'dddd DD/MM/YYYY [a las] HH:mm'}}</span></p>
+												<span>{{ re.proximaFecha | toLocalScl: compensacion : 'dddd DD/MM/YYYY [a las] HH:mm'}}</span></p>
 										</div>
 									</div>
 								</div>
