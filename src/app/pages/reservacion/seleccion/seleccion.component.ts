@@ -85,9 +85,6 @@ export class SeleccionComponent implements OnInit, OnChanges {
       let today = new Date();
       let min = today;
       let max = new Date(today.getFullYear(), today.getMonth() + 1, 0);
-   //   max.setHours(max.getHours() + 23);
-  //    max.setMinutes(max.getMinutes() + 59)
- //     max.setSeconds(max.getSeconds() + 59)
 
       this.navigationDate['min'] = min;
       this.navigationDate['max'] = max;
@@ -131,9 +128,6 @@ export class SeleccionComponent implements OnInit, OnChanges {
         min.setMonth(min.getMonth() + 1);
         newMin = new Date(min.getFullYear(), min.getMonth(), 1);
         newMax = new Date(min.getFullYear(), min.getMonth() + 1, 0);
-//        newMax.setHours(newMax.getHours() + 23);
- //       newMax.setMinutes(newMax.getMinutes() + 59)
-  //      newMax.setSeconds(newMax.getSeconds() + 59)
 
         if (this.counterLoader < 3 && !this.busquedaInicial.profesional) {
           this.counterLoader++;
@@ -152,9 +146,6 @@ export class SeleccionComponent implements OnInit, OnChanges {
         min.setMonth(min.getMonth() - 1);
         newMin = new Date(min.getFullYear(), min.getMonth(), (this.contadorMeses == 1) ? today.getDate() : 1);
         newMax = new Date(min.getFullYear(), min.getMonth() + 1, 0)
- //       newMax.setHours(newMax.getHours() + 23);
-  //      newMax.setMinutes(newMax.getMinutes() + 59)
-   //     newMax.setSeconds(newMax.getSeconds() + 59);
 
         this.utils.showProgressBar();
         setTimeout(() => {
@@ -166,8 +157,6 @@ export class SeleccionComponent implements OnInit, OnChanges {
 
     this.navigationDate['min'] = newMin;
     this.navigationDate['max'] = newMax;
-    this.setNavigationDate['min'] = new Date(this.utils.toLocalScl(newMin, this.compensacion, 'YYYY-MM-DD HH:mm:ss'));
-    this.setNavigationDate['max'] = new Date(this.utils.toLocalScl(newMax, this.compensacion, 'YYYY-MM-DD HH:mm:ss'));
     
     this.conciliarDateDisabled();
     this.determinarMesSinCupo()

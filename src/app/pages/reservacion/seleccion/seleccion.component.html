@@ -112,7 +112,7 @@
 	
 									<div *ngIf="re.datesToHighlight && re.datesToHighlight['displayed']">
 										<div *ngIf="!displayCalendar" style="height:283px"></div>
-										<mat-calendar *ngIf="displayCalendar" [minDate]="setNavigationDate['min']" [maxDate]="setNavigationDate['max']"
+										<mat-calendar *ngIf="displayCalendar" [minDate]="navigationDate['min']" [maxDate]="navigationDate['max']"
 											[dateClass]="re.datesToHighlight.dateClass" [selected]="selectedDate[i]"
 											(selectedChange)="onSelect($event, i)"></mat-calendar>
 										<div class="datos-horas">
