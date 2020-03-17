@@ -32,8 +32,8 @@
 		<div class="cwarn" *ngIf="recursos && loadedRecursos">
 			<h5 style="margin:0px" *ngIf="recursos.length > 0">Se han encontrado {{ recursos.length }} resultado(s).
 			</h5>
-			<h5 style="margin:0px" *ngIf="busquedaInicial.profesional && recursos.length == 0">Sin disponibilidad.</h5>
-			<h5 style="margin:0px" *ngIf="!busquedaInicial.profesional && recursos.length == 0">Sin disponibilidad.</h5>
+			<h5 style="margin:0px" *ngIf="busquedaInicial.profesional && recursos.length == 0">Sin disponibilidad en agendamiento web. En caso de requerir atención presencial para vacunación por campaña influenza ministerial, ésta será por orden de llegada.</h5>
+			<h5 style="margin:0px" *ngIf="!busquedaInicial.profesional && recursos.length == 0">Sin disponibilidad en agendamiento web. En caso de requerir atención presencial para vacunación por campaña influenza ministerial, ésta será por orden de llegada.</h5>
 		</div>
 
 		<div class="content-res">
