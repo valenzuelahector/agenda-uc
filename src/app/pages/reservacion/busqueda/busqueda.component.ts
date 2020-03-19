@@ -616,7 +616,9 @@ export class BusquedaComponent implements OnInit {
         );
 
         this.loadedCen = true;
-        this.utils.hideProgressBar()
+        setTimeout(()=> {
+          this.utils.hideProgressBar();
+        },2500)
       })
 
     })
