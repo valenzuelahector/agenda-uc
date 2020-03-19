@@ -153,3 +153,7 @@ opacity: 0.5 !important;
   color: #999;
   font-size: 14px;
 }
+
+::ng-deep .ctms h5, ::ng-deep .ctms p{
+  margin-bottom:0px !important;
+}
