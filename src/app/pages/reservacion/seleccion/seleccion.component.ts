@@ -9,6 +9,7 @@ import { ENV } from 'src/environments/environment';
 import gtag, { install } from 'ga-gtag';
 import * as moment from 'moment';
 import 'moment-timezone';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-seleccion',
@@ -31,11 +32,13 @@ export class SeleccionComponent implements OnInit, OnChanges {
   public loadedRecursos: boolean = false;
   public tiposCitas: any = [];
   public emitterReloadBusqueda:any;
+  public customMensaje:string;
 
   constructor(
     public agendaService: AgendaAmbulatoriaService,
     public utils: UtilsService,
     public dialog: MatDialog,
+    public sanitizer:DomSanitizer,
     public orderPipe: OrderPipe
   ) { }
 
@@ -120,6 +123,11 @@ export class SeleccionComponent implements OnInit, OnChanges {
           this.recursos = this.orderPipe.transform(data['listaRecursos'], 'proximaFechaEpoch') ;
         } else {
           this.recursos = [];
+          this.setMensaje({
+            CenterId: this.busquedaInicial.centroAtencion.idCentro,
+            ServiceId: this.busquedaInicial.especialidad.idServicio,
+            ResourceId : idProfesional
+          })
         }
         this.loadedRecursos = true;
         resolve(data);
@@ -128,6 +136,26 @@ export class SeleccionComponent implements OnInit, OnChanges {
 
   }
 
+  setMensaje(data){
+
+    this.agendaService.getMensajes({
+      CenterId: data.CenterId,
+      ServiceId: data.ServiceId,
+      ResourceId: data.ResourceId
+    }).subscribe( res => {
+
+      if(res['mensajes'] && res['mensajes'].length > 0){
+        res['mensajes'].forEach( (val, key) => {
+          if(val['mensaje'] && val['mensaje']['contenido']){
+            this.customMensaje += val['mensaje']['contenido'];
+          }
+        })
+      }else{
+        this.customMensaje = "<p>No se encontraron resultados.</p>";
+      }
+    })
+  }
+  
   dateClass(datesDs) {
     return (date: Date): MatCalendarCellCssClasses => {
       let datesDisabled = JSON.parse(JSON.stringify(datesDs))

@@ -575,8 +575,8 @@ export class BusquedaComponent implements OnInit {
               this.centroAtencionCtrl.patchValue(res['centros'][0]);
               this.centroAtencionSelection(res['centros'][0]);
             }else if(objTodos){
-              this.centroAtencionCtrl.patchValue(objTodos);
-              this.centroAtencionSelection(objTodos);
+            //  this.centroAtencionCtrl.patchValue(objTodos);
+            //  this.centroAtencionSelection(objTodos);
             }
 
             this.emitterReadQuery(true)
@@ -650,7 +650,7 @@ export class BusquedaComponent implements OnInit {
     }
 
     this.especialidadCtrl.disable();
-    console.log()
+    
     this.especialidadSelected = this.especialidadCtrl.value;
     gtag('event', 'Especialidad', { 'event_category': 'Reserva de Hora', 'event_label': this.especialidadSelected['nombreEspecialidad'], 'value' : '0' });
 
@@ -696,13 +696,7 @@ export class BusquedaComponent implements OnInit {
       especialidad: this.especialidadSelected,
       centroAtencion: this.centroAtencionSelected
     })
-/*
-    console.log({
-      area: this.areaSelected,
-      profesional: this.profesionalSelected,
-      especialidad: this.especialidadSelected,
-      centroAtencion: this.centroAtencionSelected
-    })*/
+
     this.emitterReadQuery(true)
   }
 

@@ -90,8 +90,19 @@ export class AgendaAmbulatoriaService {
     return this.http.get(this.baseApi + '/Agenda/CuposDisponibilidad?idCentro=' + query.idCentro + '&fechaInicio=' + query.fechaInicio + '&fechaTermino=' + query.fechaTermino + '&idServicio=' + query.idServicio + '&idPlanSalud=' + query.idPlanSalud + '&idPaciente='+query.idPaciente+'&idDisponibilidad='+query.idDisponibilidad+'&idProfesional='+query.idProfesional+'&codCanal=PatientPortal')
   }
 
-  getMensajes(data){
-    return this.http.get(this.baseApi + '/Mensajes?idProfesional=' + data.ResourceId + '&idCentro=' + data.CenterId + '&idServicio=' + data.ServiceId + '&codCanal=PatientPortal')
+  getMensajes(data, type = null){
+
+    let qrProf = "";
+    if(data.ResourceId && data.ResourceId != ""){
+      qrProf = '&idProfesional=' + data.ResourceId;
+    }
+    
+    if(!type){
+      qrProf += "&codCanal=PatientPortal";
+    }
+
+    return this.http.get(this.baseApi + '/Mensajes?idCentro=' + data.CenterId + '&idServicio=' + data.ServiceId + qrProf);
   }
+
 
 }
