@@ -11,7 +11,9 @@ export const ENV = {
    servRoute: '/agendaambulatoria-prod',
    profRoute: '/profesionales-prod',
    idPlanSaludInit: '0b7a577d-6364-4b28-b2ba-a96e00e243ac',
-   idCentrosNoDisponibles: []
+   idCentrosNoDisponibles: [],
+   idCentroPrioritario: '52e43c90-8ab7-4e34-afcb-a96f0106bbd1',
+   mensajeSinCupos : '<h5>Sin disponibilidad en agendamiento web. En caso de requerir atención presencial para vacunación por campaña influenza ministerial, ésta será por orden de llegada.</h5>'
 }
 
 //   idCentrosNoDisponibles: ['52e43c90-8ab7-4e34-afcb-a96f0106bbd1']

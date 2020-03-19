@@ -32,7 +32,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
   public loadedRecursos: boolean = false;
   public tiposCitas: any = [];
   public emitterReloadBusqueda:any;
-  public customMensaje:string;
+  public customMensaje:string = "";
 
   constructor(
     public agendaService: AgendaAmbulatoriaService,
@@ -142,7 +142,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
       CenterId: data.CenterId,
       ServiceId: data.ServiceId,
       ResourceId: data.ResourceId
-    }).subscribe( res => {
+    }, 'cupo').subscribe( res => {
 
       if(res['mensajes'] && res['mensajes'].length > 0){
         res['mensajes'].forEach( (val, key) => {
@@ -151,7 +151,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
           }
         })
       }else{
-        this.customMensaje = "<p>No se encontraron resultados.</p>";
+        this.customMensaje = ENV.mensajeSinCupos;
       }
     })
   }

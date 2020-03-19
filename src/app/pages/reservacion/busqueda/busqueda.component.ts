@@ -514,6 +514,30 @@ export class BusquedaComponent implements OnInit {
     })
   }
 
+  priorizarCentro(data){
+
+    let centroPrioritario = ENV.idCentroPrioritario;
+    let centros = [];
+    let centroTodos = null;
+    for(let centro of data){
+      if(centro['codigo'] !== 'todos'){
+        if(centroPrioritario === centro['idCentro']){
+          centros.unshift(centro);
+        }else{
+          centros.push(centro);
+        }
+      }else{
+        centroTodos = centro;
+      }
+    }
+
+    if(data.length >= 2 ){
+      centros.push(centroTodos);
+    }
+
+    return centros;
+  }     
+
   getCentros(idServicio){
 
     let isProf = (this.profesionalSelected) ? this.profesionalSelected['idProfesional'] : null;
@@ -563,7 +587,7 @@ export class BusquedaComponent implements OnInit {
 
           res['centros'] = this.orderPipe.transform(res['centros'], 'detalle');
 
-          this.centrosAtencion = res['centros'];
+          this.centrosAtencion = this.priorizarCentro(res['centros']);
 
           if (matCentro) {
             this.centroAtencionCtrl.patchValue(matCentro);
@@ -574,9 +598,6 @@ export class BusquedaComponent implements OnInit {
             if(res['centros'].length == 1){
               this.centroAtencionCtrl.patchValue(res['centros'][0]);
               this.centroAtencionSelection(res['centros'][0]);
-            }else if(objTodos){
-            //  this.centroAtencionCtrl.patchValue(objTodos);
-            //  this.centroAtencionSelection(objTodos);
             }
 
             this.emitterReadQuery(true)
@@ -595,6 +616,7 @@ export class BusquedaComponent implements OnInit {
         );
 
         this.loadedCen = true;
+        this.utils.hideProgressBar()
       })
 
     })

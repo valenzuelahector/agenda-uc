@@ -138,3 +138,8 @@ opacity: 0.5 !important;
     font-size: 20px;
     margin-top: 5px;
 }
+
+
+::ng-deep .ctms h5, ::ng-deep .ctms p{
+  margin-bottom:0px !important;
+}

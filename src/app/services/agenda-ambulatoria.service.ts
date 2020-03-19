@@ -96,12 +96,8 @@ export class AgendaAmbulatoriaService {
     if(data.ResourceId && data.ResourceId != ""){
       qrProf = '&idProfesional=' + data.ResourceId;
     }
-    
-    if(!type){
-      qrProf += "&codCanal=PatientPortal";
-    }
 
-    return this.http.get(this.baseApi + '/Mensajes?idCentro=' + data.CenterId + '&idServicio=' + data.ServiceId + qrProf);
+    return this.http.get(this.baseApi + '/Mensajes?idCentro=' + data.CenterId + '&codCanal=PatientPortal&idServicio=' + data.ServiceId + qrProf);
   }
 
 
