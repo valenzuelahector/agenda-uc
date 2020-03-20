@@ -598,6 +598,9 @@ export class BusquedaComponent implements OnInit {
             if(res['centros'].length == 1){
               this.centroAtencionCtrl.patchValue(res['centros'][0]);
               this.centroAtencionSelection(res['centros'][0]);
+            }else if(objTodos && (this.utils.slugify(this.areaSelected.nombre, "-") === 'telemedicina' || this.utils.slugify(this.areaSelected.nombre, "-") === 'consulta-medica-virtual')){
+              this.centroAtencionCtrl.patchValue(objTodos);
+              this.centroAtencionSelection(objTodos);
             }
 
             this.emitterReadQuery(true)
