@@ -43,20 +43,30 @@
     <div class="cmatspin">
         <mat-spinner [diameter]="60"></mat-spinner>
     </div>
-
+  </div>
+  <div class="return">
+    <div fxLayout="row">
+      <div fxFlex="50%">
+        <button mat-stroked-button class="btn-azul cus-pad" 
+                (click)="cambiarEtapa(curEtapa - 1)" *ngIf="!reservaRealizada && curEtapa != 0">
+                <mat-icon class="icon-cus-pad">keyboard_backspace</mat-icon>Volver
+        </button>
+      </div>
+      <div fxFlex="50%" style="text-align: right;">
+        <button mat-stroked-button class="btn-morado cus-pad cus" [routerLink]="['/anular-reserva']">
+            ANULAR HORA
+        </button>
+      </div>
+    </div>
   </div>
   <mat-tab-group dynamicHeight #tabGroup>
     <mat-tab label="Búsqueda">
       <app-busqueda #busqueda (emitReadQuery)="readQuerySetter($event)"></app-busqueda>
     </mat-tab>
     <mat-tab label="Selección">
-      <button mat-stroked-button class="btn-azul cus-pad" (click)="cambiarEtapa(0)"
-        *ngIf="!reservaRealizada"><mat-icon class="icon-cus-pad">keyboard_backspace</mat-icon>Volver</button>
       <app-seleccion #seleccion [busquedaInicial]="busquedaInfo" [reloadBusqueda]="reloadNumber"></app-seleccion>
     </mat-tab>
     <mat-tab label="Identificación">
-      <button mat-stroked-button class="btn-azul cus-pad" style="margin-bottom:20px" (click)="cambiarEtapa(1)"
-        *ngIf="!reservaRealizada"><mat-icon class="icon-cus-pad">keyboard_backspace</mat-icon>Volver</button>
       <app-identificacion #identificacion [busquedaInicial]="busquedaInfo" [calendario]="calendario">
       </app-identificacion>
     </mat-tab>
@@ -65,8 +75,6 @@
       </app-error-validacion>
     </mat-tab>
     <mat-tab label="Confirmación">
-      <button mat-stroked-button class="btn-azul cus-pad" style="margin-bottom:20px" (click)="cambiarEtapa(2)"
-        *ngIf="!reservaRealizada"><mat-icon class="icon-cus-pad">keyboard_backspace</mat-icon>Volver</button>
       <app-confirmacion #confirmacion [busquedaInicial]="busquedaInfo" [mensajes]="mensajesActuales" [calendario]="calendario" [paciente]="paciente"
         [reservaFinalizada]="reservaRealizada">
       </app-confirmacion>

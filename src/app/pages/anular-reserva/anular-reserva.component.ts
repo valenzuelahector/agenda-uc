@@ -26,6 +26,10 @@ export class AnularReservaComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.utils.showProgressBar();
+    setTimeout(() => {
+      this.utils.hideProgressBar();
+    },2000)
   }
 
   avanzarEtapa(data, etapa){
