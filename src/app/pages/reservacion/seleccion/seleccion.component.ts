@@ -306,6 +306,8 @@ export class SeleccionComponent implements OnInit, OnChanges {
 
   setMensaje(data){
 
+    this.customMensaje = "";
+    
     this.agendaService.getMensajes({
       CenterId: data.CenterId,
       ServiceId: data.ServiceId,
