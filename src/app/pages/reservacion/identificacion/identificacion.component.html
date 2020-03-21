@@ -60,7 +60,7 @@
               <mat-label>Teléfono</mat-label>
               <input matInput placeholder="56912345678"                 
               (keyup)="eventEnter($event, 'procesarPaciente')"
-              maxlength="12" 
+              maxlength="11" 
               [(ngModel)]="busquedaPaciente.telefono" (keypress)="this.utils.numberOnly($event)" onpaste="return false;" autocomplete="off"/>
               <mat-icon matSuffix>local_phone</mat-icon>
           </mat-form-field>
