@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnChanges } from '@angular/core';
 
 @Component({
   selector: 'app-listado-citas',
@@ -18,6 +18,18 @@ export class ListadoCitasComponent implements OnInit {
   ngOnInit() {
   }
 
+  matchRecursoTrue(recurso){
+
+    let textRecurso = "";
+    recurso.forEach((val, key) =>{ 
+      if(val['RecursoPrincipal']){
+        textRecurso = val['Recurso']['Nombre'];
+      }
+    })
+
+    return textRecurso;
+  }
+  
   verDetalle(data){
     this.emitVerDetalle.emit(data);
   }

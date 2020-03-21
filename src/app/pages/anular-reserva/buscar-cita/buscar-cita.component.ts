@@ -121,7 +121,7 @@ export class BuscarCitaComponent implements OnInit, OnDestroy {
           paciente: paciente
         }
       }else{
-        console.log(data)
+
         busquedaCita = {
           code: 'ERROR', 
           message: data['statusDesc']

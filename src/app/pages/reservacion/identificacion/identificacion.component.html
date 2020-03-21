@@ -159,7 +159,7 @@
             <div class="col-md-4 field-margin">
               <mat-form-field class="full bgwhite-input" appearance="fill" [color]="primary">
                   <mat-label>Teléfono</mat-label>
-                  <input matInput placeholder="56912345678" formControlName="fono_movil" maxlength="12" required (keypress)="utils.numberOnly($event, true)" autocomplete="off"/>
+                  <input matInput placeholder="56912345678" formControlName="fono_movil" maxlength="11" required (keypress)="utils.numberOnly($event, true)" autocomplete="off"/>
                   <mat-icon matSuffix>local_phone</mat-icon>
                   <mat-error *ngIf="revPacienteForm.fono_movil.errors">
                     <span *ngIf="revPacienteForm.fono_movil.errors.required">Campo Obligatorio</span>
