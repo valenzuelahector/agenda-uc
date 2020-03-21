@@ -124,7 +124,6 @@ export class IdentificacionComponent implements OnInit {
 
   }
 
-
   eventEnter(event, action) {
     if (event.keyCode == 13) {
 
@@ -169,7 +168,8 @@ export class IdentificacionComponent implements OnInit {
       data['fecha_nacimiento'] = f['year'] + "-" + f['month'] + "-" + f['day'];
       data['previsionObj'] = data['prevision'];
       data['prevision'] = (data['prevision']) ? data['prevision']['idPlan'] : null;
-
+      data['fono_movil'] = '+' + data['fono_movil'];
+      
       this.agendaService.postPaciente(data).subscribe(res => {
         if ((res['statusCode'] && res['statusCode'] == 'OK') || (res['statusCod'] && res['statusCod'] == 'OK')) {
           this.limpiarFormulario();
@@ -178,8 +178,6 @@ export class IdentificacionComponent implements OnInit {
           this.busquedaPaciente.tipoDocumento = data['tipo_identificador']
           this.busquedaPaciente.prevision = data['previsionObj'];
           this.buscarPaciente();
-          //   this.utils.mDialog("Mensaje", "Paciente creado correctamente", "message");
-
         } else {
           this.utils.mDialog("Error", "No se pudo guardar la información requerida. Detalle: " + res['statusDesc'], "message")
         }
@@ -213,15 +211,14 @@ export class IdentificacionComponent implements OnInit {
 
     let hasUpd = { telefono: false, correo: false };
     let dataUpd = { idPRM: this.paciente.id };
-    console.log(this.paciente)
-    console.log(this.busquedaPaciente)
+    
     if (this.paciente.email !== this.busquedaPaciente.correo) {
       dataUpd['correo'] = this.busquedaPaciente.correo;
       hasUpd['correo'] = true;
     }
 
     if (this.paciente.numeroTelefonoPrincipal !== this.busquedaPaciente.telefono) {
-      dataUpd['telefono'] = this.busquedaPaciente.telefono;
+      dataUpd['telefono'] = '+' + parseInt(this.busquedaPaciente.telefono);
       hasUpd['telefono'] = true;
     }
 
@@ -231,7 +228,6 @@ export class IdentificacionComponent implements OnInit {
   updDatosBusqCliente(data){
     return new Promise((resolve, reject) => {
       this.agendaService.putPaciente(data).subscribe( res => {
-        console.log(res);
         resolve(true)
       })
     })
@@ -242,13 +238,13 @@ export class IdentificacionComponent implements OnInit {
     if (this.busquedaPaciente.documento && this.busquedaPaciente.prevision && this.busquedaPaciente.telefono && this.busquedaPaciente.correo) {
 
       let updInfo = this.procesarDatosBusqCliente();
-      console.log(updInfo)
+
       if (!this.utils.validateEmail(this.busquedaPaciente.correo) && updInfo['hasUpd']['correo']) {
         this.utils.mDialog("Error", "El correo del Paciente tiene formato inválido.", "message");
         return false;
       }
 
-      if (String(this.busquedaPaciente.telefono).trim().length != 11 && updInfo['hasUpd']['telefono']) {
+      if (String(parseInt(this.busquedaPaciente.telefono)).trim().length != 11 && updInfo['hasUpd']['telefono']) {
         this.utils.mDialog("Error", "Número de teléfono inválido. Debe tener 11 numeros.", "message");
         return false;
       }
