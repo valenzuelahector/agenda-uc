@@ -215,4 +215,16 @@ export class UtilsService {
       day: d[2]
     }
   }
+
+  matchRecursoTrue(recurso){
+
+    let textRecurso = "";
+    recurso.forEach((val, key) =>{ 
+      if(val['RecursoPrincipal']){
+        textRecurso = val['Recurso']['Nombre'];
+      }
+    })
+
+    return textRecurso;
+  }
 }

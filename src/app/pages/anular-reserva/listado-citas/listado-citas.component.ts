@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnChanges } from '@angular/core';
+import { UtilsService } from 'src/app/services/utils.service';
 
 @Component({
   selector: 'app-listado-citas',
@@ -13,21 +14,11 @@ export class ListadoCitasComponent implements OnInit {
   
   public todayTime = (new Date()).getTime();
 
-  constructor() { }
+  constructor(
+    public utils:UtilsService
+  ) { }
 
   ngOnInit() {
-  }
-
-  matchRecursoTrue(recurso){
-
-    let textRecurso = "";
-    recurso.forEach((val, key) =>{ 
-      if(val['RecursoPrincipal']){
-        textRecurso = val['Recurso']['Nombre'];
-      }
-    })
-
-    return textRecurso;
   }
   
   verDetalle(data){

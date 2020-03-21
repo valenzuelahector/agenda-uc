@@ -13,7 +13,7 @@
         <p><b>Hora:</b> {{ dataAnularCita?.detalleCitaSeleccionada.FechaHoraDesde | date:'HH:mm' }} Hrs.</p>
       </div>
       <div class="item size-half">
-        <p><b>Profesional:</b>  <span> {{ dataAnularCita?.detalleCitaSeleccionada.RecursosCita[0]?.Recurso.Nombre }}</span></p>
+        <p><b>Profesional:</b>  <span> {{ utils.matchRecursoTrue(dataAnularCita?.detalleCitaSeleccionada.RecursosCita) }}</span></p>
       </div>
       <div class="item size-half-noborder">
         <p><b>Especialidad:</b><span> {{ dataAnularCita?.detalleCitaSeleccionada.Servicio.NombreEspecialidad }}</span></p>
