@@ -93,8 +93,8 @@ export class SeleccionComponent implements OnInit, OnChanges {
 
       this.navigationDate['min'] = min;
       this.navigationDate['max'] = max;
-      this.setNavigationDate['min'] = new Date(this.utils.toLocalScl(min, this.compensacion, 'YYYY-MM-DD HH:mm:ss'));
-      this.setNavigationDate['max'] = new Date(this.utils.toLocalScl(max, this.compensacion, 'YYYY-MM-DD HH:mm:ss'));
+      this.setNavigationDate['min'] = new Date(this.utils.toLocalScl(min, this.compensacion, 'YYYY-MM-DDTHH:mm:ss'));
+      this.setNavigationDate['max'] = new Date(this.utils.toLocalScl(max, this.compensacion, 'YYYY-MM-DDTHH:mm:ss'));
   
       if (this.busquedaInicial && this.busquedaInicial.especialidad) {
         this.resetCalendario();
@@ -222,6 +222,8 @@ export class SeleccionComponent implements OnInit, OnChanges {
       var fechaHoy = new Date();
       var fechaLimite = new Date();
 
+      console.log(fechaHoy)
+      console.log(fechaLimite)
       if (!idProfesional) {
 
         fechaHoy.setDate(fechaHoy.getDate() + (this.counterLoader * this.maxNumDays));
@@ -232,7 +234,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
         fechaLimite = new Date(fechaLimite.getFullYear(), fechaLimite.getMonth() + 12, 0);
       }
 
-      fechaHoy = new Date(this.utils.toLocalScl(fechaHoy, this.compensacion, 'YYYY-MM-DD HH:mm:ss'))
+      fechaHoy = new Date(this.utils.toLocalScl(fechaHoy, this.compensacion, 'YYYY-MM-DDTHH:mm:ss'))
 
       if (this.counterLoader > 0 && !idProfesional) {
         fechaHoy.setMonth(fechaHoy.getMonth() + 1);
@@ -243,12 +245,14 @@ export class SeleccionComponent implements OnInit, OnChanges {
       }
 
 
-      fechaLimite = new Date(this.utils.toLocalScl(fechaLimite, this.compensacion, 'YYYY-MM-DD HH:mm:ss'));
+      fechaLimite = new Date(this.utils.toLocalScl(fechaLimite, this.compensacion, 'YYYY-MM-DDTHH:mm:ss'));
       fechaLimite = new Date(fechaLimite.getFullYear(), fechaLimite.getMonth() + 1, 0);
       fechaLimite.setHours(23);
       fechaLimite.setMinutes(59);
       fechaLimite.setSeconds(59);
 
+      console.log(fechaHoy, "Fecha Hoy")
+      console.log(fechaLimite, "Fecha Limite")
       this.agendaService.getRecursos({
         todosCentro: (this.busquedaInicial.centroAtencion.codigo == 'todos') ? true : false,
         idCentro: this.busquedaInicial.centroAtencion.idCentro,
@@ -384,7 +388,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
       let datesDisabled = JSON.parse(JSON.stringify(datesDs));
 
       const highlightDate = datesDisabled
-        .map(strDate => new Date(this.utils.toLocalScl(strDate, this.compensacion, 'YYYY-MM-DD HH:mm:ss')))
+        .map(strDate => new Date(this.utils.toLocalScl(strDate, this.compensacion, 'YYYY-MM-DDTHH:mm:ss')))
         .some(d => d.getDate() === date.getDate() && d.getMonth() === date.getMonth() && d.getFullYear() === date.getFullYear());
 
       return highlightDate ? 'day-disabled' : '';
