@@ -46,14 +46,14 @@ export class SeleccionComponent implements OnInit, OnChanges {
     min: null,
     max: null
   }
-  public emitterReloadBusqueda:any;
-  public customMensaje:string = "";
+  public emitterReloadBusqueda: any;
+  public customMensaje: string = "";
 
   constructor(
     public agendaService: AgendaAmbulatoriaService,
     public utils: UtilsService,
     public dialog: MatDialog,
-    public sanitizer:DomSanitizer,
+    public sanitizer: DomSanitizer,
     public orderPipe: OrderPipe
   ) { }
 
@@ -95,7 +95,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
       this.navigationDate['max'] = max;
       this.setNavigationDate['min'] = new Date(this.utils.toLocalScl(min, this.compensacion, 'YYYY-MM-DDTHH:mm:ss'));
       this.setNavigationDate['max'] = new Date(this.utils.toLocalScl(max, this.compensacion, 'YYYY-MM-DDTHH:mm:ss'));
-  
+
       if (this.busquedaInicial && this.busquedaInicial.especialidad) {
         this.resetCalendario();
         if (this.busquedaInicial.profesional) {
@@ -162,7 +162,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
 
     this.navigationDate['min'] = newMin;
     this.navigationDate['max'] = newMax;
-    
+
     this.conciliarDateDisabled();
     this.determinarMesSinCupo()
 
@@ -251,8 +251,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
       fechaLimite.setMinutes(59);
       fechaLimite.setSeconds(59);
 
-      console.log(fechaHoy, "Fecha Hoy")
-      console.log(fechaLimite, "Fecha Limite")
+
       this.agendaService.getRecursos({
         todosCentro: (this.busquedaInicial.centroAtencion.codigo == 'todos') ? true : false,
         idCentro: this.busquedaInicial.centroAtencion.idCentro,
@@ -285,11 +284,11 @@ export class SeleccionComponent implements OnInit, OnChanges {
           this.enableScroll = true;
           let listRe = this.orderPipe.transform(data['listaRecursos'], 'proximaFechaEpoch');
           this.conciliarDataRecursos(listRe, fechaHoy, fechaLimite);
-        }else{
+        } else {
           this.setMensaje({
             CenterId: this.busquedaInicial.centroAtencion.idCentro,
             ServiceId: this.busquedaInicial.especialidad.idServicio,
-            ResourceId : idProfesional
+            ResourceId: idProfesional
           })
         }
 
@@ -308,29 +307,36 @@ export class SeleccionComponent implements OnInit, OnChanges {
 
   }
 
-  setMensaje(data){
+  setMensaje(data) {
 
     this.customMensaje = "";
-    
+
     this.agendaService.getMensajes({
       CenterId: data.CenterId,
       ServiceId: data.ServiceId,
       ResourceId: data.ResourceId
-    }, 'cupo').subscribe( res => {
+    }, 'cupo').subscribe(res => {
 
-      if(res['mensajes'] && res['mensajes'].length > 0){
-        res['mensajes'].forEach( (val, key) => {
-          if(val['mensaje'] && val['mensaje']['contenido']){
+      if (res['mensajes'] && res['mensajes'].length > 0) {
+        res['mensajes'].forEach((val, key) => {
+          if (val['mensaje'] && val['mensaje']['contenido'] &&
+            (
+              (val['aplicaA'] && val['aplicaA']['recurso'] && data.ResourceId) ||
+              (val['aplicaA'] && val['aplicaA']['servicio'] && !data.ResourceId)
+            )
+          ) {
             this.customMensaje += val['mensaje']['contenido'];
           }
         })
-      }else{
+      }
+
+      if(!this.customMensaje || this.customMensaje === ""){
         this.customMensaje = ENV.mensajeSinCupos;
       }
     })
   }
 
-  
+
   conciliarDateDisabled() {
 
     this.recursos.forEach((val, key) => {
