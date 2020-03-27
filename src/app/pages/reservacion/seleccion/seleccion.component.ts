@@ -509,6 +509,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
         let count = 0;
         dataRecurso['fechasDisponibles'][key].forEach((valDx, keyDx) => {
           if (count == 0) {
+            dataRecurso['proximaFechaCompensacion'] = valDx['compensacion']
             dataRecurso['proximaFecha'] = new Date(valDx['horaEpoch'] * 1000);
             dataRecurso['proximaFechaEpoch'] = valDx['horaEpoch'];
             proximaFecha = true;
