@@ -130,17 +130,13 @@ export class SeleccionComponent implements OnInit, OnChanges {
     switch (action) {
       case 'next':
         this.contadorMeses++;
-        console.log(min)
-        console.log(min.getDate());
         if(min.getDate() === 31){
-          console.log()
           min.setDate(min.getDate() + 1)
         }else{
           min.setMonth(min.getMonth() + 1);
         }
 
-       // min.setMonth(min.getMonth() + 1);
-        console.log(min)
+       
         newMin = new Date(min.getFullYear(), min.getMonth(), 1);
         newMax = new Date(min.getFullYear(), min.getMonth() + 1, 0);
 
