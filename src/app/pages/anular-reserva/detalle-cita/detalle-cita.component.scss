@@ -1,0 +1,240 @@
+
+.contenido-anular {
+    padding: 40px 0;
+  }
+  .contenido-anular .titulo{
+    font-size: 2rem;
+    color: #2A7DE1;
+    font-weight: normal;
+    margin: 0 0 2.5rem;
+  }
+  .contenido-anular .titulo i{
+    font-size: 1.8rem;
+  }
+  @media (max-width: 768px) {
+    .contenido-anular .titulo {
+      font-size: 1.5rem;
+    }
+    .contenido-anular .titulo i{
+      font-size: 1.2rem;
+    }
+  }
+  
+  .datos-paciente {
+    border: 1px solid #B9C6D7;
+    border-bottom: none;
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: .8rem;
+  }
+  .datos-paciente .item{
+    border-right: 1px solid #B9C6D7;
+    border-bottom: 1px solid #B9C6D7;
+    padding: .5rem 2rem .5rem 1rem;
+  }
+  .datos-paciente .item:last-child {
+    border-right: none;
+  }
+  .datos-paciente .item.size-1 {
+    width: 38%;
+  }
+  .datos-paciente .item.size-2 {
+    width: 62%;
+    border-right: none;
+  }
+  .datos-paciente .item.size-3 {
+    width: 21%;
+  }
+  .datos-paciente .item.size-4 {
+    width: 41%;
+    border-right: none;
+  }
+
+  .datos-paciente .item.size-half {
+    width: 50%;
+    border-right: 1px solid #B9C6D7;
+  }
+
+  .datos-paciente .item.size-half-noborder {
+    width: 50%;
+    border-right: none !important;
+  }
+  
+  
+  .datos-paciente .item p{
+    font-size: 1rem;
+    font-weight: normal;
+    color: #455A64;
+    margin-bottom: 0;
+  }
+  .datos-paciente .item p span {
+    font-weight: 600;
+  }
+  .datos-paciente .item p b{
+    font-weight: 600;
+    color: #32588B;
+  }
+  
+  
+  .card-horas-bottom{
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: space-between;
+    align-items: center;
+    padding: .5rem 0rem;
+  }
+  .card-horas-bottom a.anular-hora{
+    font-size: .83rem;
+    color: #fff;
+    font-weight: bold;
+    border-radius: 5px;
+    background: #2A7DE1;
+    text-align: center;
+    border: 2px solid #2A7DE1;
+    height: 2.5rem;
+    width: 14.6rem;
+    max-width: 100%;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .card-horas-bottom a.volver{
+    font-size: .83rem;
+    color: #2A7DE1;
+    font-weight: bold;
+    margin-left: 0rem;
+  }
+  .card-horas-bottom a.volver img {
+    width: 1rem;
+    height: auto;
+  }
+  
+  .modal-anular {
+    position: fixed;
+    top: 0%;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 99;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,0.7);
+    transition: all .3s ease;
+    opacity: 0;
+    visibility: hidden;
+  }
+  .modal-anular.visible {
+    opacity: 1;
+    visibility: visible;
+    top: 0;
+  }
+  .modal-anular .w-modal {
+    width: 40rem;
+    max-width: 100%;
+    background: #fff;
+    padding: 4rem 2rem;
+    text-align: center;
+    position: relative;
+  }
+  .modal-anular .w-modal .cerrar-modal {
+    position: absolute;
+    top: 5px;
+    right: 10px;
+    cursor: pointer;
+    font-size: 2rem;
+  }
+  .modal-anular .w-modal .cerrar-modal img {
+    width: 2.2rem;
+    height: auto;
+  }
+  .modal-anular .w-modal h3 {
+    color: #32588B;
+    font-size: 1.66rem;
+    margin: 0 0 3rem;
+    font-weight: 600;
+  }
+  .modal-anular .w-modal .botones {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .modal-anular .w-modal .botones .btn-azul{
+    font-size: .83rem;
+    color: #fff;
+    font-weight: bold;
+    border-radius: 5px;
+    background: #2A7DE1;
+    text-align: center;
+    border: 2px solid #2A7DE1;
+    height: 2.5rem;
+    width: 14rem;
+    max-width: 100%;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .modal-anular .w-modal .botones .cancelar{
+    font-size: .8rem;
+    color: #455A64;
+    text-decoration: underline;
+    font-weight: 600;
+    display: inline-block;
+    margin-left: 2rem;
+  }
+  
+  @media (max-width: 991px) { 
+  
+    .card-horas-bottom {}
+    .card-horas-bottom a.reservar-hora {
+      width: 200px;
+      min-width: 200px;
+    }
+  
+    .card-horas-bottom a.reservar-hora {
+      width: 200px;
+      min-width: 200px;
+    }
+  }
+  
+  @media (max-width: 768px) {
+  
+    .card-horas-bottom {
+      padding: 20px 0 0;
+    }
+    .card-horas-bottom a.volver{
+      margin-left: 0;
+    }
+    .datos-paciente {
+      flex-direction: column;
+    }
+    .datos-paciente .item {
+      width: 100%;
+      border-right: none;
+      border-bottom: 1px solid #B9C6D7;
+    }
+    .datos-paciente .item.size-1,
+    .datos-paciente .item.size-2,
+    .datos-paciente .item.size-3,
+    .datos-paciente .item.size-half,
+    .datos-paciente .item.item.size-half-noborder,
+    .datos-paciente .item.size-4 {
+      width: 100% !important;
+      border-right: none;
+    }
+   }
+  @media (max-width: 550px) {
+    .wrap {
+      padding: 0 20px;
+    }
+    .card-horas-bottom {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .card-horas-bottom a.anular-hora {
+      width: 100%;
+      margin-bottom: 15px;
+    }
+   }

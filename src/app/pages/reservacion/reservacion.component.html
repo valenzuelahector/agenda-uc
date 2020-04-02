@@ -1,0 +1,103 @@
+<section class="w-reservas">
+  <div>
+    <div class="flex-container header-reserva">
+      <h2 class="titulo-2 azul"><i class="far fa-clock"></i> RESERVA DE HORAS</h2>
+
+      <div class="w-pasos" *ngIf=" tabGroup" fxLayout="row wrap" fxLayoutAlign="space-between" >
+        <a class="item-paso" [ngClass]="{'activo' : curEtapa == 0 || busquedaInfo }" fxFlex="70px">
+          <figure matRipple>
+            <i class="fas fa-user-md"></i>
+          </figure>
+          <h4>Búsqueda</h4>
+        </a>
+        <a class="item-paso" [ngClass]="{'activo' : curEtapa == 1 || calendario}" fxFlex="70px">
+          <figure matRipple>
+            <i class="far fa-calendar-alt"></i>
+          </figure>
+          <h4>Selección</h4>
+        </a>
+        <a class="item-paso" [ngClass]="{'activo' : curEtapa == 2 || paciente}" fxFlex="75px">
+          <figure matRipple>
+            <i class="fas fa-user"></i>
+          </figure>
+          <h4>Identificación</h4>
+        </a>
+        <a class="item-paso" [ngClass]="{'activo' : reservaRealizada}" fxFlex="70px">
+          <figure matRipple>
+            <i class="fas fa-check"></i>
+          </figure>
+           <h4 style="width: 120px; margin-left: -18px;">¡Reserva Exitosa!</h4>
+        </a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="mensaje-exito" *ngIf="reservaRealizada">
+  <img src="assets/images/check-morado.svg" alt=""> HORA RESERVADA CON ÉXITO
+</div>
+
+<div class="reservaStepper cloader">
+  <div class="container-loader" [ngClass]="{'readQuery' : !readQuery}" *ngIf="utils.progressBar || !readQuery">
+    <div class="cmatspin">
+        <mat-spinner [diameter]="60"></mat-spinner>
+    </div>
+  </div>
+  <div class="return">
+    <div fxLayout="row">
+      <div fxFlex="50%">
+        <button mat-stroked-button class="btn-azul cus-pad" 
+                (click)="cambiarEtapa((curEtapa === 4) ? curEtapa - 2 : curEtapa - 1)" *ngIf="!reservaRealizada && curEtapa != 0">
+                <mat-icon class="icon-cus-pad">keyboard_backspace</mat-icon>Volver
+        </button>
+      </div>
+      <div fxFlex="50%" style="text-align: right;">
+        <button mat-stroked-button class="btn-morado cus-pad cus" [routerLink]="['/anular-reserva']">
+            Anular Hora
+            <mat-icon class="anuicon">keyboard_backspace</mat-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+  <mat-tab-group dynamicHeight #tabGroup>
+    <mat-tab label="Búsqueda">
+      <app-busqueda #busqueda (emitReadQuery)="readQuerySetter($event)"></app-busqueda>
+    </mat-tab>
+    <mat-tab label="Selección">
+      <app-seleccion #seleccion [busquedaInicial]="busquedaInfo" [reloadBusqueda]="reloadNumber"></app-seleccion>
+    </mat-tab>
+    <mat-tab label="Identificación">
+      <app-identificacion #identificacion [busquedaInicial]="busquedaInfo" [calendario]="calendario">
+      </app-identificacion>
+    </mat-tab>
+    <mat-tab label="Error">
+      <app-error-validacion [reglas]="reglasActuales" [mensajes]="mensajesActuales" (emitAccionar)="accionValidacionReglas($event)">
+      </app-error-validacion>
+    </mat-tab>
+    <mat-tab label="Confirmación">
+      <app-confirmacion #confirmacion [busquedaInicial]="busquedaInfo" [mensajes]="mensajesActuales" [calendario]="calendario" [paciente]="paciente"
+        [reservaFinalizada]="reservaRealizada">
+      </app-confirmacion>
+    </mat-tab>
+    <mat-tab label="ReservaRealizada">
+      <app-reservacion-efectuada [busquedaInicial]="busquedaInfo" [mensajes]="mensajesActuales" [calendario]="calendario" [paciente]="paciente"
+        [codCita]="codCita" [valorConvenio]="valorConvenio"></app-reservacion-efectuada>
+    </mat-tab>
+
+  </mat-tab-group>
+</div>
+
+<div class="mesa-central" *ngIf="reservaRealizada">
+  <div class="row">
+    <div class="col-lg-6">
+      <h4>Mesa Central</h4>
+      <h3><img src="assets/images/ic-tel.svg" alt=""> 22 676 7000</h3>
+    </div>
+    <div class="col-lg-6">
+      <div class="btns-mesa">
+        <button mat-raised-button color="primary" (click)="nuevaReserva()">TOMAR OTRA HORA</button>
+      </div>
+    </div>
+  </div>
+</div>

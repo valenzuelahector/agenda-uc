@@ -1,0 +1,59 @@
+.day-header{
+    padding:30px 0px 0px 0px;
+}
+
+.day-header.fixed{
+    position: fixed;
+    width: 100%;
+    top: 52px;
+    left: 0px;
+    padding: 0px;
+    background: #fff;
+    border-bottom: 1px solid #ccc;
+    z-index: 12;
+}
+
+.dayweek {
+    div{
+        background:#2A7DE1;
+        padding:6px 0px;
+        color:#fff;
+        text-align: center;
+    }
+}
+
+.search-ref{
+    position: relative;
+    padding:15px 0px;
+}
+
+.search-ref .month{
+    color: #802E87;
+    font-size: 23px;
+    display: block;
+    text-align: center;
+    font-weight: 700;
+}
+
+.search-ref .btn-nav{
+    position: absolute;
+    top: 12px;
+    background: #802E87 !important;
+    color: #fff;
+}
+
+.search-ref .btn-nav .mat-icon{
+    font-size: 30px;
+    text-align: left;
+    width: 30px;
+    height: 26px;
+    margin-left: -2px;
+}
+
+.search-ref .btn-nav.right .mat-icon{
+    margin-right: -2px;
+}
+
+.search-ref .btn-nav.right{
+    right:0px
+}

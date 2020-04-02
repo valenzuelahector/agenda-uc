@@ -1,0 +1,49 @@
+<section class="w-reservas">
+  <div>
+    <div class="flex-container header-reserva">
+      <h2 class="titulo-2 azul"><i class="far fa-clock"></i> ANULAR HORAS</h2>
+    </div>
+
+  </div>
+</section>
+
+<div class="reservaStepper cloader">
+  <div class="container-loader" *ngIf="utils.progressBar">
+    <div class="cmatspin">
+      <mat-spinner [diameter]="60"></mat-spinner>
+    </div>
+  </div>
+
+  <mat-tab-group dynamicHeight #tabGroup>
+
+    <mat-tab label="Búsqueda de Citas">
+      <h4 class="txttil">Buscar Cíta Médica</h4>
+      <app-buscar-cita (emitBusquedaCita)="avanzarEtapa($event, 'buscarCita')"></app-buscar-cita>
+    </mat-tab>
+
+    <mat-tab label="Listado de Citas">
+      <h4 class="txttil">Citas Médicas Disponibles</h4>
+      <app-listado-citas [dataAnularCita]="dataAnularCita" (emitVerDetalle)="avanzarEtapa($event, 'detalleCita')" (emitAnular)="anularReserva($event)">
+      </app-listado-citas>
+    </mat-tab>
+    <mat-tab label="Identificación">
+      <h4 class="txttil">Detalle de Cita Médica</h4>
+      <app-detalle-cita [dataAnularCita]="dataAnularCita" (emitAnular)="anularReserva($event)"></app-detalle-cita>
+    </mat-tab>
+
+    <mat-tab label="Confirmación">
+      <app-confirmacion-anulacion-reserva [respuestaAnular]="respuestaAnular"></app-confirmacion-anulacion-reserva>
+    </mat-tab>
+
+  </mat-tab-group>
+  <div class="botones" style="margin: 15px;" *ngIf="curTab != 0 && !utils.progressBar">
+    <button mat-stroked-button class="btn-azul cus-pad" [ngClass]="{'leftBtn' : curTab != 3, 'centerBtn' : curTab == 3 }" (click)="volver()">
+      <mat-icon class="icon-cus-pad">keyboard_backspace</mat-icon>Volver 
+      <span *ngIf="curTab == 3">al Inicio</span>
+    </button>
+    <button mat-stroked-button class="btn-azul cus-pad" style="float:right" [disabled]="todayTime > dataAnularCita['detalleCitaSeleccionada'].fechaTime" *ngIf="dataAnularCita['detalleCitaSeleccionada'] && curTab == 2" (click)="anularReserva(dataAnularCita['detalleCitaSeleccionada'])">
+      <mat-icon class="icon-cus-pad">check</mat-icon>Anular
+    </button>
+    <div style="clear:both"></div>
+  </div>
+</div>

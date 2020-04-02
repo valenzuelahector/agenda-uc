@@ -1,0 +1,27 @@
+.puntos-abajo{
+    margin-top:25px;
+}
+
+@media(max-width:'720px'){
+    .btn-sec-reservar{
+        position: fixed;
+        bottom: 0px;
+        left: 0px;
+        width: 100%;
+        padding: 20px;
+        background: rgba(255,255,255,0.8);
+        border-top: 1px solid #eee;
+
+        .btn-reser{
+            margin: 0px auto;
+            width: 70%;
+            display: block;        
+        }
+    }
+}
+
+@media(max-width:'990px'){
+    .no-left-line{
+        border:none !important
+    }
+}
