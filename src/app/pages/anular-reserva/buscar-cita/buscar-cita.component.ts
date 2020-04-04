@@ -15,6 +15,7 @@ export class BuscarCitaComponent implements OnInit, OnDestroy {
   @Output() public emitBusquedaCita:EventEmitter<any> = new EventEmitter();
 
   public clearBusqueda;
+  public reloadBusqueda;
   public today = new Date();
   public busquedaPaciente: any = {
     tipoDocumento: "RUN",
@@ -37,6 +38,10 @@ export class BuscarCitaComponent implements OnInit, OnDestroy {
         documentoFormateado: null,
         fechaCita: null
       }
+    });
+
+    this.reloadBusqueda = this.utils.getReloadBusquedaAnular().subscribe( res => {
+      this.buscarCita();
     });
     
   }

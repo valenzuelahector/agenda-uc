@@ -34,8 +34,8 @@
           <div class="col-lg-6 col-md-12"
             *ngIf="tipoConsulta == 'profesional' && profesionales.length > 0 && loadedProf">
             <mat-form-field class="full" appearance="fill" [color]="primary">
-              <mat-label>Seleccione un Profesional</mat-label>
-              <input matInput type="text" placeholder="Escriba para filtrar  por nombre y apellido"
+              <mat-label>Digite nombre del profesional</mat-label>
+              <input matInput type="text" placeholder="Buscar por nombre y apellido"
                 [formControl]="profesionalCtrl" [matAutocomplete]="auto" autocomplete="off">
               <mat-icon matPrefix style="margin-right: 10px">school</mat-icon>
               <mat-spinner [diameter]="30" matSuffix *ngIf="loadingProfesionales"></mat-spinner>
@@ -44,7 +44,7 @@
                 <mat-option *ngFor="let prof of filterProfesionales" [value]="prof" matTooltipPosition="right">
                   {{ prof.detalle }}
                 </mat-option>
-                <mat-option *ngIf="!filterProfesionales || filterProfesionales == 0" [value]="null"
+                <mat-option *ngIf="(!filterProfesionales || filterProfesionales.length == 0) && profesionalCtrl.value !== '' && !loadedProf" [value]="null"
                   matTooltipPosition="right">
                   No se encontraron profesionales
                 </mat-option>

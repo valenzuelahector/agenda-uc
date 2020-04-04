@@ -174,7 +174,7 @@ export class BusquedaComponent implements OnInit {
           })
 
           this.profesionales = this.orderPipe.transform(res['profesionales'], 'detalle');
-          this.filterProfesionales = this.orderPipe.transform(res['profesionales'], 'detalle');
+          //this.filterProfesionales = this.orderPipe.transform(res['profesionales'], 'detalle');
 
           if (matchProfesional) {
             this.profesionalCtrl.patchValue(matchProfesional);
@@ -197,7 +197,7 @@ export class BusquedaComponent implements OnInit {
             if (!value || value['idProfesional'] || value == "" || value.length < 3) {
               return Observable.create((observer: Observer<any>) => {
                 if (value == "" || value.length < 3) {
-                  observer.next({ profesionales: this.profesionales });
+                  observer.next([]);
                 } else {
                   observer.next([])
                 }

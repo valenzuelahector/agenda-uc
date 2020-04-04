@@ -19,6 +19,7 @@ export class UtilsService {
   public resetInfoPaciente:EventEmitter<any> = new EventEmitter();
   public emitClearBusquedaAnular = new Subject<any>();
   public reloadBusqueda:any = new Subject();
+  public reloadBusquedaAnular:any = new Subject();
 
   constructor(
     public dialog: MatDialog,
@@ -202,6 +203,14 @@ export class UtilsService {
     return this.reloadBusqueda.asObservable();
   }
   
+  setReloadBusquedaAnular(){
+    this.reloadBusquedaAnular.next(true)
+  }
+
+  getReloadBusquedaAnular(): Observable<any> {
+    return this.reloadBusquedaAnular.asObservable();
+  }
+
   toLocalScl(date, utc = -180, format = null){
     let dt = moment(date).utcOffset(utc).format(format);
     return dt;
