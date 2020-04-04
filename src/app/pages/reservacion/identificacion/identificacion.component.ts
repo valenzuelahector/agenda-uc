@@ -259,17 +259,17 @@ export class IdentificacionComponent implements OnInit {
       let fechaTermino = new Date(fecha);      
       fechaTermino.setMinutes(fechaTermino.getMinutes() + duracion);
       let fTermino = this.utils.toLocalScl(fechaTermino, this.calendario.cupo.compensacion);
-
+      console.log(this.calendario)
       this.agendaService.geReglasValidacion({
 
         fechaInicio: fecha,
         fechaTermino: fTermino,
-        idCentro: this.calendario.cupo.idStrCentro,
+        idCentro: this.calendario.cupo.centro.id,
         idRecurso: this.calendario.recurso.id,
         idServicio: this.busquedaInicial.especialidad.idServicio,
         idPaciente: this.paciente.id,
-        idDisponibilidad: this.calendario.cupo.idStrDisponibilidad,
-        idProfesional: this.calendario.cupo.idStrRecProfesional,
+        idDisponibilidad: this.calendario.cupo.disponiblidad.id,
+        idProfesional: this.calendario.recurso.id,
         idPlanSalud: this.busquedaPaciente.prevision.id
 
       }).subscribe(data => {

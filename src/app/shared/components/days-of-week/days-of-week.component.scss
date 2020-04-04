@@ -2,6 +2,55 @@
     padding:30px 0px 0px 0px;
 }
 
+.day-header.not-results{
+    padding:0 !important;
+
+    .centered{
+        margin: 25px auto;
+        padding: 10px 28px;
+        border-radius: 6px;
+        background: rgb(128,46,135);
+        background: linear-gradient(90deg, rgba(128,46,135,1) 0%, rgba(42,125,225,1) 35%, rgba(42,125,225,1) 50%, rgba(42,125,225,1) 65%, rgba(128,46,135,1) 100%);
+    }
+
+    .search-ref {
+        .btn-nav{
+            background: #fff !important;
+            color: #802E87 !important;
+
+            .txt-month{
+                position: absolute;
+                color: #fff;
+                left: 50px;
+                line-height: 15px;
+                font-size: 12px;
+                text-align: left;
+                top: 5px
+            }
+
+            &.right{
+                .txt-month{left:initial;
+                    right: 50px;
+                    text-align: right;
+                    top: 5px
+                }
+            }
+            
+        }
+
+        .disabled{
+            opacity: 0.5;
+            cursor:not-allowed;
+        }
+
+        .month{
+            color:#fff !important
+        }
+    }
+
+
+}
+
 .day-header.fixed{
     position: fixed;
     width: 100%;

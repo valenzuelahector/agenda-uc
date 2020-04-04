@@ -29,6 +29,16 @@
 		</div>
 	</div>
 	<section class="w-resultados">
+		<div *ngIf="loadedRecursos && recursos.length == 0">
+			<app-days-of-week
+				[typeDateWeek]="'not-results'"
+				[minDateIn]="navigationDate['min']"
+				[maxDateIn]="navigationDate['max']"
+				(navigate)="navigateMonth($event)">
+			</app-days-of-week>
+		</div>
+		
+
 		<div class="cwarn" *ngIf="recursos && loadedRecursos">
 			<h5 style="margin:0px" *ngIf="recursos.length > 0">Se han encontrado {{ recursos.length }} resultado(s).
 			</h5>
@@ -115,8 +125,9 @@
 											[dateClass]="re.datesToHighlight.dateClass" [selected]="selectedDate[i]"
 											(selectedChange)="onSelect($event, i)"></mat-calendar>
 										<div class="datos-horas">
-											<p *ngIf="re.proximaFecha">Próxima hora disponible:
-												<span>{{ re.proximaFecha | toLocalScl: re.proximaFechaCompensacion : 'dddd DD/MM/YYYY [a las] HH:mm'}}</span>
+											<p *ngIf="!re.proximaHoraDisponible?.cupo?.horaEpoch">Sin próxima hora disponible.</p>
+											<p *ngIf="re.proximaHoraDisponible?.cupo?.horaEpoch">Próxima hora disponible:
+												<span>{{ re.proximaHoraDisponible?.cupo.horaEpoch * 1000 | toLocalScl: re.proximaHoraDisponible?.cupo.compensacion : 'dddd DD/MM/YYYY [a las] HH:mm'}}</span>
 											</p>
 										</div>
 									</div>

@@ -1,4 +1,6 @@
 import { Component, OnInit, Input, OnChanges, Output, EventEmitter, SimpleChange, SimpleChanges } from '@angular/core';
+import { UtilsService } from 'src/app/services/utils.service';
+import * as clone from 'clone';
 
 @Component({
   selector: 'app-days-of-week',
@@ -9,8 +11,8 @@ export class DaysOfWeekComponent implements OnInit, OnChanges {
 
   public months:any = ['ENERO', 'FEBRERO', 'MARZO', 'ABRIL', 'MAYO', 'JUNIO', 'JULIO', 'AGOSTO', 'SEPTIEMBRE', 'OCTUBRE', 'NOVIEMBRE', 'DICIEMBRE'];
   public datedisplay:string;
-  public dateBefore:string;
-  public dateNext:string;
+  public dateBefore:any;
+  public dateNext:any;
   public displayNext:boolean = true;
   public displayPrev:boolean = true;
   public contadorMeses = 1;
@@ -19,9 +21,12 @@ export class DaysOfWeekComponent implements OnInit, OnChanges {
   @Input() navigationDate;
   @Input() minDateIn:Date;
   @Input() maxDateIn:Date;
+  @Input() typeDateWeek;
   @Output() navigate:EventEmitter<any> = new EventEmitter();
 
-  constructor() { }
+  constructor(
+    public utils:UtilsService
+  ) { }
 
   ngOnInit() {
   }
@@ -29,16 +34,27 @@ export class DaysOfWeekComponent implements OnInit, OnChanges {
   
 
   ngOnChanges(changes:SimpleChanges) : void{
+    if(changes.minDateIn){
+      //this.minDateIn = new Date(this.utils.toLocalScl(this.minDateIn, -180, 'YYYY-MM-DDTHH:mm:ss'))
+      let  minDateIn = clone(this.minDateIn)  ;
 
-    if(this.minDateIn){
-      let idxMonth = this.minDateIn.getMonth();
-      let year =  this.minDateIn.getFullYear();
-      this.datedisplay = this.months[idxMonth] + " " + year;
+      minDateIn.setDate(1);
+      minDateIn.setHours(6);
+      minDateIn.setMinutes(0);
+      minDateIn.setSeconds(0);
+
+      this.datedisplay = this.months[minDateIn.getMonth()] + " " + minDateIn.getFullYear();
+      minDateIn.setMonth(minDateIn.getMonth() + 1);
+      this.dateNext = this.months[minDateIn.getMonth()] + "<br/>" + minDateIn.getFullYear();
+      minDateIn.setMonth(minDateIn.getMonth() -2);
+      this.dateBefore = this.months[minDateIn.getMonth()] + "<br/>" + minDateIn.getFullYear();
     }
   }
 
   move(action){
-
+    if((this.contadorMeses === 1 && action === 'prev') || (this.contadorMeses === 12  && action === 'next')){
+      return false;
+    }
     if(action == 'next'){
       this.contadorMeses++
     }else{

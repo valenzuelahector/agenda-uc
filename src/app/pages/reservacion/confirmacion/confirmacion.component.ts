@@ -42,7 +42,7 @@ export class ConfirmacionComponent implements OnInit, OnChanges {
 
     this.agendaService.postCita({
       fechaInicioDesde: fecha,
-      idCentro: this.calendario.cupo.idStrCentro,
+      idCentro: this.calendario.cupo.centro.id,
       idRecurso: this.calendario.recurso.id,
       idServicio: this.busquedaInicial.especialidad.idServicio,
       duracion: this.calendario.cupo.duracion,
@@ -50,7 +50,7 @@ export class ConfirmacionComponent implements OnInit, OnChanges {
       tipoIdPaciente: this.paciente.adicional.tipoDocumento,
       paisIdentificador: 'CL',
       idPlanCobertura: this.paciente.adicional.prevision.idPlan,
-      idDisponibilidad: this.calendario.cupo.idStrDisponibilidad,
+      idDisponibilidad: this.calendario.cupo.disponiblidad.id,
       idTipoCita: this.calendario.cupo.idTipoCita.id
     }).subscribe(data => {
       if(data['statusCod'] == 'OK'){

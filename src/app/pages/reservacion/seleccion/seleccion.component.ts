@@ -179,7 +179,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
       fechaLimite.setSeconds(59);
 
       this.navigationDate = { min: fechaHoy, max: fechaLimite }
-
+      console.log(fechaHoy)
       this.agendaService.getRecursos({
         todosCentro: (this.busquedaInicial.centroAtencion.codigo == 'todos') ? true : false,
         idCentro: this.busquedaInicial.centroAtencion.idCentro,
@@ -194,12 +194,15 @@ export class SeleccionComponent implements OnInit, OnChanges {
         if (data['listaRecursos'] && data['listaRecursos'].length > 0) {
 
           data['listaRecursos'].forEach((val, key) => {
+            console.log(fechaHoy)
             data['listaRecursos'][key] = this.crearCalendario(val, fechaHoy);
           })
+          
           this.recursos = data['listaRecursos'];
           this.enableScroll = true;
-          console.log(this.recursos)
+
         } else {
+          this.recursos = [];
           this.setMensaje({
             CenterId: this.busquedaInicial.centroAtencion.idCentro,
             ServiceId: this.busquedaInicial.especialidad.idServicio,
@@ -225,14 +228,14 @@ export class SeleccionComponent implements OnInit, OnChanges {
 
   setMensaje(data) {
 
-    this.customMensaje = "";
+    this.customMensaje = "Cargando...";
 
     this.agendaService.getMensajes({
       CenterId: data.CenterId,
       ServiceId: data.ServiceId,
       ResourceId: data.ResourceId
     }, 'cupo').subscribe(res => {
-
+      this.customMensaje = "";
       if (res['mensajes'] && res['mensajes'].length > 0) {
         res['mensajes'].forEach((val, key) => {
           if (val['mensaje'] && val['mensaje']['contenido'] &&
@@ -311,41 +314,43 @@ export class SeleccionComponent implements OnInit, OnChanges {
 
     let datesDisabled = [];
     let f = null;
+    console.log(min)
     let fecha = new Date(min);
-    
+    console.log(fecha)
     fecha.setDate(1);
     fecha.setMinutes(0);
     fecha.setSeconds(0);
-    fecha.setHours(0);
+    fecha.setHours(6);
 
     recurso['fechasDisponibles'] = {};
-    console.log(this.navigationDate);
+    
     try {
       this.compensacion = recurso['listaCupos'][0]['cupos'].length > 0 ? recurso['listaCupos'][0]['cupos'][0]['compensacion'] : -180;
     } catch (err) {
       this.compensacion = -180;
     }
 
-    for (let day = 1; day <= 31; day++) {
+      for (let day = 1; day <= 40; day++) {
 
-      if (day == 1) {
-        f = this.utils.toLocalScl(fecha, this.compensacion);
-      } else {
-        fecha.setDate(fecha.getDate() + 1);
-        f = this.utils.toLocalScl(fecha, this.compensacion);
+        if (day == 1) {
+          f = this.utils.toLocalScl(fecha, this.compensacion);
+        } else {
+          fecha.setDate(fecha.getDate() + 1);
+          f = this.utils.toLocalScl(fecha, this.compensacion);
+        }
+  
+        f = this.utils.toStringDateJson(f);
+        recurso['fechasDisponibles'][f.year + '-' + f.month + '-' + f.day] = [];
+  
       }
-
-      f = this.utils.toStringDateJson(f);
-      recurso['fechasDisponibles'][f.year + '-' + f.month + '-' + f.day] = [];
-
-    }
-
+      
     recurso['listaCupos'].forEach((valLc, keyLc) => {
       valLc['cupos'].forEach((val, key) => {
 
         let fechaEpoch = new Date(val['horaEpoch'] * 1000);
         let u: any = this.utils.toLocalScl(fechaEpoch, this.compensacion);
         u = this.utils.toStringDateJson(u);
+        val['fechaHora'] = new Date(val['horaEpoch'] * 1000);
         val['centro'] = valLc['centro'];
         recurso['fechasDisponibles'][u['year'] + '-' + u['month']  + '-' + u['day']].push(val)
 
@@ -353,7 +358,6 @@ export class SeleccionComponent implements OnInit, OnChanges {
     })
 
     recurso['datesToHighlight'] = { dates: [], displayed: false, dateClass: null };
-
 
     Object.keys(recurso['fechasDisponibles']).forEach(key => {
       if (recurso['fechasDisponibles'][key].length == 0) {
@@ -364,7 +368,6 @@ export class SeleccionComponent implements OnInit, OnChanges {
     recurso['datesToHighlight']['displayed'] = true;
     recurso['datesToHighlight']['dates'] = datesDisabled;
     recurso['datesToHighlight']['dateClass'] = this.dateClass(datesDisabled, this.compensacion);
-
     return recurso;
 
   }
