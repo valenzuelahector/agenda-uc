@@ -126,4 +126,9 @@ export class AnularReservaComponent implements OnInit {
 
   }
 
+
+  refrescarCitas(){
+    this.utils.setReloadBusquedaAnular();
+  }
+
 }

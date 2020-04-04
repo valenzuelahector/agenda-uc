@@ -346,6 +346,8 @@ export class IdentificacionComponent implements OnInit {
           reglas = data['listaMensajesDeRegla'];
           valorConvenio = data['listaCupos'][0]['valorConvenio'];
           reservable = data['listaCupos'][0]['reservable']['reservable'];
+        }else{
+          reservable = true;
         }
 
         if (!reservable) {
