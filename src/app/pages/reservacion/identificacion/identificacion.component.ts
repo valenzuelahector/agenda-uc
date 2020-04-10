@@ -259,7 +259,7 @@ export class IdentificacionComponent implements OnInit {
       let fechaTermino = new Date(fecha);      
       fechaTermino.setMinutes(fechaTermino.getMinutes() + duracion);
       let fTermino = this.utils.toLocalScl(fechaTermino, this.calendario.cupo.compensacion);
-      console.log(this.calendario)
+
       this.agendaService.geReglasValidacion({
 
         fechaInicio: fecha,
@@ -268,7 +268,7 @@ export class IdentificacionComponent implements OnInit {
         idRecurso: this.calendario.recurso.id,
         idServicio: this.busquedaInicial.especialidad.idServicio,
         idPaciente: this.paciente.id,
-        idDisponibilidad: this.calendario.cupo.disponiblidad.id,
+        idDisponibilidad: this.calendario.cupo.disponibilidad.id,
         idProfesional: this.calendario.recurso.id,
         idPlanSalud: this.busquedaPaciente.prevision.id
 
@@ -278,6 +278,11 @@ export class IdentificacionComponent implements OnInit {
         let valorConvenio: any = false;
         let reservable: any = false;
 
+        if(!data['listaTiposDeCita'] || !data['listaTiposDeCita'][0]){
+          this.utils.mDialog("Error", "No se ha podido verificar la Disponibilidad del Cupo. Intente nuevamente.", "message");
+          return false;
+        }
+
         if (data['listaMensajesDeRegla'] && data['listaCupos'][0]) {
           reglas = data['listaMensajesDeRegla'];
           valorConvenio = data['listaCupos'][0]['valorConvenio'];
@@ -286,13 +291,21 @@ export class IdentificacionComponent implements OnInit {
 
         this.agendaService.getMensajes({
           ResourceId: this.calendario.recurso.id,
-          CenterId: this.calendario.cupo.idStrCentro,
+          CenterId: this.calendario.cupo.centro.id,
           ServiceId: this.busquedaInicial.especialidad.idServicio,
           Channel: 'PatientPortal'
         }).subscribe(dt => {
 
           let mensajes = (dt && dt['mensajes']) ? dt['mensajes'] : [];
-          this.datosPaciente.emit({ paciente: this.paciente, reglas: reglas, valorConvenio: valorConvenio, reservable: reservable, mensajes: mensajes });
+          this.datosPaciente.emit({ 
+            paciente: this.paciente, 
+            reglas: reglas, 
+            valorConvenio: valorConvenio, 
+            reservable: reservable, 
+            mensajes: mensajes ,
+            tipoCita: data['listaTiposDeCita'][0],
+            direccionCentro: (data['listaCentros'] && data['listaCentros'][0] && data['listaCentros'][0]['direccion']) ? data['listaCentros'][0]['direccion'] : null
+          });
 
         })
 

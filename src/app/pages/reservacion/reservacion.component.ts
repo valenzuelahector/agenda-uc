@@ -28,7 +28,7 @@ export class ReservacionComponent implements OnInit, AfterViewInit, OnDestroy {
   public valorConvenio: number;
   public emitterReloadBusqueda:any;
   public reloadNumber = 0;
-
+  
   @ViewChild('tabGroup', { static: false }) tabGroup: any;
   @ViewChild('busqueda', { static: false }) busqueda: BusquedaComponent;
   @ViewChild('seleccion', { static: false }) seleccion: SeleccionComponent;
@@ -70,6 +70,8 @@ export class ReservacionComponent implements OnInit, AfterViewInit, OnDestroy {
       } else {
         this.paciente = data.paciente;
         this.valorConvenio = data.valorConvenio;
+        this.calendario.cupo['idTipoCita'] = data['tipoCita'];
+        this.calendario.cupo.centro['direccion'] = data['direccionCentro'];
         this.cambiarEtapa(4);
       }
     })

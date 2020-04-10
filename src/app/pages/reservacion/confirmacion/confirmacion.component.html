@@ -17,9 +17,9 @@
           <p><b>Hora de la cita:</b> {{ calendario.cupo.fechaHora | toLocalScl: calendario.cupo.compensacion : 'DD/MM/YYYY HH:mm'}}</p>
           <p *ngIf="utils.slugify(busquedaInicial.area.nombre, '-') !== 'telemedicina' && 
             utils.slugify(busquedaInicial.area.nombre, '-') !== 'consulta-medica-virtual'"><b>Ubicación:</b> {{ calendario.cupo.centro.nombre }}</p>
-          <p *ngIf="busquedaInicial.centroAtencion.codigo != 'todos'"><b>Dirección del centro:</b>{{ busquedaInicial.centroAtencion.direccion?.calle }} 
-            {{ busquedaInicial.centroAtencion.direccion?.numero }} 
-            {{ busquedaInicial.centroAtencion.direccion?.comuna }}</p>
+          <p *ngIf="busquedaInicial.centroAtencion.codigo != 'todos'"><b>Dirección del centro:</b>{{ calendario.cupo.centro.direccion?.calle }} 
+            {{ calendario.cupo.centro.direccion?.numero }} 
+            {{ calendario.cupo.centro.direccion?.comuna }}</p>
 
         </div>
       </div>
