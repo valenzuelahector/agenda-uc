@@ -261,26 +261,42 @@ export class IdentificacionComponent implements OnInit {
       }
 
       this.paciente['adicional'] = this.busquedaPaciente;
-      let { fecha, fTermino } = this.getFechasInicioTermino();
+      let duracion = this.calendario.cupo.duracion;
+      let fecha: any = this.utils.toLocalScl(this.calendario.cupo.fechaHora, this.calendario.cupo.compensacion);
+      let fechaTermino = new Date(fecha);      
+      fechaTermino.setMinutes(fechaTermino.getMinutes() + duracion);
+      let fTermino = this.utils.toLocalScl(fechaTermino, this.calendario.cupo.compensacion);
 
       this.reglasValidacion(fecha, fTermino).then(data => {
 
+        if(!data['cupd']['listaTiposDeCita'] || !data['cupd']['listaTiposDeCita'][0]){
+          this.utils.mDialog("Error", "No se ha podido verificar la Disponibilidad del Cupo. Intente nuevamente.", "message");
+          return false;
+        }
+
         this.agendaService.getMensajes({
           ResourceId: this.calendario.recurso.id,
-          CenterId: this.calendario.cupo.idStrCentro,
+          CenterId: this.calendario.cupo.centro.id,
           ServiceId: this.busquedaInicial.especialidad.idServicio,
           Channel: 'PatientPortal'
         }).subscribe(dt => {
 
           let mensajes = (dt && dt['mensajes']) ? dt['mensajes'] : [];
-          this.datosPaciente.emit({ paciente: this.paciente, reglas: data['reglas'], valorConvenio: data['valorConvenio'], reservable: data['reservable'], mensajes: mensajes });
+          this.datosPaciente.emit({ 
+            paciente: this.paciente, 
+            reglas: data['cupd']['reglas'], 
+            valorConvenio: data['cupd']['valorConvenio'], 
+            reservable: data['cupd']['reservable'], 
+            mensajes: mensajes ,
+            tipoCita: data['cupd']['listaTiposDeCita'][0],
+            direccionCentro: (data['cupd']['listaCentros'] && data['cupd']['listaCentros'][0] && data['cupd']['listaCentros'][0]['direccion']) ? data['cupd']['listaCentros'][0]['direccion'] : null
+          });
 
         })
 
       }).catch(err => {
         this.errReserva(null);
       })
-
 
     } else {
 
@@ -332,7 +348,7 @@ export class IdentificacionComponent implements OnInit {
         idRecurso: this.calendario.recurso.id,
         idServicio: this.busquedaInicial.especialidad.idServicio,
         idPaciente: this.paciente.id,
-        idDisponibilidad: this.calendario.cupo.disponiblidad.id,
+        idDisponibilidad: this.calendario.cupo.disponibilidad.id,
         idProfesional: this.calendario.recurso.id,
         idPlanSalud: this.busquedaPaciente.prevision.id
 
@@ -351,9 +367,10 @@ export class IdentificacionComponent implements OnInit {
         }
 
         if (!reservable) {
-          reject(false);
+       //   reject(false);
         } else {
           resolve({
+            cupd: data,
             reglas,
             valorConvenio,
             reservable

@@ -50,7 +50,7 @@ export class ConfirmacionComponent implements OnInit, OnChanges {
       tipoIdPaciente: this.paciente.adicional.tipoDocumento,
       paisIdentificador: 'CL',
       idPlanCobertura: this.paciente.adicional.prevision.idPlan,
-      idDisponibilidad: this.calendario.cupo.disponiblidad.id,
+      idDisponibilidad: this.calendario.cupo.disponibilidad.id,
       idTipoCita: this.calendario.cupo.idTipoCita.id
     }).subscribe(data => {
       if(data['statusCod'] == 'OK'){

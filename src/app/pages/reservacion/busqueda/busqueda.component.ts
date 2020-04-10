@@ -155,6 +155,7 @@ export class BusquedaComponent implements OnInit {
       if(idProfesional){
         this.needLoadInitProfesionales = true;
       }
+      this.utils.showProgressBar();
 
       this.agendaService.getProfesionales(this.areaSelected['id'], null, idProfesional).subscribe(res => {
 
