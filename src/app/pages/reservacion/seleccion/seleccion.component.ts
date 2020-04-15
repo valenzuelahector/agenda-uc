@@ -37,7 +37,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
   public displayCalendar: boolean = true;
   public contadorMeses = 1;
   public enableScroll: boolean = false;
-  public compensacion = -180;
+  public compensacion = -240;
   public navigationDate = {
     min: null,
     max: null
@@ -228,8 +228,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
       var fechaHoy = new Date();
       var fechaLimite = new Date();
 
-      console.log(fechaHoy)
-      console.log(fechaLimite)
+
       if (!idProfesional) {
 
         fechaHoy.setDate(fechaHoy.getDate() + (this.counterLoader * this.maxNumDays));
