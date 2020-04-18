@@ -6,6 +6,7 @@
 
 -->
 <div class="cuadro-reserva">
+  
   <div class="seleccionar-area">
     <h4>Seleccionar Área: <span *ngIf="areas.length == 0"> No existen Áreas de Consulta disponibles</span></h4>
     <mat-radio-group [(ngModel)]="areaSelected" (change)="changeAreas($event)">
@@ -14,7 +15,32 @@
       </ng-container>
     </mat-radio-group>
   </div>
-  <p class="cwarn" *ngIf="areaSelected">
+  
+  <div class="mobile-panel-area">
+    <!-- <h4 style="margin-bottom:20px">Seleccionar Área: <span *ngIf="areas.length == 0"> No existen Áreas de Consulta disponibles</span></h4> -->
+    <mat-accordion>
+      <mat-expansion-panel [expanded]="expanded" (opened)="expanded = true;">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Seleccionar Área: <b>{{ areaSelected?.nombre }}</b>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class="container-pn" >
+          <mat-radio-group [(ngModel)]="areaSelected" (change)="changeAreas($event)">
+            <ng-container *ngFor="let area of areas; let i = index" >
+              <div matRipple class="iit">
+                <mat-radio-button [value]="area" color="primary" >{{ area.nombre }}</mat-radio-button>
+              </div>
+            </ng-container>
+          </mat-radio-group>
+        </div>
+
+      </mat-expansion-panel>
+    </mat-accordion>
+  </div>
+
+
+  <p class="cwarn det-area" *ngIf="areaSelected">
     Área Seleccionada: <b>{{ areaSelected.nombre }}</b>
   </p>
   <div class="busqueda-reserva" *ngIf="areas.length > 0 && areaSelected">
@@ -35,8 +61,8 @@
             *ngIf="tipoConsulta == 'profesional' && profesionales.length > 0 && loadedProf">
             <mat-form-field class="full" appearance="fill" [color]="primary">
               <mat-label>Digite nombre del profesional</mat-label>
-              <input matInput type="text" placeholder="Buscar por nombre y apellido"
-                [formControl]="profesionalCtrl" [matAutocomplete]="auto" autocomplete="off">
+              <input matInput type="text" placeholder="Buscar por nombre y apellido" [formControl]="profesionalCtrl"
+                [matAutocomplete]="auto" autocomplete="off">
               <mat-icon matPrefix style="margin-right: 10px">school</mat-icon>
               <mat-spinner [diameter]="30" matSuffix *ngIf="loadingProfesionales"></mat-spinner>
               <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayTextAutocomplete"
@@ -44,8 +70,9 @@
                 <mat-option *ngFor="let prof of filterProfesionales" [value]="prof" matTooltipPosition="right">
                   {{ prof.detalle }}
                 </mat-option>
-                <mat-option *ngIf="(!filterProfesionales || filterProfesionales.length == 0) && profesionalCtrl.value !== '' && !loadedProf" [value]="null"
-                  matTooltipPosition="right">
+                <mat-option
+                  *ngIf="(!filterProfesionales || filterProfesionales.length == 0) && profesionalCtrl.value !== '' && !loadedProf"
+                  [value]="null" matTooltipPosition="right">
                   No se encontraron profesionales
                 </mat-option>
               </mat-autocomplete>
@@ -106,7 +133,8 @@
             </div>
           </div>
 
-          <div class="col-lg-6 col-md-12" *ngIf="((especialidadSelected && tipoConsulta == 'profesional') || (servicioSelected && tipoConsulta == 'especialidad')) && centrosAtencion.length > 0 && loadedCen" 
+          <div class="col-lg-6 col-md-12"
+            *ngIf="((especialidadSelected && tipoConsulta == 'profesional') || (servicioSelected && tipoConsulta == 'especialidad')) && centrosAtencion.length > 0 && loadedCen"
             [hidden]="utils.slugify(areaSelected.nombre, '-') === 'telemedicina' || utils.slugify(areaSelected.nombre, '-') === 'consulta-medica-virtual'">
             <mat-form-field class="full" appearance="fill" [color]="primary">
               <mat-label>Seleccione un Centro de Atención</mat-label>
@@ -174,18 +202,25 @@
   </div>
 </div>
 
-<p class="info-busqueda bg-purple" *ngIf="profesionalSelected || especialidadSelected || centroAtencionSelected" 
-[ngClass]="{ padTelm : utils.slugify(areaSelected.nombre, '-') === 'telemedicina' ||
+<p class="info-busqueda bg-purple" *ngIf="profesionalSelected || especialidadSelected || centroAtencionSelected"
+  [ngClass]="{ padTelm : utils.slugify(areaSelected.nombre, '-') === 'telemedicina' ||
  utils.slugify(areaSelected.nombre, '-') === 'consulta-medica-virtual' }">
-  <span *ngIf="profesionalSelected"> Profesional: <b>{{ profesionalSelected.nombreProfesional }}</b></span>
-  <span *ngIf="especialidadSelected"> Especialidad: <b>{{ especialidadSelected.nombreEspecialidad }}</b>
+  <span *ngIf="profesionalSelected"> <span class="lbl_srch"> Profesional:</span>
+    <b>{{ profesionalSelected.nombreProfesional }}</b></span>
+  <span *ngIf="especialidadSelected"> <span class="lbl_srch">Especialidad:</span>
+    <b>{{ especialidadSelected.nombreEspecialidad }}</b>
     <b
       *ngIf="(tipoConsulta == 'especialidad' && servicioSelected) || (tipoConsulta == 'profesional' && especialidadSelected)">
       - {{ (tipoConsulta == 'especialidad') ? servicioSelected.nombreServicio : especialidadSelected.nombreServicio }}
     </b>
   </span>
-  <span *ngIf="centroAtencionSelected && utils.slugify(areaSelected.nombre, '-') !== 'telemedicina' && utils.slugify(areaSelected.nombre, '-') !== 'consulta-medica-virtual'"> Centro de Atención: <b>{{ centroAtencionSelected.nombreEspecialidad }} -
-      {{ centroAtencionSelected.nombre }}</b> </span>
-  <button mat-raised-button class="full-btn" *ngIf="especialidadSelected && centroAtencionSelected"
-    (click)="buscarHora()">BUSCAR HORA</button>
+  <span
+    *ngIf="centroAtencionSelected && utils.slugify(areaSelected.nombre, '-') !== 'telemedicina' && utils.slugify(areaSelected.nombre, '-') !== 'consulta-medica-virtual'">
+    <span class="lbl_srch">Centro de Atención:</span> <b> {{ centroAtencionSelected.nombre }}</b>
+  </span>
+  <button mat-stroked-button class="full-btn srch" *ngIf="especialidadSelected && centroAtencionSelected"
+    (click)="buscarHora()">
+    <mat-icon class="if">search</mat-icon>
+    BUSCAR HORA
+  </button>
 </p>

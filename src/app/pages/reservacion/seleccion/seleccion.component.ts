@@ -37,7 +37,8 @@ export class SeleccionComponent implements OnInit, OnChanges {
   public displayCalendar: boolean = true;
   public contadorMeses = 1;
   public enableScroll: boolean = false;
-  public compensacion = -180;
+  public compensacion = -240;
+  public horaSeleccionada:any;
   public navigationDate = {
     min: null,
     max: null
@@ -533,6 +534,8 @@ export class SeleccionComponent implements OnInit, OnChanges {
   }
 
   seleccionarHora(data) {
+    console.log(data)
+    this.horaSeleccionada = data;
     this.calendario.emit(data);
     gtag('event', 'Clic', { 'event_category': 'Reserva de Hora', 'event_label': 'Paso2:Selección-Hora' });
   }

@@ -1,6 +1,11 @@
 .resultados-para, .w-resultados{
   margin-top: 25px
 }
+
+.resultados-para-mobile{
+  display: none;
+}
+
 .item-hora{
   color:#fff !important
 }
@@ -17,10 +22,10 @@
   width: 100%;
   top: 0px;
   display: block;
+  font-weight: 500;
+  margin:0px;
   z-index: 10;
-  font-weight: bold;
   padding: 20px;
-  border-bottom: 1px solid #ccc;
   text-transform: uppercase;
 
   button{
@@ -156,4 +161,43 @@ opacity: 0.5 !important;
 
 ::ng-deep .ctms h5, ::ng-deep .ctms p{
   margin-bottom:0px !important;
+}
+
+.btn-otrodia{
+  border: 1px solid #2a7de1;
+  padding: 9px 15px;
+
+  &:hover{
+    background: #2a7de1;
+    color:#fff;
+  }
+}
+
+.resultados-para-mobile{
+  background: #e1ebf8;
+  padding: 25px;
+  border-radius: 5px;
+
+  h4{
+    font-size: 18px;
+    font-weight: 700;
+  }
+
+  .item-rb{
+    display: block;
+    padding: 5px 0px;
+    font-size: 15px;
+    b{
+      font-weight: bold;
+    }
+  }
+}
+
+@media(max-width:720px){
+  .resultados-para{
+    display: none !important;
+  }
+  .resultados-para-mobile{
+    display: block;
+  }
 }

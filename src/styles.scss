@@ -4990,7 +4990,8 @@ width: 200px;
 }
 .item-doc .box-doc .txt-doc .ver-perfil{
   font-weight: 300;
-  background: #802E87;
+ // background: #802E87;
+ background: #2a7de1;
   font-size: 16px;
   color: #fff !important;
   padding: 5px 16px !important;
@@ -5057,7 +5058,7 @@ width: 200px;
 }
 
 .item-hora{
-  background: #802E87;
+  background: #b467bb;
   color:#fff;
   padding: 8px 20px;
   border-radius: 6px;
@@ -5079,8 +5080,8 @@ width: 200px;
   text-align: center !important;
 
 }
-.item-hora:hover{
-  background: #632369;
+.item-hora:hover, .item-hora.active-hr{
+  background: #802e87;
 }
 .item-hora .centro-medico{
   color:#fff;
@@ -5114,7 +5115,7 @@ width: 200px;
   font-weight: bold;
   display: block;
   width: 100%;
-  letter-spacing: 5px;
+  letter-spacing: 1px;
 }
 .comentario-hora{
   position: absolute;
@@ -6718,3 +6719,9 @@ width: 850px;
   
   .cus-pad{ padding:5px 25px 5px 15px !important; margin-bottom: 10px;}
   .icon-cus-pad{margin-right: 12px !important;}
+.btn-purple{
+    background: #802e87;
+    color: #fff;
+    font-size: 16px;
+    width: 100%;
+}

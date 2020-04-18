@@ -18,12 +18,12 @@ import gtag, { install } from 'ga-gtag';
 })
 export class BusquedaComponent implements OnInit {
 
+  public expanded = false;
   public areas: any = []
   public especialidades: any = [];
   public realEspecialidades:any = [];
   public profesionales: any = [];
   public servicios:any = [];
-
 
   public filterEspecialidades: Observable<any[]>;
   public filterCentrosAtencion: Observable<any[]>;
@@ -448,6 +448,7 @@ export class BusquedaComponent implements OnInit {
     this.areaSelected = event.value;
     this.clearSelection('profesional');
     this.getEspecialidades('especialidad');
+    this.expanded = false;
   }
 
   clearSelection(tipo: string, fromForm:boolean = false) {

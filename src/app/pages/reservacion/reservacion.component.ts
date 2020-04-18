@@ -76,7 +76,7 @@ export class ReservacionComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.confirmacion.confirmarReserva.subscribe(data => {
       if (data['response']) {
-        this.cambiarEtapa(5);
+   //     this.cambiarEtapa(5);
         this.reservaRealizada = true;
         this.codCita = data['data']['codCita']
       }
