@@ -1,72 +1,67 @@
+<h4 class="title-alert" *ngIf="!reservaFinalizada">Revisa los datos antes de concluir la reserva</h4>
+
+<div class="mensaje-exito" *ngIf="reservaFinalizada">
+  <img src="assets/images/check-morado.svg" alt=""> HORA RESERVADA CON ÉXITO
+</div>
+
 <section class="datos-reserva datos-r2" *ngIf="paciente && calendario && busquedaInicial">
-  <div class="w-datos">
-    <div class="header-datos">
-      <h4>Revisa los datos antes de reservar</h4>
+  <div fxLayout="row wrap" class="confirm-panel">
+    <div fxFlex fxFlex.sm="100%" fxFlex.xs="100%">
+      <mat-accordion>
+        <mat-expansion-panel [expanded]="expanded.reserva" [hideToggle]="disableExpand" [disabled]="disableExpand" (closed)="expanded.reserva = false" (opened)="expanded.reserva = true">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Datos de la Reserva
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <div class="container-pn" >
+            <div class="line-sp"></div>
+            <p><b>Hora de la cita:</b> {{ calendario.cupo.fechaHora | toLocalScl: calendario.cupo.compensacion : 'DD/MM/YYYY HH:mm'}}</p>
+            <p><b>Profesional:</b> {{ calendario.recurso.nombre }}</p>
+            <p><b>Especialidad:</b> {{ busquedaInicial.especialidad.detalle }}</p>
+            <p *ngIf="utils.slugify(busquedaInicial.area.nombre, '-') !== 'telemedicina' && 
+            utils.slugify(busquedaInicial.area.nombre, '-') !== 'consulta-medica-virtual'"><b>Centro:</b> {{ calendario.cupo.centro.nombre }}</p>
+            <p *ngIf="busquedaInicial.centroAtencion.codigo != 'todos'"><b>Dirección del centro:</b>{{ calendario.cupo.centro.direccion?.calle }} 
+              {{ calendario.cupo.centro.direccion?.numero }} 
+              {{ calendario.cupo.centro.direccion?.comuna }}</p>
+  
+          </div>
+        </mat-expansion-panel>
+      </mat-accordion>
     </div>
-    <div class="body-datos">
-      <div class="row">
-        <div class="col-lg-6">
-          <p><b>Nombre:</b> {{ paciente.nombreCompleto }}</p>
-          <p><b>RUT:</b> {{ paciente.numeroDocumentoFormateado }}</p>
-          <p><b>Profesional:</b> {{ calendario.recurso.nombre }}</p>
-          <p><b>Especialidad:</b> {{ busquedaInicial.especialidad.detalle }}</p>
+    <div fxFlex fxFlex.sm="100%" fxFlex.xs="100%">
+      <mat-accordion>
+        <mat-expansion-panel [expanded]="expanded.paciente" [hideToggle]="disableExpand" [disabled]="disableExpand" (closed)="expanded.paciente = false" (opened)="expanded.paciente = true">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Datos del Paciente
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <div class="container-pn" >
+            <p><b>Nombre:</b> {{ paciente.nombreCompleto }}</p>
+            <p><b>RUT:</b> {{ paciente.numeroDocumentoFormateado }}</p>
+            <p><b>Previsión:</b> {{ paciente.adicional.prevision.nombrePlan }}</p>
 
-        </div>
-        <div class="col-lg-6 b-l no-left-line">
-          <p><b>Previsión:</b> {{ paciente.adicional.prevision.nombrePlan }}</p>
-          <p><b>Hora de la cita:</b> {{ calendario.cupo.fechaHora | toLocalScl: calendario.cupo.compensacion : 'DD/MM/YYYY HH:mm'}}</p>
-          <p *ngIf="utils.slugify(busquedaInicial.area.nombre, '-') !== 'telemedicina' && 
-            utils.slugify(busquedaInicial.area.nombre, '-') !== 'consulta-medica-virtual'"><b>Ubicación:</b> {{ calendario.cupo.centro.nombre }}</p>
-          <p *ngIf="busquedaInicial.centroAtencion.codigo != 'todos'"><b>Dirección del centro:</b>{{ calendario.cupo.centro.direccion?.calle }} 
-            {{ calendario.cupo.centro.direccion?.numero }} 
-            {{ calendario.cupo.centro.direccion?.comuna }}</p>
-
-        </div>
-      </div>
+          </div>
+        </mat-expansion-panel>
+      </mat-accordion>
     </div>
   </div>
+
   <div class="puntos-abajo p2" *ngIf="mensajes.length > 0">
       <ng-container *ngFor="let msj of mensajes">
           <div [innerHTML]="sanitizer.bypassSecurityTrustHtml(msj['mensaje']['contenido'])" *ngIf="msj['mensaje']['mostrar']" ></div>
       </ng-container>
     </div>
-  <!-- 
-  <div class="puntos-abajo p2">
-    <p><span>(*)</span> Atiende pacientes mayores a 18 años</p>
-    <p><span>(**)</span> El centro recibe bonos Isapre y pago privado.</p>
-  </div>
--->
-  <!--
-		<div class="w-datos">
-      <div class="header-datos">
-        <h4>Datos de la reserva</h4>
+  
+  <div class="text-right btn-sec-reservar" style="margin-top:25px" *ngIf="!reservaFinalizada && !disableBarReserva && !utils.progressBar">
+    <div fxLayout="row" fxLayoutAlign="space-between center">
+      <div fxFlex="75%" fxFlex.sm="100%" fxFlex.xs="100%" class="desc-s"> 
+        <h4 class="desc">Para confirmar su reserva, haga clic en Reservar.</h4>
       </div>
-      <div class="body-datos">
-        <div class="row">
-          <div class="col-lg-5">
-            <p><b>Nombre:</b> </p>
-            <p><b>RUT:</b> </p>
-            <p><b>Profesional:</b> </p>
-            <p><b>Especialidad:</b></p>
-            <p><b>Valor lista: </b> -- </p>
-          </div>
-          <div class="col-lg-7">
-            <p><b>Previsión:</b></p>
-            <p><b>Hora de la cita:</b> </p>
-            <p><b>Ubicación:</b> {{ busquedaInicial.centroAtencion.nombre }} <span>(**)</span></p>
-            <p><b>Dirección del centro:</b>
-              {{ busquedaInicial.centroAtencion.direccion?.calle }}
-              {{ busquedaInicial.centroAtencion.direccion?.numero }} -
-              {{ busquedaInicial.centroAtencion.direccion?.comuna }}</p>
-            <p><b>Valor convenio:</b>--</p>
-          </div>
-          <div class="col-lg-12">
-          </div>
-        </div>
+      <div fxFlex="25%" fxFlex.sm="100%" fxFlex.xs="100%" style="text-align: right;">
+        <button mat-raised-button class="full-btn btn-morado btn-reser" (click)="reservar()">RESERVAR</button>
       </div>
     </div>
-	-->
-  <div class="text-right btn-sec-reservar" style="margin-top:25px">
-    <button mat-raised-button class="full-btn btn-morado btn-reser" (click)="reservar()">RESERVAR</button>
   </div>
 </section>

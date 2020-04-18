@@ -28,6 +28,13 @@
 			</div>
 		</div>
 	</div>
+	
+	<div class="resultados-para-mobile">
+		<h4>Para tu búsqueda en:</h4>
+		<span class='item-rb'><b>Área Médica:</b> {{ busquedaInicial.area.nombre }}</span>
+		<span class='item-rb'><b>Clínica / Centro:</b> {{ busquedaInicial.centroAtencion.nombre }}</span>
+		<span class='item-rb'><b>Especialidad:</b> {{ busquedaInicial.especialidad.nombreEspecialidad }}</span>
+	</div>
 	<section class="w-resultados">
 		<div *ngIf="loadedRecursos && recursos.length == 0">
 			<app-days-of-week
@@ -88,16 +95,24 @@
 						
 										<div class="sel-hora" style="display: block;"
 											*ngIf="selectedDate[i] && centrosProfesional[i] && centrosProfesional[i].length > 0">
-											<p class="header-sel-hora">
-												Seleccione 
-												<span *ngIf="utils.slugify(busquedaInicial.area.nombre, '-') !== 'telemedicina'
-													&& utils.slugify(busquedaInicial.area.nombre, '-') !== 'consulta-medica-virtual'" style="font-weight: bold !important;" >un Centro y </span>
-												una Hora Disponible para el {{ selectedDate[i] | date:'dd/MM/yyyy'}}
-												<button mat-stroked-button (click)="eligeOtroDia(i)"
+											<div fxLayout="row wrap" fxLayoutAlign="space-between center" fxLayoutGap="1%">
+												<div fxFlex>
+													<p class="header-sel-hora">
+														Seleccione 
+														<span *ngIf="utils.slugify(busquedaInicial.area.nombre, '-') !== 'telemedicina'
+															&& utils.slugify(busquedaInicial.area.nombre, '-') !== 'consulta-medica-virtual'">un Centro y </span>
+														una Hora Disponible para el <b>{{ selectedDate[i] | date:'dd/MM/yyyy'}}</b>
+													</p>
+												</div>
+												<div fxFlex="150px">
+													<button mat-stroked-button (click)="eligeOtroDia(i)" class="btn-otrodia"
 													color="primary">
 													Elegir otro día
-												</button>
-											</p>
+													</button>
+
+												</div>
+											</div>
+						
 											<ng-container *ngFor="let cet of centrosProfesional[i]; let idx = index">
 	
 												<a class="item-hora" [ngClass]="{ 'active' : cet.habilitado }"
@@ -109,7 +124,7 @@
 												</a>
 	
 												<ng-container *ngIf="cet.habilitado">
-													<a class="item-hora" *ngFor="let cupo of cet.cupos"
+													<a class="item-hora" [ngClass]="{ 'active-hr' : horaSeleccionada?.cupo.horaEpoch === cupo.horaEpoch && horaSeleccionada?.cupo.idRecurso === cupo.idRecurso}" *ngFor="let cupo of cet.cupos"
 														(click)="seleccionarHora({fecha: selectedDate[i], cupo : cupo, recurso:re})">
 														<div class="hora">{{ cupo.horaEpoch * 1000 | toLocalScl: cupo.compensacion : 'HH:mm' }}</div>
 													</a>
