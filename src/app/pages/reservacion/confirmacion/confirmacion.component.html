@@ -36,7 +36,7 @@
       </mat-accordion>
     </div>
     <div fxFlex="49%" fxFlex.sm="100%" fxFlex.xs="100%" *ngIf="mensajes.length > 0">
-      <div style="padding: 0px 20px;">
+      <div class="pylw">
         <div class="ylw-cont">
           <ng-container *ngFor="let msj of mensajes">
             <div [innerHTML]="sanitizer.bypassSecurityTrustHtml(msj['mensaje']['contenido'])"
