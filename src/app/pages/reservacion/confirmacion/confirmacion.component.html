@@ -8,34 +8,39 @@
   <div fxLayout="row wrap" class="confirm-panel" fxLayoutAlign="space-evenly">
     <div fxFlex="49%" fxFlex.sm="100%" fxFlex.xs="100%" class="cnt-info">
       <mat-accordion>
-        <mat-expansion-panel [expanded]="expanded.reserva" [hideToggle]="disableExpand" [disabled]="disableExpand" (closed)="expanded.reserva = false" (opened)="expanded.reserva = true">
+        <mat-expansion-panel [expanded]="expanded.reserva" [hideToggle]="disableExpand" [disabled]="disableExpand"
+          (closed)="expanded.reserva = false" (opened)="expanded.reserva = true">
           <mat-expansion-panel-header>
             <mat-panel-title>
               Datos de la Reserva
             </mat-panel-title>
           </mat-expansion-panel-header>
-          <div class="container-pn" >
-            <p><b>Hora de la cita:</b> {{ calendario.cupo.fechaHora | toLocalScl: calendario.cupo.compensacion : 'DD/MM/YYYY HH:mm'}}</p>
-            <p><b>Nombre:</b> {{ paciente.nombreCompleto }}</p>
-            <p><b>RUT:</b> {{ paciente.numeroDocumentoFormateado }}</p>
-            <p><b>Previsión:</b> {{ paciente.adicional.prevision.nombrePlan }}</p>
+          <div class="container-pn">
+            <p><b>Hora de la cita:</b>
+              {{ calendario.cupo.fechaHora | toLocalScl: calendario.cupo.compensacion : 'DD/MM/YYYY HH:mm'}}</p>
             <p><b>Profesional:</b> {{ calendario.recurso.nombre }}</p>
             <p><b>Especialidad:</b> {{ busquedaInicial.especialidad.detalle }}</p>
             <p *ngIf="utils.slugify(busquedaInicial.area.nombre, '-') !== 'telemedicina' && 
-            utils.slugify(busquedaInicial.area.nombre, '-') !== 'consulta-medica-virtual'"><b>Centro:</b> {{ calendario.cupo.nombreCentro }}</p>
-            <p *ngIf="busquedaInicial.centroAtencion.codigo != 'todos'"><b>Dirección del centro:</b>{{ busquedaInicial.centroAtencion.direccion?.calle }} 
-              {{ busquedaInicial.centroAtencion.direccion?.numero }} 
+            utils.slugify(busquedaInicial.area.nombre, '-') !== 'consulta-medica-virtual'"><b>Centro:</b>
+              {{ calendario.cupo.nombreCentro }}</p>
+            <p *ngIf="busquedaInicial.centroAtencion.codigo != 'todos'"><b>Dirección del
+                centro:</b>{{ busquedaInicial.centroAtencion.direccion?.calle }}
+              {{ busquedaInicial.centroAtencion.direccion?.numero }}
               {{ busquedaInicial.centroAtencion.direccion?.comuna }}</p>
+            <p><b>Nombre:</b> {{ paciente.nombreCompleto }}</p>
+            <p><b>RUT:</b> {{ paciente.numeroDocumentoFormateado }}</p>
+            <!-- <p><b>Previsión:</b> {{ paciente.adicional.prevision.nombrePlan }}</p> -->
 
           </div>
         </mat-expansion-panel>
       </mat-accordion>
     </div>
-    <div fxFlex="49%" fxFlex.sm="100%" fxFlex.xs="100%" *ngIf="mensajes.length > 0"> 
+    <div fxFlex="49%" fxFlex.sm="100%" fxFlex.xs="100%" *ngIf="mensajes.length > 0">
       <div style="padding: 0px 20px;">
-        <div class="ylw-cont" >
+        <div class="ylw-cont">
           <ng-container *ngFor="let msj of mensajes">
-            <div [innerHTML]="sanitizer.bypassSecurityTrustHtml(msj['mensaje']['contenido'])" *ngIf="msj['mensaje']['mostrar']" ></div>
+            <div [innerHTML]="sanitizer.bypassSecurityTrustHtml(msj['mensaje']['contenido'])"
+              *ngIf="msj['mensaje']['mostrar']"></div>
           </ng-container>
         </div>
       </div>
@@ -58,10 +63,11 @@
       -->
     </div>
   </div>
-  
-  <div class="text-right btn-sec-reservar" style="margin-top:25px" *ngIf="!reservaFinalizada && !disableBarReserva && !utils.progressBar">
+
+  <div class="text-right btn-sec-reservar" style="margin-top:25px"
+    *ngIf="!reservaFinalizada && !disableBarReserva && !utils.progressBar">
     <div fxLayout="row" fxLayoutAlign="space-between center">
-      <div fxFlex="75%" fxFlex.sm="100%" fxFlex.xs="100%" class="desc-s"> 
+      <div fxFlex="75%" fxFlex.sm="100%" fxFlex.xs="100%" class="desc-s">
         <h4 class="desc">Para confirmar su reserva, haga clic en Reservar.</h4>
       </div>
       <div fxFlex="25%" fxFlex.sm="100%" fxFlex.xs="100%" style="text-align: right;">
