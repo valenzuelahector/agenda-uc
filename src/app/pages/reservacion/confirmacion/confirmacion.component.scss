@@ -46,7 +46,7 @@
 .confirm-panel{
     display:none;
     margin-bottom:15px;
-    border: 1px solid #2a7de1;
+ //   border: 1px solid #2a7de1;
 
     .container-pn{
       background: #fff;
@@ -128,4 +128,13 @@
 
 .mensaje-exito{
   margin-top: 0px !important;
+}
+
+.ylw-cont{
+  background: #fed377;
+  padding: 20px;
+  border-radius: 8px;
+}
+.cnt-info{
+  border:1px solid #2a7de1
 }

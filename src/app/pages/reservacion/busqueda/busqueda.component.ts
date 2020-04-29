@@ -581,7 +581,8 @@ export class BusquedaComponent implements OnInit {
 
         if (res['centros'] && res['centros'].length > 0) {
           res['centros'].forEach((val, key) => {
-            res['centros'][key]['detalle'] = val['nombre'] + ' - ' + val['direccion']['comuna'];
+            res['centros'][key]['detalle'] = val['nombre'];
+           // res['centros'][key]['detalle'] = val['nombre'] + ' - ' + val['direccion']['comuna'];
             if (qp['centro'] && qp['centro'].toLowerCase() == val['idCentro'].toLowerCase()) {
               matCentro = res['centros'][key];
             }
@@ -691,7 +692,6 @@ export class BusquedaComponent implements OnInit {
 
   }
 
-
   servicioSelection(event){
     this.servicioCtrl.disable();
     this.servicioSelected = this.servicioCtrl.value;
@@ -717,7 +717,7 @@ export class BusquedaComponent implements OnInit {
       this.especialidadSelected['idServicio'] = this.servicioSelected['idServicio'];
       this.especialidadSelected['nombreServicio'] = this.servicioSelected['nombreServicio'];
     }
- 
+
 
     this.emitBusqueda.emit({
       area: this.areaSelected,
