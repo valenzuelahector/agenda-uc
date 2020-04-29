@@ -5,8 +5,8 @@
 </div>
 
 <section class="datos-reserva datos-r2" *ngIf="paciente && calendario && busquedaInicial">
-  <div fxLayout="row wrap" class="confirm-panel">
-    <div fxFlex fxFlex.sm="100%" fxFlex.xs="100%">
+  <div fxLayout="row wrap" class="confirm-panel" fxLayoutAlign="space-evenly">
+    <div fxFlex="49%" fxFlex.sm="100%" fxFlex.xs="100%" class="cnt-info">
       <mat-accordion>
         <mat-expansion-panel [expanded]="expanded.reserva" [hideToggle]="disableExpand" [disabled]="disableExpand" (closed)="expanded.reserva = false" (opened)="expanded.reserva = true">
           <mat-expansion-panel-header>
@@ -15,8 +15,10 @@
             </mat-panel-title>
           </mat-expansion-panel-header>
           <div class="container-pn" >
-            <div class="line-sp"></div>
             <p><b>Hora de la cita:</b> {{ calendario.cupo.fechaHora | toLocalScl: calendario.cupo.compensacion : 'DD/MM/YYYY HH:mm'}}</p>
+            <p><b>Nombre:</b> {{ paciente.nombreCompleto }}</p>
+            <p><b>RUT:</b> {{ paciente.numeroDocumentoFormateado }}</p>
+            <p><b>Previsión:</b> {{ paciente.adicional.prevision.nombrePlan }}</p>
             <p><b>Profesional:</b> {{ calendario.recurso.nombre }}</p>
             <p><b>Especialidad:</b> {{ busquedaInicial.especialidad.detalle }}</p>
             <p *ngIf="utils.slugify(busquedaInicial.area.nombre, '-') !== 'telemedicina' && 
@@ -24,12 +26,20 @@
             <p *ngIf="busquedaInicial.centroAtencion.codigo != 'todos'"><b>Dirección del centro:</b>{{ busquedaInicial.centroAtencion.direccion?.calle }} 
               {{ busquedaInicial.centroAtencion.direccion?.numero }} 
               {{ busquedaInicial.centroAtencion.direccion?.comuna }}</p>
-  
+
           </div>
         </mat-expansion-panel>
       </mat-accordion>
     </div>
-    <div fxFlex fxFlex.sm="100%" fxFlex.xs="100%">
+    <div fxFlex="49%" fxFlex.sm="100%" fxFlex.xs="100%" *ngIf="mensajes.length > 0"> 
+      <div style="padding: 0px 20px;">
+        <div class="ylw-cont" >
+          <ng-container *ngFor="let msj of mensajes">
+            <div [innerHTML]="sanitizer.bypassSecurityTrustHtml(msj['mensaje']['contenido'])" *ngIf="msj['mensaje']['mostrar']" ></div>
+          </ng-container>
+        </div>
+      </div>
+      <!--
       <mat-accordion>
         <mat-expansion-panel [expanded]="expanded.paciente" [hideToggle]="disableExpand" [disabled]="disableExpand" (closed)="expanded.paciente = false" (opened)="expanded.paciente = true">
           <mat-expansion-panel-header>
@@ -45,14 +55,9 @@
           </div>
         </mat-expansion-panel>
       </mat-accordion>
+      -->
     </div>
   </div>
-
-  <div class="puntos-abajo p2" *ngIf="mensajes.length > 0">
-      <ng-container *ngFor="let msj of mensajes">
-          <div [innerHTML]="sanitizer.bypassSecurityTrustHtml(msj['mensaje']['contenido'])" *ngIf="msj['mensaje']['mostrar']" ></div>
-      </ng-container>
-    </div>
   
   <div class="text-right btn-sec-reservar" style="margin-top:25px" *ngIf="!reservaFinalizada && !disableBarReserva && !utils.progressBar">
     <div fxLayout="row" fxLayoutAlign="space-between center">
