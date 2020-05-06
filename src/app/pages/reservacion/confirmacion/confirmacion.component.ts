@@ -1,17 +1,18 @@
-import { Component, OnInit, Input, Output, EventEmitter, OnChanges, HostListener } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnChanges, HostListener, OnDestroy } from '@angular/core';
 import { AgendaAmbulatoriaService } from  'src/app/services/agenda-ambulatoria.service';
 import { UtilsService } from 'src/app/services/utils.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import gtag, { install } from 'ga-gtag';
 import { ErrorReservaComponent } from 'src/app/shared/components/modals/error-reserva/error-reserva.component';
 import { MatDialog } from '@angular/material';
+import * as $ from 'jquery';
 
 @Component({
   selector: 'app-confirmacion',
   templateUrl: './confirmacion.component.html',
   styleUrls: ['./confirmacion.component.scss']
 })
-export class ConfirmacionComponent implements OnInit, OnChanges {
+export class ConfirmacionComponent implements OnInit, OnChanges, OnDestroy {
 
   //public reservaFinalizada:boolean = false;
 
@@ -23,9 +24,10 @@ export class ConfirmacionComponent implements OnInit, OnChanges {
   @Input() mensajes:any = [];
   disableExpand = true;
   disableBarReserva = false;
-
-  expanded = { reserva : true, paciente : true }
-
+  expanded = { reserva : true, info : true }
+  reservaSubscribe;
+  verMasOpened = false;
+  verMasAction = false;
   constructor(
     public agendaService:AgendaAmbulatoriaService,
     public utils:UtilsService,
@@ -35,9 +37,21 @@ export class ConfirmacionComponent implements OnInit, OnChanges {
 
   ngOnInit() {
     this.onResize();
+    this.reservaSubscribe = this.utils.getEmitReservar().subscribe( res => {
+      this.reservar();
+    })
   }
 
   ngOnChanges() {
+    this.onResize();
+    setTimeout(()=> {
+      this.verMas();
+      this.setVerMas('close')
+    },300)
+  }
+
+  ngOnDestroy(){
+    this.reservaSubscribe.unsubscribe();
   }
 
   reservar(){
@@ -83,6 +97,7 @@ export class ConfirmacionComponent implements OnInit, OnChanges {
     dialogRef.componentInstance.dialogEvent.subscribe((result) => {
       this.utils.setReloadBusqueda();
     })
+
   }
 
   @HostListener('window:resize', [])
@@ -92,10 +107,41 @@ export class ConfirmacionComponent implements OnInit, OnChanges {
       this.disableExpand = false;
     } else {
       this.disableExpand = true;
-      this.expanded = { reserva : true, paciente : true }
+      this.expanded = { reserva : true, info : true }
     }
-  
+    
+    this.verMas();
   }
-  
+
+  verMas(){
+    
+    const hDatosReserva = $("#contDatosReserva").height();
+    const hIndic = $("#contIndic").height();
+    if(hDatosReserva !== undefined){
+      if(hIndic > hDatosReserva){
+        this.verMasAction = true;
+        $("#contIndic").css({
+          height: (hDatosReserva + 42) + 'px'
+        })
+      }else{
+        this.verMasAction = false;
+        $("#contIndic").css({
+          height: ''
+        })
+      }
+    }
+  }
+
+  setVerMas(action){
+    if(action === 'open'){
+      this.verMasOpened = true;
+      $("#contIndic").css({
+        height: ''
+      })
+    }else{
+      this.verMasOpened = false;
+      this.verMas();
+    }
+  }
 }
 

@@ -36,7 +36,9 @@
   }
 
   .anuicon{
-    transform: rotate(180deg);
-    margin-left: 5px;
+    &.rot{
+      transform: rotate(180deg);
+    }
+    margin-left: 15px;
   }
 

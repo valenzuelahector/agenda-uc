@@ -5,17 +5,17 @@
 </div>
 
 <section class="datos-reserva datos-r2" *ngIf="paciente && calendario && busquedaInicial">
-  <div fxLayout="row wrap" class="confirm-panel" fxLayoutAlign="space-evenly">
-    <div fxFlex="49%" fxFlex.sm="100%" fxFlex.xs="100%" class="cnt-info">
+  <div fxLayout="row wrap" class="confirm-panel" fxLayoutAlign="{{ mensajes.length > 0 ? 'space-between' : 'space-evenly' }} start">
+    <div fxFlex="{{ mensajes.length > 0 ? '49%' : '70%' }}" fxFlex.sm="100%" fxFlex.xs="100%" class="cnt-info">
       <mat-accordion>
         <mat-expansion-panel [expanded]="expanded.reserva" [hideToggle]="disableExpand" [disabled]="disableExpand"
           (closed)="expanded.reserva = false" (opened)="expanded.reserva = true">
-          <mat-expansion-panel-header>
+          <mat-expansion-panel-header class="isBlue">
             <mat-panel-title>
               Datos de la Reserva
             </mat-panel-title>
           </mat-expansion-panel-header>
-          <div class="container-pn">
+          <div class="container-pn" id="contDatosReserva">
             <p><b>Hora de la cita:</b>
               {{ calendario.cupo.fechaHora | toLocalScl: calendario.cupo.compensacion : 'DD/MM/YYYY HH:mm'}}</p>
             <p><b>Profesional:</b> {{ calendario.recurso.nombre }}</p>
@@ -29,38 +29,32 @@
               {{ busquedaInicial.centroAtencion.direccion?.comuna }}</p>
             <p><b>Nombre:</b> {{ paciente.nombreCompleto }}</p>
             <p><b>RUT:</b> {{ paciente.numeroDocumentoFormateado }}</p>
-            <!-- <p><b>Previsión:</b> {{ paciente.adicional.prevision.nombrePlan }}</p> -->
-
+            <p><b>Previsión:</b> {{ paciente.adicional.prevision.nombrePlan }}</p>
           </div>
         </mat-expansion-panel>
       </mat-accordion>
     </div>
-    <div fxFlex="49%" fxFlex.sm="100%" fxFlex.xs="100%" *ngIf="mensajes.length > 0">
-      <div class="pylw">
-        <div class="ylw-cont">
-          <ng-container *ngFor="let msj of mensajes">
-            <div [innerHTML]="sanitizer.bypassSecurityTrustHtml(msj['mensaje']['contenido'])"
-              *ngIf="msj['mensaje']['mostrar']"></div>
-          </ng-container>
-        </div>
-      </div>
-      <!--
-      <mat-accordion>
-        <mat-expansion-panel [expanded]="expanded.paciente" [hideToggle]="disableExpand" [disabled]="disableExpand" (closed)="expanded.paciente = false" (opened)="expanded.paciente = true">
-          <mat-expansion-panel-header>
-            <mat-panel-title>
-              Datos del Paciente
-            </mat-panel-title>
-          </mat-expansion-panel-header>
-          <div class="container-pn" >
-            <p><b>Nombre:</b> {{ paciente.nombreCompleto }}</p>
-            <p><b>RUT:</b> {{ paciente.numeroDocumentoFormateado }}</p>
-            <p><b>Previsión:</b> {{ paciente.adicional.prevision.nombrePlan }}</p>
+    <div fxFlex="49%" fxFlex.sm="100%" fxFlex.xs="100%" clasS="mtinf" *ngIf="mensajes?.length > 0">
 
-          </div>
-        </mat-expansion-panel>
-      </mat-accordion>
-      -->
+        <mat-accordion>
+          <mat-expansion-panel [expanded]="expanded.info" [hideToggle]="disableExpand" [disabled]="disableExpand" (closed)="expanded.info = false" (opened)="expanded.info = true">
+            <mat-expansion-panel-header class="isYellow">
+              <mat-panel-title>
+                Estimado paciente favor considerar las siguientes indicaciones
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <div class="container-pn ylw-cont" id="contIndic">
+              <div *ngIf="verMasAction">
+                <div class="verMas" (click)="setVerMas('open')" *ngIf="!verMasOpened">+ Ver más</div>
+                <div class="verMas" (click)="setVerMas('close')" *ngIf="verMasOpened">Cerrar</div>
+              </div>
+              <ng-container *ngFor="let msj of mensajes">
+                <div [innerHTML]="sanitizer.bypassSecurityTrustHtml(msj['mensaje']['contenido'])" *ngIf="msj['mensaje']['mostrar']"></div>
+              </ng-container>
+  
+            </div>
+          </mat-expansion-panel>
+        </mat-accordion>
     </div>
   </div>
 

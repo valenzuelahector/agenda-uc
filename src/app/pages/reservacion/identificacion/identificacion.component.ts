@@ -278,7 +278,11 @@ export class IdentificacionComponent implements OnInit {
         })
 
       }).catch(err => {
-        this.errReserva(null);
+        if(err === 'no-reservable'){
+          this.errReserva('El cupo seleccionado no se encuentra disponible. Seleccione otra hora.');
+        }else{
+          this.errReserva(null);
+        }
       })
 
 
@@ -350,15 +354,11 @@ export class IdentificacionComponent implements OnInit {
           reservable = true;
         }
 
-        if (!reservable) {
-          reject(false);
-        } else {
-          resolve({
-            reglas,
-            valorConvenio,
-            reservable
-          });
-        }
+        resolve({
+          reglas,
+          valorConvenio,
+          reservable
+        });
 
       })
     })

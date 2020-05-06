@@ -135,6 +135,9 @@ export class ReservacionComponent implements OnInit, AfterViewInit, OnDestroy {
         this.cambiarEtapa(4)
         break;
     }
+  }
 
+  reservar(){
+    this.utils.setEmitReservar()
   }
 }

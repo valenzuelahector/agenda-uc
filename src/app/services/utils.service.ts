@@ -20,6 +20,7 @@ export class UtilsService {
   public emitClearBusquedaAnular = new Subject<any>();
   public reloadBusqueda:any = new Subject();
   public reloadBusquedaAnular:any = new Subject();
+  public emitReservar:any = new Subject();
 
   constructor(
     public dialog: MatDialog,
@@ -172,6 +173,14 @@ export class UtilsService {
 
   setEmitClearBusquedaAnular(){
     this.emitClearBusquedaAnular.next(true)
+  }
+
+  getEmitReservar() : Observable<any>{
+    return this.emitReservar.asObservable();
+  }
+
+  setEmitReservar(){
+    this.emitReservar.next(true)
   }
   
   slugify(str, separator) {
