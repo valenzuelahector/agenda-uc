@@ -295,11 +295,11 @@ export class IdentificacionComponent implements OnInit {
         })
 
       }).catch(err => {
-        console.log(err)
+
         if(err === 'no-reservable'){
           this.errReserva('El cupo seleccionado no se encuentra disponible. Seleccione otra hora.');
         }else{
-      //    this.errReserva(null);
+          this.errReserva(null);
         }
       })
 
