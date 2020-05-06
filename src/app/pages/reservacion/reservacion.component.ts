@@ -70,6 +70,7 @@ export class ReservacionComponent implements OnInit, AfterViewInit, OnDestroy {
       } else {
         this.paciente = data.paciente;
         this.valorConvenio = data.valorConvenio;
+        console.log(this.calendario.cupo);
         this.calendario.cupo['idTipoCita'] = data['tipoCita'];
         this.calendario.cupo.centro['direccion'] = data['direccionCentro'];
         this.cambiarEtapa(4);

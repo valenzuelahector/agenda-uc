@@ -269,7 +269,7 @@ export class IdentificacionComponent implements OnInit {
 
       this.reglasValidacion(fecha, fTermino).then(data => {
 
-        if(!data['cupd']['listaTiposDeCita'] || !data['cupd']['listaTiposDeCita'][0]){
+        if(!data['listaTiposDeCita'] || !data['listaTiposDeCita'][0]){
           this.utils.mDialog("Error", "No se ha podido verificar la Disponibilidad del Cupo. Intente nuevamente.", "message");
           return false;
         }
@@ -284,21 +284,22 @@ export class IdentificacionComponent implements OnInit {
           let mensajes = (dt && dt['mensajes']) ? dt['mensajes'] : [];
           this.datosPaciente.emit({ 
             paciente: this.paciente, 
-            reglas: data['cupd']['reglas'], 
-            valorConvenio: data['cupd']['valorConvenio'], 
-            reservable: data['cupd']['reservable'], 
+            reglas: data['reglas'], 
+            valorConvenio: data['valorConvenio'], 
+            reservable: data['reservable'], 
             mensajes: mensajes ,
-            tipoCita: data['cupd']['listaTiposDeCita'][0],
-            direccionCentro: (data['cupd']['listaCentros'] && data['cupd']['listaCentros'][0] && data['cupd']['listaCentros'][0]['direccion']) ? data['cupd']['listaCentros'][0]['direccion'] : null
+            tipoCita: data['listaTiposDeCita'][0],
+            direccionCentro: (data['listaCentros'] && data['listaCentros'][0] && data['listaCentros'][0]['direccion']) ? data['listaCentros'][0]['direccion'] : null
           });
 
         })
 
       }).catch(err => {
+        console.log(err)
         if(err === 'no-reservable'){
           this.errReserva('El cupo seleccionado no se encuentra disponible. Seleccione otra hora.');
         }else{
-          this.errReserva(null);
+      //    this.errReserva(null);
         }
       })
 
@@ -341,7 +342,9 @@ export class IdentificacionComponent implements OnInit {
       fTermino
     }
   }
+
   reglasValidacion(fecha, fTermino) {
+
     return new Promise((resolve, reject) => {
 
       this.agendaService.geReglasValidacion({
@@ -370,10 +373,12 @@ export class IdentificacionComponent implements OnInit {
           reservable = true;
         }
 
+  
         resolve({
+          ...data,
           reglas,
           valorConvenio,
-          reservable
+          reservable, 
         });
 
       })
