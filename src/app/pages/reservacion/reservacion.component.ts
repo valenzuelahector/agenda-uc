@@ -58,23 +58,20 @@ export class ReservacionComponent implements OnInit, AfterViewInit, OnDestroy {
     })
 
     this.identificacion.datosPaciente.subscribe(data => {
-
+      
       this.mensajesActuales = data.mensajes;
+      this.paciente = data.paciente;
+      this.valorConvenio = data.valorConvenio;
+      this.calendario.cupo['idTipoCita'] = data['tipoCita'];
+      this.calendario.cupo.centro['direccion'] = data['direccionCentro'];
+
       if (data.reglas && data.reglas.length > 0) {
         this.reglasActuales = { reglas: data.reglas, reservable: data.reservable };
-        if (this.reglasActuales.reservable) {
-          this.paciente = data.paciente;
-          this.valorConvenio = data.valorConvenio;
-        }
         this.cambiarEtapa(3);
       } else {
-        this.paciente = data.paciente;
-        this.valorConvenio = data.valorConvenio;
-        console.log(this.calendario.cupo);
-        this.calendario.cupo['idTipoCita'] = data['tipoCita'];
-        this.calendario.cupo.centro['direccion'] = data['direccionCentro'];
         this.cambiarEtapa(4);
       }
+
     })
 
     this.confirmacion.confirmarReserva.subscribe(data => {
