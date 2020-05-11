@@ -8,7 +8,7 @@
             <p class="datos-usuario">
               {{ paciente.nombreCompleto }} | {{ busquedaPaciente.tipoDocumento == 'PAS' ? 'Pasaporte' : 'RUT' }}:
               {{ paciente.numeroDocumentoFormateado }}
-            <button mat-icon-button class="rmvBtn" (click)="limpiarFormulario(true)">
+            <button mat-icon-button class="rmvBtn" (click)="limpiarFormulario(true)" *ngIf="!rutMatch">
               <mat-icon>close</mat-icon>
             </button>
           </p>

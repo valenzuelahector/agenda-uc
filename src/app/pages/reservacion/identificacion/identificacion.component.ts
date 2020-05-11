@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, Output, EventEmitter, Input } from '@angular/core';
+import { Component, OnInit, ViewChild, Output, EventEmitter, Input, OnChanges } from '@angular/core';
 import { UtilsService } from 'src/app/services/utils.service';
 import { AgendaAmbulatoriaService } from 'src/app/services/agenda-ambulatoria.service';
 import { FormControl, FormGroup, Validators, FormGroupDirective } from '@angular/forms'
@@ -12,11 +12,12 @@ import { MatDialog } from '@angular/material';
   templateUrl: './identificacion.component.html',
   styleUrls: ['./identificacion.component.scss']
 })
-export class IdentificacionComponent implements OnInit {
+export class IdentificacionComponent implements OnInit, OnChanges {
 
   @Output() datosPaciente: EventEmitter<any> = new EventEmitter();
   @Input() busquedaInicial: any;
   @Input() calendario: any;
+  @Input() rutMatch;
 
   public today: Date = new Date();
   public paciente: any;
@@ -63,6 +64,14 @@ export class IdentificacionComponent implements OnInit {
     public dialog: MatDialog
   ) {
 
+  }
+
+  ngOnChanges(){
+    if(this.rutMatch){
+      this.busquedaPaciente.documento = this.rutMatch;
+      this.busquedaPaciente.documentoFormateado = this.utils.formatRut(this.rutMatch);
+      this.buscarPaciente();
+    }
   }
 
   ngOnInit() {

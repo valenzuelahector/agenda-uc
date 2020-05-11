@@ -6,6 +6,8 @@ import { Subject, Observable } from 'rxjs';
 import * as moment from 'moment';
 import 'moment-timezone';
 import 'moment/locale/es';
+import { AgendaAmbulatoriaService } from './agenda-ambulatoria.service';
+import { PerfilProfesionalComponent } from '../shared/components/modals/perfil-profesional/perfil-profesional.component';
 
 @Injectable({
   providedIn: 'root'
@@ -15,17 +17,18 @@ export class UtilsService {
   public progressBar: boolean = false;
   public horizontalPosition: MatSnackBarHorizontalPosition = 'end';
   public verticalPosition: MatSnackBarVerticalPosition = 'bottom';
-  public nuevaHora:EventEmitter<any> = new EventEmitter();
-  public resetInfoPaciente:EventEmitter<any> = new EventEmitter();
+  public nuevaHora: EventEmitter<any> = new EventEmitter();
+  public resetInfoPaciente: EventEmitter<any> = new EventEmitter();
   public emitClearBusquedaAnular = new Subject<any>();
-  public reloadBusqueda:any = new Subject();
-  public reloadBusquedaAnular:any = new Subject();
-  public emitReservar:any = new Subject();
+  public reloadBusqueda: any = new Subject();
+  public reloadBusquedaAnular: any = new Subject();
+  public emitReservar: any = new Subject();
 
   constructor(
     public dialog: MatDialog,
     public snackBar: MatSnackBar,
-  ) { 
+    public agendaService: AgendaAmbulatoriaService,
+  ) {
   }
 
   showProgressBar() {
@@ -43,6 +46,10 @@ export class UtilsService {
       autoFocus: false
     });
     return dialogConfirm.afterClosed();
+  }
+
+  aleatorio(min, max) {
+    return Math.floor(Math.random() * ((max + 1) - min) + min);
   }
 
   message(message: string): void {
@@ -83,7 +90,7 @@ export class UtilsService {
     let hour = (date.getHours() < 10) ? "0" + date.getHours() : date.getHours();
     let min = (date.getMinutes() < 10) ? "0" + date.getMinutes() : date.getMinutes();
     let sec = (date.getSeconds() < 10) ? "0" + date.getSeconds() : date.getSeconds();
-    
+
     if (type == 'json') {
       return { year: year, month: month, day: day, hour: hour, min: min, sec: sec }
     }
@@ -167,22 +174,22 @@ export class UtilsService {
 
   }
 
-  getEmitClearBusquedaAnular() : Observable<any>{
+  getEmitClearBusquedaAnular(): Observable<any> {
     return this.emitClearBusquedaAnular.asObservable();
   }
 
-  setEmitClearBusquedaAnular(){
+  setEmitClearBusquedaAnular() {
     this.emitClearBusquedaAnular.next(true)
   }
 
-  getEmitReservar() : Observable<any>{
+  getEmitReservar(): Observable<any> {
     return this.emitReservar.asObservable();
   }
 
-  setEmitReservar(){
+  setEmitReservar() {
     this.emitReservar.next(true)
   }
-  
+
   slugify(str, separator) {
 
     str = str.trim();
@@ -204,15 +211,15 @@ export class UtilsService {
       .replace(/-/g, separator);
   }
 
-  setReloadBusqueda(){
+  setReloadBusqueda() {
     this.reloadBusqueda.next(true)
   }
 
   getReloadBusqueda(): Observable<any> {
     return this.reloadBusqueda.asObservable();
   }
-  
-  setReloadBusquedaAnular(){
+
+  setReloadBusquedaAnular() {
     this.reloadBusquedaAnular.next(true)
   }
 
@@ -220,12 +227,12 @@ export class UtilsService {
     return this.reloadBusquedaAnular.asObservable();
   }
 
-  toLocalScl(date, utc = -180, format = null){
+  toLocalScl(date, utc = -180, format = null) {
     let dt = moment(date).utcOffset(utc).format(format);
     return dt;
   }
 
-  toStringDateJson(dateString){
+  toStringDateJson(dateString) {
     let d = dateString.split("T")[0].split("-");
     return {
       year: d[0],
@@ -234,15 +241,28 @@ export class UtilsService {
     }
   }
 
-  matchRecursoTrue(recurso){
+  matchRecursoTrue(recurso) {
 
     let textRecurso = "";
-    recurso.forEach((val, key) =>{ 
-      if(val['RecursoPrincipal']){
+    recurso.forEach((val, key) => {
+      if (val['RecursoPrincipal']) {
         textRecurso = val['Recurso']['Nombre'];
       }
     })
 
     return textRecurso;
+  }
+
+  verPerfilProfesional(re) {
+    this.agendaService.getDatosProfesional(re.id).subscribe(data => {
+      if (data && data['statusCod'] && data['statusCod'] == 'OK') {
+        let dialogRef = this.dialog.open(PerfilProfesionalComponent, {
+          width: '840px',
+          data: { profesionalData: data['datosProfesional'] }
+        });
+      } else {
+        this.mDialog("Error", "No se puede mostrar el perfil. Intente más tarde", "error");
+      }
+    })
   }
 }
