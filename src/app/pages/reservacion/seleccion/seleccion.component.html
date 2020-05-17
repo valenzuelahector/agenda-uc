@@ -14,16 +14,16 @@
 			<div class="cuadro-res">
 				<div class="item-res">
 					<img src="/assets/images/ic-area.svg" alt="">
-					<p><b>Área Médica:</b> {{ busquedaInicial.area.nombre }}</p>
+					<p class="infseleccion"><b>Área Médica:</b> {{ busquedaInicial.area.nombre }}</p>
 				</div>
 				<div class="item-res" *ngIf="utils.slugify(busquedaInicial.area.nombre, '-') !== 'telemedicina'
 				&& utils.slugify(busquedaInicial.area.nombre, '-') !== 'consulta-medica-virtual'">
 					<img src="/assets/images/ic-clinica.svg" alt="">
-					<p><b>Clínica/Centro:</b> {{ busquedaInicial.centroAtencion.nombre }} </p>
+					<p class="infseleccion"><b>Clínica/Centro:</b> {{ busquedaInicial.centroAtencion.nombre }} </p>
 				</div>
 				<div class="item-res">
 					<img src="/assets/images/ic-esp.svg" alt="">
-					<p><b>Especialidad:</b> {{ busquedaInicial.especialidad.nombreEspecialidad }} </p>
+					<p class="infseleccion"><b>Especialidad:</b> {{ busquedaInicial.especialidad.nombreEspecialidad }} </p>
 				</div>
 			</div>
 		</div>

@@ -381,17 +381,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
   }
 
   verPerfil(re) {
-    this.agendaService.getDatosProfesional(re.id).subscribe(data => {
-      if (data && data['statusCod'] && data['statusCod'] == 'OK') {
-        let dialogRef = this.dialog.open(PerfilProfesionalComponent, {
-          width: '840px',
-          data: { profesionalData: data['datosProfesional'] }
-        });
-      } else {
-        this.utils.mDialog("Error", "No se puede mostrar el perfil. Intente más tarde", "error");
-      }
-
-    })
+    this.utils.verPerfilProfesional(re);
   }
 
 }

@@ -55,7 +55,7 @@ export class ConfirmacionComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   reservar(){
-
+    console.log(this.calendario)
     let fecha:any = this.utils.toLocalScl(this.calendario.cupo.fechaHora, this.calendario.cupo.compensacion);
     this.disableBarReserva = true;
     this.agendaService.postCita({

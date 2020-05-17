@@ -1,4 +1,4 @@
-<section class="w-reservas">
+<section class="w-reservas" *ngIf="!conoceTuMedico || (conoceTuMedico && verMedicoAsociado)">
   <div>
     <div class="flex-container header-reserva">
       <h2 class="titulo-2 azul"><i class="far fa-clock"></i> RESERVA DE HORAS</h2>
@@ -45,7 +45,8 @@
         <mat-spinner [diameter]="60"></mat-spinner>
     </div>
   </div>
-  <div class="return">
+
+  <div class="return" *ngIf="!conoceTuMedico || (conoceTuMedico && curEtapa !== 0)">
     <div fxLayout="row">
       <div fxFlex="50%">
         <button mat-stroked-button class="btn-azul cus-pad" 
@@ -58,22 +59,28 @@
             Anular Hora
             <mat-icon class="anuicon rot">keyboard_backspace</mat-icon>
         </button>
-        <button mat-stroked-button class="btn-morado cus-pad cus" (click)="reservar()" *ngIf="curEtapa == 4">
+        <button mat-stroked-button class="btn-morado cus-pad cus" (click)="reservar()" *ngIf="curEtapa == 4 && !reservaRealizada">
           Confirmar Reserva
           <mat-icon class="anuicon">done</mat-icon>
-      </button>
+        </button>
       </div>
     </div>
   </div>
+
   <mat-tab-group dynamicHeight #tabGroup>
     <mat-tab label="Búsqueda">
-      <app-busqueda #busqueda (emitReadQuery)="readQuerySetter($event)"></app-busqueda>
+      <div *ngIf="checkConoceTuMedico">
+        <app-busqueda (emitReadQuery)="readQuerySetter($event)" (emitBusqueda)="busquedaEmitter($event)" *ngIf="!conoceTuMedico"></app-busqueda>
+        <app-buscar-tu-medico *ngIf="conoceTuMedico && !verMedicoAsociado" (datosBeneficiarioMedico)="setDatosBeneficiario($event)"></app-buscar-tu-medico>
+        <app-detalle-tu-medico (nuevaBusqueda)="nuevaBusquedaCM()" (medBuscaCalendario)="busquedaEmitter($event)" *ngIf="conoceTuMedico && verMedicoAsociado" [dbm]="datosBeneficiarioMedico"></app-detalle-tu-medico>
+        <app-medicos-asociados (medBuscaCalendario)="busquedaEmitter($event)" *ngIf="conoceTuMedico && verMedicoAsociado" [medicosAsociados]="datosBeneficiarioMedico?.data?.profesionalesSimilares"></app-medicos-asociados>
+      </div>
     </mat-tab>
     <mat-tab label="Selección">
       <app-seleccion #seleccion [busquedaInicial]="busquedaInfo" [reloadBusqueda]="reloadNumber"></app-seleccion>
     </mat-tab>
     <mat-tab label="Identificación">
-      <app-identificacion #identificacion [busquedaInicial]="busquedaInfo" [calendario]="calendario">
+      <app-identificacion #identificacion [busquedaInicial]="busquedaInfo" [calendario]="calendario" [rutMatch]="calendario ? rutMatch : null">
       </app-identificacion>
     </mat-tab>
     <mat-tab label="Error">
@@ -102,7 +109,7 @@
     </div>
     <div class="col-lg-6">
       <div class="btns-mesa">
-        <button mat-raised-button color="primary" (click)="nuevaReserva()">TOMAR OTRA HORA</button>
+        <button mat-raised-button color="primary" (click)="nuevaReserva()">{{ conoceTuMedico ? 'NUEVA BÚSQUEDA' : 'TOMAR OTRA HORA' }}</button>
       </div>
     </div>
   </div>

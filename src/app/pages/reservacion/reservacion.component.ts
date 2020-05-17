@@ -6,6 +6,8 @@ import { ConfirmacionComponent } from './confirmacion/confirmacion.component';
 import { UtilsService } from 'src/app/services/utils.service';
 import { ENV } from 'src/environments/environment';
 import gtag, { install } from 'ga-gtag';
+import { ActivatedRoute } from '@angular/router';
+import { IfStmt } from '@angular/compiler';
 
 install('UA-143119471-2');
 
@@ -28,15 +30,20 @@ export class ReservacionComponent implements OnInit, AfterViewInit, OnDestroy {
   public valorConvenio: number;
   public emitterReloadBusqueda:any;
   public reloadNumber = 0;
-  
+  public conoceTuMedico = false;
+  public checkConoceTuMedico = false;
+  public verMedicoAsociado = false;
+  public datosBeneficiarioMedico;
+  public rutMatch;
+
   @ViewChild('tabGroup', { static: false }) tabGroup: any;
-  @ViewChild('busqueda', { static: false }) busqueda: BusquedaComponent;
   @ViewChild('seleccion', { static: false }) seleccion: SeleccionComponent;
   @ViewChild('identificacion', { static: false }) identificacion: IdentificacionComponent;
   @ViewChild('confirmacion', { static: false }) confirmacion: ConfirmacionComponent;
 
   constructor(
-    public utils: UtilsService
+    public utils: UtilsService,
+    public aRouter: ActivatedRoute,
   ) {
 
   }
@@ -44,13 +51,6 @@ export class ReservacionComponent implements OnInit, AfterViewInit, OnDestroy {
   ngAfterViewInit(){
 
     this.cambiarEtapa(0);
-
-    this.busqueda.emitBusqueda.subscribe(data => {
-      if (data && data.area && data.especialidad && data.centroAtencion) {
-        this.busquedaInfo = data;
-        this.cambiarEtapa(1);
-      }
-    })
 
     this.seleccion.calendario.subscribe(data => {
       this.cambiarEtapa(2);
@@ -76,19 +76,41 @@ export class ReservacionComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.confirmacion.confirmarReserva.subscribe(data => {
       if (data['response']) {
-   //     this.cambiarEtapa(5);
         this.reservaRealizada = true;
-        this.codCita = data['data']['codCita']
+        this.codCita = data['data']['codCita'];
       }
     })
     
   }
 
+  busquedaEmitter(data){
+    if (data && data.area && data.especialidad && data.centroAtencion) {
+      this.busquedaInfo = data;
+      this.cambiarEtapa(1);
+    }
+
+  }
+
+
+  getParamsArea(){
+
+    this.aRouter.params.subscribe( params => {
+      if(params['area'] === 'conoce-tu-medico'){
+        this.conoceTuMedico = true;
+        setTimeout(()=> {
+          this.readQuery = true;
+        },2000)
+      }
+      this.checkConoceTuMedico = true;
+    })
+  
+  }
+
   ngOnInit() {
-    
+    this.getParamsArea();
     this.emitterReloadBusqueda = this.utils.getReloadBusqueda().subscribe( r => {
       this.cambiarEtapa(1);
-      this.reloadNumber = Math.floor(Math.random() * Math.floor(9999999));
+      this.reloadNumber = this.utils.aleatorio(1,99999);
     })
 
   }
@@ -105,6 +127,7 @@ export class ReservacionComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   nuevaReserva() {
+
     this.utils.reiniciarReserva();
     this.utils.resetPaciente();
     this.busquedaInfo = null
@@ -112,6 +135,11 @@ export class ReservacionComponent implements OnInit, AfterViewInit, OnDestroy {
     this.calendario = null
     this.reservaRealizada = null;
     this.cambiarEtapa(0);
+
+    if(this.conoceTuMedico){
+        this.nuevaBusquedaCM()
+    }
+
   }
 
   readQuerySetter(event) {
@@ -139,5 +167,33 @@ export class ReservacionComponent implements OnInit, AfterViewInit, OnDestroy {
 
   reservar(){
     this.utils.setEmitReservar()
+  }
+
+  setDatosBeneficiario(data){
+
+    this.datosBeneficiarioMedico = data;
+    this.rutMatch = data.rut;
+    this.verMedicoAsociado = true;
+    this.readQuery = false;
+
+    setTimeout(()=> {
+      this.readQuery = true;
+      this.utils.hideProgressBar();
+    },2000);
+
+  }
+
+  nuevaBusquedaCM(){
+
+    this.utils.showProgressBar();
+    this.readQuery = false;
+    this.verMedicoAsociado = false;
+    this.datosBeneficiarioMedico = null;
+    this.rutMatch = null;
+    setTimeout(()=> {
+      this.readQuery = true;
+      this.utils.hideProgressBar();
+    },1500);
+
   }
 }

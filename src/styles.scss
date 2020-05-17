@@ -4800,7 +4800,7 @@ padding-top: 0px;
 }
 .resultados-para .cuadro-res .item-res img{
   display: inline-block;
-  margin-right: 5px;
+  margin-right: 15px;
   vertical-align: middle;
 }
 .resultados-para .cuadro-res .item-res p{
@@ -6725,4 +6725,15 @@ width: 850px;
     color: #fff;
     font-size: 16px;
     width: 100%;
+}
+
+.infseleccion{
+    line-height: 19px !important;
+    text-align: left !important;
+    font-size: 15px !important;
+    font-weight: bold;
+    b{
+        display: block;
+        font-size: 12px;
+    }
 }
