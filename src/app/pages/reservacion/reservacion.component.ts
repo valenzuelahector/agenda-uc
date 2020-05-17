@@ -64,7 +64,7 @@ export class ReservacionComponent implements OnInit, AfterViewInit, OnDestroy {
       this.valorConvenio = data.valorConvenio;
       this.calendario.cupo['idTipoCita'] = data['tipoCita'];
       this.calendario.cupo.centro['direccion'] = data['direccionCentro'];
-
+      this.calendario.cupo['valorConvenio'] = data.valorConvenio;
       if (data.reglas && data.reglas.length > 0) {
         this.reglasActuales = { reglas: data.reglas, reservable: data.reservable };
         this.cambiarEtapa(3);
