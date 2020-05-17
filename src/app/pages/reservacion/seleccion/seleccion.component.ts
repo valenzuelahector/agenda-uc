@@ -187,7 +187,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
       fechaLimite.setSeconds(59);
 
       this.navigationDate = { min: fechaHoy, max: fechaLimite }
-      
+
       this.agendaService.getRecursos({
         todosCentro: (this.busquedaInicial.centroAtencion.codigo == 'todos') ? true : false,
         idCentro: this.busquedaInicial.centroAtencion.idCentro,
@@ -218,7 +218,6 @@ export class SeleccionComponent implements OnInit, OnChanges {
         this.dayWeekFixed = false;
         this.goTop();
 
-
         } else {
 
           if(this.counterLoader < 12 && this.navDirection == 'next'){
@@ -242,6 +241,9 @@ export class SeleccionComponent implements OnInit, OnChanges {
             this.enableScroll = true;
             this.loadedRecursos = true;
             this.displayCalendar = true;
+            this.goTop();
+
+            
           }
  
         }
