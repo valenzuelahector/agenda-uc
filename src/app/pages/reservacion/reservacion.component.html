@@ -77,7 +77,7 @@
       </div>
     </mat-tab>
     <mat-tab label="Selección">
-      <app-seleccion #seleccion [busquedaInicial]="busquedaInfo" [reloadBusqueda]="reloadNumber"></app-seleccion>
+      <app-seleccion #seleccion [busquedaInicial]="busquedaInfo" (readQuery)="readQuery = $event" [reloadBusqueda]="reloadNumber"></app-seleccion>
     </mat-tab>
     <mat-tab label="Identificación">
       <app-identificacion #identificacion [busquedaInicial]="busquedaInfo" [calendario]="calendario" [rutMatch]="calendario ? rutMatch : null">

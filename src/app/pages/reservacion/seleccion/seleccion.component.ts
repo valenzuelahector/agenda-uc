@@ -22,6 +22,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
   @Input() busquedaInicial: any;
   @Input() reloadBusqueda: number = 0;
   @Output() calendario: EventEmitter<any> = new EventEmitter();
+  @Output() readQuery: EventEmitter<any> = new EventEmitter();
 
   public recursos: any;
   public fechaHoy: Date;
@@ -39,6 +40,9 @@ export class SeleccionComponent implements OnInit, OnChanges {
   public enableScroll: boolean = false;
   public compensacion = -240;
   public horaSeleccionada:any;
+  public navDirection = 'next';
+  public enableAutoSearch = false;
+
   public navigationDate = {
     min: null,
     max: null
@@ -83,6 +87,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
 
       this.navigationDate = { min: null, max: null };
       this.counterLoader = 0;
+      this.navDirection = 'next';
       this.displayCalendar = true;
 
       if (this.busquedaInicial && this.busquedaInicial.especialidad) {
@@ -115,10 +120,13 @@ export class SeleccionComponent implements OnInit, OnChanges {
     switch (action) {
       case 'next':
         this.counterLoader++;
+        this.navDirection = 'next';
       break;
 
       case 'prev':
         this.counterLoader--;
+        this.navDirection = 'prev';
+
       break;
 
     }
@@ -129,14 +137,13 @@ export class SeleccionComponent implements OnInit, OnChanges {
       this.getRecursos();
     }
 
-    this.goTop();
-
   }
 
   goTop() {
     let dayWeekPos = this.getOffsetTop((<HTMLElement>document.getElementById('dayWeek')));
+    console.log(dayWeekPos);
     $("body, html").animate({
-      scrollTop: dayWeekPos + "px"
+      scrollTop: "0px"
     }, 500)
   }
 
@@ -180,7 +187,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
       fechaLimite.setSeconds(59);
 
       this.navigationDate = { min: fechaHoy, max: fechaLimite }
-      console.log(fechaHoy)
+      
       this.agendaService.getRecursos({
         todosCentro: (this.busquedaInicial.centroAtencion.codigo == 'todos') ? true : false,
         idCentro: this.busquedaInicial.centroAtencion.idCentro,
@@ -194,6 +201,8 @@ export class SeleccionComponent implements OnInit, OnChanges {
         data = this.filtrarRecursosSoloProfesional(data);
         if (data['listaRecursos'] && data['listaRecursos'].length > 0) {
 
+          this.enableAutoSearch = false;
+
           data['listaRecursos'].forEach((val, key) => {
             console.log(fechaHoy)
             data['listaRecursos'][key] = this.crearCalendario(val, fechaHoy);
@@ -201,26 +210,48 @@ export class SeleccionComponent implements OnInit, OnChanges {
           
           this.recursos = data['listaRecursos'];
           this.enableScroll = true;
-
-        } else {
-          this.recursos = [];
-          this.setMensaje({
-            CenterId: this.busquedaInicial.centroAtencion.idCentro,
-            ServiceId: this.busquedaInicial.especialidad.idServicio,
-            ResourceId: idProfesional
-          })
-        }
+          this.readQuery.emit(true);
 
         this.enableScroll = true;
         this.loadedRecursos = true;
         this.displayCalendar = true;
+        this.dayWeekFixed = false;
+        this.goTop();
 
-        setTimeout(() => {
+
+        } else {
+
+          if(this.counterLoader < 12 && this.navDirection == 'next'){
+            this.enableAutoSearch = true;
+            this.readQuery.emit(false);
+            this.navigateMonth('next');
+          }else if(this.counterLoader > 0 && this.navDirection == 'prev'){
+            this.enableAutoSearch = true;
+            this.readQuery.emit(false);
+            this.navigateMonth('prev');
+          }else{
+
+            this.enableAutoSearch = false;;
+            this.readQuery.emit(true);
+            this.recursos = [];
+            this.setMensaje({
+              CenterId: this.busquedaInicial.centroAtencion.idCentro,
+              ServiceId: this.busquedaInicial.especialidad.idServicio,
+              ResourceId: idProfesional
+            })
+            this.enableScroll = true;
+            this.loadedRecursos = true;
+            this.displayCalendar = true;
+          }
+ 
+        }
+
+
+      /*  setTimeout(() => {
           this.utils.hideProgressBar();
-        }, 1500)
+        }, 1500)*/
 
         resolve(data);
-
 
       })
     })

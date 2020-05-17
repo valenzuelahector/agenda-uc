@@ -15,8 +15,8 @@ export class DaysOfWeekComponent implements OnInit, OnChanges {
   public dateNext:any;
   public displayNext:boolean = true;
   public displayPrev:boolean = true;
-  public contadorMeses = 1;
-
+  
+  @Input() contadorMeses = 1;
   @Input() dayWeekFixed:boolean = false;
   @Input() navigationDate;
   @Input() minDateIn:Date;

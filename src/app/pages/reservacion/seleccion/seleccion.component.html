@@ -1,4 +1,4 @@
-<div *ngIf="busquedaInicial">
+<div *ngIf="busquedaInicial && !enableAutoSearch">
 	<div class="resultados-para">
 		<div>
 			<h5>Resultados para:</h5>
@@ -38,6 +38,7 @@
 	<section class="w-resultados">
 		<div *ngIf="loadedRecursos && recursos.length == 0">
 			<app-days-of-week
+				[contadorMeses]="counterLoader"
 				[typeDateWeek]="'not-results'"
 				[minDateIn]="navigationDate['min']"
 				[maxDateIn]="navigationDate['max']"
