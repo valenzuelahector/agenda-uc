@@ -52,7 +52,7 @@ export class DaysOfWeekComponent implements OnInit, OnChanges {
   }
 
   move(action){
-    if((this.contadorMeses === 1 && action === 'prev') || (this.contadorMeses === 12  && action === 'next')){
+    if((this.contadorMeses === 0 && action === 'prev') || (this.contadorMeses === 12  && action === 'next')){
       return false;
     }
     if(action == 'next'){
