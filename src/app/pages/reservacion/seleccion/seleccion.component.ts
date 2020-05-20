@@ -39,10 +39,11 @@ export class SeleccionComponent implements OnInit, OnChanges {
   public contadorMeses = 1;
   public enableScroll: boolean = false;
   public compensacion = -240;
-  public horaSeleccionada:any;
+  public horaSeleccionada: any;
   public navDirection = 'next';
   public enableAutoSearch = false;
-
+  public numberSearchs = 0;
+  public maxNumberSearch = 6;
   public navigationDate = {
     min: null,
     max: null
@@ -113,21 +114,25 @@ export class SeleccionComponent implements OnInit, OnChanges {
     this.enableScroll = false;
   }
 
-  async navigateMonth(action) {
+  async navigateMonth(action, fromBtn = false) {
 
     this.displayCalendar = false;
+    
+    if(fromBtn){
+      this.maxNumberSearch = 5;
+    }
 
     switch (action) {
       case 'next':
         this.counterLoader++;
         this.navDirection = 'next';
-      break;
+        break;
 
       case 'prev':
         this.counterLoader--;
         this.navDirection = 'prev';
 
-      break;
+        break;
 
     }
 
@@ -141,7 +146,6 @@ export class SeleccionComponent implements OnInit, OnChanges {
 
   goTop() {
     let dayWeekPos = this.getOffsetTop((<HTMLElement>document.getElementById('dayWeek')));
-    console.log(dayWeekPos);
     $("body, html").animate({
       scrollTop: "0px"
     }, 500)
@@ -204,60 +208,82 @@ export class SeleccionComponent implements OnInit, OnChanges {
           this.enableAutoSearch = false;
 
           data['listaRecursos'].forEach((val, key) => {
-            console.log(fechaHoy)
             data['listaRecursos'][key] = this.crearCalendario(val, fechaHoy);
           })
-          
+
           this.recursos = data['listaRecursos'];
           this.enableScroll = true;
           this.readQuery.emit(true);
 
-        this.enableScroll = true;
-        this.loadedRecursos = true;
-        this.displayCalendar = true;
-        this.dayWeekFixed = false;
-        this.goTop();
+          this.enableScroll = true;
+          this.loadedRecursos = true;
+          this.displayCalendar = true;
+          this.dayWeekFixed = false;
+          this.numberSearchs = 0;
+          this.goTop();
 
         } else {
 
-          if(this.counterLoader < 12 && this.navDirection == 'next'){
+          if (this.counterLoader < 12 && this.navDirection == 'next') {
+
             this.enableAutoSearch = true;
             this.readQuery.emit(false);
-            this.navigateMonth('next');
-          }else if(this.counterLoader > 0 && this.navDirection == 'prev'){
+            this.numberSearchs++;
+
+            if (this.numberSearchs <= this.maxNumberSearch) {
+              this.navigateMonth('next');
+            } else {
+              this.setCalendarInfo(idProfesional);
+              this.numberSearchs = 0;
+            }
+
+          } else if (this.counterLoader > 0 && this.navDirection == 'prev') {
+
             this.enableAutoSearch = true;
             this.readQuery.emit(false);
-            this.navigateMonth('prev');
-          }else{
+            this.numberSearchs++;
 
-            this.enableAutoSearch = false;;
-            this.readQuery.emit(true);
-            this.recursos = [];
-            this.setMensaje({
-              CenterId: this.busquedaInicial.centroAtencion.idCentro,
-              ServiceId: this.busquedaInicial.especialidad.idServicio,
-              ResourceId: idProfesional
-            })
-            this.enableScroll = true;
-            this.loadedRecursos = true;
-            this.displayCalendar = true;
-            this.goTop();
-
-            
+            if (this.numberSearchs <= this.maxNumberSearch) {
+              this.navigateMonth('prev');
+            } else {
+              this.setCalendarInfo(idProfesional);
+              this.numberSearchs = 0;
+            }
+          } else {
+            if(this.navDirection === 'prev'){
+              this.counterLoader = 0;
+            }
+            this.numberSearchs = 0;
+            this.setCalendarInfo(idProfesional)
           }
- 
+
         }
 
 
-      /*  setTimeout(() => {
-          this.utils.hideProgressBar();
-        }, 1500)*/
+        /*  setTimeout(() => {
+            this.utils.hideProgressBar();
+          }, 1500)*/
 
         resolve(data);
 
       })
     })
 
+  }
+
+  setCalendarInfo(idProfesional) {
+    this.enableAutoSearch = false;;
+    this.readQuery.emit(true);
+    this.recursos = [];
+    this.setMensaje({
+      CenterId: this.busquedaInicial.centroAtencion.idCentro,
+      ServiceId: this.busquedaInicial.especialidad.idServicio,
+      ResourceId: idProfesional
+    })
+    this.enableScroll = true;
+    this.loadedRecursos = true;
+    this.displayCalendar = true;
+    this.goTop();
   }
 
   setMensaje(data) {
@@ -348,36 +374,34 @@ export class SeleccionComponent implements OnInit, OnChanges {
 
     let datesDisabled = [];
     let f = null;
-    console.log(min)
     let fecha = new Date(min);
-    console.log(fecha)
     fecha.setDate(1);
     fecha.setMinutes(0);
     fecha.setSeconds(0);
     fecha.setHours(6);
 
     recurso['fechasDisponibles'] = {};
-    
+
     try {
       this.compensacion = recurso['listaCupos'][0]['cupos'].length > 0 ? recurso['listaCupos'][0]['cupos'][0]['compensacion'] : -180;
     } catch (err) {
       this.compensacion = -180;
     }
 
-      for (let day = 1; day <= 40; day++) {
+    for (let day = 1; day <= 40; day++) {
 
-        if (day == 1) {
-          f = this.utils.toLocalScl(fecha, this.compensacion);
-        } else {
-          fecha.setDate(fecha.getDate() + 1);
-          f = this.utils.toLocalScl(fecha, this.compensacion);
-        }
-  
-        f = this.utils.toStringDateJson(f);
-        recurso['fechasDisponibles'][f.year + '-' + f.month + '-' + f.day] = [];
-  
+      if (day == 1) {
+        f = this.utils.toLocalScl(fecha, this.compensacion);
+      } else {
+        fecha.setDate(fecha.getDate() + 1);
+        f = this.utils.toLocalScl(fecha, this.compensacion);
       }
-      
+
+      f = this.utils.toStringDateJson(f);
+      recurso['fechasDisponibles'][f.year + '-' + f.month + '-' + f.day] = [];
+
+    }
+
     recurso['listaCupos'].forEach((valLc, keyLc) => {
       valLc['cupos'].forEach((val, key) => {
 
@@ -386,7 +410,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
         u = this.utils.toStringDateJson(u);
         val['fechaHora'] = new Date(val['horaEpoch'] * 1000);
         val['centro'] = valLc['centro'];
-        recurso['fechasDisponibles'][u['year'] + '-' + u['month']  + '-' + u['day']].push(val)
+        recurso['fechasDisponibles'][u['year'] + '-' + u['month'] + '-' + u['day']].push(val)
 
       })
     })
@@ -407,7 +431,6 @@ export class SeleccionComponent implements OnInit, OnChanges {
   }
 
   seleccionarHora(data) {
-    console.log(data)
     this.horaSeleccionada = data;
     this.calendario.emit(data);
     gtag('event', 'Clic', { 'event_category': 'Reserva de Hora', 'event_label': 'Paso2:Selección-Hora' });

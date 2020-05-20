@@ -42,7 +42,7 @@
 				[typeDateWeek]="'not-results'"
 				[minDateIn]="navigationDate['min']"
 				[maxDateIn]="navigationDate['max']"
-				(navigate)="navigateMonth($event)">
+				(navigate)="navigateMonth($event, true)">
 			</app-days-of-week>
 		</div>
 		
@@ -59,7 +59,7 @@
 				[dayWeekFixed]="dayWeekFixed" 
 				[minDateIn]="navigationDate['min']"
 				[maxDateIn]="navigationDate['max']"
-				(navigate)="navigateMonth($event)">
+				(navigate)="navigateMonth($event, true)">
 			</app-days-of-week>
 		</div>
 		<div class="content-res">

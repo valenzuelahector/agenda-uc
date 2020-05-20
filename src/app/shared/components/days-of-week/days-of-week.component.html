@@ -33,7 +33,7 @@
 <div class="day-header not-results" *ngIf="typeDateWeek === 'not-results'">
         <div class="centered">
             <div class="search-ref">
-                <button mat-icon-button matTooltip="MES ANTERIOR" matTooltipPosition="below" class="btn-nav" [ngClass]="{'disabled' : contadorMeses == 1 }"
+                <button mat-icon-button matTooltip="MES ANTERIOR" matTooltipPosition="below" class="btn-nav" [ngClass]="{'disabled' : contadorMeses == 0 }"
                     (click)="move('prev')" >
                     <mat-icon>keyboard_arrow_left</mat-icon>
                     <span class="txt-month" [innerHTML]="dateBefore"></span>
