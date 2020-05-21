@@ -3,27 +3,29 @@
     <div class="flex-container header-reserva">
       <h2 class="titulo-2 azul"><i class="far fa-clock"></i> RESERVA DE HORAS</h2>
 
-      <div class="w-pasos" *ngIf=" tabGroup" fxLayout="row wrap" fxLayoutAlign="space-between" >
+      <div class="w-pasos" 
+      [ngClass]="{'step1' : curEtapa == 1, 'step2' : curEtapa >= 2 && !reservaRealizada, 'step3': reservaRealizada  }"
+      *ngIf="tabGroup" fxLayout="row wrap" fxLayoutAlign="space-between" >
         <a class="item-paso" [ngClass]="{'activo' : curEtapa == 0 || busquedaInfo }" fxFlex="70px">
           <figure matRipple>
             <i class="fas fa-user-md"></i>
           </figure>
           <h4>Búsqueda</h4>
         </a>
-        <a class="item-paso" [ngClass]="{'activo' : curEtapa == 1 || calendario}" fxFlex="70px">
-          <figure matRipple>
+        <a class="item-paso" [ngClass]="{'activo' : curEtapa == 1 || calendario }" fxFlex="70px">
+          <figure matRipple [ngClass]="{ 'stepOpacity' : curEtapa < 1}">
             <i class="far fa-calendar-alt"></i>
           </figure>
           <h4>Selección</h4>
         </a>
-        <a class="item-paso" [ngClass]="{'activo' : curEtapa == 2 || paciente}" fxFlex="75px">
-          <figure matRipple>
+        <a class="item-paso" [ngClass]="{'activo' : curEtapa == 2 || paciente }" fxFlex="75px">
+          <figure matRipple [ngClass]="{ 'stepOpacity' : curEtapa < 2}">
             <i class="fas fa-user"></i>
           </figure>
           <h4>Identificación</h4>
         </a>
-        <a class="item-paso" [ngClass]="{'activo' : reservaRealizada}" fxFlex="70px">
-          <figure matRipple>
+        <a class="item-paso" [ngClass]="{'activo' : reservaRealizada }" fxFlex="70px">
+          <figure matRipple [ngClass]="{ 'stepOpacity' : !reservaRealizada }">
             <i class="fas fa-check"></i>
           </figure>
            <h4 style="width: 130px; margin-left: -18px;">¡Reserva Exitosa!</h4>

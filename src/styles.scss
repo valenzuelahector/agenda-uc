@@ -4611,19 +4611,46 @@ padding-top: 0px;
   max-width: 100%;
   position: relative;
 }
-.w-pasos:after{
-  content: "";
-  width: 90%;
-  margin: 0 auto;
-  left: 0;
-  right: 0;
-  z-index: -1;
-  top: 20px;
-  height: 3px;
-  background: #802E87;
-  display: block;
-  position: absolute;
+.w-pasos{
+
+    &:after, &:before{
+        content: "";
+        left: 20px;
+        right: 0;
+        z-index: -1;
+        top: 20px;
+        height: 3px;
+        display: block;
+        position: absolute;
+        background: #802E87;
+        display: block;
+        position: absolute;
+    }
+    &:after{
+        width: 0%;
+    }
+
+    &.step1:after{
+        width:33%
+    }
+
+    &.step2:after{
+        width:60%
+    }
+
+    &.step3:after{
+        width:90%
+    }
+
+    &:before{
+        width: 90%;
+        opacity: 0.3;
+    }
+
 }
+
+
+
 .w-pasos .item-paso{
 }
 .w-pasos .item-paso figure{
