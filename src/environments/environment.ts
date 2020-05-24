@@ -6,7 +6,7 @@ export const environment = {
   production: true
 };
 
-/*
+
 export const ENV = {
   baseApi: 'https://apigw.ucchristus.cl',
   servRoute: '/agendaambulatoria-test',
@@ -15,10 +15,10 @@ export const ENV = {
   idCentrosNoDisponibles: [],
   idCentroPrioritario: '8ca284cf-482a-4248-bc8f-a92800f90207',
   mensajeSinCupos : '<h5>No se encontraron cupos disponibles.</h5>'
-}*/
+}
 
-
-export const ENV = {
+/*
+export const ENV2 = {
   baseApi: 'https://apigw.ucchristus.cl',
   servRoute: '/agendaambulatoria-prod',
   profRoute: '/profesionales-prod',
@@ -26,7 +26,7 @@ export const ENV = {
   idCentrosNoDisponibles: [],
   idCentroPrioritario: '52e43c90-8ab7-4e34-afcb-a96f0106bbd1',
   mensajeSinCupos: '<h5>No se encontraron cupos disponibles.</h5>'
-}
+}*/
 
 export const dummyData = {
   profesionalAsignado: {
