@@ -211,7 +211,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
             data['listaRecursos'][key] = this.crearCalendario(val, fechaHoy);
           })
 
-          this.recursos = data['listaRecursos'];
+          this.recursos = this.orderPipe.transform(data['listaRecursos'], 'proximaFechaEpoch');
           this.enableScroll = true;
           this.readQuery.emit(true);
 
@@ -426,6 +426,8 @@ export class SeleccionComponent implements OnInit, OnChanges {
     recurso['datesToHighlight']['displayed'] = true;
     recurso['datesToHighlight']['dates'] = datesDisabled;
     recurso['datesToHighlight']['dateClass'] = this.dateClass(datesDisabled, this.compensacion);
+    recurso['proximaFechaEpoch'] = recurso['proximaHoraDisponible']['cupo']['horaEpoch'];
+
     return recurso;
 
   }
