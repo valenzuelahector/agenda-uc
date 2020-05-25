@@ -221,7 +221,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
           this.dayWeekFixed = false;
           this.numberSearchs = 0;
           this.goTop();
-
+          console.log(this.counterLoader);
         } else {
 
           if (this.counterLoader < 12 && this.navDirection == 'next') {

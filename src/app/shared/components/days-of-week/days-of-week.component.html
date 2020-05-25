@@ -7,7 +7,7 @@
             <div class="col-lg-6">
                 <div class="search-ref">
                     <button mat-icon-button matTooltip="MES ANTERIOR" matTooltipPosition="above" class="btn-nav"
-                        (click)="move('prev')" *ngIf="contadorMeses > 1">
+                        (click)="move('prev')" *ngIf="contadorMeses > 0">
                         <mat-icon>keyboard_arrow_left</mat-icon>
                     </button>
                     <b class="month">{{ datedisplay }}</b>
