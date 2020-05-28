@@ -280,8 +280,7 @@ export class IdentificacionComponent implements OnInit, OnChanges {
 
         if(!data['listaTiposDeCita'] || !data['listaTiposDeCita'][0]){
           if(data['statusCod'] && data['statusCod'].toUpperCase() == 'ERR'){
-            console.log(data)
-            this.utils.mDialog("Error", data['usrMsg'], "message");
+            this.errReserva(data['usrMsg']);
           }else{
             this.utils.mDialog("Error", "No se ha podido verificar la Disponibilidad del Cupo. Intente nuevamente.", "message");
           }
