@@ -75,7 +75,7 @@ export class ConfirmacionComponent implements OnInit, OnChanges, OnDestroy {
         this.reservaFinalizada =  true;
         this.confirmarReserva.emit({response: true, data:data});
       }else{
-        this.errReserva(data['statusDesc']);
+        this.errReserva(data['usrMsg']);
       }
       this.disableBarReserva = false;
     })

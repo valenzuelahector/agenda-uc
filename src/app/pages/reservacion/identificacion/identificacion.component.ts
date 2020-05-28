@@ -279,7 +279,12 @@ export class IdentificacionComponent implements OnInit, OnChanges {
       this.reglasValidacion(fecha, fTermino).then(data => {
 
         if(!data['listaTiposDeCita'] || !data['listaTiposDeCita'][0]){
-          this.utils.mDialog("Error", "No se ha podido verificar la Disponibilidad del Cupo. Intente nuevamente.", "message");
+          if(data['statusCod'] && data['statusCod'].toUpperCase() == 'ERR'){
+            console.log(data)
+            this.utils.mDialog("Error", data['usrMsg'], "message");
+          }else{
+            this.utils.mDialog("Error", "No se ha podido verificar la Disponibilidad del Cupo. Intente nuevamente.", "message");
+          }
           return false;
         }
 
@@ -308,7 +313,7 @@ export class IdentificacionComponent implements OnInit, OnChanges {
         if(err === 'no-reservable'){
           this.errReserva('El cupo seleccionado no se encuentra disponible. Seleccione otra hora.');
         }else{
-          this.errReserva(null);
+          this.errReserva(err['usrMsg']);
         }
       })
 
@@ -390,6 +395,8 @@ export class IdentificacionComponent implements OnInit, OnChanges {
           reservable, 
         });
 
+      }, err => {
+        reject(err);
       })
     })
   }
