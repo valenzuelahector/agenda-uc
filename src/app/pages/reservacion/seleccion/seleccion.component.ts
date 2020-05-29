@@ -221,8 +221,10 @@ export class SeleccionComponent implements OnInit, OnChanges {
           this.dayWeekFixed = false;
           this.numberSearchs = 0;
           this.goTop();
-          console.log(this.counterLoader);
+          
         } else {
+          
+          const usrMsg = (data['usrMsg']) ? data['usrMsg'] : ENV.mensajeSinCupos;
 
           if (this.counterLoader < 12 && this.navDirection == 'next') {
 
@@ -233,7 +235,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
             if (this.numberSearchs <= this.maxNumberSearch) {
               this.navigateMonth('next');
             } else {
-              this.setCalendarInfo(idProfesional);
+              this.setCalendarInfo(idProfesional, usrMsg);
               this.numberSearchs = 0;
             }
 
@@ -246,7 +248,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
             if (this.numberSearchs <= this.maxNumberSearch) {
               this.navigateMonth('prev');
             } else {
-              this.setCalendarInfo(idProfesional);
+              this.setCalendarInfo(idProfesional, usrMsg);
               this.numberSearchs = 0;
             }
           } else {
@@ -254,16 +256,10 @@ export class SeleccionComponent implements OnInit, OnChanges {
               this.counterLoader = 0;
             }
             this.numberSearchs = 0;
-            this.setCalendarInfo(idProfesional)
+            this.setCalendarInfo(idProfesional, usrMsg)
           }
 
         }
-
-
-        /*  setTimeout(() => {
-            this.utils.hideProgressBar();
-          }, 1500)*/
-
         resolve(data);
 
       })
@@ -271,7 +267,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
 
   }
 
-  setCalendarInfo(idProfesional) {
+  setCalendarInfo(idProfesional, usrMsg) {
     this.enableAutoSearch = false;;
     this.readQuery.emit(true);
     this.recursos = [];
@@ -279,14 +275,14 @@ export class SeleccionComponent implements OnInit, OnChanges {
       CenterId: this.busquedaInicial.centroAtencion.idCentro,
       ServiceId: this.busquedaInicial.especialidad.idServicio,
       ResourceId: idProfesional
-    })
+    }, usrMsg)
     this.enableScroll = true;
     this.loadedRecursos = true;
     this.displayCalendar = true;
     this.goTop();
   }
 
-  setMensaje(data) {
+  setMensaje(data, usrMsg) {
 
     this.customMensaje = "Cargando...";
 
@@ -310,7 +306,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
       }
 
       if (!this.customMensaje || this.customMensaje === "") {
-        this.customMensaje = ENV.mensajeSinCupos;
+        this.customMensaje = usrMsg;
       }
     })
   }
