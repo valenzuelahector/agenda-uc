@@ -7,12 +7,12 @@
             <div class="col-lg-6">
                 <div class="search-ref">
                     <button mat-icon-button matTooltip="MES ANTERIOR" matTooltipPosition="above" class="btn-nav"
-                        (click)="move('prev')" *ngIf="contadorMeses > 0">
+                        (click)="move('prev')" *ngIf="contadorMeses > 0 && !disableNavigation">
                         <mat-icon>keyboard_arrow_left</mat-icon>
                     </button>
                     <b class="month">{{ datedisplay }}</b>
                     <button mat-icon-button matTooltip="MES SIGUIENTE" matTooltipPosition="above" class="btn-nav right"
-                        (click)="move('next')" *ngIf="contadorMeses < 13">
+                        (click)="move('next')" *ngIf="contadorMeses < 13 && !disableNavigation">
                         <mat-icon>keyboard_arrow_right</mat-icon>
                     </button>
                 </div>
@@ -33,13 +33,13 @@
 <div class="day-header not-results" *ngIf="typeDateWeek === 'not-results'">
         <div class="centered">
             <div class="search-ref">
-                <button mat-icon-button matTooltip="MES ANTERIOR" matTooltipPosition="below" class="btn-nav" [ngClass]="{'disabled' : contadorMeses == 0 }"
+                <button mat-icon-button matTooltip="MES ANTERIOR" matTooltipPosition="below" class="btn-nav" [ngClass]="{'disabled' : contadorMeses == 0 || disableNavigation }"
                     (click)="move('prev')" >
                     <mat-icon>keyboard_arrow_left</mat-icon>
                     <span class="txt-month" [innerHTML]="dateBefore"></span>
                 </button>
                 <b class="month">{{ datedisplay }}</b>
-                <button mat-icon-button matTooltip="MES SIGUIENTE" matTooltipPosition="below" class="btn-nav right" [ngClass]="{'disabled' : contadorMeses == 12 }"
+                <button mat-icon-button matTooltip="MES SIGUIENTE" matTooltipPosition="below" class="btn-nav right" [ngClass]="{'disabled' : contadorMeses == 12 || disableNavigation}"
                     (click)="move('next')">
                     <mat-icon>keyboard_arrow_right</mat-icon>
                     <span class="txt-month" [innerHTML]="dateNext"></span>

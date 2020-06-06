@@ -11,6 +11,7 @@ import * as $ from 'jquery';
 import * as moment from 'moment';
 import 'moment-timezone';
 import { DomSanitizer } from '@angular/platform-browser';
+import * as clone from 'clone';
 
 @Component({
   selector: 'app-seleccion',
@@ -44,13 +45,12 @@ export class SeleccionComponent implements OnInit, OnChanges {
   public enableAutoSearch = false;
   public numberSearchs = 0;
   public maxNumberSearch = 6;
-  public navigationDate = {
-    min: null,
-    max: null
-  }
-
+  public navigationDate = { min: null, max: null }
+  public disableNavigation = false;
   public emitterReloadBusqueda: any;
   public customMensaje: string = "";
+  public keepSearching = true;
+  public listaFechas = {};
 
   constructor(
     public agendaService: AgendaAmbulatoriaService,
@@ -93,6 +93,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
 
       if (this.busquedaInicial && this.busquedaInicial.especialidad) {
         this.resetCalendario();
+        this.crearListaFechas();
         if (this.busquedaInicial.profesional) {
           this.getRecursos(this.busquedaInicial.profesional.idProfesional);
         } else {
@@ -105,6 +106,24 @@ export class SeleccionComponent implements OnInit, OnChanges {
 
   }
 
+  determinarMesSinCupo() {
+
+    this.recursos.forEach((val, key) => {
+      let posee = false;
+      let listFechaDis = Object.keys(val['fechasDisponibles']);
+      listFechaDis.forEach(k => {
+        let fechaEvaluar = new Date(k + "T23:59:59");
+        if (fechaEvaluar.getTime() >= this.navigationDate['min'].getTime() &&
+          fechaEvaluar.getTime() <= this.navigationDate['max'].getTime() &&
+          val['fechasDisponibles'][k].length > 0
+        ) {
+          posee = true;
+        }
+      })
+      this.recursos[key]['poseeMes'] = posee;
+    })
+  }
+
   resetCalendario() {
     this.datesToHighlight = {};
     this.selectedDate = {};
@@ -112,13 +131,16 @@ export class SeleccionComponent implements OnInit, OnChanges {
     this.centrosProfesional = {};
     this.loadedRecursos = false;
     this.enableScroll = false;
+    this.listaFechas = {};
+    this.disableNavigation = false;
+    this.keepSearching = true;
   }
 
   async navigateMonth(action, fromBtn = false) {
 
     this.displayCalendar = false;
-    
-    if(fromBtn){
+
+    if (fromBtn) {
       this.maxNumberSearch = 5;
     }
 
@@ -203,28 +225,23 @@ export class SeleccionComponent implements OnInit, OnChanges {
       }).subscribe(data => {
 
         data = this.filtrarRecursosSoloProfesional(data);
+
         if (data['listaRecursos'] && data['listaRecursos'].length > 0) {
 
+          this.keepSearching = false;
           this.enableAutoSearch = false;
 
           data['listaRecursos'].forEach((val, key) => {
             data['listaRecursos'][key] = this.crearCalendario(val, fechaHoy);
           })
-
-          this.recursos = this.orderPipe.transform(data['listaRecursos'], 'proximaFechaEpoch');
+          const listaRecursos = this.mergeRecursos(clone(this.recursos), data['listaRecursos'])
+          this.recursos = this.orderPipe.transform(listaRecursos, 'proximaFechaEpoch');
           this.enableScroll = true;
           this.readQuery.emit(true);
 
-          this.enableScroll = true;
-          this.loadedRecursos = true;
-          this.displayCalendar = true;
-          this.dayWeekFixed = false;
-          this.numberSearchs = 0;
-          this.goTop();
-          
-        } else {
-          
-          const usrMsg = (data['usrMsg']) ? data['usrMsg'] : ENV.mensajeSinCupos;
+          this.restoreCalendar();
+
+        } else if (this.keepSearching) {
 
           if (this.counterLoader < 12 && this.navDirection == 'next') {
 
@@ -233,37 +250,63 @@ export class SeleccionComponent implements OnInit, OnChanges {
             this.numberSearchs++;
 
             if (this.numberSearchs <= this.maxNumberSearch) {
+
               this.navigateMonth('next');
+
             } else {
+
+              const usrMsg = (data['usrMsg']) ? data['usrMsg'] : ENV.mensajeSinCupos;
               this.setCalendarInfo(idProfesional, usrMsg);
               this.numberSearchs = 0;
+              this.disableNavigation = true;
+
             }
 
-          } else if (this.counterLoader > 0 && this.navDirection == 'prev') {
-
-            this.enableAutoSearch = true;
-            this.readQuery.emit(false);
-            this.numberSearchs++;
-
-            if (this.numberSearchs <= this.maxNumberSearch) {
-              this.navigateMonth('prev');
-            } else {
-              this.setCalendarInfo(idProfesional, usrMsg);
-              this.numberSearchs = 0;
-            }
-          } else {
-            if(this.navDirection === 'prev'){
-              this.counterLoader = 0;
-            }
-            this.numberSearchs = 0;
-            this.setCalendarInfo(idProfesional, usrMsg)
           }
 
+        } else {
+          this.restoreCalendar();
         }
+
+        this.determinarMesSinCupo();
+
         resolve(data);
 
       })
     })
+
+  }
+
+  restoreCalendar() {
+    this.enableScroll = true;
+    this.loadedRecursos = true;
+    this.displayCalendar = true;
+    this.dayWeekFixed = false;
+    this.numberSearchs = 0;
+    this.goTop();
+  }
+
+  mergeRecursos(recursosActuales, recursosNuevos) {
+
+    let nRecursos = [];
+    let found;
+
+    recursosNuevos.forEach((valRn, keyRn) => {
+
+      found = false;
+      recursosActuales.forEach((valRa, keyRa) => {
+        if (valRn['id'] === valRa['id']) {
+          recursosActuales[keyRa] = valRn;
+          found = true;
+        }
+      });
+
+      if (!found) {
+        nRecursos.push(valRn);
+      }
+    });
+
+    return recursosActuales.concat(nRecursos);
 
   }
 
@@ -369,13 +412,6 @@ export class SeleccionComponent implements OnInit, OnChanges {
   crearCalendario(recurso: any, min) {
 
     let datesDisabled = [];
-    let f = null;
-    let fecha = new Date(min);
-    fecha.setDate(1);
-    fecha.setMinutes(0);
-    fecha.setSeconds(0);
-    fecha.setHours(6);
-
     recurso['fechasDisponibles'] = {};
 
     try {
@@ -384,20 +420,8 @@ export class SeleccionComponent implements OnInit, OnChanges {
       this.compensacion = -180;
     }
 
-    for (let day = 1; day <= 40; day++) {
-
-      if (day == 1) {
-        f = this.utils.toLocalScl(fecha, this.compensacion);
-      } else {
-        fecha.setDate(fecha.getDate() + 1);
-        f = this.utils.toLocalScl(fecha, this.compensacion);
-      }
-
-      f = this.utils.toStringDateJson(f);
-      recurso['fechasDisponibles'][f.year + '-' + f.month + '-' + f.day] = [];
-
-    }
-
+    recurso['fechasDisponibles'] = clone(this.listaFechas);
+    
     recurso['listaCupos'].forEach((valLc, keyLc) => {
       valLc['cupos'].forEach((val, key) => {
 
@@ -425,6 +449,32 @@ export class SeleccionComponent implements OnInit, OnChanges {
     recurso['proximaFechaEpoch'] = recurso['proximaHoraDisponible']['cupo']['horaEpoch'];
 
     return recurso;
+
+  }
+
+  crearListaFechas() {
+
+    const compensacion = -180;
+    let fecha = new Date();
+    let f;
+    fecha.setDate(1);
+    fecha.setMinutes(0);
+    fecha.setSeconds(0);
+    fecha.setHours(6);
+
+    for (let day = 1; day <= 380; day++) {
+
+      if (day == 1) {
+        f = this.utils.toLocalScl(fecha, compensacion);
+      } else {
+        fecha.setDate(fecha.getDate() + 1);
+        f = this.utils.toLocalScl(fecha, compensacion);
+      }
+
+      f = this.utils.toStringDateJson(f);
+      this.listaFechas[f.year + '-' + f.month + '-' + f.day] = [];
+
+    }
 
   }
 

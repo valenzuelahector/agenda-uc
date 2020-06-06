@@ -23,6 +23,7 @@ export class DaysOfWeekComponent implements OnInit, OnChanges {
   @Input() maxDateIn:Date;
   @Input() typeDateWeek;
   @Output() navigate:EventEmitter<any> = new EventEmitter();
+  @Input() disableNavigation = false;
 
   constructor(
     public utils:UtilsService
@@ -30,8 +31,6 @@ export class DaysOfWeekComponent implements OnInit, OnChanges {
 
   ngOnInit() {
   }
-
-  
 
   ngOnChanges(changes:SimpleChanges) : void{
     if(changes.minDateIn){
@@ -52,7 +51,7 @@ export class DaysOfWeekComponent implements OnInit, OnChanges {
   }
 
   move(action){
-    if((this.contadorMeses === 0 && action === 'prev') || (this.contadorMeses === 12  && action === 'next')){
+    if((this.contadorMeses === 0 && action === 'prev') || (this.contadorMeses === 12  && action === 'next') || this.disableNavigation){
       return false;
     }
     if(action == 'next'){
