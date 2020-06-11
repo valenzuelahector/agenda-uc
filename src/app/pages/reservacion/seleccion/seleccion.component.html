@@ -139,7 +139,7 @@
 											[dateClass]="re.datesToHighlight.dateClass" [selected]="selectedDate[i]"
 											(selectedChange)="onSelect($event, i)"></mat-calendar>
 										<div class="datos-horas" *ngIf="displayCalendar">
-											<p class="sinHorasMes" *ngIf="!re.poseeMes">El profesional no tiene horas disponibles en el mes.</p>
+											<p class="sinHorasMes" *ngIf="!re.poseeMes">Sin disponibilidad de horas este mes. Puedes buscar citas en meses siguientes o llamarnos al 22 676 7000.</p>
 											<p *ngIf="!re.proximaHoraDisponible?.cupo?.horaEpoch && re.poseeMes">Sin próxima hora disponible.</p>
 											<p *ngIf="re.proximaHoraDisponible?.cupo?.horaEpoch && re.poseeMes">Próxima hora disponible:
 												<span>{{ re.proximaHoraDisponible?.cupo.horaEpoch * 1000 | toLocalScl: re.proximaHoraDisponible?.cupo.compensacion : 'dddd DD/MM/YYYY [a las] HH:mm'}}</span>
