@@ -367,10 +367,12 @@ export class SeleccionComponent implements OnInit, OnChanges {
   }
 
   displayCentro(idxCentro, idxItem) {
+
     let cet = this.centrosProfesional[idxCentro][idxItem];
-    if (Object.keys(this.centrosProfesional).length > 1) {
+    if (Object.keys(this.centrosProfesional[idxCentro]).length > 1) {
+      console.log(cet.habilitado);
       this.centrosProfesional[idxCentro][idxItem]['habilitado'] = (cet.habilitado) ? false : true
-    } else if (Object.keys(this.centrosProfesional).length == 1) {
+    } else if (Object.keys(this.centrosProfesional[idxCentro]).length == 1) {
       this.centrosProfesional[idxCentro][idxItem]['habilitado'] = true;
     } else {
       this.centrosProfesional[idxCentro][idxItem]['habilitado'] = false;
@@ -383,7 +385,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
   }
 
   onSelect(event, i) {
-
+    console.log(this.recursos[i]);
     this.selectedDate[i] = event;
     let fechaDisSel = this.utils.trDateStr(event, 'json');
     let idxFecha = fechaDisSel['year'] + "-" + fechaDisSel['month'] + '-' + fechaDisSel['day'];
@@ -391,12 +393,12 @@ export class SeleccionComponent implements OnInit, OnChanges {
     let agrupCentros: any = {};
 
     centrosProfesionales.forEach((val, key) => {
-      if (!agrupCentros[val['idCentro']]) {
-        agrupCentros[val['idCentro']] = { 'nombreCentro': val['centro']['nombre'], cupos: [], habilitado: false }
+      if (!agrupCentros[val['centro']['id']]) {
+        agrupCentros[val['centro']['id']] = { 'nombreCentro': val['centro']['nombre'], cupos: [], habilitado: false }
       }
-      agrupCentros[val['idCentro']]['cupos'].push(val)
+      agrupCentros[val['centro']['id']]['cupos'].push(val)
     })
-
+    console.log(agrupCentros);
     this.centrosProfesional[i] = [];
     let enableCentro = (Object.keys(agrupCentros).length == 1) ? true : false;
 
