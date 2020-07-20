@@ -1,0 +1,31 @@
+<div class="mdAsoc">
+</div>
+<div class="carouselConfig">
+    <span class="iniText">REVISA QUÉ OTROS MÉDICOS TIENEN HORAS DISPONIBLES</span>
+
+    <ngx-slick-carousel class="carousel" #slickModal="slick-carousel" [config]="slideConfig">
+    <div ngxSlickItem *ngFor="let med of medicosAsociados" class="slide">
+        <div fxLayout="row" fxLayoutGap="15px" class="itmslide">
+            <div fxFlex="70px">
+                <img [src]="med?.profesional?.urlImagenProfesional" alt="" width="100%">
+            </div>
+            <div fxFlex="100%">
+                <span class="smtxt">{{ med?.profesional.nombreProfesional }}</span>
+                <span class="ctxts"><b>{{ med?.proximaHoraEpoch * 1000 | toLocalScl: med?.compensacion : 'dddd DD/MM/YYYY'}}</b></span>
+                <span class="ctxts">{{ med?.centroAtencion.nombre }}</span>
+                <button mat-stroked-button class="btn-morado btng" (click)="buscarCalendario(med)">
+                    Agendar
+                </button>
+            </div>
+           
+        </div>
+    </div>
+</ngx-slick-carousel>
+</div>
+
+<!-- 
+<button (click)="addSlide()">Add</button>
+<button (click)="removeSlide()">Remove</button>
+<button (click)="slickModal.slickGoTo(2)">slickGoto 2</button>
+<button (click)="slickModal.unslick()">unslick</button>
+-->

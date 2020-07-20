@@ -36,6 +36,24 @@
   }
 
   .anuicon{
-    transform: rotate(180deg);
-    margin-left: 5px;
+    &.rot{
+      transform: rotate(180deg);
+    }
+    margin-left: 15px;
   }
+
+  .stepOpacity{
+    opacity: 0.3;
+  }
+
+.item-paso{ position: relative;}
+.item-paso:before{
+   content:'';
+    display: block;
+    width: 40px;
+    height: 40px;
+    background: #fff;
+    position: absolute;
+    left: 50%;
+    margin-left: -20px;
+ }

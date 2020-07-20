@@ -11,6 +11,7 @@ import * as $ from 'jquery';
 import * as moment from 'moment';
 import 'moment-timezone';
 import { DomSanitizer } from '@angular/platform-browser';
+import * as clone from 'clone';
 
 @Component({
   selector: 'app-seleccion',
@@ -22,6 +23,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
   @Input() busquedaInicial: any;
   @Input() reloadBusqueda: number = 0;
   @Output() calendario: EventEmitter<any> = new EventEmitter();
+  @Output() readQuery: EventEmitter<any> = new EventEmitter();
 
   public recursos: any;
   public fechaHoy: Date;
@@ -38,16 +40,17 @@ export class SeleccionComponent implements OnInit, OnChanges {
   public contadorMeses = 1;
   public enableScroll: boolean = false;
   public compensacion = -240;
-  public navigationDate = {
-    min: null,
-    max: null
-  }
-  public setNavigationDate = {
-    min: null,
-    max: null
-  }
+  public horaSeleccionada: any;
+  public navDirection = 'next';
+  public enableAutoSearch = false;
+  public numberSearchs = 0;
+  public maxNumberSearch = 6;
+  public navigationDate = { min: null, max: null }
+  public disableNavigation = false;
   public emitterReloadBusqueda: any;
   public customMensaje: string = "";
+  public keepSearching = true;
+  public listaFechas = {};
 
   constructor(
     public agendaService: AgendaAmbulatoriaService,
@@ -85,19 +88,12 @@ export class SeleccionComponent implements OnInit, OnChanges {
 
       this.navigationDate = { min: null, max: null };
       this.counterLoader = 0;
+      this.navDirection = 'next';
       this.displayCalendar = true;
-
-      let today = new Date();
-      let min = today;
-      let max = new Date(today.getFullYear(), today.getMonth() + 1, 0);
-
-      this.navigationDate['min'] = min;
-      this.navigationDate['max'] = max;
-      this.setNavigationDate['min'] = new Date(this.utils.toLocalScl(min, this.compensacion, 'YYYY-MM-DDTHH:mm:ss'));
-      this.setNavigationDate['max'] = new Date(this.utils.toLocalScl(max, this.compensacion, 'YYYY-MM-DDTHH:mm:ss'));
 
       if (this.busquedaInicial && this.busquedaInicial.especialidad) {
         this.resetCalendario();
+        this.crearListaFechas();
         if (this.busquedaInicial.profesional) {
           this.getRecursos(this.busquedaInicial.profesional.idProfesional);
         } else {
@@ -108,84 +104,6 @@ export class SeleccionComponent implements OnInit, OnChanges {
       }
     }
 
-  }
-
-  resetCalendario() {
-    this.datesToHighlight = {};
-    this.selectedDate = {};
-    this.recursos = [];
-    this.centrosProfesional = {};
-    this.loadedRecursos = false;
-    this.enableScroll = false;
-  }
-
-  async navigateMonth(action) {
-
-    this.displayCalendar = false;
-    let today = new Date();
-    let min = this.navigationDate['min']
-    let newMin;
-    let newMax;
-
-    switch (action) {
-      case 'next':
-        this.contadorMeses++;
-        if(min.getDate() === 31){
-          min.setDate(min.getDate() + 1)
-        }else{
-          min.setMonth(min.getMonth() + 1);
-        }
-
-       
-        newMin = new Date(min.getFullYear(), min.getMonth(), 1);
-        newMax = new Date(min.getFullYear(), min.getMonth() + 1, 0);
-
-        if (this.counterLoader < 3 && !this.busquedaInicial.profesional) {
-          this.counterLoader++;
-          await this.getRecursos(null, true);
-        } else {
-          this.utils.showProgressBar();
-          setTimeout(() => {
-            this.utils.hideProgressBar();
-          }, 2000);
-        }
-
-        break;
-
-      case 'prev':
-        this.contadorMeses--;
-        min.setMonth(min.getMonth() - 1);
-        newMin = new Date(min.getFullYear(), min.getMonth(), (this.contadorMeses == 1) ? today.getDate() : 1);
-        newMax = new Date(min.getFullYear(), min.getMonth() + 1, 0)
-
-        this.utils.showProgressBar();
-        setTimeout(() => {
-          this.utils.hideProgressBar();
-        }, 2000);
-
-        break;
-    }
-
-    this.navigationDate['min'] = newMin;
-    this.navigationDate['max'] = newMax;
-
-    this.conciliarDateDisabled();
-    this.determinarMesSinCupo()
-
-    setTimeout(() => {
-      this.displayCalendar = true;
-    }, 500);
-
-    this.goTop();
-
-  }
-
-  goTop() {
-
-    let dayWeekPos = this.getOffsetTop((<HTMLElement>document.getElementById('dayWeek')));
-    $("body, html").animate({
-      scrollTop: dayWeekPos + "px"
-    }, 500)
   }
 
   determinarMesSinCupo() {
@@ -206,6 +124,55 @@ export class SeleccionComponent implements OnInit, OnChanges {
     })
   }
 
+  resetCalendario() {
+    this.datesToHighlight = {};
+    this.selectedDate = {};
+    this.recursos = [];
+    this.centrosProfesional = {};
+    this.loadedRecursos = false;
+    this.enableScroll = false;
+    this.listaFechas = {};
+    this.disableNavigation = false;
+    this.keepSearching = true;
+  }
+
+  async navigateMonth(action, fromBtn = false) {
+
+    this.displayCalendar = false;
+
+    if (fromBtn) {
+      this.maxNumberSearch = 5;
+    }
+
+    switch (action) {
+      case 'next':
+        this.counterLoader++;
+        this.navDirection = 'next';
+        break;
+
+      case 'prev':
+        this.counterLoader--;
+        this.navDirection = 'prev';
+
+        break;
+
+    }
+
+    if (this.busquedaInicial.profesional) {
+      this.getRecursos(this.busquedaInicial.profesional.idProfesional);
+    } else {
+      this.getRecursos();
+    }
+
+  }
+
+  goTop() {
+    let dayWeekPos = this.getOffsetTop((<HTMLElement>document.getElementById('dayWeek')));
+    $("body, html").animate({
+      scrollTop: "0px"
+    }, 500)
+  }
+
   filtrarRecursosSoloProfesional(data) {
 
     let recursos = [];
@@ -216,7 +183,6 @@ export class SeleccionComponent implements OnInit, OnChanges {
         }
       })
     }
-
     data['listaRecursos'] = recursos;
     return data;
   }
@@ -226,29 +192,19 @@ export class SeleccionComponent implements OnInit, OnChanges {
     return new Promise((resolve, reject) => {
 
       var fechaHoy = new Date();
-      var fechaLimite = new Date();
+      var fechaLimite;
 
-
-      if (!idProfesional) {
-
-        fechaHoy.setDate(fechaHoy.getDate() + (this.counterLoader * this.maxNumDays));
-        fechaLimite.setDate(fechaHoy.getDate() + (this.counterLoader * this.maxNumDays) + this.maxNumDays);
-
-      } else {
-
-        fechaLimite = new Date(fechaLimite.getFullYear(), fechaLimite.getMonth() + 12, 0);
-      }
+      fechaHoy.setMonth(fechaHoy.getMonth() + this.counterLoader);
+      fechaLimite = new Date(fechaHoy.getFullYear(), fechaHoy.getMonth() + 1, 0)
 
       fechaHoy = new Date(this.utils.toLocalScl(fechaHoy, this.compensacion, 'YYYY-MM-DDTHH:mm:ss'))
 
-      if (this.counterLoader > 0 && !idProfesional) {
-        fechaHoy.setMonth(fechaHoy.getMonth() + 1);
+      if (this.counterLoader > 0) {
         fechaHoy.setDate(1)
         fechaHoy.setHours(0);
         fechaHoy.setMinutes(0);
         fechaHoy.setSeconds(0);
       }
-
 
       fechaLimite = new Date(this.utils.toLocalScl(fechaLimite, this.compensacion, 'YYYY-MM-DDTHH:mm:ss'));
       fechaLimite = new Date(fechaLimite.getFullYear(), fechaLimite.getMonth() + 1, 0);
@@ -256,6 +212,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
       fechaLimite.setMinutes(59);
       fechaLimite.setSeconds(59);
 
+      this.navigationDate = { min: fechaHoy, max: fechaLimite }
 
       this.agendaService.getRecursos({
         todosCentro: (this.busquedaInicial.centroAtencion.codigo == 'todos') ? true : false,
@@ -268,60 +225,116 @@ export class SeleccionComponent implements OnInit, OnChanges {
       }).subscribe(data => {
 
         data = this.filtrarRecursosSoloProfesional(data);
-        this.tiposCitas = data['listaTiposDeCita'];
-
-        data['cuposProfesional'] = {};
 
         if (data['listaRecursos'] && data['listaRecursos'].length > 0) {
 
-          data['listaCupos'].forEach((valCupo, keyCupo) => {
-            if (!data['cuposProfesional'][valCupo['idRecurso']]) {
-              data['cuposProfesional'][valCupo['idRecurso']] = [];
-            }
-            data['cuposProfesional'][valCupo['idRecurso']].push(valCupo);
-          })
+          this.keepSearching = false;
+          this.enableAutoSearch = false;
 
           data['listaRecursos'].forEach((val, key) => {
-            data['listaRecursos'][key]['cupos'] = (data['cuposProfesional'][val['idCorto']]) ? data['cuposProfesional'][val['idCorto']] : [];
-            data['listaRecursos'][key] = this.crearCalendario(data['listaRecursos'][key], data['listaCentros'], data['listaDisponibilidades'], data['listaRecursos'])
+            data['listaRecursos'][key] = this.crearCalendario(val, fechaHoy);
           })
-
+          const listaRecursos = this.mergeRecursos(clone(this.recursos), data['listaRecursos'])
+          this.recursos = this.orderPipe.transform(listaRecursos, 'proximaFechaEpoch');
           this.enableScroll = true;
-          let listRe = this.orderPipe.transform(data['listaRecursos'], 'proximaFechaEpoch');
-          this.conciliarDataRecursos(listRe, fechaHoy, fechaLimite);
+          this.readQuery.emit(true);
+
+          this.restoreCalendar();
+
+        } else if (this.keepSearching) {
+
+          if (this.counterLoader < 12 && this.navDirection == 'next') {
+
+            this.enableAutoSearch = true;
+            this.readQuery.emit(false);
+            this.numberSearchs++;
+
+            if (this.numberSearchs <= this.maxNumberSearch) {
+
+              this.navigateMonth('next');
+
+            } else {
+
+              const usrMsg = (data['usrMsg']) ? data['usrMsg'] : ENV.mensajeSinCupos;
+              this.setCalendarInfo(idProfesional, usrMsg);
+              this.numberSearchs = 0;
+              this.disableNavigation = true;
+
+            }
+
+          }
+
         } else {
-          this.setMensaje({
-            CenterId: this.busquedaInicial.centroAtencion.idCentro,
-            ServiceId: this.busquedaInicial.especialidad.idServicio,
-            ResourceId: idProfesional
-          })
+          this.restoreCalendar();
         }
 
-        this.enableScroll = true;
-        this.loadedRecursos = true;
-
-        setTimeout(() => {
-          this.utils.hideProgressBar();
-        }, 3000)
+        this.determinarMesSinCupo();
 
         resolve(data);
-
 
       })
     })
 
   }
 
-  setMensaje(data) {
+  restoreCalendar() {
+    this.enableScroll = true;
+    this.loadedRecursos = true;
+    this.displayCalendar = true;
+    this.dayWeekFixed = false;
+    this.numberSearchs = 0;
+    this.goTop();
+  }
 
-    this.customMensaje = "";
+  mergeRecursos(recursosActuales, recursosNuevos) {
+
+    let nRecursos = [];
+    let found;
+
+    recursosNuevos.forEach((valRn, keyRn) => {
+
+      found = false;
+      recursosActuales.forEach((valRa, keyRa) => {
+        if (valRn['id'] === valRa['id']) {
+          recursosActuales[keyRa] = valRn;
+          found = true;
+        }
+      });
+
+      if (!found) {
+        nRecursos.push(valRn);
+      }
+    });
+
+    return recursosActuales.concat(nRecursos);
+
+  }
+
+  setCalendarInfo(idProfesional, usrMsg) {
+    this.enableAutoSearch = false;;
+    this.readQuery.emit(true);
+    this.recursos = [];
+    this.setMensaje({
+      CenterId: this.busquedaInicial.centroAtencion.idCentro,
+      ServiceId: this.busquedaInicial.especialidad.idServicio,
+      ResourceId: idProfesional
+    }, usrMsg)
+    this.enableScroll = true;
+    this.loadedRecursos = true;
+    this.displayCalendar = true;
+    this.goTop();
+  }
+
+  setMensaje(data, usrMsg) {
+
+    this.customMensaje = "Cargando...";
 
     this.agendaService.getMensajes({
       CenterId: data.CenterId,
       ServiceId: data.ServiceId,
       ResourceId: data.ResourceId
     }, 'cupo').subscribe(res => {
-
+      this.customMensaje = "";
       if (res['mensajes'] && res['mensajes'].length > 0) {
         res['mensajes'].forEach((val, key) => {
           if (val['mensaje'] && val['mensaje']['contenido'] &&
@@ -335,63 +348,10 @@ export class SeleccionComponent implements OnInit, OnChanges {
         })
       }
 
-      if(!this.customMensaje || this.customMensaje === ""){
-        this.customMensaje = ENV.mensajeSinCupos;
+      if (!this.customMensaje || this.customMensaje === "") {
+        this.customMensaje = usrMsg;
       }
     })
-  }
-
-
-  conciliarDateDisabled() {
-
-    this.recursos.forEach((val, key) => {
-      let dateDisabled = this.recursos[key]['datesToHighlight']['dates'];
-      this.recursos[key]['datesToHighlight']['dates'] = dateDisabled;
-      this.recursos[key]['datesToHighlight']['dateClass'] = this.dateClass(dateDisabled, val['compensacion']);
-
-    })
-  }
-
-  conciliarDataRecursos(recursosProcesados, desde, hasta): void {
-
-    recursosProcesados.forEach((valRe, keyRe) => {
-
-      var foundInRe = false;
-      this.recursos.forEach((valRee, keyRee) => {
-
-        if (valRe['id'] == valRee['id']) {
-          foundInRe = true;
-          this.recursos[keyRee]['cupos'] = valRee['cupos'].concat(valRe['cupos'])
-          Object.keys(valRe['fechasDisponibles']).forEach(keyr => {
-            let fechaEvaluar = new Date(keyr)
-            if (fechaEvaluar.getTime() >= desde.getTime() && fechaEvaluar.getTime() <= hasta.getTime()) {
-              this.recursos[keyRee]['fechasDisponibles'][keyr] = valRe['fechasDisponibles'][keyr];
-            }
-          })
-
-          this.recursos[keyRee]['datesToHighlight']['dates'] = [];
-          let dateDisabled = [];
-          Object.keys(this.recursos[keyRee]['fechasDisponibles']).forEach(key => {
-            let itm = this.recursos[keyRee]['fechasDisponibles'];
-            if (itm[key].length == 0) {
-              dateDisabled.push(key + "T12:00:00.000Z")
-            }
-          })
-          this.recursos[keyRee]['datesToHighlight']['dates'] = dateDisabled;
-          this.recursos[keyRee]['datesToHighlight']['dateClass'] = this.dateClass(dateDisabled, valRee['compensacion']);
-        }
-      })
-
-      if (!foundInRe) {
-        valRe['disponibleDesde'] = desde;
-        valRe['disponibleHasta'] = hasta;
-        this.recursos.push(valRe)
-      }
-
-      this.determinarMesSinCupo();
-
-    })
-
   }
 
   dateClass(datesDs, compensacion) {
@@ -407,10 +367,12 @@ export class SeleccionComponent implements OnInit, OnChanges {
   }
 
   displayCentro(idxCentro, idxItem) {
+
     let cet = this.centrosProfesional[idxCentro][idxItem];
-    if (Object.keys(this.centrosProfesional).length > 1) {
+    if (Object.keys(this.centrosProfesional[idxCentro]).length > 1) {
+      console.log(cet.habilitado);
       this.centrosProfesional[idxCentro][idxItem]['habilitado'] = (cet.habilitado) ? false : true
-    } else if (Object.keys(this.centrosProfesional).length == 1) {
+    } else if (Object.keys(this.centrosProfesional[idxCentro]).length == 1) {
       this.centrosProfesional[idxCentro][idxItem]['habilitado'] = true;
     } else {
       this.centrosProfesional[idxCentro][idxItem]['habilitado'] = false;
@@ -423,7 +385,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
   }
 
   onSelect(event, i) {
-    console.log(event)
+    console.log(this.recursos[i]);
     this.selectedDate[i] = event;
     let fechaDisSel = this.utils.trDateStr(event, 'json');
     let idxFecha = fechaDisSel['year'] + "-" + fechaDisSel['month'] + '-' + fechaDisSel['day'];
@@ -431,12 +393,12 @@ export class SeleccionComponent implements OnInit, OnChanges {
     let agrupCentros: any = {};
 
     centrosProfesionales.forEach((val, key) => {
-      if (!agrupCentros[val['idCentro']]) {
-        agrupCentros[val['idCentro']] = { 'nombreCentro': val['nombreCentro'], cupos: [], habilitado: false }
+      if (!agrupCentros[val['centro']['id']]) {
+        agrupCentros[val['centro']['id']] = { 'nombreCentro': val['centro']['nombre'], cupos: [], habilitado: false }
       }
-      agrupCentros[val['idCentro']]['cupos'].push(val)
+      agrupCentros[val['centro']['id']]['cupos'].push(val)
     })
-
+    console.log(agrupCentros);
     this.centrosProfesional[i] = [];
     let enableCentro = (Object.keys(agrupCentros).length == 1) ? true : false;
 
@@ -444,121 +406,88 @@ export class SeleccionComponent implements OnInit, OnChanges {
       agrupCentros[key]['habilitado'] = enableCentro;
       this.centrosProfesional[i].push(agrupCentros[key]);
     })
+
     gtag('event', 'Clic', { 'event_category': 'Reserva de Hora', 'event_label': 'Paso2:Selección-Calendario' });
 
   }
 
-  crearCalendario(dataRecurso: any, centros: any, disponibilidades: any, recursos: any) {
+  crearCalendario(recurso: any, min) {
 
-    this.compensacion = dataRecurso['cupos'].length > 0 ? dataRecurso['cupos'][0]['compensacion'] : -180;
-    let fecha = new Date();
-    let f = null;
+    let datesDisabled = [];
+    recurso['fechasDisponibles'] = {};
 
-    dataRecurso['fechasDisponibles'] = {};
-    dataRecurso['listaCentrosIdCorto'] = {};
-    dataRecurso['listaDisponibilidadesIdCorto'] = {};
-    dataRecurso['listaRecursosIdCorto'] = {};
+    try {
+      this.compensacion = recurso['listaCupos'][0]['cupos'].length > 0 ? recurso['listaCupos'][0]['cupos'][0]['compensacion'] : -180;
+    } catch (err) {
+      this.compensacion = -180;
+    }
 
-
-    centros.forEach((val, key) => {
-      dataRecurso['listaCentrosIdCorto'][val['idCorto']] = val;
-    })
-
-    disponibilidades.forEach((val, key) => {
-      dataRecurso['listaDisponibilidadesIdCorto'][val['idCorto']] = val;
-    })
-
-    recursos.forEach((val, key) => {
-      dataRecurso['listaRecursosIdCorto'][val['idCorto']] = val;
-    })
-
-    for (let day = 0; day <= 400; day++) {
-
-      if (day == 0) {
-        f = this.utils.toLocalScl(fecha, this.compensacion);
-      } else {
-        fecha.setDate(fecha.getDate() + 1);
-        f = this.utils.toLocalScl(fecha, this.compensacion);
-      }
-
-      f = this.utils.toStringDateJson(f);
-      dataRecurso['fechasDisponibles'][f.year + '-' + f.month + '-' + f.day] = [];
-      dataRecurso['cupos'].forEach((val, key) => {
+    recurso['fechasDisponibles'] = clone(this.listaFechas);
+    
+    recurso['listaCupos'].forEach((valLc, keyLc) => {
+      valLc['cupos'].forEach((val, key) => {
 
         let fechaEpoch = new Date(val['horaEpoch'] * 1000);
         let u: any = this.utils.toLocalScl(fechaEpoch, this.compensacion);
         u = this.utils.toStringDateJson(u);
-        val['idTipoCita'] = this.getTipoCita(val['tiposDeCita'][0]);
-        val['fechaHora'] = fechaEpoch;
-        val['nombreCentro'] = (dataRecurso['listaCentrosIdCorto'][val['idCentro']]) ? dataRecurso['listaCentrosIdCorto'][val['idCentro']]['nombre'] : 'S/I';
-        val['idStrCentro'] = (dataRecurso['listaCentrosIdCorto'][val['idCentro']]) ? dataRecurso['listaCentrosIdCorto'][val['idCentro']]['id'] : null;
-        val['idStrDisponibilidad'] = (dataRecurso['listaDisponibilidadesIdCorto'][val['idDisponibilidad']]) ? dataRecurso['listaDisponibilidadesIdCorto'][val['idDisponibilidad']]['id'] : null;
-        val['idStrRecProfesional'] = (dataRecurso['listaRecursosIdCorto'][val['idRecurso']]) ? dataRecurso['listaRecursosIdCorto'][val['idRecurso']]['id'] : null;
-
-        if (f['year'] == u['year'] && f['month'] == u['month'] && f['day'] == u['day']) {
-          dataRecurso['fechasDisponibles'][f.year + '-' + f.month + '-' + f.day].push(val)
-        }
+        val['fechaHora'] = new Date(val['horaEpoch'] * 1000);
+        val['centro'] = valLc['centro'];
+        recurso['fechasDisponibles'][u['year'] + '-' + u['month'] + '-' + u['day']].push(val)
 
       })
-    }
+    })
 
-    dataRecurso['datesToHighlight'] = { dates: [], displayed: false, dateClass: null };
+    recurso['datesToHighlight'] = { dates: [], displayed: false, dateClass: null };
 
-    let proximaFecha: boolean = false;
-    let datesDisabled = [];
-
-    Object.keys(dataRecurso['fechasDisponibles']).forEach(key => {
-      if (dataRecurso['fechasDisponibles'][key].length == 0) {
+    Object.keys(recurso['fechasDisponibles']).forEach(key => {
+      if (recurso['fechasDisponibles'][key].length == 0) {
         datesDisabled.push(key + 'T12:00:00.000Z');
-      } else if (!proximaFecha) {
-        let count = 0;
-        dataRecurso['fechasDisponibles'][key].forEach((valDx, keyDx) => {
-          if (count == 0) {
-            dataRecurso['proximaFechaCompensacion'] = valDx['compensacion']
-            dataRecurso['proximaFecha'] = new Date(valDx['horaEpoch'] * 1000);
-            dataRecurso['proximaFechaEpoch'] = valDx['horaEpoch'];
-            proximaFecha = true;
-          }
-          count++;
-        });
       }
     })
 
-    dataRecurso['datesToHighlight']['displayed'] = true;
-    dataRecurso['datesToHighlight']['dates'] = datesDisabled;
-    dataRecurso['datesToHighlight']['dateClass'] = this.dateClass(datesDisabled, this.compensacion);
+    recurso['datesToHighlight']['displayed'] = true;
+    recurso['datesToHighlight']['dates'] = datesDisabled;
+    recurso['datesToHighlight']['dateClass'] = this.dateClass(datesDisabled, this.compensacion);
+    recurso['proximaFechaEpoch'] = recurso['proximaHoraDisponible']['cupo']['horaEpoch'];
 
-    return dataRecurso;
+    return recurso;
+
+  }
+
+  crearListaFechas() {
+
+    const compensacion = -180;
+    let fecha = new Date();
+    let f;
+    fecha.setDate(1);
+    fecha.setMinutes(0);
+    fecha.setSeconds(0);
+    fecha.setHours(6);
+
+    for (let day = 1; day <= 380; day++) {
+
+      if (day == 1) {
+        f = this.utils.toLocalScl(fecha, compensacion);
+      } else {
+        fecha.setDate(fecha.getDate() + 1);
+        f = this.utils.toLocalScl(fecha, compensacion);
+      }
+
+      f = this.utils.toStringDateJson(f);
+      this.listaFechas[f.year + '-' + f.month + '-' + f.day] = [];
+
+    }
+
   }
 
   seleccionarHora(data) {
+    this.horaSeleccionada = data;
     this.calendario.emit(data);
     gtag('event', 'Clic', { 'event_category': 'Reserva de Hora', 'event_label': 'Paso2:Selección-Hora' });
   }
 
   verPerfil(re) {
-    this.agendaService.getDatosProfesional(re.id).subscribe(data => {
-      if (data && data['statusCod'] && data['statusCod'] == 'OK') {
-        let dialogRef = this.dialog.open(PerfilProfesionalComponent, {
-          width: '840px',
-          data: { profesionalData: data['datosProfesional'] }
-        });
-      } else {
-        this.utils.mDialog("Error", "No se puede mostrar el perfil. Intente más tarde", "error");
-      }
-
-    })
+    this.utils.verPerfilProfesional(re);
   }
 
-  getTipoCita(idCorto) {
-
-    let res = null;
-    this.tiposCitas.forEach((val, key) => {
-      if (val['idCorto'] == idCorto) {
-        res = val;
-      }
-    })
-
-    return res;
-  }
 }

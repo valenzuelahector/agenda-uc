@@ -18,12 +18,12 @@ import gtag, { install } from 'ga-gtag';
 })
 export class BusquedaComponent implements OnInit {
 
+  public expanded = false;
   public areas: any = []
   public especialidades: any = [];
   public realEspecialidades:any = [];
   public profesionales: any = [];
   public servicios:any = [];
-
 
   public filterEspecialidades: Observable<any[]>;
   public filterCentrosAtencion: Observable<any[]>;
@@ -155,6 +155,7 @@ export class BusquedaComponent implements OnInit {
       if(idProfesional){
         this.needLoadInitProfesionales = true;
       }
+      this.utils.showProgressBar();
 
       this.agendaService.getProfesionales(this.areaSelected['id'], null, idProfesional).subscribe(res => {
 
@@ -174,7 +175,7 @@ export class BusquedaComponent implements OnInit {
           })
 
           this.profesionales = this.orderPipe.transform(res['profesionales'], 'detalle');
-          this.filterProfesionales = this.orderPipe.transform(res['profesionales'], 'detalle');
+          //this.filterProfesionales = this.orderPipe.transform(res['profesionales'], 'detalle');
 
           if (matchProfesional) {
             this.profesionalCtrl.patchValue(matchProfesional);
@@ -197,7 +198,7 @@ export class BusquedaComponent implements OnInit {
             if (!value || value['idProfesional'] || value == "" || value.length < 3) {
               return Observable.create((observer: Observer<any>) => {
                 if (value == "" || value.length < 3) {
-                  observer.next({ profesionales: this.profesionales });
+                  observer.next([]);
                 } else {
                   observer.next([])
                 }
@@ -448,6 +449,7 @@ export class BusquedaComponent implements OnInit {
     this.areaSelected = event.value;
     this.clearSelection('profesional');
     this.getEspecialidades('especialidad');
+    this.expanded = false;
   }
 
   clearSelection(tipo: string, fromForm:boolean = false) {
@@ -579,7 +581,8 @@ export class BusquedaComponent implements OnInit {
 
         if (res['centros'] && res['centros'].length > 0) {
           res['centros'].forEach((val, key) => {
-            res['centros'][key]['detalle'] = val['nombre'] + ' - ' + val['direccion']['comuna'];
+            res['centros'][key]['detalle'] = val['nombre'];
+           // res['centros'][key]['detalle'] = val['nombre'] + ' - ' + val['direccion']['comuna'];
             if (qp['centro'] && qp['centro'].toLowerCase() == val['idCentro'].toLowerCase()) {
               matCentro = res['centros'][key];
             }
@@ -689,7 +692,6 @@ export class BusquedaComponent implements OnInit {
 
   }
 
-
   servicioSelection(event){
     this.servicioCtrl.disable();
     this.servicioSelected = this.servicioCtrl.value;
@@ -715,7 +717,7 @@ export class BusquedaComponent implements OnInit {
       this.especialidadSelected['idServicio'] = this.servicioSelected['idServicio'];
       this.especialidadSelected['nombreServicio'] = this.servicioSelected['nombreServicio'];
     }
- 
+
 
     this.emitBusqueda.emit({
       area: this.areaSelected,

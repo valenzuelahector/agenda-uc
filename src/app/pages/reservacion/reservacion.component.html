@@ -1,42 +1,45 @@
-<section class="w-reservas">
+<section class="w-reservas" *ngIf="!conoceTuMedico || (conoceTuMedico && verMedicoAsociado)">
   <div>
     <div class="flex-container header-reserva">
       <h2 class="titulo-2 azul"><i class="far fa-clock"></i> RESERVA DE HORAS</h2>
 
-      <div class="w-pasos" *ngIf=" tabGroup" fxLayout="row wrap" fxLayoutAlign="space-between" >
+      <div class="w-pasos" 
+      [ngClass]="{'step1' : curEtapa == 1, 'step2' : curEtapa >= 2 && !reservaRealizada, 'step3': reservaRealizada  }"
+      *ngIf="tabGroup" fxLayout="row wrap" fxLayoutAlign="space-between" >
         <a class="item-paso" [ngClass]="{'activo' : curEtapa == 0 || busquedaInfo }" fxFlex="70px">
           <figure matRipple>
             <i class="fas fa-user-md"></i>
           </figure>
           <h4>Búsqueda</h4>
         </a>
-        <a class="item-paso" [ngClass]="{'activo' : curEtapa == 1 || calendario}" fxFlex="70px">
-          <figure matRipple>
+        <a class="item-paso" [ngClass]="{'activo' : curEtapa == 1 || calendario }" fxFlex="70px">
+          <figure matRipple [ngClass]="{ 'stepOpacity' : curEtapa < 1}">
             <i class="far fa-calendar-alt"></i>
           </figure>
           <h4>Selección</h4>
         </a>
-        <a class="item-paso" [ngClass]="{'activo' : curEtapa == 2 || paciente}" fxFlex="75px">
-          <figure matRipple>
+        <a class="item-paso" [ngClass]="{'activo' : curEtapa == 2 || paciente }" fxFlex="75px">
+          <figure matRipple [ngClass]="{ 'stepOpacity' : curEtapa < 2}">
             <i class="fas fa-user"></i>
           </figure>
           <h4>Identificación</h4>
         </a>
-        <a class="item-paso" [ngClass]="{'activo' : reservaRealizada}" fxFlex="70px">
-          <figure matRipple>
+        <a class="item-paso" [ngClass]="{'activo' : reservaRealizada }" fxFlex="70px">
+          <figure matRipple [ngClass]="{ 'stepOpacity' : !reservaRealizada }">
             <i class="fas fa-check"></i>
           </figure>
-           <h4 style="width: 120px; margin-left: -18px;">¡Reserva Exitosa!</h4>
+           <h4 style="width: 130px; margin-left: -18px;">¡Reserva Exitosa!</h4>
         </a>
       </div>
     </div>
 
   </div>
 </section>
-
+<!--
 <div class="mensaje-exito" *ngIf="reservaRealizada">
   <img src="assets/images/check-morado.svg" alt=""> HORA RESERVADA CON ÉXITO
 </div>
+-->
 
 <div class="reservaStepper cloader">
   <div class="container-loader" [ngClass]="{'readQuery' : !readQuery}" *ngIf="utils.progressBar || !readQuery">
@@ -44,7 +47,8 @@
         <mat-spinner [diameter]="60"></mat-spinner>
     </div>
   </div>
-  <div class="return">
+
+  <div class="return" *ngIf="!conoceTuMedico || (conoceTuMedico && curEtapa !== 0)">
     <div fxLayout="row">
       <div fxFlex="50%">
         <button mat-stroked-button class="btn-azul cus-pad" 
@@ -53,22 +57,32 @@
         </button>
       </div>
       <div fxFlex="50%" style="text-align: right;">
-        <button mat-stroked-button class="btn-morado cus-pad cus" [routerLink]="['/anular-reserva']">
+        <button mat-stroked-button class="btn-morado cus-pad cus" [routerLink]="['/anular-reserva']" *ngIf="curEtapa == 0 || reservaRealizada">
             Anular Hora
-            <mat-icon class="anuicon">keyboard_backspace</mat-icon>
+            <mat-icon class="anuicon rot">keyboard_backspace</mat-icon>
+        </button>
+        <button mat-stroked-button class="btn-morado cus-pad cus" (click)="reservar()" *ngIf="curEtapa == 4 && !reservaRealizada">
+          Confirmar Reserva
+          <mat-icon class="anuicon">done</mat-icon>
         </button>
       </div>
     </div>
   </div>
+
   <mat-tab-group dynamicHeight #tabGroup>
     <mat-tab label="Búsqueda">
-      <app-busqueda #busqueda (emitReadQuery)="readQuerySetter($event)"></app-busqueda>
+      <div *ngIf="checkConoceTuMedico">
+        <app-busqueda (emitReadQuery)="readQuerySetter($event)" (emitBusqueda)="busquedaEmitter($event)" *ngIf="!conoceTuMedico"></app-busqueda>
+        <app-buscar-tu-medico *ngIf="conoceTuMedico && !verMedicoAsociado" (datosBeneficiarioMedico)="setDatosBeneficiario($event)"></app-buscar-tu-medico>
+        <app-detalle-tu-medico (nuevaBusqueda)="nuevaBusquedaCM()" (medBuscaCalendario)="busquedaEmitter($event)" *ngIf="conoceTuMedico && verMedicoAsociado" [dbm]="datosBeneficiarioMedico"></app-detalle-tu-medico>
+        <app-medicos-asociados (medBuscaCalendario)="busquedaEmitter($event)" *ngIf="conoceTuMedico && verMedicoAsociado" [medicosAsociados]="datosBeneficiarioMedico?.data?.profesionalesSimilares"></app-medicos-asociados>
+      </div>
     </mat-tab>
     <mat-tab label="Selección">
-      <app-seleccion #seleccion [busquedaInicial]="busquedaInfo" [reloadBusqueda]="reloadNumber"></app-seleccion>
+      <app-seleccion #seleccion [busquedaInicial]="busquedaInfo" (readQuery)="readQuery = $event" [reloadBusqueda]="reloadNumber"></app-seleccion>
     </mat-tab>
     <mat-tab label="Identificación">
-      <app-identificacion #identificacion [busquedaInicial]="busquedaInfo" [calendario]="calendario">
+      <app-identificacion #identificacion [busquedaInicial]="busquedaInfo" [calendario]="calendario" [rutMatch]="calendario ? rutMatch : null">
       </app-identificacion>
     </mat-tab>
     <mat-tab label="Error">
@@ -91,12 +105,13 @@
 <div class="mesa-central" *ngIf="reservaRealizada">
   <div class="row">
     <div class="col-lg-6">
-      <h4>Mesa Central</h4>
-      <h3><img src="assets/images/ic-tel.svg" alt=""> 22 676 7000</h3>
+     <!-- <h4>Mesa Central</h4>
+          <h3><img src="assets/images/ic-tel.svg" alt=""> 22 676 7000</h3>
+      -->
     </div>
     <div class="col-lg-6">
       <div class="btns-mesa">
-        <button mat-raised-button color="primary" (click)="nuevaReserva()">TOMAR OTRA HORA</button>
+        <button mat-raised-button color="primary" (click)="nuevaReserva()">{{ conoceTuMedico ? 'NUEVA BÚSQUEDA' : 'TOMAR OTRA HORA' }}</button>
       </div>
     </div>
   </div>

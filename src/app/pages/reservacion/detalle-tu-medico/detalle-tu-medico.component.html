@@ -1,0 +1,67 @@
+<div class="dtm-c">
+    <div class="resultados-para" style="margin-bottom:40px;">
+        <div fxLayout="row">
+            <div fxFlex="50%">
+                <h3 style="margin-bottom: 30px;">
+                    Resultados de la Búsqueda
+                </h3>
+            </div>
+            <div fxFlex="50%" style="text-align: right;">
+                <button mat-stroked-button class="btn-morado cus-pad nobgbtn" style="margin-right: 0px;" (click)="nuevaBusquedaE()">
+                    Nueva Búsqueda
+                </button>
+            </div>
+        </div>
+
+        <div class="cuadro-res">
+            <div class="item-res">
+                <img src="/assets/images/ic-area.svg" alt="">
+                <p class="infseleccion"><b>Área Médica:</b> {{ dt.profesionalAsignado.area.nombre }}</p>
+            </div>
+            <div class="item-res">
+                <img src="/assets/images/ic-clinica.svg" alt="">
+                <p class="infseleccion"><b>Clínica / Centro:</b> {{ dt.profesionalAsignado.centroAtencion.nombre }} </p>
+            </div>
+            <div class="item-res">
+                <img src="/assets/images/ic-esp.svg" alt="">
+                <p class="infseleccion"><b>Especialidad:</b> {{ dt.profesionalAsignado.especialidad.nombreEspecialidad }} </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="resultados-para-mobile" style="margin-bottom: 40px;">
+		<h4>Para tu búsqueda en:</h4>
+		<span class='item-rb'><b>Área Médica:</b> {{ dt.profesionalAsignado.area.nombre }}</span>
+		<span class='item-rb'><b>Clínica / Centro:</b> {{ dt.profesionalAsignado.centroAtencion.nombre }}</span>
+		<span class='item-rb'><b>Especialidad:</b> {{ dt.profesionalAsignado.especialidad.nombreEspecialidad }}</span>
+    </div>
+    
+    <div fxLayout="row {{ isReponsive ? 'wrap' : '' }}" fxLayoutAlign="space-between center" fxLayoutGap="5%">
+        <div fxFlex="221px" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+            <img [src]="dt.profesionalAsignado?.profesional?.urlImagenProfesional" class="picProf">
+        </div>
+        <div fxFlex="100%" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+            <div class="profInfo">
+                <span class="iniText">Médico Asignado</span>
+                <span class="nombreMedico">{{ dt.profesionalAsignado?.profesional.nombreProfesional }}</span>
+            </div>
+            <div class="actions">
+                <button mat-stroked-button class="btn-morado cus-pad nobgbtn" (click)="verPerfil(dt.profesionalAsignado?.profesional)" style="margin-right: 15px;" >
+                    Ver Perfil
+                </button>
+                <button mat-stroked-button class="btn-morado cus-pad nn" (click)="buscarCalendario(dt.profesionalAsignado)">
+                    Agendar Hora
+                </button>
+            </div>
+        </div>
+        <div fxFlex="300px" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+            <div class="proximaHora">
+                <div class="datos-horas">
+                    <p>Próxima hora disponible:
+                        <span>{{ dt.profesionalAsignado?.proximaHoraEpoch * 1000 | toLocalScl: dt.profesionalAsignado?.compensacion : 'dddd DD/MM/YYYY [a las] HH:mm'}}</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

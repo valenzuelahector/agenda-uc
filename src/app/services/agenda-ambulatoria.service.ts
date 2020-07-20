@@ -57,7 +57,7 @@ export class AgendaAmbulatoriaService {
     let endpoint = (queryData.idProfesional) ? 'CuposProfFechas' : 'CuposEspecCentro';
 
     return this.http.get(this.baseApi +
-      '/Agenda/'+endpoint+'?fechaInicio=' + queryData.fechaInicio +'&fechaTermino=' + queryData.fechaTermino +
+      '/Agenda/'+endpoint+'?tipoResponse=2&fechaInicio=' + queryData.fechaInicio +'&fechaTermino=' + queryData.fechaTermino +
       '&idServicio=' + queryData.idServicio + '&codCanal=PatientPortal&idPlanSalud=' + queryData.idPlanSalud + queryProfesional  + queryCentro
   );
   }

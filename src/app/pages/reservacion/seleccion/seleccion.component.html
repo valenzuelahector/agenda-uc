@@ -1,4 +1,4 @@
-<div *ngIf="busquedaInicial">
+<div *ngIf="busquedaInicial && !enableAutoSearch">
 	<div class="resultados-para">
 		<div>
 			<h5>Resultados para:</h5>
@@ -14,21 +14,29 @@
 			<div class="cuadro-res">
 				<div class="item-res">
 					<img src="/assets/images/ic-area.svg" alt="">
-					<p><b>Área Médica:</b> {{ busquedaInicial.area.nombre }}</p>
+					<p class="infseleccion"><b>Área Médica:</b> {{ busquedaInicial.area.nombre }}</p>
 				</div>
 				<div class="item-res" *ngIf="utils.slugify(busquedaInicial.area.nombre, '-') !== 'telemedicina'
 				&& utils.slugify(busquedaInicial.area.nombre, '-') !== 'consulta-medica-virtual'">
 					<img src="/assets/images/ic-clinica.svg" alt="">
-					<p><b>Clínica/Centro:</b> {{ busquedaInicial.centroAtencion.nombre }} </p>
+					<p class="infseleccion"><b>Clínica/Centro:</b> {{ busquedaInicial.centroAtencion.nombre }} </p>
 				</div>
 				<div class="item-res">
 					<img src="/assets/images/ic-esp.svg" alt="">
-					<p><b>Especialidad:</b> {{ busquedaInicial.especialidad.nombreEspecialidad }} </p>
+					<p class="infseleccion"><b>Especialidad:</b> {{ busquedaInicial.especialidad.nombreEspecialidad }} </p>
 				</div>
 			</div>
 		</div>
 	</div>
+	
+	<div class="resultados-para-mobile">
+		<h4>Para tu búsqueda en:</h4>
+		<span class='item-rb'><b>Área Médica:</b> {{ busquedaInicial.area.nombre }}</span>
+		<span class='item-rb'><b>Clínica / Centro:</b> {{ busquedaInicial.centroAtencion.nombre }}</span>
+		<span class='item-rb'><b>Especialidad:</b> {{ busquedaInicial.especialidad.nombreEspecialidad }}</span>
+	</div>
 	<section class="w-resultados">
+
 		<div class="cwarn" *ngIf="recursos && loadedRecursos">
 			<h5 style="margin:0px" *ngIf="recursos.length > 0">Se han encontrado {{ recursos.length }} resultado(s).
 			</h5>
@@ -38,10 +46,12 @@
 		</div>
 		<div id="dayWeek" *ngIf="recursos.length > 0">
 			<app-days-of-week
+				[contadorMeses]="counterLoader"
 				[dayWeekFixed]="dayWeekFixed" 
+				[disableNavigation]="disableNavigation"
 				[minDateIn]="navigationDate['min']"
 				[maxDateIn]="navigationDate['max']"
-				(navigate)="navigateMonth($event)">
+				(navigate)="navigateMonth($event, true)">
 			</app-days-of-week>
 		</div>
 		<div class="content-res">
@@ -62,7 +72,13 @@
 											perfil
 											<i class="fa fa-angle-right" aria-hidden="true"></i>
 										</button>
-										<p class="small" *ngIf="re?.informacionAdicional" style="margin-top:0px;">
+										<p class="small" *ngIf="re?.informacionAdicional" style="margin-top:0px;font-size: 13px;
+										font-weight: 500;
+										color: #802e87;
+										margin-top: 20px;
+										padding: 14px;
+										text-align: center;
+										background: #fddd98;">
 											{{ re?.informacionAdicional }}</p>
 									</div>
 								</div>
@@ -75,21 +91,27 @@
 								<div class="calendar-utils">
 									<div class="container-calendar"
 										*ngIf="!re.datesToHighlight || (selectedDate[i] && centrosProfesional[i] && centrosProfesional[i].length > 0)">
-										<button mat-raised-button *ngIf="!re.datesToHighlight" color="primary"
-											class="full-btn" (click)="cargarCalendario(re, i)">Ver Calendario
-											Disponible</button>
+						
 										<div class="sel-hora" style="display: block;"
 											*ngIf="selectedDate[i] && centrosProfesional[i] && centrosProfesional[i].length > 0">
-											<p class="header-sel-hora">
-												Seleccione 
-												<span *ngIf="utils.slugify(busquedaInicial.area.nombre, '-') !== 'telemedicina'
-													&& utils.slugify(busquedaInicial.area.nombre, '-') !== 'consulta-medica-virtual'" style="font-weight: bold !important;" >un Centro y </span>
-												una Hora Disponible para el {{ selectedDate[i] | date:'dd/MM/yyyy'}}
-												<button mat-stroked-button (click)="eligeOtroDia(i)"
+											<div fxLayout="row wrap" fxLayoutAlign="space-between center" fxLayoutGap="1%">
+												<div fxFlex>
+													<p class="header-sel-hora">
+														Seleccione 
+														<span *ngIf="utils.slugify(busquedaInicial.area.nombre, '-') !== 'telemedicina'
+															&& utils.slugify(busquedaInicial.area.nombre, '-') !== 'consulta-medica-virtual'">un Centro y </span>
+														una Hora Disponible para el <b>{{ selectedDate[i] | date:'dd/MM/yyyy'}}</b>
+													</p>
+												</div>
+												<div fxFlex="150px">
+													<button mat-stroked-button (click)="eligeOtroDia(i)" class="btn-otrodia"
 													color="primary">
 													Elegir otro día
-												</button>
-											</p>
+													</button>
+
+												</div>
+											</div>
+						
 											<ng-container *ngFor="let cet of centrosProfesional[i]; let idx = index">
 	
 												<a class="item-hora" [ngClass]="{ 'active' : cet.habilitado }"
@@ -101,9 +123,9 @@
 												</a>
 	
 												<ng-container *ngIf="cet.habilitado">
-													<a class="item-hora" *ngFor="let cupo of cet.cupos"
+													<a class="item-hora" [ngClass]="{ 'active-hr' : horaSeleccionada?.cupo.horaEpoch === cupo.horaEpoch && horaSeleccionada?.cupo.idRecurso === cupo.idRecurso}" *ngFor="let cupo of cet.cupos"
 														(click)="seleccionarHora({fecha: selectedDate[i], cupo : cupo, recurso:re})">
-														<div class="hora">{{ cupo.fechaHora | toLocalScl: cupo.compensacion : 'HH:mm' }}</div>
+														<div class="hora">{{ cupo.horaEpoch * 1000 | toLocalScl: cupo.compensacion : 'HH:mm' }}</div>
 													</a>
 												</ng-container>
 											</ng-container>
@@ -116,11 +138,12 @@
 										<mat-calendar *ngIf="displayCalendar" [minDate]="navigationDate['min']" [maxDate]="navigationDate['max']"
 											[dateClass]="re.datesToHighlight.dateClass" [selected]="selectedDate[i]"
 											(selectedChange)="onSelect($event, i)"></mat-calendar>
-										<div class="datos-horas">
-											<p class="sinHorasMes" *ngIf="!re.poseeMes">El profesional no tiene horas disponibles en el mes.</p>
-											<p *ngIf="!re.proximaFecha">No existen horas disponibles.</p>
-											<p *ngIf="re.proximaFecha">Próxima hora disponible:
-												<span>{{ re.proximaFecha | toLocalScl: re.proximaFechaCompensacion : 'dddd DD/MM/YYYY [a las] HH:mm'}}</span></p>
+										<div class="datos-horas" *ngIf="displayCalendar">
+											<p class="sinHorasMes" *ngIf="!re.poseeMes">Sin disponibilidad de horas este mes. Puedes buscar citas en meses siguientes o llamarnos al 22 676 7000.</p>
+											<p *ngIf="!re.proximaHoraDisponible?.cupo?.horaEpoch && re.poseeMes">Sin próxima hora disponible.</p>
+											<p *ngIf="re.proximaHoraDisponible?.cupo?.horaEpoch && re.poseeMes">Próxima hora disponible:
+												<span>{{ re.proximaHoraDisponible?.cupo.horaEpoch * 1000 | toLocalScl: re.proximaHoraDisponible?.cupo.compensacion : 'dddd DD/MM/YYYY [a las] HH:mm'}}</span>
+											</p>
 										</div>
 									</div>
 								</div>

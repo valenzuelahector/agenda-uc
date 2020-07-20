@@ -1,17 +1,18 @@
-import { Component, OnInit, Input, Output, EventEmitter, OnChanges } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnChanges, HostListener, OnDestroy } from '@angular/core';
 import { AgendaAmbulatoriaService } from  'src/app/services/agenda-ambulatoria.service';
 import { UtilsService } from 'src/app/services/utils.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import gtag, { install } from 'ga-gtag';
 import { ErrorReservaComponent } from 'src/app/shared/components/modals/error-reserva/error-reserva.component';
 import { MatDialog } from '@angular/material';
+import * as $ from 'jquery';
 
 @Component({
   selector: 'app-confirmacion',
   templateUrl: './confirmacion.component.html',
   styleUrls: ['./confirmacion.component.scss']
 })
-export class ConfirmacionComponent implements OnInit, OnChanges {
+export class ConfirmacionComponent implements OnInit, OnChanges, OnDestroy {
 
   //public reservaFinalizada:boolean = false;
 
@@ -21,7 +22,12 @@ export class ConfirmacionComponent implements OnInit, OnChanges {
   @Input() reservaFinalizada:boolean;
   @Output() confirmarReserva:EventEmitter<any> = new EventEmitter();
   @Input() mensajes:any = [];
-
+  disableExpand = true;
+  disableBarReserva = false;
+  expanded = { reserva : true, info : true }
+  reservaSubscribe;
+  verMasOpened = false;
+  verMasAction = false;
   constructor(
     public agendaService:AgendaAmbulatoriaService,
     public utils:UtilsService,
@@ -30,19 +36,31 @@ export class ConfirmacionComponent implements OnInit, OnChanges {
   ) { }
 
   ngOnInit() {
-   
+    this.onResize();
+    this.reservaSubscribe = this.utils.getEmitReservar().subscribe( res => {
+      this.reservar();
+    })
   }
 
   ngOnChanges() {
+    this.onResize();
+    setTimeout(()=> {
+      this.verMas();
+      this.setVerMas('close')
+    },300)
+  }
+
+  ngOnDestroy(){
+    this.reservaSubscribe.unsubscribe();
   }
 
   reservar(){
-
+    console.log(this.calendario)
     let fecha:any = this.utils.toLocalScl(this.calendario.cupo.fechaHora, this.calendario.cupo.compensacion);
-
+    this.disableBarReserva = true;
     this.agendaService.postCita({
       fechaInicioDesde: fecha,
-      idCentro: this.calendario.cupo.idStrCentro,
+      idCentro: this.calendario.cupo.centro.id,
       idRecurso: this.calendario.recurso.id,
       idServicio: this.busquedaInicial.especialidad.idServicio,
       duracion: this.calendario.cupo.duracion,
@@ -50,7 +68,7 @@ export class ConfirmacionComponent implements OnInit, OnChanges {
       tipoIdPaciente: this.paciente.adicional.tipoDocumento,
       paisIdentificador: 'CL',
       idPlanCobertura: this.paciente.adicional.prevision.idPlan,
-      idDisponibilidad: this.calendario.cupo.idStrDisponibilidad,
+      idDisponibilidad: this.calendario.cupo.disponibilidad.id,
       idTipoCita: this.calendario.cupo.idTipoCita.id
     }).subscribe(data => {
       if(data['statusCod'] == 'OK'){
@@ -59,6 +77,7 @@ export class ConfirmacionComponent implements OnInit, OnChanges {
       }else{
         this.errReserva(data['usrMsg']);
       }
+      this.disableBarReserva = false;
     })
 
     gtag('event', 'Clic', { 'event_category': 'Reserva de Hora', 'event_label': 'Paso4:Confirmación'});
@@ -78,6 +97,51 @@ export class ConfirmacionComponent implements OnInit, OnChanges {
     dialogRef.componentInstance.dialogEvent.subscribe((result) => {
       this.utils.setReloadBusqueda();
     })
+
+  }
+
+  @HostListener('window:resize', [])
+  onResize(): void {
+
+    if (window.innerWidth <= 960) {
+      this.disableExpand = false;
+    } else {
+      this.disableExpand = true;
+      this.expanded = { reserva : true, info : true }
+    }
+    
+    this.verMas();
+  }
+
+  verMas(){
+    
+    const hDatosReserva = $("#contDatosReserva").height();
+    const hIndic = $("#contIndic").height();
+    if(hDatosReserva !== undefined){
+      if(hIndic > hDatosReserva){
+        this.verMasAction = true;
+        $("#contIndic").css({
+          height: (hDatosReserva + 42) + 'px'
+        })
+      }else{
+        this.verMasAction = false;
+        $("#contIndic").css({
+          height: ''
+        })
+      }
+    }
+  }
+
+  setVerMas(action){
+    if(action === 'open'){
+      this.verMasOpened = true;
+      $("#contIndic").css({
+        height: ''
+      })
+    }else{
+      this.verMasOpened = false;
+      this.verMas();
+    }
   }
 }
 

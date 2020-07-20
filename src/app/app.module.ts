@@ -8,6 +8,7 @@ import { LOCALE_ID } from '@angular/core';
 import { registerLocaleData } from '@angular/common';
 import locale from '@angular/common/locales/es';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { SlickCarouselModule } from 'ngx-slick-carousel';
 
 registerLocaleData(locale, 'es');
 import { NgModule } from '@angular/core';
@@ -38,6 +39,9 @@ import { ConfirmacionAnulacionReservaComponent } from './pages/anular-reserva/co
 import { ConfirmarAnularReservaComponent } from './shared/components/modals/confirmar-anular-reserva/confirmar-anular-reserva.component';
 import { ErrorReservaComponent } from './shared/components/modals/error-reserva/error-reserva.component';
 import { ToLocalSclPipe } from './to-local-scl.pipe';
+import { BuscarTuMedicoComponent } from './pages/reservacion/buscar-tu-medico/buscar-tu-medico.component';
+import { DetalleTuMedicoComponent } from './pages/reservacion/detalle-tu-medico/detalle-tu-medico.component';
+import { MedicosAsociadosComponent } from './shared/components/medicos-asociados/medicos-asociados.component';
 
 @NgModule({
   declarations: [
@@ -64,6 +68,9 @@ import { ToLocalSclPipe } from './to-local-scl.pipe';
     RutFormaterDirective,
     ErrorReservaComponent,
     ToLocalSclPipe,
+    BuscarTuMedicoComponent,
+    DetalleTuMedicoComponent,
+    MedicosAsociadosComponent,
   ],
   imports: [
     BrowserModule,
@@ -75,7 +82,8 @@ import { ToLocalSclPipe } from './to-local-scl.pipe';
     FormsModule,
     ReactiveFormsModule,
     OrderModule,
-    FlexLayoutModule
+    FlexLayoutModule,
+    SlickCarouselModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: Interceptor, multi: true },

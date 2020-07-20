@@ -1,19 +1,23 @@
-import { Component, OnInit, ViewChild, Output, EventEmitter, Input } from '@angular/core';
+import { Component, OnInit, ViewChild, Output, EventEmitter, Input, OnChanges } from '@angular/core';
 import { UtilsService } from 'src/app/services/utils.service';
 import { AgendaAmbulatoriaService } from 'src/app/services/agenda-ambulatoria.service';
 import { FormControl, FormGroup, Validators, FormGroupDirective } from '@angular/forms'
 import gtag, { install } from 'ga-gtag';
+import { ErrorReservaComponent } from 'src/app/shared/components/modals/error-reserva/error-reserva.component';
+import { MatDialog } from '@angular/material';
+
 
 @Component({
   selector: 'app-identificacion',
   templateUrl: './identificacion.component.html',
   styleUrls: ['./identificacion.component.scss']
 })
-export class IdentificacionComponent implements OnInit {
+export class IdentificacionComponent implements OnInit, OnChanges {
 
   @Output() datosPaciente: EventEmitter<any> = new EventEmitter();
   @Input() busquedaInicial: any;
   @Input() calendario: any;
+  @Input() rutMatch;
 
   public today: Date = new Date();
   public paciente: any;
@@ -56,9 +60,18 @@ export class IdentificacionComponent implements OnInit {
 
   constructor(
     public utils: UtilsService,
-    public agendaService: AgendaAmbulatoriaService
+    public agendaService: AgendaAmbulatoriaService,
+    public dialog: MatDialog
   ) {
 
+  }
+
+  ngOnChanges(){
+    if(this.rutMatch){
+      this.busquedaPaciente.documento = this.rutMatch;
+      this.busquedaPaciente.documentoFormateado = this.utils.formatRut(this.rutMatch);
+      this.buscarPaciente();
+    }
   }
 
   ngOnInit() {
@@ -108,6 +121,7 @@ export class IdentificacionComponent implements OnInit {
     }
 
     this.agendaService.getPaciente(this.busquedaPaciente.documento, this.busquedaPaciente.tipoDocumento).subscribe(res => {
+
       if (res['listaPacientes'] && res['listaPacientes'][0]) {
         this.paciente = res['listaPacientes'][0];
         this.busquedaPaciente.telefono = res['listaPacientes'][0]['numeroTelefonoPrincipal'];
@@ -116,7 +130,9 @@ export class IdentificacionComponent implements OnInit {
       } else {
         this.getPlanesSalud(null, this.busquedaPaciente);
       }
+
       this.findPaciente = true;
+
     })
 
 
@@ -169,7 +185,7 @@ export class IdentificacionComponent implements OnInit {
       data['previsionObj'] = data['prevision'];
       data['prevision'] = (data['prevision']) ? data['prevision']['idPlan'] : null;
       data['fono_movil'] = '+' + data['fono_movil'];
-      
+
       this.agendaService.postPaciente(data).subscribe(res => {
         if ((res['statusCode'] && res['statusCode'] == 'OK') || (res['statusCod'] && res['statusCod'] == 'OK')) {
           this.limpiarFormulario();
@@ -211,7 +227,7 @@ export class IdentificacionComponent implements OnInit {
 
     let hasUpd = { telefono: false, correo: false };
     let dataUpd = { idPRM: this.paciente.id };
-    
+
     if (this.paciente.email !== this.busquedaPaciente.correo) {
       dataUpd['correo'] = this.busquedaPaciente.correo;
       hasUpd['correo'] = true;
@@ -222,12 +238,12 @@ export class IdentificacionComponent implements OnInit {
       hasUpd['telefono'] = true;
     }
 
-   return { dataUpd, hasUpd };
+    return { dataUpd, hasUpd };
 
   }
-  updDatosBusqCliente(data){
+  updDatosBusqCliente(data) {
     return new Promise((resolve, reject) => {
-      this.agendaService.putPaciente(data).subscribe( res => {
+      this.agendaService.putPaciente(data).subscribe(res => {
         resolve(true)
       })
     })
@@ -249,7 +265,7 @@ export class IdentificacionComponent implements OnInit {
         return false;
       }
 
-      if(updInfo['hasUpd']['correo'] || updInfo['hasUpd']['telefono']){
+      if (updInfo['hasUpd']['correo'] || updInfo['hasUpd']['telefono']) {
         let respUpdB = await this.updDatosBusqCliente(updInfo['dataUpd']);
       }
 
@@ -260,42 +276,44 @@ export class IdentificacionComponent implements OnInit {
       fechaTermino.setMinutes(fechaTermino.getMinutes() + duracion);
       let fTermino = this.utils.toLocalScl(fechaTermino, this.calendario.cupo.compensacion);
 
-      this.agendaService.geReglasValidacion({
+      this.reglasValidacion(fecha, fTermino).then(data => {
 
-        fechaInicio: fecha,
-        fechaTermino: fTermino,
-        idCentro: this.calendario.cupo.idStrCentro,
-        idRecurso: this.calendario.recurso.id,
-        idServicio: this.busquedaInicial.especialidad.idServicio,
-        idPaciente: this.paciente.id,
-        idDisponibilidad: this.calendario.cupo.idStrDisponibilidad,
-        idProfesional: this.calendario.cupo.idStrRecProfesional,
-        idPlanSalud: this.busquedaPaciente.prevision.id
-
-      }).subscribe(data => {
-
-        let reglas: any = [];
-        let valorConvenio: any = false;
-        let reservable: any = false;
-
-        if (data['listaMensajesDeRegla'] && data['listaCupos'][0]) {
-          reglas = data['listaMensajesDeRegla'];
-          valorConvenio = data['listaCupos'][0]['valorConvenio'];
-          reservable = data['listaCupos'][0]['reservable']['reservable']
+        if(!data['listaTiposDeCita'] || !data['listaTiposDeCita'][0]){
+          if(data['statusCod'] && data['statusCod'].toUpperCase() == 'ERR'){
+            this.errReserva(data['usrMsg']);
+          }else{
+            this.utils.mDialog("Error", "No se ha podido verificar la Disponibilidad del Cupo. Intente nuevamente.", "message");
+          }
+          return false;
         }
 
         this.agendaService.getMensajes({
           ResourceId: this.calendario.recurso.id,
-          CenterId: this.calendario.cupo.idStrCentro,
+          CenterId: this.calendario.cupo.centro.id,
           ServiceId: this.busquedaInicial.especialidad.idServicio,
           Channel: 'PatientPortal'
         }).subscribe(dt => {
 
           let mensajes = (dt && dt['mensajes']) ? dt['mensajes'] : [];
-          this.datosPaciente.emit({ paciente: this.paciente, reglas: reglas, valorConvenio: valorConvenio, reservable: reservable, mensajes: mensajes });
+          this.datosPaciente.emit({ 
+            paciente: this.paciente, 
+            reglas: data['reglas'], 
+            valorConvenio: data['valorConvenio'], 
+            reservable: data['reservable'], 
+            mensajes: mensajes ,
+            tipoCita: data['listaTiposDeCita'][0],
+            direccionCentro: (data['listaCentros'] && data['listaCentros'][0] && data['listaCentros'][0]['direccion']) ? data['listaCentros'][0]['direccion'] : null
+          });
 
         })
 
+      }).catch(err => {
+
+        if(err === 'no-reservable'){
+          this.errReserva('El cupo seleccionado no se encuentra disponible. Seleccione otra hora.');
+        }else{
+          this.errReserva(err['usrMsg']);
+        }
       })
 
     } else {
@@ -325,6 +343,63 @@ export class IdentificacionComponent implements OnInit {
 
   }
 
+  getFechasInicioTermino() {
+    let duracion = this.calendario.cupo.duracion;
+    let fecha: any = this.utils.toLocalScl(this.calendario.cupo.fechaHora, this.calendario.cupo.compensacion);
+    let fechaTermino = new Date(fecha);
+    fechaTermino.setMinutes(fechaTermino.getMinutes() + duracion);
+    let fTermino = this.utils.toLocalScl(fechaTermino, this.calendario.cupo.compensacion);
+
+    return {
+      fecha,
+      fTermino
+    }
+  }
+
+  reglasValidacion(fecha, fTermino) {
+
+    return new Promise((resolve, reject) => {
+
+      this.agendaService.geReglasValidacion({
+
+        fechaInicio: fecha,
+        fechaTermino: fTermino,
+        idCentro: this.calendario.cupo.centro.id,
+        idRecurso: this.calendario.recurso.id,
+        idServicio: this.busquedaInicial.especialidad.idServicio,
+        idPaciente: this.paciente.id,
+        idDisponibilidad: this.calendario.cupo.disponibilidad.id,
+        idProfesional: this.calendario.recurso.id,
+        idPlanSalud: this.busquedaPaciente.prevision.id
+
+      }).subscribe(data => {
+
+        let reglas: any = [];
+        let valorConvenio: any = false;
+        let reservable: any = false;
+
+        if (data['listaMensajesDeRegla'] && data['listaCupos'][0]) {
+          reglas = data['listaMensajesDeRegla'];
+          valorConvenio = data['listaCupos'][0]['valorConvenio'];
+          reservable = data['listaCupos'][0]['reservable']['reservable'];
+        }else{
+          reservable = true;
+        }
+
+  
+        resolve({
+          ...data,
+          reglas,
+          valorConvenio,
+          reservable, 
+        });
+
+      }, err => {
+        reject(err);
+      })
+    })
+  }
+
   setFormatRut() {
     this.busquedaPaciente.documentoFormateado = (this.busquedaPaciente.documentoFormateado) ?
       this.busquedaPaciente.documentoFormateado.trim() : null;
@@ -349,6 +424,21 @@ export class IdentificacionComponent implements OnInit {
       documento = this.utils.replaceAll(documento, "-", "");
       this.busquedaPaciente.documentoFormateado = documento;
     }
+  }
+
+  errReserva(message) {
+
+    let msg = (message) ? message : 'Se ha producido un error. ¿Que desea hacer?';
+
+    let dialogRef = this.dialog.open(ErrorReservaComponent, {
+      width: '400px',
+      data: { message: msg },
+      autoFocus: false
+    });
+
+    dialogRef.componentInstance.dialogEvent.subscribe((result) => {
+      this.utils.setReloadBusqueda();
+    })
   }
 
 }

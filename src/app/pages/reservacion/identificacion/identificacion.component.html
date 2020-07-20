@@ -3,186 +3,191 @@
     <div>
       <h5>Identificación de paciente</h5>
       <div *ngIf="paciente">
-        <div *ngIf="paciente">
-          <div class="row">
-            <div class="col-md-9"><p class="datos-usuario">{{ paciente.nombreCompleto }} | {{ busquedaPaciente.tipoDocumento == 'PAS' ? 'Pasaporte' : 'RUT' }}: {{ paciente.numeroDocumentoFormateado }}</p></div>
-            <div class="col-md-3"> <button mat-raised-button color="warn" class="full-btn full" (click)="limpiarFormulario(true)" style="margin-top:14px;">Nuevo Paciente</button></div>
+        <div class="row">
+          <div class="col-md-12">
+            <p class="datos-usuario">
+              {{ paciente.nombreCompleto }} | {{ busquedaPaciente.tipoDocumento == 'PAS' ? 'Pasaporte' : 'RUT' }}:
+              {{ paciente.numeroDocumentoFormateado }}
+            <button mat-icon-button class="rmvBtn" (click)="limpiarFormulario(true)" *ngIf="!rutMatch">
+              <mat-icon>close</mat-icon>
+            </button>
+          </p>
           </div>
         </div>
       </div>
       <div class="row" style="margin-top:20px;" *ngIf="!paciente">
         <div class="col-md-4">
           <mat-form-field class="full bgwhite-input" appearance="fill" [color]="primary">
-              <mat-label>Tipo de Documento</mat-label>
-              <mat-select [(ngModel)]="busquedaPaciente.tipoDocumento" [disabled]="!paciente && findPaciente" (selectionChange)="busquedaPaciente.documentoFormateado = null">
-                <mat-option [value]="'RUN'">RUN</mat-option>
-                <mat-option [value]="'PAS'">PASAPORTE</mat-option>
-              </mat-select>
-              <mat-icon matSuffix>list</mat-icon>
-            </mat-form-field>
-        </div>
-        <div class="col-md-4">
-          <mat-form-field class="full bgwhite-input" appearance="fill" [color]="primary">
-              <mat-label>Indique su Identificación</mat-label>
-              <input matInput  
-                maxlength="{{ (busquedaPaciente.tipoDocumento == 'PAS') ? 15 : NULL }}" 
-                [(ngModel)]="busquedaPaciente.documentoFormateado" 
-                (focusout)="setFormatRut()" 
-                (focusin)="restoreFormatRut()" 
-                (keyup)="eventEnter($event, 'buscarPaciente')"
-                placeholder="{{ (busquedaPaciente.tipoDocumento == 'RUN') ? 'Rut sin puntos ni guión' : 'Pasaporte'}}" 
-                autocomplete="off" [disabled]="!paciente && findPaciente"/>
-              <mat-icon matSuffix>chrome_reader_mode</mat-icon>
+            <mat-label>Tipo de Documento</mat-label>
+            <mat-select [(ngModel)]="busquedaPaciente.tipoDocumento" [disabled]="!paciente && findPaciente"
+              (selectionChange)="busquedaPaciente.documentoFormateado = null">
+              <mat-option [value]="'RUN'">RUN</mat-option>
+              <mat-option [value]="'PAS'">PASAPORTE</mat-option>
+            </mat-select>
+            <mat-icon matSuffix>list</mat-icon>
           </mat-form-field>
         </div>
         <div class="col-md-4">
-          <button mat-raised-button color="primary" class="full-btn" (click)="buscarPaciente()" *ngIf="!paciente && !findPaciente">Buscar</button>
-          <button mat-raised-button color="warn" class="full-btn" (click)="limpiarFormulario()" *ngIf="!paciente && findPaciente">Nueva Búsqueda</button>
+          <mat-form-field class="full bgwhite-input" appearance="fill" [color]="primary">
+            <mat-label>Indique su Identificación</mat-label>
+            <input matInput maxlength="{{ (busquedaPaciente.tipoDocumento == 'PAS') ? 15 : NULL }}"
+              [(ngModel)]="busquedaPaciente.documentoFormateado" (focusout)="setFormatRut()"
+              (focusin)="restoreFormatRut()" (keyup)="eventEnter($event, 'buscarPaciente')"
+              placeholder="{{ (busquedaPaciente.tipoDocumento == 'RUN') ? 'Rut sin puntos ni guión' : 'Pasaporte'}}"
+              autocomplete="off" [disabled]="!paciente && findPaciente" />
+            <mat-icon matSuffix>chrome_reader_mode</mat-icon>
+          </mat-form-field>
+        </div>
+        <div class="col-md-4">
+          <button mat-stroked-button class="full-btn btn-purple" (click)="buscarPaciente()" *ngIf="!paciente && !findPaciente">Siguiente</button>
+          <button mat-raised-button class="full-btn btn-purple" (click)="limpiarFormulario()" *ngIf="!paciente && findPaciente">Nueva Búsqueda</button>
         </div>
       </div>
 
       <div class="row" style="margin-top:20px;" *ngIf="paciente">
         <div class="col-md-3 field-margin">
           <mat-form-field class="full bgwhite-input" appearance="fill" [color]="primary">
-              <mat-label>Prevision</mat-label>
-              <mat-select [(ngModel)]="busquedaPaciente.prevision" [compareWith]="utils.compareFn">
-                <mat-optgroup *ngFor="let com of planesSalud" [label]="com.nombreCompania">
-                  <mat-option *ngFor="let plan of com.planes" [value]="plan">
-                    {{plan.nombrePlan}}
-                  </mat-option>
-                </mat-optgroup>
-              </mat-select>
-              <mat-icon matSuffix>local_hospital</mat-icon>
-            </mat-form-field>
+            <mat-label>Prevision</mat-label>
+            <mat-select [(ngModel)]="busquedaPaciente.prevision" [compareWith]="utils.compareFn">
+              <mat-optgroup *ngFor="let com of planesSalud" [label]="com.nombreCompania">
+                <mat-option *ngFor="let plan of com.planes" [value]="plan">
+                  {{plan.nombrePlan}}
+                </mat-option>
+              </mat-optgroup>
+            </mat-select>
+            <mat-icon matSuffix>local_hospital</mat-icon>
+          </mat-form-field>
         </div>
         <div class="col-md-3 field-margin">
-          <mat-form-field class="full bgwhite-input" appearance="fill" [color]="primary" >
-              <mat-label>Teléfono</mat-label>
-              <input matInput placeholder="56912345678"                 
-              (keyup)="eventEnter($event, 'procesarPaciente')"
-              maxlength="11" 
-              [(ngModel)]="busquedaPaciente.telefono" (keypress)="this.utils.numberOnly($event)" onpaste="return false;" autocomplete="off"/>
+          <mat-form-field class="full bgwhite-input" appearance="fill" [color]="primary">
+            <mat-label>Teléfono</mat-label>
+            <input matInput placeholder="56912345678" (keyup)="eventEnter($event, 'procesarPaciente')" maxlength="11"
+              [(ngModel)]="busquedaPaciente.telefono" (keypress)="this.utils.numberOnly($event)" onpaste="return false;"
+              autocomplete="off" />
               <mat-icon matSuffix>local_phone</mat-icon>
           </mat-form-field>
         </div>
         <div class="col-md-3 field-margin">
           <mat-form-field class="full bgwhite-input" appearance="fill" [color]="primary">
-              <mat-label>Correo</mat-label>
-              <input matInput placeholder="nombre@mail.com" 
-              (keyup)="eventEnter($event, 'procesarPaciente')"
-              [(ngModel)]="busquedaPaciente.correo" autocomplete="off"/>
-              <mat-icon matSuffix>mail_outline</mat-icon>
+            <mat-label>Correo</mat-label>
+            <input matInput placeholder="nombre@mail.com" (keyup)="eventEnter($event, 'procesarPaciente')"
+              [(ngModel)]="busquedaPaciente.correo" autocomplete="off" />
+            <mat-icon matSuffix>mail_outline</mat-icon>
           </mat-form-field>
         </div>
         <div class="col-md-3 field-margin">
-          <button mat-raised-button color="primary" class="full-btn full" (click)="procesarPaciente()" style="margin-right:15px">Siguiente</button>
+          <button mat-raised-button color="primary" class="full-btn full" (click)="procesarPaciente()"
+            style="margin-right:15px">Siguiente</button>
         </div>
       </div>
 
       <div *ngIf="!paciente && findPaciente">
         <p>Por favor ingrese sus datos para otorgarle un mejor servicio</p>
-        <form [formGroup]="pacienteForm" #formDirective="ngForm" (keyup)="eventEnter($event, 'buscarPaciente')" >
+        <form [formGroup]="pacienteForm" #formDirective="ngForm" (keyup)="eventEnter($event, 'buscarPaciente')">
           <div class="row" style="margin-top:20px;">
             <div class="col-md-4 field-margin">
-                <mat-form-field class="full bgwhite-input" appearance="fill" [color]="primary">
-                    <mat-label>Nombres</mat-label>
-                    <input matInput formControlName="nombre" required autocomplete="off"/>
-                    <mat-icon matSuffix>format_quote</mat-icon>
-                    <mat-error *ngIf="revPacienteForm.nombre.errors">
-                      <span *ngIf="revPacienteForm.nombre.errors.required">Campo Obligatorio</span>
-                    </mat-error>
-                </mat-form-field>
-            </div>
-            <div class="col-md-4 field-margin">
               <mat-form-field class="full bgwhite-input" appearance="fill" [color]="primary">
-                  <mat-label>Apellido Paterno</mat-label>
-                  <input matInput formControlName="apellido_paterno" required autocomplete="off"/>
-                  <mat-icon matSuffix>format_quote</mat-icon>
-                  <mat-error *ngIf="revPacienteForm.apellido_paterno.errors">
-                    <span *ngIf="revPacienteForm.apellido_paterno.errors.required">Campo Obligatorio</span>
-                  </mat-error>
+                <mat-label>Nombres</mat-label>
+                <input matInput formControlName="nombre" required autocomplete="off" />
+                <mat-icon matSuffix>format_quote</mat-icon>
+                <mat-error *ngIf="revPacienteForm.nombre.errors">
+                  <span *ngIf="revPacienteForm.nombre.errors.required">Campo Obligatorio</span>
+                </mat-error>
               </mat-form-field>
             </div>
             <div class="col-md-4 field-margin">
               <mat-form-field class="full bgwhite-input" appearance="fill" [color]="primary">
-                  <mat-label>Apellido Materno</mat-label>
-                  <input matInput formControlName="apellido_materno" required autocomplete="off" />
-                  <mat-icon matSuffix>format_quote</mat-icon>
-                    <mat-error *ngIf="revPacienteForm.apellido_materno.errors">
-                    <span *ngIf="revPacienteForm.apellido_materno.errors.required" style="font-size: 10px !important;">Campo Obligatorio, si no tiene ingrese un punto (.)</span>
-                  </mat-error>
+                <mat-label>Apellido Paterno</mat-label>
+                <input matInput formControlName="apellido_paterno" required autocomplete="off" />
+                <mat-icon matSuffix>format_quote</mat-icon>
+                <mat-error *ngIf="revPacienteForm.apellido_paterno.errors">
+                  <span *ngIf="revPacienteForm.apellido_paterno.errors.required">Campo Obligatorio</span>
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div class="col-md-4 field-margin">
+              <mat-form-field class="full bgwhite-input" appearance="fill" [color]="primary">
+                <mat-label>Apellido Materno</mat-label>
+                <input matInput formControlName="apellido_materno" required autocomplete="off" />
+                <mat-icon matSuffix>format_quote</mat-icon>
+                <mat-error *ngIf="revPacienteForm.apellido_materno.errors">
+                  <span *ngIf="revPacienteForm.apellido_materno.errors.required"
+                    style="font-size: 10px !important;">Campo Obligatorio, si no tiene ingrese un punto (.)</span>
+                </mat-error>
               </mat-form-field>
             </div>
 
             <div class="col-md-4 field-margin">
               <mat-form-field class="full bgwhite-input" appearance="fill" [color]="primary" (click)="picker.open()">
-                  <mat-label>Fecha de Nacimiento</mat-label>
-                  <input matInput [matDatepicker]="picker"  formControlName="fecha_nacimiento" [max]="today" readonly required >
-                  <mat-icon matSuffix>calendar_today</mat-icon>
-                  <mat-datepicker #picker></mat-datepicker>
-                  <mat-error *ngIf="revPacienteForm.fecha_nacimiento.errors">
-                    <span *ngIf="revPacienteForm.fecha_nacimiento.errors.required">Campo Obligatorio</span>
-                  </mat-error>
+                <mat-label>Fecha de Nacimiento</mat-label>
+                <input matInput [matDatepicker]="picker" formControlName="fecha_nacimiento" [max]="today" readonly
+                  required>
+                <mat-icon matSuffix>calendar_today</mat-icon>
+                <mat-datepicker #picker></mat-datepicker>
+                <mat-error *ngIf="revPacienteForm.fecha_nacimiento.errors">
+                  <span *ngIf="revPacienteForm.fecha_nacimiento.errors.required">Campo Obligatorio</span>
+                </mat-error>
               </mat-form-field>
             </div>
 
             <div class="col-md-4 field-margin">
               <mat-form-field class="full bgwhite-input" appearance="fill" [color]="primary">
-                  <mat-label>Sexo</mat-label>
-                  <mat-select formControlName="sexo" required>
-                    <mat-option [value]="'F'">Femenino</mat-option>
-                    <mat-option [value]="'M'">Masculino</mat-option>
-                  </mat-select>
-                  <mat-icon matSuffix>face</mat-icon>
-                  <mat-error *ngIf="revPacienteForm.sexo.errors">
-                    <span *ngIf="revPacienteForm.sexo.errors.required">Campo Obligatorio</span>
-                  </mat-error>
-                </mat-form-field>
-            </div>
-
-            <div class="col-md-4 field-margin">
-              <mat-form-field class="full bgwhite-input" appearance="fill" [color]="primary">
-                  <mat-label>Prevision</mat-label>
-                  <mat-select formControlName="prevision">
-                    <mat-optgroup *ngFor="let com of planesSalud" [label]="com.nombreCompania">
-                      <mat-option *ngFor="let plan of com.planes" [value]="plan">
-                        {{plan.nombrePlan}}
-                      </mat-option>
-                    </mat-optgroup>
-                  </mat-select>
-                  <mat-icon matSuffix>local_hospital</mat-icon>
-                  <mat-error *ngIf="revPacienteForm.prevision.errors">
-                    <span *ngIf="revPacienteForm.prevision.errors.required">Campo Obligatorio</span>
-                  </mat-error>
-                </mat-form-field>
-            </div>
-            <div class="col-md-4 field-margin">
-              <mat-form-field class="full bgwhite-input" appearance="fill" [color]="primary">
-                  <mat-label>Teléfono</mat-label>
-                  <input matInput placeholder="56912345678" formControlName="fono_movil" maxlength="11" required (keypress)="utils.numberOnly($event, true)" autocomplete="off"/>
-                  <mat-icon matSuffix>local_phone</mat-icon>
-                  <mat-error *ngIf="revPacienteForm.fono_movil.errors">
-                    <span *ngIf="revPacienteForm.fono_movil.errors.required">Campo Obligatorio</span>
-                  </mat-error>
+                <mat-label>Sexo</mat-label>
+                <mat-select formControlName="sexo" required>
+                  <mat-option [value]="'F'">Femenino</mat-option>
+                  <mat-option [value]="'M'">Masculino</mat-option>
+                </mat-select>
+                <mat-icon matSuffix>face</mat-icon>
+                <mat-error *ngIf="revPacienteForm.sexo.errors">
+                  <span *ngIf="revPacienteForm.sexo.errors.required">Campo Obligatorio</span>
+                </mat-error>
               </mat-form-field>
             </div>
 
             <div class="col-md-4 field-margin">
               <mat-form-field class="full bgwhite-input" appearance="fill" [color]="primary">
-                  <mat-label>Correo</mat-label>
-                  <input matInput placeholder="nombre@mail.com" formControlName="email" required autocomplete="off"/>
-                  <mat-icon matSuffix>mail_outline</mat-icon>
-                  <mat-error *ngIf="revPacienteForm.email.errors">
-                    <span *ngIf="revPacienteForm.email.errors.required">Campo Obligatorio</span>
-                    <span *ngIf="revPacienteForm.email.errors.email">Formato de Correo Inválido</span>
-                  </mat-error>
+                <mat-label>Prevision</mat-label>
+                <mat-select formControlName="prevision">
+                  <mat-optgroup *ngFor="let com of planesSalud" [label]="com.nombreCompania">
+                    <mat-option *ngFor="let plan of com.planes" [value]="plan">
+                      {{plan.nombrePlan}}
+                    </mat-option>
+                  </mat-optgroup>
+                </mat-select>
+                <mat-icon matSuffix>local_hospital</mat-icon>
+                <mat-error *ngIf="revPacienteForm.prevision.errors">
+                  <span *ngIf="revPacienteForm.prevision.errors.required">Campo Obligatorio</span>
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div class="col-md-4 field-margin">
+              <mat-form-field class="full bgwhite-input" appearance="fill" [color]="primary">
+                <mat-label>Teléfono</mat-label>
+                <input matInput placeholder="56912345678" formControlName="fono_movil" maxlength="11" required
+                  (keypress)="utils.numberOnly($event, true)" autocomplete="off" />
+                <mat-icon matSuffix>local_phone</mat-icon>
+                <mat-error *ngIf="revPacienteForm.fono_movil.errors">
+                  <span *ngIf="revPacienteForm.fono_movil.errors.required">Campo Obligatorio</span>
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="col-md-4 field-margin">
+              <mat-form-field class="full bgwhite-input" appearance="fill" [color]="primary">
+                <mat-label>Correo</mat-label>
+                <input matInput placeholder="nombre@mail.com" formControlName="email" required autocomplete="off" />
+                <mat-icon matSuffix>mail_outline</mat-icon>
+                <mat-error *ngIf="revPacienteForm.email.errors">
+                  <span *ngIf="revPacienteForm.email.errors.required">Campo Obligatorio</span>
+                  <span *ngIf="revPacienteForm.email.errors.email">Formato de Correo Inválido</span>
+                </mat-error>
               </mat-form-field>
             </div>
 
             <div class="col-md-4 field-margin">
               <button mat-raised-button color="primary" class="full-btn" (click)="guardarPaciente()">Guardar</button>
             </div>
-  
+
           </div>
         </form>
 

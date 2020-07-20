@@ -1887,7 +1887,7 @@ footer .m-footer .redes-footer a:hover img{
     margin: 15px 0;
 }
 .titulo-2{
-    font-size: 38px;
+    font-size: 28px;
     margin: 15px 0;
 }
 .titulo-3{
@@ -3547,7 +3547,7 @@ float: left;
     padding: 30px 0;
 }
 section{
-    margin-bottom: 60px;
+   // margin-bottom: 60px;
 }
 section.s-m{
     margin-bottom: 0;
@@ -4578,7 +4578,7 @@ padding-top: 0px;
 
 /*--RESERVA--*/
 .w-reservas{
-  padding: 60px 0 0;
+  padding: 30px 0px;
 }
 .flex-container{
   display:-ms-flexbox;
@@ -4591,7 +4591,7 @@ padding-top: 0px;
   justify-content:space-between;
 }
 .header-reserva{
-  margin-bottom: 50px;
+ // margin-bottom: 50px;
 }
 .titulo-2{
   font-weight: normal;
@@ -4607,29 +4607,56 @@ padding-top: 0px;
   -webkit-box-align:space-between;
   justify-content:space-between;
   flex-wrap: wrap;
-  width: 550px;
+  width: 450px;
   max-width: 100%;
   position: relative;
 }
-.w-pasos:after{
-  content: "";
-  width: 90%;
-  margin: 0 auto;
-  left: 0;
-  right: 0;
-  z-index: -1;
-  top: 28px;
-  height: 3px;
-  background: #802E87;
-  display: block;
-  position: absolute;
+.w-pasos{
+
+    &:after, &:before{
+        content: "";
+        left: 20px;
+        right: 0;
+        z-index: -1;
+        top: 20px;
+        height: 3px;
+        display: block;
+        position: absolute;
+        background: #802E87;
+        display: block;
+        position: absolute;
+    }
+    &:after{
+        width: 0%;
+    }
+
+    &.step1:after{
+        width:33%
+    }
+
+    &.step2:after{
+        width:60%
+    }
+
+    &.step3:after{
+        width:90%
+    }
+
+    &:before{
+        width: 90%;
+        opacity: 0.3;
+    }
+
 }
+
+
+
 .w-pasos .item-paso{
 }
 .w-pasos .item-paso figure{
   text-align: center;
-  width: 58px;
-  height: 58px;
+  width: 40px;
+  height: 40px;
   margin: 0 auto;
   border:3px solid #802E87;
   border-radius: 100%;
@@ -4648,7 +4675,7 @@ padding-top: 0px;
 }
 .w-pasos .item-paso h4{
   font-weight: 300;
-  font-size: 14px;
+  font-size: 12px;
   margin-top: 5px;
 }
 
@@ -4657,7 +4684,7 @@ padding-top: 0px;
 }
 .item-paso figure i{
   color:#802E87;
-  font-size: 28px;
+  font-size: 20px;
 
 }
 .item-paso.activo figure i{
@@ -4793,13 +4820,14 @@ padding-top: 0px;
   align-items: center;
   justify-content: space-around;
   margin-top: 20px;
+  border-radius: 6px;
 }
 .resultados-para .cuadro-res .item-res{
   display: inline-block;
 }
 .resultados-para .cuadro-res .item-res img{
   display: inline-block;
-  margin-right: 5px;
+  margin-right: 15px;
   vertical-align: middle;
 }
 .resultados-para .cuadro-res .item-res p{
@@ -4990,7 +5018,8 @@ width: 200px;
 }
 .item-doc .box-doc .txt-doc .ver-perfil{
   font-weight: 300;
-  background: #802E87;
+ // background: #802E87;
+ background: #2a7de1;
   font-size: 16px;
   color: #fff !important;
   padding: 5px 16px !important;
@@ -5057,7 +5086,7 @@ width: 200px;
 }
 
 .item-hora{
-  background: #802E87;
+  background: #b467bb;
   color:#fff;
   padding: 8px 20px;
   border-radius: 6px;
@@ -5079,8 +5108,8 @@ width: 200px;
   text-align: center !important;
 
 }
-.item-hora:hover{
-  background: #632369;
+.item-hora:hover, .item-hora.active-hr{
+  background: #802e87;
 }
 .item-hora .centro-medico{
   color:#fff;
@@ -5114,7 +5143,7 @@ width: 200px;
   font-weight: bold;
   display: block;
   width: 100%;
-  letter-spacing: 5px;
+  letter-spacing: 1px;
 }
 .comentario-hora{
   position: absolute;
@@ -6718,3 +6747,20 @@ width: 850px;
   
   .cus-pad{ padding:5px 25px 5px 15px !important; margin-bottom: 10px;}
   .icon-cus-pad{margin-right: 12px !important;}
+.btn-purple{
+    background: #802e87;
+    color: #fff;
+    font-size: 16px;
+    width: 100%;
+}
+
+.infseleccion{
+    line-height: 19px !important;
+    text-align: left !important;
+    font-size: 15px !important;
+    font-weight: bold;
+    b{
+        display: block;
+        font-size: 12px;
+    }
+}
