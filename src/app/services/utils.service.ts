@@ -66,9 +66,9 @@ export class UtilsService {
     if (!/^[0-9]+[-|‐]{1}[0-9kK]{1}$/.test(run)) {
       return false
     } else {
-      var tmp = run.split('-');
-      var digv = tmp[1];
-      var rut = tmp[0];
+      const tmp = run.split('-');
+      let digv = tmp[1];
+      const rut = tmp[0];
       if (digv == 'K') digv = 'k';
       return (this.checkRunDv(rut) == (digv as string).toUpperCase());
     }
@@ -76,7 +76,7 @@ export class UtilsService {
   }
 
   checkRunDv(T) {
-    var M = 0, S = 1;
+    let M = 0, S = 1;
     for (; T; T = Math.floor(T / 10))
       S = (S + T % 10 * (9 - M++ % 6)) % 11;
     return S ? S - 1 : 'K';
@@ -140,7 +140,7 @@ export class UtilsService {
   }
 
   validateEmail(correo) {
-    var regex = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+    let regex = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
     return regex.test(correo) ? true : false;
   }
 
@@ -150,23 +150,24 @@ export class UtilsService {
 
   formatRut(rut) {
     rut = rut.toUpperCase();
+    let rutPuntos;
     let actual = rut.replace(/^0+/, "");
     if (actual != '' && actual.length > 1) {
-      var sinPuntos = actual.replace(/\./g, "");
-      var actualLimpio = sinPuntos.replace(/-/g, "");
-      var inicio = actualLimpio.substring(0, actualLimpio.length - 1);
-      var rutPuntos = "";
-      var i = 0;
-      var j = 1;
+      let sinPuntos = actual.replace(/\./g, "");
+      let actualLimpio = sinPuntos.replace(/-/g, "");
+      let inicio = actualLimpio.substring(0, actualLimpio.length - 1);
+      rutPuntos = "";
+      let i = 0;
+      let j = 1;
       for (i = inicio.length - 1; i >= 0; i--) {
-        var letra = inicio.charAt(i);
+        let letra = inicio.charAt(i);
         rutPuntos = letra + rutPuntos;
         if (j % 3 == 0 && j <= inicio.length - 1) {
           rutPuntos = "." + rutPuntos;
         }
         j++;
       }
-      var dv = actualLimpio.substring(actualLimpio.length - 1);
+      let dv = actualLimpio.substring(actualLimpio.length - 1);
       rutPuntos = rutPuntos + "-" + dv;
     }
 

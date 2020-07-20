@@ -191,8 +191,8 @@ export class SeleccionComponent implements OnInit, OnChanges {
 
     return new Promise((resolve, reject) => {
 
-      var fechaHoy = new Date();
-      var fechaLimite;
+      let fechaHoy = new Date();
+      let fechaLimite;
 
       fechaHoy.setMonth(fechaHoy.getMonth() + this.counterLoader);
       fechaLimite = new Date(fechaHoy.getFullYear(), fechaHoy.getMonth() + 1, 0)
