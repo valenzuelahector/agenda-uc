@@ -7,35 +7,15 @@
 img {
     display: block;
     border-radius: 100%;
-    margin:0px auto;
 }
 
 .smtxt{
-    color: #2A7DE1;
+    color: #802e87;
     display: block;
-    font-size: 15px;
-    line-height: 20px;
+    font-size: 11px;
+    font-weight: bold;
+    line-height: 14px;
     margin-bottom: 5px;
-}
-
-.block{
-
-    display: block;
-    margin-bottom: 8px;
-
-    .lbl{
-        display: block;
-        font-size: 14px;
-        font-weight: 300;
-    }
-    .des{
-        display: block;
-        font-size: 14px;
-
-        &.mh{
-            min-height: 45px;
-        }
-    }
 }
 
 .ctxts{
@@ -64,7 +44,6 @@ img {
     left:-33px !important;
 }
 
-
 .carouselConfig{
     width: 100%; 
     margin:0px auto;
@@ -75,16 +54,22 @@ img {
     width: 1000px;
 }
 
-@media(max-width: 1000px){
-    .carouselConfig{
-        width: 85%;
-    }
-}
-
 .btng{
-    font-size: 11px;
+    font-size: 14px;
     line-height: 25px;
     margin-top: 5px;
+}
+
+.tituloEspc{
+    display: block;
+    color: #802e87;
+    font-weight: bold;
+}
+
+.descEspc{
+    display: block;
+    font-size: 14px;
+    margin: 10px 0px;
 }
 
 .btn-nav{
@@ -96,11 +81,6 @@ img {
     height: 38px;
     border-radius: 100%;
     cursor: pointer;
-    position: absolute;
-    top: 50%;
-    margin-top: -32px;
-    left: 50%;
-    margin-left: -19px;
 }
 
 @media(max-width:720px){

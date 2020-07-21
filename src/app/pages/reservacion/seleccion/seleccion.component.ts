@@ -5,7 +5,7 @@ import { MatCalendarCellCssClasses } from '@angular/material';
 import { PerfilProfesionalComponent } from 'src/app/shared/components/modals/perfil-profesional/perfil-profesional.component';
 import { MatDialog } from '@angular/material';
 import { OrderPipe } from 'ngx-order-pipe';
-import { ENV } from 'src/environments/environment';
+import { ENV, dummyData } from 'src/environments/environment';
 import gtag, { install } from 'ga-gtag';
 import * as $ from 'jquery';
 import * as moment from 'moment';
@@ -24,6 +24,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
   @Input() reloadBusqueda: number = 0;
   @Output() calendario: EventEmitter<any> = new EventEmitter();
   @Output() readQuery: EventEmitter<any> = new EventEmitter();
+  @Output() listaEspera : EventEmitter<any> = new EventEmitter();
 
   public recursos: any;
   public fechaHoy: Date;
@@ -51,6 +52,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
   public customMensaje: string = "";
   public keepSearching = true;
   public listaFechas = {};
+  public medicosAsociados = dummyData.profesionalesSimilares;
 
   constructor(
     public agendaService: AgendaAmbulatoriaService,
@@ -490,4 +492,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
     this.utils.verPerfilProfesional(re);
   }
 
+  procesarListaEspera(data){
+    this.listaEspera.emit(data);
+  }
 }

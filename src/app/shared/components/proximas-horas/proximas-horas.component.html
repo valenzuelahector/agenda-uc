@@ -1,0 +1,30 @@
+<div class="carouselConfig">
+    <span class="iniText">Revisa las próximas horas que tenemos disponibles para tí</span>
+
+    <div fxLayout="row">
+        <div fxFlex="45px" fxFlex.sm="0px" fxFlex.xs="0px">
+            <div (click)="slickModal.slickPrev()" class="btn-nav" style="margin: 55px 2px;" matRipple>
+                <i class="fas fa-angle-left"></i>
+            </div>
+        </div>
+        <div fxFlex="100%">
+            <ngx-slick-carousel class="carousel" #slickModal="slick-carousel" [config]="slideConfig">
+                <div ngxSlickItem *ngFor="let pe of proximasHoras" class="slide">
+                    <div class="itmslide">
+                        <span class="tituloEspc">{{ pe?.title }}</span>
+                        <span class="descEspc"> {{ pe?.description}}</span>
+                        <button mat-stroked-button class="btn-morado btng" (click)="buscarCalendario(med)">
+                            Ver Horas Disponibles
+                        </button>
+                    </div>
+                </div>
+            </ngx-slick-carousel>
+        </div>
+        <div fxFlex="45px" fxFlex.sm="0px" fxFlex.xs="0px">
+            <div (click)="slickModal.slickNext()" class="btn-nav" style="margin: 55px 2px;" matRipple>
+                <i class="fas fa-angle-right"></i>
+            </div>
+        </div>
+    </div> 
+
+</div>

@@ -42,6 +42,8 @@ import { ToLocalSclPipe } from './to-local-scl.pipe';
 import { BuscarTuMedicoComponent } from './pages/reservacion/buscar-tu-medico/buscar-tu-medico.component';
 import { DetalleTuMedicoComponent } from './pages/reservacion/detalle-tu-medico/detalle-tu-medico.component';
 import { MedicosAsociadosComponent } from './shared/components/medicos-asociados/medicos-asociados.component';
+import { ProximasHorasComponent } from './shared/components/proximas-horas/proximas-horas.component';
+import { ListaEsperaEfectuadaComponent } from './pages/reservacion/lista-espera-efectuada/lista-espera-efectuada.component';
 
 @NgModule({
   declarations: [
@@ -71,6 +73,8 @@ import { MedicosAsociadosComponent } from './shared/components/medicos-asociados
     BuscarTuMedicoComponent,
     DetalleTuMedicoComponent,
     MedicosAsociadosComponent,
+    ProximasHorasComponent,
+    ListaEsperaEfectuadaComponent,
   ],
   imports: [
     BrowserModule,

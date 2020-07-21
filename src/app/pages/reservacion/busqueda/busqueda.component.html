@@ -6,7 +6,9 @@
 
 -->
 <div class="cuadro-reserva">
-
+  <div class="proxHora">
+    <app-proximas-horas></app-proximas-horas>
+  </div>
   <div class="seleccionar-area">
     <h4>Seleccionar Área: <span *ngIf="areas.length == 0"> No existen Áreas de Consulta disponibles</span></h4>
     <mat-radio-group [(ngModel)]="areaSelected" (change)="changeAreas($event)">

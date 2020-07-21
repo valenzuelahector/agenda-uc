@@ -5,6 +5,9 @@ import { FormControl, FormGroup, Validators, FormGroupDirective } from '@angular
 import gtag, { install } from 'ga-gtag';
 import { ErrorReservaComponent } from 'src/app/shared/components/modals/error-reserva/error-reserva.component';
 import { MatDialog } from '@angular/material';
+import { ENV } from 'src/environments/environment';
+import { OrderPipe } from 'ngx-order-pipe';
+import { ThrowStmt } from '@angular/compiler';
 
 
 @Component({
@@ -15,9 +18,12 @@ import { MatDialog } from '@angular/material';
 export class IdentificacionComponent implements OnInit, OnChanges {
 
   @Output() datosPaciente: EventEmitter<any> = new EventEmitter();
+  @Output() confirmacionListaEspera: EventEmitter<any> = new EventEmitter();
+
   @Input() busquedaInicial: any;
   @Input() calendario: any;
   @Input() rutMatch;
+  @Input() listaEspera:any;
 
   public today: Date = new Date();
   public paciente: any;
@@ -37,6 +43,15 @@ export class IdentificacionComponent implements OnInit, OnChanges {
     telefono: null,
     correo: null
   }
+
+  public listaEsperaSeleccion = {
+    horario: null,
+    centro: null,
+    profesional: null
+  }
+
+  public centros = [];
+  public profesionales = []
 
   @ViewChild("formDirective", { static: false }) formDirective: FormGroupDirective;
 
@@ -61,16 +76,26 @@ export class IdentificacionComponent implements OnInit, OnChanges {
   constructor(
     public utils: UtilsService,
     public agendaService: AgendaAmbulatoriaService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    public orderPipe: OrderPipe
+
   ) {
 
   }
 
   ngOnChanges(){
+
     if(this.rutMatch){
       this.busquedaPaciente.documento = this.rutMatch;
       this.busquedaPaciente.documentoFormateado = this.utils.formatRut(this.rutMatch);
       this.buscarPaciente();
+    }
+
+    if(this.listaEspera && this.busquedaInicial){
+      this.limpiarFormulario(true);
+      const idServicio = this.busquedaInicial.especialidad.idServicio;
+      const area = this.busquedaInicial.area.id;
+      this.getProfesionales(idServicio);
     }
   }
 
@@ -220,6 +245,12 @@ export class IdentificacionComponent implements OnInit, OnChanges {
       prevision: null,
       telefono: null,
       correo: null
+    }
+
+    this.listaEsperaSeleccion = {
+      horario: null,
+      centro: null,
+      profesional: null
     }
   }
 
@@ -439,6 +470,104 @@ export class IdentificacionComponent implements OnInit, OnChanges {
     dialogRef.componentInstance.dialogEvent.subscribe((result) => {
       this.utils.setReloadBusqueda();
     })
+  }
+
+  getCentros(idServicio, idArea, idProfesional){
+
+    this.agendaService.getCentrosByEspecialidad(idServicio, idArea, idProfesional).subscribe( res => {
+      
+      res['centros'].forEach((val, key) => {
+        
+        ENV.idCentrosNoDisponibles.forEach((v, k) => {
+          if(val['idCentro'] == v){
+            res['centros'].splice(key, 1);
+          }
+        });
+      });
+
+      res['centros'] = this.orderPipe.transform(res['centros'], 'nombre');
+      this.centros = res['centros'];
+
+      if(this.centros.length === 1){
+        this.listaEsperaSeleccion.centro = this.centros[0];
+      }
+
+    });
+
+  }
+
+  getProfesionales(idServicio){
+    const query = `idServicio=${idServicio}`
+    this.agendaService.getProfesionalesByQuery(query).subscribe( res => {
+      this.profesionales = this.orderPipe.transform(res['profesionales'], 'nombreProfesional');
+      this.profesionales.forEach((val, key) => {
+        if(val['idProfesional'] === this.listaEspera.id){
+          this.listaEsperaSeleccion.profesional = val;
+          this.selectProfesional({value :val });
+        }
+      });
+    });
+  }
+
+  selectProfesional(dt){
+    
+    let idProfesional = null;
+    
+    if(dt.value !== 'NA'){
+      idProfesional = dt.value.idProfesional;
+      this.listaEspera.nombre = dt.value.nombreProfesional;
+      this.listaEsperaSeleccion.centro = null;
+    }
+
+    const idServicio = this.busquedaInicial.especialidad.idServicio;
+    const area = this.busquedaInicial.area.id;
+
+    this.getCentros(idServicio, area, idProfesional);
+ 
+  }
+
+  procesarListaDeEspera(){
+
+    if(!this.listaEsperaSeleccion.profesional){
+      this.utils.mDialog("Error", "Debe seleccionar el profesional de preferencia.", "message");
+      return false;
+    }
+
+    if(!this.listaEsperaSeleccion.horario){
+      this.utils.mDialog("Error", "Debe seleccionar el horario de preferencia.", "message");
+      return false;
+    }
+
+    if(!this.listaEsperaSeleccion.centro){
+      this.utils.mDialog("Error", "Debe seleccionar el Centro Médico de preferencia.", "message");
+      return false;
+    }
+
+    let data = {
+      intervaloPreferido : this.listaEsperaSeleccion.horario,
+      idPaciente: this.paciente.id,
+      idServicio: this.busquedaInicial.especialidad.idServicio,
+      fechaLimite : (new Date()).toISOString().split("T")[0]
+    }
+
+    if(this.listaEsperaSeleccion.profesional !== 'NA'){
+      data['idRecurso'] = this.listaEsperaSeleccion.profesional.idProfesional
+    }
+
+    if(this.listaEsperaSeleccion.centro !== 'NA'){
+      data['idCentro'] = this.listaEsperaSeleccion.centro.idCentro
+    }
+
+    this.confirmacionListaEspera.emit({datosListaEspera: this.listaEsperaSeleccion, paciente : this.paciente });
+    /*
+    this.agendaService.postListaDeEspera(data).then( res => {
+      if(res['statusCod'] === 'OK'){
+        this.confirmacionListaEspera.emit({datosListaEspera: this.listaEsperaSeleccion, paciente : this.paciente });
+      }else{
+        const msg = (res['usrMsg']) ? res['usrMsg'] : 'Se ha producido un error interno. Intente más tarde nuevamente.'
+        this.utils.mDialog("Notificación", res['usrMsg'], 'message');
+      }
+    });*/
   }
 
 }

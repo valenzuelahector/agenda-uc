@@ -9,13 +9,14 @@ export class MedicosAsociadosComponent implements OnInit {
   
   @Output() medBuscaCalendario: EventEmitter<any> = new EventEmitter();
   @Input() medicosAsociados = [];
+  @Input() title = 'REVISA QUÉ OTROS MÉDICOS TIENEN HORAS DISPONIBLES';
 
   slideConfig = {
-    slidesToShow: 4, 
-    slidesToScroll: 4, 
+    slidesToShow: 3, 
+    slidesToScroll: 3, 
     infinite: false,  
     dots: true, 
-    arrows: true,
+    arrows: false,
     responsive: [
       {
         breakpoint: 1000,
@@ -32,7 +33,7 @@ export class MedicosAsociadosComponent implements OnInit {
           slidesToShow: 1,
           slidesToScroll: 1,
           infinite: false,
-          dots: false
+          dots: true
         }
       }
     ] 
@@ -41,22 +42,6 @@ export class MedicosAsociadosComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-  }
-  
-  slickInit(e) {
-    console.log('slick initialized');
-  }
-  
-  breakpoint(e) {
-    console.log('breakpoint');
-  }
-  
-  afterChange(e) {
-    console.log('afterChange');
-  }
-  
-  beforeChange(e) {
-    console.log('beforeChange');
   }
 
   buscarCalendario(datosBusqueda){

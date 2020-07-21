@@ -4,7 +4,7 @@ import { SeleccionComponent } from './seleccion/seleccion.component';
 import { IdentificacionComponent } from './identificacion/identificacion.component';
 import { ConfirmacionComponent } from './confirmacion/confirmacion.component';
 import { UtilsService } from 'src/app/services/utils.service';
-import { ENV } from 'src/environments/environment';
+import { ENV, dummyData } from 'src/environments/environment';
 import gtag, { install } from 'ga-gtag';
 import { ActivatedRoute } from '@angular/router';
 import { IfStmt } from '@angular/compiler';
@@ -35,6 +35,8 @@ export class ReservacionComponent implements OnInit, AfterViewInit, OnDestroy {
   public verMedicoAsociado = false;
   public datosBeneficiarioMedico;
   public rutMatch;
+  public listaEsperaData;
+  public confirmacionListaEsperaData;
 
   @ViewChild('tabGroup', { static: false }) tabGroup: any;
   @ViewChild('seleccion', { static: false }) seleccion: SeleccionComponent;
@@ -55,6 +57,7 @@ export class ReservacionComponent implements OnInit, AfterViewInit, OnDestroy {
     this.seleccion.calendario.subscribe(data => {
       this.cambiarEtapa(2);
       this.calendario = data;
+      this.listaEsperaData = null;
     })
 
     this.identificacion.datosPaciente.subscribe(data => {
@@ -65,6 +68,7 @@ export class ReservacionComponent implements OnInit, AfterViewInit, OnDestroy {
       this.calendario.cupo['idTipoCita'] = data['tipoCita'];
       this.calendario.cupo.centro['direccion'] = data['direccionCentro'];
       this.calendario.cupo['valorConvenio'] = data.valorConvenio;
+
       if (data.reglas && data.reglas.length > 0) {
         this.reglasActuales = { reglas: data.reglas, reservable: data.reservable };
         this.cambiarEtapa(3);
@@ -74,13 +78,20 @@ export class ReservacionComponent implements OnInit, AfterViewInit, OnDestroy {
 
     })
 
-    this.confirmacion.confirmarReserva.subscribe(data => {
-      if (data['response']) {
-        this.reservaRealizada = true;
-        this.codCita = data['data']['codCita'];
-      }
-    })
+    this.identificacion.confirmacionListaEspera.subscribe( data => {
+      this.confirmacionListaEsperaData = data;
+      this.reservaRealizada = true;
+      this.cambiarEtapa(4);
+    });
     
+  }
+
+  confirmarReserva(data){
+    if (data['response']) {
+      this.reservaRealizada = true;
+      this.listaEsperaData = null;
+      this.codCita = data['data']['codCita'];
+    }
   }
 
   busquedaEmitter(data){
@@ -107,11 +118,12 @@ export class ReservacionComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit() {
+
     this.getParamsArea();
     this.emitterReloadBusqueda = this.utils.getReloadBusqueda().subscribe( r => {
       this.cambiarEtapa(1);
       this.reloadNumber = this.utils.aleatorio(1,99999);
-    })
+    });
 
   }
 
@@ -122,6 +134,11 @@ export class ReservacionComponent implements OnInit, AfterViewInit, OnDestroy {
   cambiarEtapa(index: number) {
     this.curEtapa = index;
     this.tabGroup.selectedIndex = this.curEtapa;
+
+    if(index < 2){
+      this.listaEsperaData = null;
+    }
+
     window.scrollTo(0, 0);
 
   }
@@ -134,6 +151,8 @@ export class ReservacionComponent implements OnInit, AfterViewInit, OnDestroy {
     this.paciente = null;
     this.calendario = null
     this.reservaRealizada = null;
+    this.listaEsperaData = null;
+    this.confirmacionListaEsperaData = null;
     this.cambiarEtapa(0);
 
     if(this.conoceTuMedico){
@@ -195,5 +214,11 @@ export class ReservacionComponent implements OnInit, AfterViewInit, OnDestroy {
       this.utils.hideProgressBar();
     },1500);
 
+  }
+
+  listaEspera(data){
+    console.log(data);
+    this.listaEsperaData = data;
+    this.cambiarEtapa(2);
   }
 }

@@ -57,3 +57,26 @@
     left: 50%;
     margin-left: -20px;
  }
+
+ .custep{
+  width: 115px;
+  margin-left: -22px;
+  text-align: center;
+}
+
+.mainBtnCnt{
+
+  margin-top: 10px;
+  background: #f6f6f6;
+  text-align: right;
+  padding: 20px;
+  border-radius: 10px;
+
+  .mainBtn{
+    background: #802e87;
+    color: #fff;
+    padding: 10px 55px;
+    font-size: 12px;
+    letter-spacing: 1px;
+  }
+}

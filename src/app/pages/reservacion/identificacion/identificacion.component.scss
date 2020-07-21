@@ -9,3 +9,46 @@
     top: 0px;
     right: 0px;
 }
+
+.spec{
+  display: block;
+    font-weight: bold;
+    font-size: 20px;
+    margin-top: 5px;
+}
+
+.box-le{
+  background: #fddd98;
+  font-size: 14px;
+  padding: 15px;
+  margin: 15px 0px 25px 0px;
+}
+
+.cusSelect{
+  
+  ::ng-deep mat-label{
+    font-size: 13px !important;
+  }
+  
+  ::ng-deep .mat-select-value-text{
+    font-size: 14px !important;
+  }
+
+}
+
+.mat-option-smtext{
+  font-size: 14px !important;
+  line-height: 40px;
+  height: 40px;
+}
+
+.btnc{
+  font-size: 14px;
+  text-transform: uppercase;
+}
+
+.wtxt{
+  font-weight: bold;
+    font-size: 14px;
+    margin: 16px 0px;
+}

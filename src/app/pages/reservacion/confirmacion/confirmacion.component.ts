@@ -22,6 +22,7 @@ export class ConfirmacionComponent implements OnInit, OnChanges, OnDestroy {
   @Input() reservaFinalizada:boolean;
   @Output() confirmarReserva:EventEmitter<any> = new EventEmitter();
   @Input() mensajes:any = [];
+  
   disableExpand = true;
   disableBarReserva = false;
   expanded = { reserva : true, info : true }

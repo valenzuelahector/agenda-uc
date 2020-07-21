@@ -201,3 +201,22 @@ opacity: 0.5 !important;
     display: block;
   }
 }
+
+.lista-espera-acc{
+  ::ng-deep .mat-expansion-panel {
+    box-shadow: none !important;
+    background: #f6f6f6;
+
+    .mat-expansion-panel-header .mat-expansion-panel-header-title{
+      text-align: center;
+      display: initial !important;
+    }
+  }
+
+  .link-le{
+    text-decoration: underline;
+    cursor:pointer;
+    color:#000;
+  }
+}
+

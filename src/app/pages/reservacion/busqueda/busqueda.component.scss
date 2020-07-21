@@ -111,6 +111,8 @@
 
 ::ng-deep .mat-select-panel .mat-option-text {
   white-space: normal !important;
+  line-height: 20px;
+  margin: 6px 0px;
 }
 
 .padTelm{
@@ -230,3 +232,6 @@
   display: none;
 }
 
+.proxHora{
+  margin-bottom: 20px;
+}

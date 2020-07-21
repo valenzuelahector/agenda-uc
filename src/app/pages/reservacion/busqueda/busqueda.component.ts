@@ -556,8 +556,8 @@ export class BusquedaComponent implements OnInit {
             if(val['idCentro'] == v){
               res['centros'].splice(key, 1);
             }
-          })
-        })
+          });
+        });
         
         let objTodos:any;
 
@@ -582,7 +582,6 @@ export class BusquedaComponent implements OnInit {
         if (res['centros'] && res['centros'].length > 0) {
           res['centros'].forEach((val, key) => {
             res['centros'][key]['detalle'] = val['nombre'];
-           // res['centros'][key]['detalle'] = val['nombre'] + ' - ' + val['direccion']['comuna'];
             if (qp['centro'] && qp['centro'].toLowerCase() == val['idCentro'].toLowerCase()) {
               matCentro = res['centros'][key];
             }

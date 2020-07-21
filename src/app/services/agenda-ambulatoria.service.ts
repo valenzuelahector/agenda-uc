@@ -45,6 +45,10 @@ export class AgendaAmbulatoriaService {
     return this.http.get(this.baseApi + '/Profesionales?idArea=' + idArea + keyf + idp);
   }
 
+  getProfesionalesByQuery(query:string){
+    return this.http.get(this.baseApi + '/Profesionales?' + query);
+  }
+
   getCentrosByEspecialidad(idServicio:string, idArea:string, idProfesional = null){
     let queryProfesional = (idProfesional) ? '&idProfesional=' + idProfesional : '';
     return this.http.get(this.baseApi + '/Centros?idServicio=' + idServicio + '&idArea=' + idArea + queryProfesional);
@@ -110,5 +114,9 @@ export class AgendaAmbulatoriaService {
 
   cambiarEstadoCita(data){
     return this.http.put(this.baseApi + '/Citas', data, this.httpOptions);
+  }
+
+  postListaDeEspera(data){
+    return this.http.post(this.baseApi + '/ListaDeEspera/Pacientes', data).toPromise();
   }
 }

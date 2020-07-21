@@ -1,0 +1,52 @@
+
+<div class="mensaje-exito">
+  <img src="assets/images/check-morado.svg" alt=""> INSCRIPCIÓN A LISTA DE ESPERA EXITOSA
+</div>
+
+<section class="datos-reserva datos-r2" *ngIf="confirmacionListaEsperaData && busquedaInicial">
+  <div fxLayout="row wrap" class="confirm-panel" fxLayoutAlign="space-between start">
+    <div fxFlex="49%" fxFlex.sm="100%" fxFlex.xs="100%" class="cnt-info">
+      <mat-accordion>
+        <mat-expansion-panel [expanded]="true" [hideToggle]="true" [disabled]="true">
+          <mat-expansion-panel-header class="isBlue">
+            <mat-panel-title>
+              Datos de la Solicitud de Inscripción
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <div class="container-pn" id="contDatosReserva">
+            <p><b>Nombre:</b> {{ confirmacionListaEsperaData.paciente.nombreCompleto }}</p>
+            <p><b>RUT:</b> {{ confirmacionListaEsperaData.paciente.numeroDocumentoFormateado }}</p>
+            <p *ngIf="confirmacionListaEsperaData.datosListaEspera.profesional !== 'NA'"><b>Profesional:</b> {{ confirmacionListaEsperaData.datosListaEspera.profesional.nombreProfesional }}</p>
+            <p *ngIf="confirmacionListaEsperaData.datosListaEspera.profesional === 'NA'"><b>Profesional:</b> No tiene preferencia</p>
+            <p><b>Especialidad:</b> {{ busquedaInicial.especialidad.nombreEspecialidad }}</p>
+            <p><b>Área de Interés:</b> {{ busquedaInicial.especialidad.nombreServicio }}</p>
+            <p><b>Hora de Preferencia:</b> {{ confirmacionListaEsperaData.datosListaEspera.horario }}</p>
+            <p *ngIf="getNotTelemedicina && confirmacionListaEsperaData.datosListaEspera.centro === 'NA'"><b>Centro:</b> No tiene preferencia</p>
+            <p *ngIf="getNotTelemedicina && confirmacionListaEsperaData.datosListaEspera.centro !== 'NA'"><b>Centro:</b>{{ confirmacionListaEsperaData.datosListaEspera.centro.nombre }}</p>
+            <p *ngIf="getNotTelemedicina && confirmacionListaEsperaData.datosListaEspera.centro !== 'NA'"><b>Dirección del
+                centro:</b>{{ confirmacionListaEsperaData.datosListaEspera.centro.direccion?.calle }}
+              {{ confirmacionListaEsperaData.datosListaEspera.centro.direccion?.numero }}
+              {{ confirmacionListaEsperaData.datosListaEspera.centro.direccion?.comuna }}</p>
+          </div>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </div>
+    <div fxFlex="49%" fxFlex.sm="100%" fxFlex.xs="100%" clasS="mtinf" >
+
+        <mat-accordion>
+          <mat-expansion-panel [expanded]="true" [hideToggle]="true" [disabled]="true">
+            <mat-expansion-panel-header class="isYellow">
+              <mat-panel-title>
+                Estimado paciente favor considerar las siguientes indicaciones
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <div class="container-pn ylw-cont" id="contIndic">
+                De correr la lista de Espera para esta hora, se le comunicará oportunimanete por el medio de contacto
+                de preferencia marcado en el formulario anteriormente completado.
+            </div>
+          </mat-expansion-panel>
+        </mat-accordion>
+    </div>
+  </div>
+
+</section>
