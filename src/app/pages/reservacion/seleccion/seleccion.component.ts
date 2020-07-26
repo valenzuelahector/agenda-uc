@@ -99,6 +99,9 @@ export class SeleccionComponent implements OnInit, OnChanges {
         this.resetCalendario();
         this.crearListaFechas();
         if (this.busquedaInicial.profesional) {
+          setTimeout(()=> {
+            this.utils.setDataProfesionalRelacionado(clone(this.busquedaInicial));
+          },3000);
           this.getRecursos(this.busquedaInicial.profesional.idProfesional);
         } else {
           this.getRecursos();
@@ -239,7 +242,6 @@ export class SeleccionComponent implements OnInit, OnChanges {
             data['listaRecursos'][key] = this.crearCalendario(val, fechaHoy);
           });
 
-          const fLim = this.utils.trDateStr(fechaLimite, null, this.compensacion);
           const listaRecursos = this.mergeRecursos(clone(this.recursos), data['listaRecursos']);
           this.recursos = this.orderPipe.transform(listaRecursos, 'proximaFechaEpoch');
           this.enableScroll = true;

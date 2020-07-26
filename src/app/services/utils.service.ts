@@ -23,6 +23,7 @@ export class UtilsService {
   public reloadBusqueda: any = new Subject();
   public reloadBusquedaAnular: any = new Subject();
   public emitReservar: any = new Subject();
+  public emitProfesionalRelacionado : any = new Subject();
 
   constructor(
     public dialog: MatDialog,
@@ -139,6 +140,7 @@ export class UtilsService {
     this.resetInfoPaciente.emit(true);
   }
 
+
   validateEmail(correo) {
     let regex = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
     return regex.test(correo) ? true : false;
@@ -189,6 +191,14 @@ export class UtilsService {
 
   setEmitReservar() {
     this.emitReservar.next(true)
+  }
+
+  getDataProfesionalRelacionado() : Observable<any>{
+      return this.emitProfesionalRelacionado.asObservable();
+  }
+
+  setDataProfesionalRelacionado(data){
+    this.emitProfesionalRelacionado.next(data);
   }
 
   slugify(str, separator) {

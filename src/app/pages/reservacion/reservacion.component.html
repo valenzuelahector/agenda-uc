@@ -18,7 +18,7 @@
           </figure>
           <h4>Selección</h4>
         </a>
-        <a class="item-paso" [ngClass]="{'activo' : curEtapa == 2 || paciente || confirmacionListaEsperaData}" fxFlex="75px">
+        <a class="item-paso" [ngClass]="{'activo' : curEtapa == 2 || paciente || confirmacionListaEsperaData || confirmacionProcedimiento}" fxFlex="75px">
           <figure matRipple [ngClass]="{ 'stepOpacity' : curEtapa < 2}">
             <i class="fas fa-user"></i>
           </figure>

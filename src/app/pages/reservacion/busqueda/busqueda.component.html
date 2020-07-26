@@ -160,7 +160,7 @@
           </div>
 
           <div class="col-lg-4 col-md-12" *ngIf="tipoConsulta == 'profesional' && !loadedProf">
-            <p class="nores mat-option-smtext"
+            <p class="nores"
               style="position: relative; padding-left:60px; height: 57px; line-height: 22px;">
               <mat-spinner [diameter]="30" style="position: absolute; left:15px; top:10px;"></mat-spinner>
               Cargando, por favor espere...
@@ -168,7 +168,7 @@
           </div>
 
           <div class="col-lg-4 col-md-12" *ngIf="tipoConsulta == 'especialidad' && !loadedEsp">
-            <p class="nores mat-option-smtext"
+            <p class="nores"
               style="position: relative; padding-left:60px; height: 57px; line-height: 22px;">
               <mat-spinner [diameter]="30" style="position: absolute; left:15px; top:10px;"></mat-spinner>
               Cargando, por favor espere...
@@ -176,7 +176,7 @@
           </div>
 
           <div class="col-lg-4 col-md-12" *ngIf="tipoConsulta == 'profesional' && profesionalSelected && !loadedEsp">
-            <p class="nores mat-option-smtext"
+            <p class="nores"
               style="position: relative; padding-left:60px; height: 57px; line-height: 22px;">
               <mat-spinner [diameter]="30" style="position: absolute; left:15px; top:15px;"></mat-spinner>
               Cargando, por favor espere...
@@ -185,12 +185,12 @@
 
           <div class="col-lg-4 col-md-12"
             *ngIf="tipoConsulta == 'profesional' && profesionales.length == 0 && loadedProf">
-            <p class="nores mat-option-smtext">No existen Profesionales disponibles </p>
+            <p class="nores">No existen Profesionales disponibles </p>
           </div>
 
           <div class="col-lg-4 col-md-12"
             *ngIf="((tipoConsulta == 'especialidad' && especialidades.length == 0) || (profesionalSelected && especialidades.length == 0)) && loadedEsp ">
-            <p class="nores mat-option-smtext">No existen Especialidades disponibles </p>
+            <p class="nores">No existen Especialidades disponibles </p>
           </div>
 
           <div class="col-lg-4 col-md-12"
@@ -199,7 +199,7 @@
           </div>
 
           <div class="col-lg-4 col-md-12" *ngIf="especialidadSelected && centrosAtencion.length == 0 && loadedCen">
-            <p class="nores mat-option-smtext">Sin disponibilidad vía web. Llámanos al 226767000</p>
+            <p class="nores">Sin disponibilidad vía web. Llámanos al 226767000</p>
           </div>
         </div>
       </div>

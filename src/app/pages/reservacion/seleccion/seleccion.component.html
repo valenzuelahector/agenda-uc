@@ -72,18 +72,9 @@
 											perfil
 											<i class="fa fa-angle-right" aria-hidden="true"></i>
 										</button>
-										<p class="small" *ngIf="re?.informacionAdicional" style="margin-top:0px;font-size: 13px;
-										font-weight: 500;
-										color: #802e87;
-										margin-top: 20px;
-										padding: 14px;
-										text-align: center;
-										background: #fddd98;">
-											{{ re?.informacionAdicional }}</p>
+										<p class="small bxsmall" *ngIf="re?.informacionAdicional">{{ re?.informacionAdicional }}</p>
 									</div>
 								</div>
-	
-	
 							</div>
 						</div>
 						<div class="col-lg-6">
@@ -177,8 +168,7 @@
 		</button>
 
 	</div>
-	<div style="margin-top:20px">
-		<app-medicos-asociados [title]="'Otros especialistas del área'" (medBuscaCalendario)="busquedaEmitter($event)" [medicosAsociados]="medicosAsociados" *ngIf="loadedRecursos"></app-medicos-asociados>
-	</div>
-
+</div>
+<div style="margin-top:20px" *ngIf="busquedaInicial && busquedaInicial.profesional">
+	<app-medicos-asociados [title]="'Otros especialistas del área'" (medBuscaCalendario)="busquedaEmitter($event)" [medicosAsociados]="medicosAsociados"></app-medicos-asociados>
 </div>

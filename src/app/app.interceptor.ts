@@ -17,7 +17,10 @@ export class Interceptor implements HttpInterceptor {
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     
-    if(request.url.indexOf('/Servicios/Rel/Especialidades') < 0 && request.url.indexOf('/Profesionales?idArea') < 0){
+    if(
+      request.url.indexOf('/Servicios/Rel/Especialidades') < 0 && 
+      request.url.indexOf('/Profesionales?idArea') < 0 && 
+      !request.url.includes('fromProfRel=true')){
       setTimeout(() => {
         this.utils.showProgressBar();
         clearTimeout(this.clearProgBar)

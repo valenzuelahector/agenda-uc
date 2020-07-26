@@ -567,7 +567,7 @@ export class BusquedaComponent implements OnInit {
             horaApertura: null,
             horaCierre: null,
             idCentro: region,
-            idRegion: null,
+            idRegion: region,
             latitud: null,
             longitud: null,
             nombre: "Todos",
