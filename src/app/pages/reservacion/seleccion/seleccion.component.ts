@@ -25,6 +25,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
   @Output() calendario: EventEmitter<any> = new EventEmitter();
   @Output() readQuery: EventEmitter<any> = new EventEmitter();
   @Output() listaEspera : EventEmitter<any> = new EventEmitter();
+  @Output() procedimiento : EventEmitter<any> = new EventEmitter();
 
   public recursos: any;
   public fechaHoy: Date;
@@ -53,6 +54,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
   public keepSearching = true;
   public listaFechas = {};
   public medicosAsociados = dummyData.profesionalesSimilares;
+  public isProcedimiento = false;
 
   constructor(
     public agendaService: AgendaAmbulatoriaService,
@@ -91,9 +93,9 @@ export class SeleccionComponent implements OnInit, OnChanges {
       this.navigationDate = { min: null, max: null };
       this.counterLoader = 0;
       this.navDirection = 'next';
-      this.displayCalendar = true;
-
-      if (this.busquedaInicial && this.busquedaInicial.especialidad) {
+      this.isProcedimiento = this.busquedaInicial.area.id ===  ENV.idExamenProcedimiento;
+      if (this.busquedaInicial && this.busquedaInicial.especialidad && !this.isProcedimiento) {
+        this.displayCalendar = true;
         this.resetCalendario();
         this.crearListaFechas();
         if (this.busquedaInicial.profesional) {
@@ -199,7 +201,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
       fechaHoy.setMonth(fechaHoy.getMonth() + this.counterLoader);
       fechaLimite = new Date(fechaHoy.getFullYear(), fechaHoy.getMonth() + 1, 0)
 
-      fechaHoy = new Date(this.utils.toLocalScl(fechaHoy, this.compensacion, 'YYYY-MM-DDTHH:mm:ss'))
+      fechaHoy = new Date(this.utils.toLocalScl(fechaHoy, this.compensacion, 'YYYY-MM-DDTHH:mm:ss'));
 
       if (this.counterLoader > 0) {
         fechaHoy.setDate(1)
@@ -235,14 +237,15 @@ export class SeleccionComponent implements OnInit, OnChanges {
 
           data['listaRecursos'].forEach((val, key) => {
             data['listaRecursos'][key] = this.crearCalendario(val, fechaHoy);
-          })
-          const listaRecursos = this.mergeRecursos(clone(this.recursos), data['listaRecursos'])
+          });
+
+          const fLim = this.utils.trDateStr(fechaLimite, null, this.compensacion);
+          const listaRecursos = this.mergeRecursos(clone(this.recursos), data['listaRecursos']);
           this.recursos = this.orderPipe.transform(listaRecursos, 'proximaFechaEpoch');
           this.enableScroll = true;
           this.readQuery.emit(true);
-
           this.restoreCalendar();
-
+          
         } else if (this.keepSearching) {
 
           if (this.counterLoader < 12 && this.navDirection == 'next') {
@@ -271,7 +274,6 @@ export class SeleccionComponent implements OnInit, OnChanges {
         }
 
         this.determinarMesSinCupo();
-
         resolve(data);
 
       })
@@ -298,6 +300,13 @@ export class SeleccionComponent implements OnInit, OnChanges {
       found = false;
       recursosActuales.forEach((valRa, keyRa) => {
         if (valRn['id'] === valRa['id']) {
+
+          Object.keys(valRa['fechasDisponibles']).forEach(keyRaFd => {
+            if(valRa['fechasDisponibles'][keyRaFd].length > 0){
+              valRn['fechasDisponibles'][keyRaFd] = clone(valRa['fechasDisponibles'][keyRaFd]);
+            }
+          });
+
           recursosActuales[keyRa] = valRn;
           found = true;
         }
@@ -306,6 +315,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
       if (!found) {
         nRecursos.push(valRn);
       }
+
     });
 
     return recursosActuales.concat(nRecursos);
@@ -387,7 +397,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
   }
 
   onSelect(event, i) {
-    console.log(this.recursos[i]);
+
     this.selectedDate[i] = event;
     let fechaDisSel = this.utils.trDateStr(event, 'json');
     let idxFecha = fechaDisSel['year'] + "-" + fechaDisSel['month'] + '-' + fechaDisSel['day'];
@@ -400,7 +410,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
       }
       agrupCentros[val['centro']['id']]['cupos'].push(val)
     })
-    console.log(agrupCentros);
+    
     this.centrosProfesional[i] = [];
     let enableCentro = (Object.keys(agrupCentros).length == 1) ? true : false;
 
@@ -494,5 +504,50 @@ export class SeleccionComponent implements OnInit, OnChanges {
 
   procesarListaEspera(data){
     this.listaEspera.emit(data);
+  }
+
+  displayListaEspera(fechasDisponibles, poseeMes){
+
+    let display = true;
+
+    if(this.counterLoader > 0){
+
+      const today = new Date(this.utils.toLocalScl(new Date(), this.compensacion, 'YYYY-MM-DDTHH:mm:ss'));
+      const end = new Date(this.utils.toLocalScl(new Date(), this.compensacion, 'YYYY-MM-DDTHH:mm:ss'));
+      today.setMonth(today.getMonth() + this.counterLoader - 1);
+      end.setMonth(end.getMonth() + (this.counterLoader));
+      end.setDate(end.getDate() - 1);
+      
+      const init = today.toISOString().split("T")[0];
+      const endit = end.toISOString().split("T")[0];
+      
+      let activateInit = false;
+  
+      Object.keys(fechasDisponibles).forEach( keyDate => {
+  
+        if(keyDate === init){
+          activateInit = true;
+        }
+  
+        if(keyDate === endit){
+          activateInit = false;
+        }
+  
+        if(activateInit && fechasDisponibles[keyDate].length > 0){
+          display = false;
+        }
+  
+      });
+
+    }else{
+      display = (!poseeMes) ? true : false;
+    }
+
+
+    return display;
+  }
+
+  setProcedimiento(){
+    this.procedimiento.emit(true);
   }
 }

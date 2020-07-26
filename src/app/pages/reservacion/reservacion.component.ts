@@ -37,6 +37,8 @@ export class ReservacionComponent implements OnInit, AfterViewInit, OnDestroy {
   public rutMatch;
   public listaEsperaData;
   public confirmacionListaEsperaData;
+  public confirmacionProcedimiento;
+  public isProcedimiento = false;
 
   @ViewChild('tabGroup', { static: false }) tabGroup: any;
   @ViewChild('seleccion', { static: false }) seleccion: SeleccionComponent;
@@ -80,6 +82,12 @@ export class ReservacionComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.identificacion.confirmacionListaEspera.subscribe( data => {
       this.confirmacionListaEsperaData = data;
+      this.reservaRealizada = true;
+      this.cambiarEtapa(4);
+    });
+
+    this.identificacion.confirmacionProcedimiento.subscribe( data => {
+      this.confirmacionProcedimiento = data;
       this.reservaRealizada = true;
       this.cambiarEtapa(4);
     });
@@ -132,11 +140,13 @@ export class ReservacionComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   cambiarEtapa(index: number) {
+
     this.curEtapa = index;
     this.tabGroup.selectedIndex = this.curEtapa;
 
     if(index < 2){
       this.listaEsperaData = null;
+      this.isProcedimiento = false;
     }
 
     window.scrollTo(0, 0);
@@ -153,6 +163,8 @@ export class ReservacionComponent implements OnInit, AfterViewInit, OnDestroy {
     this.reservaRealizada = null;
     this.listaEsperaData = null;
     this.confirmacionListaEsperaData = null;
+    this.isProcedimiento = false;
+    this.confirmacionProcedimiento = null;
     this.cambiarEtapa(0);
 
     if(this.conoceTuMedico){
@@ -217,8 +229,12 @@ export class ReservacionComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   listaEspera(data){
-    console.log(data);
     this.listaEsperaData = data;
+    this.cambiarEtapa(2);
+  }
+
+  setProcedimiento(){
+    this.isProcedimiento = true;
     this.cambiarEtapa(2);
   }
 }

@@ -44,6 +44,7 @@ import { DetalleTuMedicoComponent } from './pages/reservacion/detalle-tu-medico/
 import { MedicosAsociadosComponent } from './shared/components/medicos-asociados/medicos-asociados.component';
 import { ProximasHorasComponent } from './shared/components/proximas-horas/proximas-horas.component';
 import { ListaEsperaEfectuadaComponent } from './pages/reservacion/lista-espera-efectuada/lista-espera-efectuada.component';
+import { SolicitudProcedimientoEfectuadoComponent } from './pages/reservacion/solicitud-procedimiento-efectuado/solicitud-procedimiento-efectuado.component';
 
 @NgModule({
   declarations: [
@@ -75,6 +76,7 @@ import { ListaEsperaEfectuadaComponent } from './pages/reservacion/lista-espera-
     MedicosAsociadosComponent,
     ProximasHorasComponent,
     ListaEsperaEfectuadaComponent,
+    SolicitudProcedimientoEfectuadoComponent,
   ],
   imports: [
     BrowserModule,

@@ -12,7 +12,7 @@
           </figure>
           <h4>Búsqueda</h4>
         </a>
-        <a class="item-paso" [ngClass]="{'activo' : curEtapa == 1 || calendario ||  listaEsperaData}" fxFlex="70px">
+        <a class="item-paso" [ngClass]="{'activo' : curEtapa == 1 || calendario ||  listaEsperaData || isProcedimiento }" fxFlex="70px">
           <figure matRipple [ngClass]="{ 'stepOpacity' : curEtapa < 1}">
             <i class="far fa-calendar-alt"></i>
           </figure>
@@ -83,10 +83,10 @@
       </div>
     </mat-tab>
     <mat-tab label="Selección">
-      <app-seleccion #seleccion [busquedaInicial]="busquedaInfo" (readQuery)="readQuery = $event" [reloadBusqueda]="reloadNumber" (listaEspera)="listaEspera($event)"></app-seleccion>
+      <app-seleccion #seleccion [busquedaInicial]="busquedaInfo" (readQuery)="readQuery = $event" [reloadBusqueda]="reloadNumber" (listaEspera)="listaEspera($event)" (procedimiento)="setProcedimiento()"></app-seleccion>
     </mat-tab>
     <mat-tab label="Identificación">
-      <app-identificacion #identificacion [listaEspera]="listaEsperaData" [busquedaInicial]="busquedaInfo" [calendario]="calendario" [rutMatch]="calendario ? rutMatch : null">
+      <app-identificacion #identificacion [listaEspera]="listaEsperaData" [isProcedimiento]="isProcedimiento" [busquedaInicial]="busquedaInfo" [calendario]="calendario" [rutMatch]="calendario ? rutMatch : null">
       </app-identificacion>
     </mat-tab>
     <mat-tab label="Error">
@@ -95,9 +95,10 @@
     </mat-tab>
     <mat-tab label="Confirmación">
       <app-confirmacion [busquedaInicial]="busquedaInfo" [mensajes]="mensajesActuales" [calendario]="calendario" [paciente]="paciente"
-        [reservaFinalizada]="reservaRealizada" (confirmarReserva)="confirmarReserva($event)" *ngIf="!listaEsperaData">
+        [reservaFinalizada]="reservaRealizada" (confirmarReserva)="confirmarReserva($event)" *ngIf="!listaEsperaData && !isProcedimiento">
       </app-confirmacion>
       <app-lista-espera-efectuada *ngIf="listaEsperaData" [busquedaInicial]="busquedaInfo" [confirmacionListaEsperaData]="confirmacionListaEsperaData"></app-lista-espera-efectuada>
+      <app-solicitud-procedimiento-efectuado *ngIf="isProcedimiento" [confirmacionProcedimiento]="confirmacionProcedimiento" [busquedaInicial]="busquedaInfo"></app-solicitud-procedimiento-efectuado>
     </mat-tab>
   
   </mat-tab-group>

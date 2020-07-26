@@ -14,7 +14,8 @@ export const ENV = {
   idPlanSaludInit: '0b7a577d-6364-4b28-b2ba-a96e00e243ac',
   idCentrosNoDisponibles: [],
   idCentroPrioritario: '52e43c90-8ab7-4e34-afcb-a96f0106bbd1',
-  mensajeSinCupos: '<h5>No se encontraron cupos disponibles.</h5>' 
+  mensajeSinCupos: '<h5>No se encontraron cupos disponibles.</h5>',
+  idExamenProcedimiento: '97bd5208-60d1-4d6c-9d1e-a96e00ddbc15'
 }
 
 /*

@@ -146,14 +146,14 @@
 											</p>
 										</div>
 									</div>
-									<mat-accordion class="lista-espera-acc">
+									<mat-accordion class="lista-espera-acc" *ngIf="displayListaEspera(re.fechasDisponibles, re.poseeMes) && displayCalendar">
 										<mat-expansion-panel>
 										  <mat-expansion-panel-header>
 											<mat-panel-title>
 											  ¿No encuentras una hora que te acomode?
 											</mat-panel-title>
 										  </mat-expansion-panel-header>
-										  <p style="text-align: center;">Inscríbete en nuestra <a class="link-le" (click)="procesarListaEspera(re)">lista de espera</a>. <br />Si se libera una hora te avisaremos.</p>
+										  <p style="text-align: center;">Inscríbete  <a class="link-le" (click)="procesarListaEspera(re)">aquí</a>. <br />Si se libera una hora te avisaremos.</p>
 										</mat-expansion-panel>
 									  </mat-accordion>
 								</div>
@@ -167,6 +167,16 @@
 
 		</div>
 	</section>
+	<div class="detalleProcedimiento" *ngIf="isProcedimiento">
+		<p>	Estimado paciente, tenemos a su disposición la mayor oferta de procedimientos clínicos de todas las especialidades. Si 
+		no ha encontrado un procedimiento para agendamiento directo, es porque requerimos mayor información para contactarlos,
+		explicar el procedimiento y agendar. Por favor, completa el siguiente formulario para que te contactemos a la brevedad.
+		</p>
+		<button mat-stroked-button class="btn-morado cus-pad cus" (click)="setProcedimiento()">
+			Pedir hora para procedimiento
+		</button>
+
+	</div>
 	<div style="margin-top:20px">
 		<app-medicos-asociados [title]="'Otros especialistas del área'" (medBuscaCalendario)="busquedaEmitter($event)" [medicosAsociados]="medicosAsociados" *ngIf="loadedRecursos"></app-medicos-asociados>
 	</div>
