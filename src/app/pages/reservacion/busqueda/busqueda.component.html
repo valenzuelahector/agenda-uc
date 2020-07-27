@@ -1,12 +1,5 @@
-<!-- 
-
-  <div class="container-query" >
-  <mat-spinner [diameter]="70" class="spin"></mat-spinner>
-</div>
-
--->
 <div class="cuadro-reserva">
-  <div class="proxHora">
+  <div class="proxHora" *ngIf="etapaActual === 0">
     <app-proximas-horas></app-proximas-horas>
   </div>
   <div class="seleccionar-area">
@@ -40,11 +33,6 @@
     </mat-accordion>
   </div>
 
-  <!--
-  <p class="cwarn det-area" *ngIf="areaSelected">
-    Área Seleccionada: <b>{{ areaSelected.nombre }}</b>
-  </p>
-  -->
   <div class="busqueda-reserva" *ngIf="areas.length > 0 && areaSelected">
     <div class="busqueda-hora">
       <h4>Búsqueda de hora por</h4>

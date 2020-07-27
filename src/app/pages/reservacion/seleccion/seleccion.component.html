@@ -60,7 +60,7 @@
 					<div class="row">
 						<div class="col-lg-6">
 							<div class="box-doc">
-								<div fxLayout="row wrap" style="margin-top:90px" fxLayoutAlign="space-evenly">
+								<div fxLayout="row wrap" style="margin-top:00px" fxLayoutAlign="space-evenly">
 									<figure fxFlex="35%" >
 										<img [src]="re?.urlImagenProfesional" alt="">
 									</figure>
@@ -170,5 +170,5 @@
 	</div>
 </div>
 <div style="margin-top:20px" *ngIf="busquedaInicial && busquedaInicial.profesional">
-	<app-medicos-asociados [title]="'Otros especialistas del área'" (medBuscaCalendario)="busquedaEmitter($event)" [medicosAsociados]="medicosAsociados"></app-medicos-asociados>
+	<app-medicos-asociados [title]="'Otros especialistas del área'"></app-medicos-asociados>
 </div>

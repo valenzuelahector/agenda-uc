@@ -23,7 +23,8 @@ export class UtilsService {
   public reloadBusqueda: any = new Subject();
   public reloadBusquedaAnular: any = new Subject();
   public emitReservar: any = new Subject();
-  public emitProfesionalRelacionado : any = new Subject();
+  public emitProfesionalRelacionado: any = new Subject();
+  public emitBuscarProfesionalRelacionado: any = new Subject();
 
   constructor(
     public dialog: MatDialog,
@@ -193,13 +194,22 @@ export class UtilsService {
     this.emitReservar.next(true)
   }
 
-  getDataProfesionalRelacionado() : Observable<any>{
-      return this.emitProfesionalRelacionado.asObservable();
+  getDataProfesionalRelacionado(): Observable<any> {
+    return this.emitProfesionalRelacionado.asObservable();
   }
 
-  setDataProfesionalRelacionado(data){
+  setDataProfesionalRelacionado(data) {
     this.emitProfesionalRelacionado.next(data);
   }
+
+  getBuscarProfesionalRelacionado(): Observable<any> {
+    return this.emitBuscarProfesionalRelacionado.asObservable();
+  }
+
+  setBuscarProfesionalRelacionado(data) {
+    this.emitBuscarProfesionalRelacionado.next(data);
+  }
+
 
   slugify(str, separator) {
 

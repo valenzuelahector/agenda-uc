@@ -39,6 +39,7 @@ export class ReservacionComponent implements OnInit, AfterViewInit, OnDestroy {
   public confirmacionListaEsperaData;
   public confirmacionProcedimiento;
   public isProcedimiento = false;
+  public buscarProfesionalRelacionadoSuscription;
 
   @ViewChild('tabGroup', { static: false }) tabGroup: any;
   @ViewChild('seleccion', { static: false }) seleccion: SeleccionComponent;
@@ -92,6 +93,12 @@ export class ReservacionComponent implements OnInit, AfterViewInit, OnDestroy {
       this.cambiarEtapa(4);
     });
     
+    this.buscarProfesionalRelacionadoSuscription = this.utils.getBuscarProfesionalRelacionado().subscribe( data => {
+      this.busquedaInfo = data;
+      this.cambiarEtapa(1);
+  //    this.reloadNumber = this.utils.aleatorio(1,99999);
+    });
+
   }
 
   confirmarReserva(data){
@@ -137,6 +144,7 @@ export class ReservacionComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnDestroy(){
     this.emitterReloadBusqueda.unsubscribe();
+    this.buscarProfesionalRelacionadoSuscription.unsubscribe();
   }
 
   cambiarEtapa(index: number) {

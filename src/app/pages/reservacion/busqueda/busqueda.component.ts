@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter, ViewChild } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, ViewChild, Input } from '@angular/core';
 import { AgendaAmbulatoriaService } from 'src/app/services/agenda-ambulatoria.service';
 import { FormControl } from '@angular/forms'
 import { map, startWith, debounceTime, tap, switchMap, finalize } from 'rxjs/operators';
@@ -62,7 +62,8 @@ export class BusquedaComponent implements OnInit {
 
   @Output() public emitReadQuery: EventEmitter<boolean> = new EventEmitter();
   @Output() public emitBusqueda: EventEmitter<any> = new EventEmitter();
-
+  @Input() public etapaActual:number;
+  
   constructor(
     public agendaService: AgendaAmbulatoriaService,
     public utils: UtilsService,

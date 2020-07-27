@@ -3,6 +3,7 @@ import { UtilsService } from 'src/app/services/utils.service';
 import { ENV } from 'src/environments/environment';
 import { AgendaAmbulatoriaService } from 'src/app/services/agenda-ambulatoria.service';
 import { OrderPipe } from 'ngx-order-pipe';
+import * as clone from 'clone';
 
 @Component({
   selector: 'app-medicos-asociados',
@@ -11,7 +12,6 @@ import { OrderPipe } from 'ngx-order-pipe';
 })
 export class MedicosAsociadosComponent implements OnInit, OnDestroy {
   
-  @Output() medBuscaCalendario: EventEmitter<any> = new EventEmitter();
   @Input() medicosAsociados = [];
   @Input() title = 'REVISA QUÉ OTROS MÉDICOS TIENEN HORAS DISPONIBLES';
   
@@ -72,8 +72,37 @@ export class MedicosAsociadosComponent implements OnInit, OnDestroy {
     this.subMedicos.unsubscribe();
   }
 
-  buscarCalendario(datosBusqueda){
-    this.medBuscaCalendario.emit(datosBusqueda);
+  buscarCalendario(re){
+
+    const region = this.detalleBusqueda.centroAtencion.idRegion;
+    let detalleBusqueda = clone(this.detalleBusqueda);
+
+    detalleBusqueda.profesional = {
+      detalle: re.nombre,
+      esProfesional: true,
+      idProfesional: re.id,
+      informacionAdicional: re.informacionAdicional,
+      nombreProfesional: re.nombre,
+      urlImagenProfesional: re.urlImagenProfesional
+    }
+
+    detalleBusqueda.centro =  {
+      direccion: { calle: null, numero: null, piso: null, comuna: 'Región Metropolitana' },
+      horaApertura: null,
+      horaCierre: null,
+      idCentro: region,
+      idRegion: region,
+      latitud: null,
+      longitud: null,
+      nombre: "Todos",
+      codigo: 'todos',
+      detalle: 'Todos'
+    }
+
+    this.utils.setBuscarProfesionalRelacionado(detalleBusqueda);
+    this.loading = true;
+    this.displayRecursos = false;
+    
   }
 
   getRecursosRelacionados() {
