@@ -96,7 +96,6 @@ export class ReservacionComponent implements OnInit, AfterViewInit, OnDestroy {
     this.buscarProfesionalRelacionadoSuscription = this.utils.getBuscarProfesionalRelacionado().subscribe( data => {
       this.busquedaInfo = data;
       this.cambiarEtapa(1);
-  //    this.reloadNumber = this.utils.aleatorio(1,99999);
     });
 
   }
@@ -111,10 +110,10 @@ export class ReservacionComponent implements OnInit, AfterViewInit, OnDestroy {
 
   busquedaEmitter(data){
     if (data && data.area && data.especialidad && data.centroAtencion) {
+      console.log(data)
       this.busquedaInfo = data;
       this.cambiarEtapa(1);
     }
-
   }
 
 

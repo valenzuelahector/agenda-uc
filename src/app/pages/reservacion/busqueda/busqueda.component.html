@@ -1,6 +1,6 @@
 <div class="cuadro-reserva">
   <div class="proxHora" *ngIf="etapaActual === 0">
-    <app-proximas-horas></app-proximas-horas>
+    <app-proximas-horas (seleccionProximaHora)="buscarProximaHora($event)"></app-proximas-horas>
   </div>
   <div class="seleccionar-area">
     <h4>Seleccionar Área: <span *ngIf="areas.length == 0"> No existen Áreas de Consulta disponibles</span></h4>

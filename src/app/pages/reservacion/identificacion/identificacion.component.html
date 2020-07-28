@@ -22,7 +22,6 @@
   </div>
 </div>
 
-
 <div class="seccion-c">
   <div class="info-paciente">
     <h5>Identificación de paciente</h5>
@@ -324,35 +323,48 @@
     <mat-form-field class="full bgwhite-input cusSelect" appearance="fill" [color]="primary">
       <mat-label>Centro Médico de Preferencia *</mat-label>
       <mat-select [(ngModel)]="procedimientoSeleccion.centro">
-        <mat-option [value]="'NA'" class="mat-option-smtext" *ngIf="centros.length > 1">NO TENGO UNA PREFERENCIA
-        </mat-option>
         <ng-container *ngFor="let cet of centros">
           <mat-option [value]="cet" class="mat-option-smtext">{{ cet.nombre }}</mat-option>
         </ng-container>
       </mat-select>
       <mat-icon matSuffix>apartment</mat-icon>
     </mat-form-field>
-    <p class="wtxt" style="margin: 0px; margin-top:-5px;">Campos marcados con * son obligatorios.</p>
   </div>
   <div class="col-md-4 field-margin">
     <mat-form-field class="full bgwhite-input cusSelect" appearance="fill" [color]="primary">
       <mat-label>Horario de Preferencia *</mat-label>
       <mat-select [(ngModel)]="procedimientoSeleccion.horario">
-        <mat-option [value]="'Ninguno'" class="mat-option-smtext">NO TENGO UNA PREFERENCIA</mat-option>
         <mat-option [value]="'AM'" class="mat-option-smtext">AM</mat-option>
         <mat-option [value]="'PM'" class="mat-option-smtext">PM</mat-option>
       </mat-select>
       <mat-icon matSuffix>schedule</mat-icon>
     </mat-form-field>
   </div>
-
+  <div class="col-md-4 field-margin">
+    <mat-form-field class="full bgwhite-input cusSelect" appearance="fill" [color]="primary">
+      <mat-label>Prevision *</mat-label>
+      <mat-select [(ngModel)]="procedimientoSeleccion.prevision" [compareWith]="utils.compareFn">
+        <mat-optgroup *ngFor="let com of planesSalud" [label]="com.nombreCompania" class="mat-option-smtext">
+          <mat-option *ngFor="let plan of com.planes" [value]="plan" class="mat-option-smtext">
+            {{plan.nombrePlan}}
+          </mat-option>
+        </mat-optgroup>
+      </mat-select>
+      <mat-icon matSuffix>local_hospital</mat-icon>
+    </mat-form-field>
+  </div>
+  <div class="col-md-4 field-margin">
+    <p class="wtxt" style="margin: 0px; margin-top:10px;">Campos marcados con * son obligatorios.</p>
+  </div>
+  <div class="col-md-4 field-margin">
+    <div class="chkb" style="margin-top:9px">
+      <mat-checkbox color="primary"  [(ngModel)]="procedimientoSeleccion.generarPresupuesto"></mat-checkbox>
+      <span>Quiero generar un prespuesto antes de definir una hora para procedimiento.</span>
+    </div>
+  </div>
   <div class="col-md-4 field-margin">
     <button mat-raised-button color="primary" class="full-btn full btnc" (click)="procesarProcedimiento()"
       style="margin-right:15px">Solicitar Procedimiento</button>
-      <div class="chkb" style="margin-top:15px">
-        <mat-checkbox color="primary"  [(ngModel)]="procedimientoSeleccion.generarPresupuesto"></mat-checkbox>
-        <span>Quiero generar un prespuesto antes de definir una hora para procedimiento.</span>
-      </div>
+      
   </div>
-
 </ng-template>

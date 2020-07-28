@@ -1,7 +1,8 @@
 <div class="carouselConfig">
     <span class="iniText">Revisa las próximas horas que tenemos disponibles para tí</span>
+    <mat-spinner [diameter]="30" style="margin:30px auto" *ngIf="loading"></mat-spinner>
 
-    <div fxLayout="row">
+    <div fxLayout="row" *ngIf="!loading">
         <div fxFlex="45px" fxFlex.sm="0px" fxFlex.xs="0px">
             <div (click)="slickModal.slickPrev()" class="btn-nav" style="margin: 55px 2px;" matRipple>
                 <i class="fas fa-angle-left"></i>
@@ -13,7 +14,7 @@
                     <div class="itmslide">
                         <span class="tituloEspc">{{ pe?.title }}</span>
                         <span class="descEspc"> {{ pe?.description}}</span>
-                        <button mat-stroked-button class="btn-morado btng" (click)="buscarCalendario(med)">
+                        <button mat-stroked-button class="btn-morado btng" (click)="procesarSeleccion(pe.itemSearch)">
                             Ver Horas Disponibles
                         </button>
                     </div>

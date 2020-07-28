@@ -120,4 +120,12 @@ export class AgendaAmbulatoriaService {
   postListaDeEspera(data){
     return this.http.post(this.baseApi + '/ListaDeEspera/Pacientes', data).toPromise();
   }
+
+  getCuposInmediatos(){
+    return this.http.get(this.baseApi + '/Agenda/CuposInmediatos?idArea=' + ENV.areaConsultaMedica.id ).toPromise();
+  }
+
+  postProcedimiento(data){
+    return this.http.post(this.baseApi + '/SolicitudProcedimiento', data).toPromise();
+  }
 }

@@ -57,7 +57,8 @@ export class IdentificacionComponent implements OnInit, OnChanges {
     generarPresupuesto: false,
     celularPref: false,
     correoPref: true,
-    archivo: null
+    archivo: null,
+    prevision: null
   }
 
   public centros = [];
@@ -121,7 +122,8 @@ export class IdentificacionComponent implements OnInit, OnChanges {
           generarPresupuesto: false,
           celularPref: false,
           correoPref: true,
-          archivo: null
+          archivo: null,
+          prevision: null
         }
 
         this.getCentros(idServicio, idArea, null);
@@ -623,7 +625,31 @@ export class IdentificacionComponent implements OnInit, OnChanges {
       return false;
     }
 
-    this.confirmacionProcedimiento.emit({ datosProcedimiento: this.procedimientoSeleccion, paciente: this.paciente });
+    if(!this.procedimientoSeleccion.prevision){
+      this.utils.mDialog("Error", "Debe seleccionar la previsión.", "message");
+      return false;
+    }
+
+    const data = {
+      idCentro : this.procedimientoSeleccion.centro.idCentro,
+      idServicio: this.busquedaInicial.especialidad.idServicio,
+      idPaciente: this.paciente.id,
+      idPrevision: this.procedimientoSeleccion.prevision.id,
+      preferenciaContacto: this.procedimientoSeleccion.celularPref ? '0' : '1',
+      horarioPreferencia: this.procedimientoSeleccion.horario === 'AM' ? '0' : '1',
+      presupuesto: this.procedimientoSeleccion.generarPresupuesto,
+      ordenMedicaFILE: this.procedimientoSeleccion.archivo.file
+    }
+
+    this.agendaService.postProcedimiento(data).then( res => {
+      if(res['statusCod'] && res['statusCod'] === 'OK'){
+        this.confirmacionProcedimiento.emit({ datosProcedimiento: this.procedimientoSeleccion, paciente: this.paciente });
+      }else{
+        const msj =  res['usrMsg'] ?  res['usrMsg'] : 'No se ha podido guardar la información. Intente más tarde.'
+        this.utils.mDialog('Error', msj, 'message');
+      }
+    })
+
 
   }
 
@@ -663,7 +689,7 @@ export class IdentificacionComponent implements OnInit, OnChanges {
 
     return new Promise((resolve, reject) => {
 
-      if (size < 10000) {
+      if (size <= 5000) {
 
         reader.readAsDataURL(file);
         reader.onload = () => {
@@ -676,7 +702,8 @@ export class IdentificacionComponent implements OnInit, OnChanges {
             size: size + "KB",
             displayName: `${namesplit[0].substring(0, 16)}....${namesplit[1]}`,
             mimetype: file64[0].split(":")[1],
-            file64: file64[1].split(",")[1]
+            file64: file64[1].split(",")[1],
+            file: String(reader.result)
           }
 
           if (this.validarMimetype(data.mimetype)) {
@@ -690,7 +717,7 @@ export class IdentificacionComponent implements OnInit, OnChanges {
         };
 
       } else {
-        this.utils.mDialog("Error", "El tamaño máximo permitido del archivo es 10MB.", "message");
+        this.utils.mDialog("Error", "El tamaño máximo permitido del archivo es 5MB.", "message");
       }
 
     });

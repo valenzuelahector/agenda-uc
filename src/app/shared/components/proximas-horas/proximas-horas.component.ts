@@ -1,4 +1,6 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { AgendaAmbulatoriaService } from 'src/app/services/agenda-ambulatoria.service';
+import { ENV } from 'src/environments/environment';
 
 @Component({
   selector: 'app-proximas-horas',
@@ -11,9 +13,11 @@ export class ProximasHorasComponent implements OnInit {
 
   proximasHoras = [];
   displayCarousel = false;
+  loading = true;
+
   slideConfig = {
-    slidesToShow: 4, 
-    slidesToScroll: 4, 
+    slidesToShow: 3, 
+    slidesToScroll: 3, 
     infinite: false,  
     dots: false, 
     arrows: false,
@@ -21,8 +25,8 @@ export class ProximasHorasComponent implements OnInit {
       {
         breakpoint: 1000,
         settings: {
-          slidesToShow: 2,
-          slidesToScroll: 2,
+          slidesToShow: 3,
+          slidesToScroll: 3,
           infinite: false,
           dots: false
         }
@@ -39,26 +43,51 @@ export class ProximasHorasComponent implements OnInit {
     ] 
   };
 
-  constructor() { }
+  constructor(
+    public agendaService:AgendaAmbulatoriaService
+  ) { }
 
   ngOnInit() {
-
-    setTimeout(()=> {
-      this.displayCarousel = true;
-    },2500);
-
-    this.proximasHoras = [
-      { title: "Kinesiología", description: "5 cupos disponibles dentro de las próximas 6 horas." },
-      { title: "Kinesiología", description: "5 cupos disponibles dentro de las próximas 6 horas." },
-      { title: "Kinesiología", description: "5 cupos disponibles dentro de las próximas 6 horas." },
-      { title: "Kinesiología", description: "5 cupos disponibles dentro de las próximas 6 horas." },
-      { title: "Kinesiología", description: "5 cupos disponibles dentro de las próximas 6 horas." },
-      { title: "Kinesiología", description: "5 cupos disponibles dentro de las próximas 6 horas." }
-    ];
-
+    this.buscarCalendario();
   }
 
   buscarCalendario(){
 
+    this.agendaService.getCuposInmediatos().then( res => {
+      this.loading = false;
+      this.displayCarousel = true;
+      if(res['listaCuposInmediatos'] && res['listaCuposInmediatos'].length > 0){
+        res['listaCuposInmediatos'].forEach((val, key) => {
+          val['listaServicios'][0]['idServicio'] = val['listaServicios'][0]['id'];
+          const item = {
+            title: val['listaServicios'][0]['nombreEspecialidad'],
+            description: `${val['cantidadCupos']} cupos disponibles dentro de las próximas ${val['ventanaTiempo']} horas.`,
+            itemSearch: {
+              area: ENV.areaConsultaMedica,
+              especialidad: val['listaServicios'][0],
+              profesional: null,
+              centroAtencion: {
+                codigo: 'todos',
+                detalle: 'Todos',
+                idCentro: ENV.idRegion,
+                idRegion: ENV.idRegion,
+                nombre: 'Todos', 
+                direccion: {
+                  calle: null,
+                  comuna: "Región Metropolitana",
+                  numero: null,
+                  piso: null,
+                }
+              }
+            }
+          }
+          this.proximasHoras.push(item);
+        });
+      }
+    });
+  }
+
+  procesarSeleccion(data){
+    this.seleccionProximaHora.emit(data);
   }
 }

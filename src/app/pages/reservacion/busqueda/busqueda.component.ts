@@ -729,6 +729,10 @@ export class BusquedaComponent implements OnInit {
     this.emitterReadQuery(true)
   }
 
+  buscarProximaHora(data){
+    this.emitBusqueda.emit(data);
+  }
+
   emitterReadQuery(status) {
     this.readQuery = status;
     if (status) {
