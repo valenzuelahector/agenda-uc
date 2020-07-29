@@ -638,7 +638,7 @@ export class IdentificacionComponent implements OnInit, OnChanges {
       idPreferenciaContacto: this.procedimientoSeleccion.celularPref ? '0' : '1',
       horarioPreferencia: this.procedimientoSeleccion.horario === 'AM' ? '0' : '1',
       presupuesto: this.procedimientoSeleccion.generarPresupuesto,
-      ordenMedicaFILE: this.procedimientoSeleccion.archivo.file
+      ordenMedica: this.procedimientoSeleccion.archivo.file64
     }
 
     this.agendaService.postProcedimiento(data).then( res => {
