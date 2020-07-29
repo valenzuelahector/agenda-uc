@@ -635,7 +635,7 @@ export class IdentificacionComponent implements OnInit, OnChanges {
       idServicio: this.busquedaInicial.especialidad.idServicio,
       idPaciente: this.paciente.id,
       idPrevision: this.procedimientoSeleccion.prevision.id,
-      preferenciaContacto: this.procedimientoSeleccion.celularPref ? '0' : '1',
+      idPreferenciaContacto: this.procedimientoSeleccion.celularPref ? '0' : '1',
       horarioPreferencia: this.procedimientoSeleccion.horario === 'AM' ? '0' : '1',
       presupuesto: this.procedimientoSeleccion.generarPresupuesto,
       ordenMedicaFILE: this.procedimientoSeleccion.archivo.file
