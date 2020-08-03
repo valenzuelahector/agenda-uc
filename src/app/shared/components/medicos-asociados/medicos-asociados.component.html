@@ -1,8 +1,8 @@
 <div class="carouselConfig">
-    <span class="iniText">{{ title }}</span>
-    <mat-spinner [diameter]="30" style="margin:30px auto" *ngIf="loading"></mat-spinner>
+    <span class="iniText" *ngIf="recursos.length > 0">{{ title }}</span>
+    <!-- <mat-spinner [diameter]="30" style="margin:30px auto" *ngIf="loading"></mat-spinner> -->
 
-    <div fxLayout="row" *ngIf="!loading && displayRecursos">
+    <div fxLayout="row" *ngIf="!loading && displayRecursos && recursos.length > 0">
         <div fxFlex="45px" fxFlex.sm="0px" fxFlex.xs="0px" style="position: relative;">
             <div (click)="slickModal.slickPrev()" class="btn-nav" matRipple>
                 <i class="fas fa-angle-left"></i>

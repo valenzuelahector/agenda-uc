@@ -532,7 +532,11 @@ export class IdentificacionComponent implements OnInit, OnChanges {
   getProfesionales(idServicio) {
     const query = `idServicio=${idServicio}`
     this.agendaService.getProfesionalesByQuery(query).subscribe(res => {
-      this.profesionales = this.orderPipe.transform(res['profesionales'], 'nombreProfesional');
+      if(res['profesionales'] && res['profesionales'].length > 0){
+        this.profesionales = this.orderPipe.transform(res['profesionales'], 'nombreProfesional');
+      }else{
+        this.profesionales = [];
+      }
       this.profesionales.forEach((val, key) => {
         if (val['idProfesional'] === this.listaEspera.id) {
           this.listaEsperaSeleccion.profesional = val;
@@ -580,7 +584,7 @@ export class IdentificacionComponent implements OnInit, OnChanges {
       intervaloPreferido: this.listaEsperaSeleccion.horario,
       idPaciente: this.paciente.id,
       idServicio: this.busquedaInicial.especialidad.idServicio,
-      fechaLimite: (new Date()).toISOString().split("T")[0]
+    //  fechaLimite: (new Date()).toISOString().split("T")[0]
     }
 
     if (this.listaEsperaSeleccion.profesional !== 'NA') {

@@ -4,10 +4,10 @@
       <span class="spec">{{ busquedaInicial.especialidad.nombreServicio }} (Lista de Espera)</span>
     </h3>
     <div class="box-le">
-      <span *ngIf="listaEsperaSeleccion.profesional !== 'NA'">Esta lista de espera corresponde específicamente a <b
+      <span *ngIf="listaEspera.id && listaEsperaSeleccion.profesional !== 'NA'">Esta lista de espera corresponde específicamente a <b
           style="font-weight: bold;">{{ listaEspera.nombre }}</b>,
         en caso de querer tomar hora con otro especialista, modifíquelo directamente en el siguiente paso.</span>
-      <span *ngIf="listaEsperaSeleccion.profesional === 'NA'">Esta lista de espera <b style="font-weight: bold;">NO
+      <span *ngIf="listaEsperaSeleccion.profesional === 'NA' || !listaEspera.id">Esta lista de espera <b style="font-weight: bold;">NO
           CORRESPONDE A ALGÚN ESPECIALISTA EN PARTICULAR</b>,
         en caso de querer tomar hora con algún especialista, modifíquelo directamente en el siguiente paso.</span>
     </div>
