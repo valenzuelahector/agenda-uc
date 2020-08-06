@@ -334,6 +334,7 @@
     <mat-form-field class="full bgwhite-input cusSelect" appearance="fill" [color]="primary">
       <mat-label>Horario de Preferencia *</mat-label>
       <mat-select [(ngModel)]="procedimientoSeleccion.horario">
+        <mat-option [value]="'Ninguno'" class="mat-option-smtext">NO TENGO UNA PREFERENCIA</mat-option>
         <mat-option [value]="'AM'" class="mat-option-smtext">AM</mat-option>
         <mat-option [value]="'PM'" class="mat-option-smtext">PM</mat-option>
       </mat-select>

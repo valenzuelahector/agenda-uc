@@ -41,20 +41,19 @@
 			<h5 style="margin:0px" *ngIf="recursos.length > 0">Se han encontrado {{ recursos.length }} resultado(s).
 			</h5>
 			<div class="ctms" *ngIf="recursos.length == 0">
-				<div [innerHTML]="sanitizer.bypassSecurityTrustHtml(customMensaje)" ></div>		
+				<div fxLayout="row wrap" fxLayoutAlign="center center">
+					<div fxFlex="69%" fxFlex.sm="100%" fxFlex.xs="100%"  [innerHTML]="sanitizer.bypassSecurityTrustHtml(customMensaje)">
+						<div  ></div>		
+					</div>
+					<div fxFlex="30%" fxFlex.sm="100%" fxFlex.xs="100%" style="text-align: right;">
+						<button mat-stroked-button class="btn-morado cus-pad cus" (click)="procesarListaEspera({})">
+							Incribirse a Lista de Espera
+						</button>
+					</div>
+				</div>
 			</div>
 		</div>
-		<mat-accordion class="lista-espera-acc" *ngIf="recursos && loadedRecursos && recursos.length == 0">
-			<mat-expansion-panel>
-			  <mat-expansion-panel-header>
-				<mat-panel-title>
-				  ¿No encuentras una hora que te acomode?
-				</mat-panel-title>
-			  </mat-expansion-panel-header>
-			  <p style="text-align: center;">Inscríbete  <a class="link-le" (click)="procesarListaEspera({})">aquí</a>. <br />Si se libera una hora te avisaremos.</p>
-			</mat-expansion-panel>
-		  </mat-accordion>	
-		  
+
 		<div id="dayWeek" *ngIf="recursos.length > 0">
 			<app-days-of-week
 				[contadorMeses]="counterLoader"

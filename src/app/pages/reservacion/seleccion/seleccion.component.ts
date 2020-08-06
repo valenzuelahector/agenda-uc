@@ -516,7 +516,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
 
       const today = new Date(this.utils.toLocalScl(new Date(), this.compensacion, 'YYYY-MM-DDTHH:mm:ss'));
       const end = new Date(this.utils.toLocalScl(new Date(), this.compensacion, 'YYYY-MM-DDTHH:mm:ss'));
-      today.setMonth(today.getMonth() + this.counterLoader - 1);
+      //today.setMonth(today.getMonth() + this.counterLoader - 1);
       end.setMonth(end.getMonth() + (this.counterLoader));
       end.setDate(end.getDate() - 1);
       

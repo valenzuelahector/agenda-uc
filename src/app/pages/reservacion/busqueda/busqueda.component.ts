@@ -552,6 +552,10 @@ export class BusquedaComponent implements OnInit {
         let qp = params;
         let region = (res['regiones'] && res['regiones'][0]) ? res['regiones'][0]['idRegion'] : null;
 
+        if(!res['centros']){
+          res['centros'] = [];
+        }
+
         res['centros'].forEach((val, key) => {
           ENV.idCentrosNoDisponibles.forEach((v, k) => {
             if(val['idCentro'] == v){

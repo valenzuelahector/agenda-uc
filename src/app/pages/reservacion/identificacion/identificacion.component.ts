@@ -190,6 +190,8 @@ export class IdentificacionComponent implements OnInit, OnChanges {
 
       this.findPaciente = true;
 
+    }, err => {
+      this.utils.mDialog("Error", "No se ha podido consultar al paciente, intente nuevamente", "message");
     })
 
 

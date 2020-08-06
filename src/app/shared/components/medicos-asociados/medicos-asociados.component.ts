@@ -129,10 +129,12 @@ export class MedicosAsociadosComponent implements OnInit, OnDestroy {
       fechaLimite.setHours(23);
       fechaLimite.setMinutes(59);
       fechaLimite.setSeconds(59);
-
+      const nombreCentro = this.detalleBusqueda.centroAtencion.nombre.toUpperCase();
+      const idCentro = nombreCentro === 'TODOS' ? this.detalleBusqueda.centroAtencion.idCentro : this.detalleBusqueda.centroAtencion.idRegion
+      
       this.agendaService.getRecursos({
-        todosCentro: true,
-        idCentro: this.detalleBusqueda.centroAtencion.idRegion,
+        todosCentro: nombreCentro === 'TODOS' ? true : false,
+        idCentro: idCentro,
         fechaInicio: this.utils.trDateStr(fechaHoy, null, this.compensacion),
         fechaTermino: this.utils.trDateStr(fechaLimite, null, this.compensacion),
         idServicio: this.detalleBusqueda.especialidad.idServicio,
@@ -142,13 +144,16 @@ export class MedicosAsociadosComponent implements OnInit, OnDestroy {
       }).subscribe(data => {
 
         data = this.filtrarRecursosSoloProfesional(data);
-
+        let recursos = [];
         if (data['listaRecursos'] && data['listaRecursos'].length > 0) {
           data['listaRecursos'].forEach((val, key) => {
             data['listaRecursos'][key]['proximaHoraEpoch'] = val['proximaHoraDisponible']['cupo']['horaEpoch'];
+            if(val['id'] !== this.detalleBusqueda.profesional.idProfesional){
+              recursos.push(data['listaRecursos'][key]);
+            }
           });
 
-          this.recursos = this.orderPipe.transform(data['listaRecursos'], 'proximaHoraEpoch');
+          this.recursos = this.orderPipe.transform(recursos, 'proximaHoraEpoch');
           this.loading = false;
           this.displayRecursos = true;
 

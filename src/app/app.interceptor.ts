@@ -20,7 +20,7 @@ export class Interceptor implements HttpInterceptor {
     if(
       request.url.indexOf('/Servicios/Rel/Especialidades') < 0 && 
       request.url.indexOf('/Profesionales?idArea') < 0 && 
-      !request.url.includes('fromProfRel=true')){
+      !request.url.includes('fromProfRel=true') && !request.url.includes('/CuposInmediatos')){
       setTimeout(() => {
         this.utils.showProgressBar();
         clearTimeout(this.clearProgBar)

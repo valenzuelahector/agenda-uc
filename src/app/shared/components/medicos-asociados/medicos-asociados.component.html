@@ -11,7 +11,7 @@
         <div fxFlex="100%">
             <ngx-slick-carousel class="carousel" #slickModal="slick-carousel" [config]="slideConfig">
                 <ng-container *ngFor="let re of recursos">
-                    <div ngxSlickItem class="slide" *ngIf="detalleBusqueda.profesional.idProfesional !== re.id">
+                    <div ngxSlickItem class="slide">
                         <div class="itmslide">
                             <div fxLayout="row wrap" fxLayoutAlign="space-between center">
                                 <div fxFlex="60%">
@@ -57,5 +57,4 @@
             </div>
         </div>
     </div>
-    <h5 style="font-weight: bold;color: #802e87;" *ngIf="!loading && recursos.length === 0">Sin profesionales para mostrar.</h5>
 </div>
