@@ -526,7 +526,6 @@ export class SeleccionComponent implements OnInit, OnChanges {
 
     const init = today.toISOString().split("T")[0];
     const endit = end.toISOString().split("T")[0];
-    console.log(init, endit)
     let activateInit = false;
 
     Object.keys(fechasDisponibles).forEach(keyDate => {
