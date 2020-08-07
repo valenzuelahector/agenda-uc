@@ -24,8 +24,8 @@ export class SeleccionComponent implements OnInit, OnChanges {
   @Input() reloadBusqueda: number = 0;
   @Output() calendario: EventEmitter<any> = new EventEmitter();
   @Output() readQuery: EventEmitter<any> = new EventEmitter();
-  @Output() listaEspera : EventEmitter<any> = new EventEmitter();
-  @Output() procedimiento : EventEmitter<any> = new EventEmitter();
+  @Output() listaEspera: EventEmitter<any> = new EventEmitter();
+  @Output() procedimiento: EventEmitter<any> = new EventEmitter();
 
   public recursos: any;
   public fechaHoy: Date;
@@ -93,15 +93,15 @@ export class SeleccionComponent implements OnInit, OnChanges {
       this.navigationDate = { min: null, max: null };
       this.counterLoader = 0;
       this.navDirection = 'next';
-      this.isProcedimiento = this.busquedaInicial.area.id ===  ENV.idExamenProcedimiento;
+      this.isProcedimiento = this.busquedaInicial.area.id === ENV.idExamenProcedimiento;
       if (this.busquedaInicial && this.busquedaInicial.especialidad && !this.isProcedimiento) {
         this.displayCalendar = true;
         this.resetCalendario();
         this.crearListaFechas();
         if (this.busquedaInicial.profesional) {
-          setTimeout(()=> {
+          setTimeout(() => {
             this.utils.setDataProfesionalRelacionado(clone(this.busquedaInicial));
-          },3000);
+          }, 3000);
           this.getRecursos(this.busquedaInicial.profesional.idProfesional);
         } else {
           this.getRecursos();
@@ -200,8 +200,14 @@ export class SeleccionComponent implements OnInit, OnChanges {
 
       let fechaHoy = new Date();
       let fechaLimite;
+      const dayToday = fechaHoy.getDate();
 
       fechaHoy.setMonth(fechaHoy.getMonth() + this.counterLoader);
+
+      if(dayToday === 31 && this.counterLoader > 0){
+        fechaHoy.setMonth(fechaHoy.getMonth() - 1);
+      }
+
       fechaLimite = new Date(fechaHoy.getFullYear(), fechaHoy.getMonth() + 1, 0)
 
       fechaHoy = new Date(this.utils.toLocalScl(fechaHoy, this.compensacion, 'YYYY-MM-DDTHH:mm:ss'));
@@ -247,7 +253,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
           this.enableScroll = true;
           this.readQuery.emit(true);
           this.restoreCalendar();
-          
+
         } else if (this.keepSearching) {
 
           if (this.counterLoader < 12 && this.navDirection == 'next') {
@@ -304,7 +310,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
         if (valRn['id'] === valRa['id']) {
 
           Object.keys(valRa['fechasDisponibles']).forEach(keyRaFd => {
-            if(valRa['fechasDisponibles'][keyRaFd].length > 0){
+            if (valRa['fechasDisponibles'][keyRaFd].length > 0) {
               valRn['fechasDisponibles'][keyRaFd] = clone(valRa['fechasDisponibles'][keyRaFd]);
             }
           });
@@ -412,7 +418,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
       }
       agrupCentros[val['centro']['id']]['cupos'].push(val)
     })
-    
+
     this.centrosProfesional[i] = [];
     let enableCentro = (Object.keys(agrupCentros).length == 1) ? true : false;
 
@@ -437,7 +443,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
     }
 
     recurso['fechasDisponibles'] = clone(this.listaFechas);
-    
+
     recurso['listaCupos'].forEach((valLc, keyLc) => {
       valLc['cupos'].forEach((val, key) => {
 
@@ -504,52 +510,45 @@ export class SeleccionComponent implements OnInit, OnChanges {
     this.utils.verPerfilProfesional(re);
   }
 
-  procesarListaEspera(data){
+  procesarListaEspera(data) {
     this.listaEspera.emit(data);
   }
 
-  displayListaEspera(fechasDisponibles, poseeMes){
+  displayListaEspera(fechasDisponibles, poseeMes) {
 
     let display = true;
 
-    if(this.counterLoader > 0){
+    const today = new Date(this.utils.toLocalScl(new Date(), this.compensacion, 'YYYY-MM-DDTHH:mm:ss'));
+    const end = new Date(this.utils.toLocalScl(new Date(), this.compensacion, 'YYYY-MM-DDTHH:mm:ss'));
 
-      const today = new Date(this.utils.toLocalScl(new Date(), this.compensacion, 'YYYY-MM-DDTHH:mm:ss'));
-      const end = new Date(this.utils.toLocalScl(new Date(), this.compensacion, 'YYYY-MM-DDTHH:mm:ss'));
-      //today.setMonth(today.getMonth() + this.counterLoader - 1);
-      end.setMonth(end.getMonth() + (this.counterLoader));
-      end.setDate(end.getDate() - 1);
-      
-      const init = today.toISOString().split("T")[0];
-      const endit = end.toISOString().split("T")[0];
-      
-      let activateInit = false;
-  
-      Object.keys(fechasDisponibles).forEach( keyDate => {
-  
-        if(keyDate === init){
-          activateInit = true;
-        }
-  
-        if(keyDate === endit){
-          activateInit = false;
-        }
-  
-        if(activateInit && fechasDisponibles[keyDate].length > 0){
-          display = false;
-        }
-  
-      });
+    end.setMonth(end.getMonth() + 1);
+    end.setDate(end.getDate() - 1);
 
-    }else{
-      display = (!poseeMes) ? true : false;
-    }
+    const init = today.toISOString().split("T")[0];
+    const endit = end.toISOString().split("T")[0];
+    console.log(init, endit)
+    let activateInit = false;
 
+    Object.keys(fechasDisponibles).forEach(keyDate => {
+
+      if (keyDate === init) {
+        activateInit = true;
+      }
+
+      if (keyDate === endit) {
+        activateInit = false;
+      }
+
+      if (activateInit && fechasDisponibles[keyDate].length > 0) {
+        display = false;
+      }
+
+    });
 
     return display;
   }
 
-  setProcedimiento(){
+  setProcedimiento() {
     this.procedimiento.emit(true);
   }
 }
