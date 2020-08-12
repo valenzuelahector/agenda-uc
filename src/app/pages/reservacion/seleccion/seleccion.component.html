@@ -147,7 +147,7 @@
 											</p>
 										</div>
 									</div>
-									<mat-accordion class="lista-espera-acc" *ngIf="displayListaEspera(re.fechasDisponibles, re.poseeMes) && displayCalendar">
+									<mat-accordion class="lista-espera-acc" *ngIf="(displayListaEspera(re.fechasDisponibles, re.poseeMes) || counterLoader > 0) && displayCalendar">
 										<mat-expansion-panel>
 										  <mat-expansion-panel-header>
 											<mat-panel-title>
