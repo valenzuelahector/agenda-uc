@@ -168,7 +168,7 @@
 
 		</div>
 	</section>
-	<div class="detalleProcedimiento" *ngIf="isProcedimiento">
+	<div class="detalleProcedimiento" *ngIf="isProcedimiento && recursos.length === 0 && loadedRecursos">
 		<p>	Estimado paciente, tenemos a su disposición la mayor oferta de procedimientos clínicos de todas las especialidades. Si 
 		no ha encontrado un procedimiento para agendamiento directo, es porque requerimos mayor información para contactarlos,
 		explicar el procedimiento y agendar. Por favor, completa el siguiente formulario para que te contactemos a la brevedad.

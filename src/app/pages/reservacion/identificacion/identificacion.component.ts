@@ -545,13 +545,17 @@ export class IdentificacionComponent implements OnInit, OnChanges {
           this.selectProfesional({ value: val });
         }
       });
+
+      setTimeout(()=> {
+        this.utils.hideProgressBar();
+      },3000);
     });
   }
 
   selectProfesional(dt) {
 
     let idProfesional = null;
-
+    
     if (dt.value !== 'NA') {
       idProfesional = dt.value.idProfesional;
       this.listaEspera.nombre = dt.value.nombreProfesional;
@@ -565,7 +569,9 @@ export class IdentificacionComponent implements OnInit, OnChanges {
 
   }
 
-  procesarListaDeEspera() {
+  async procesarListaDeEspera() {
+
+    let reglaExclusionData = {};
 
     if (!this.listaEsperaSeleccion.profesional) {
       this.utils.mDialog("Error", "Debe seleccionar el profesional de preferencia.", "message");
@@ -590,26 +596,54 @@ export class IdentificacionComponent implements OnInit, OnChanges {
     }
 
     if (this.listaEsperaSeleccion.profesional !== 'NA') {
-      data['idRecurso'] = this.listaEsperaSeleccion.profesional.idProfesional
+      data['idRecurso'] = this.listaEsperaSeleccion.profesional.idProfesional;
+      reglaExclusionData['idProfesional'] = this.listaEsperaSeleccion.profesional.idProfesional;
     }
 
     if (this.listaEsperaSeleccion.centro !== 'NA') {
-      data['idCentro'] = this.listaEsperaSeleccion.centro.idCentro
+      data['idCentro'] = this.listaEsperaSeleccion.centro.idCentro;
+      reglaExclusionData['idCentro'] = this.listaEsperaSeleccion.centro.idCentro;
+
     }
 
+    reglaExclusionData['idServicio'] = this.busquedaInicial.especialidad.idServicio;
 
-    this.agendaService.postListaDeEspera(data).then(res => {
-      if (res['statusCod'] === 'OK') {
-        this.confirmacionListaEspera.emit({ datosListaEspera: this.listaEsperaSeleccion, paciente: this.paciente });
-      } else {
-        const msg = (res['usrMsg']) ? res['usrMsg'] : 'Se ha producido un error interno. Intente más tarde nuevamente.'
-        this.utils.mDialog("Notificación", msg, 'message');
+    try{
+
+      const reglaExclusion = await this.agendaService.getReglasExclusion('LE', reglaExclusionData);
+
+      if(reglaExclusion['resultadoValidacion'] && reglaExclusion['resultadoValidacion'].toUpperCase() === 'VALIDO'){
+        
+        this.agendaService.postListaDeEspera(data).then(res => {
+          if (res['statusCod'] === 'OK') {
+            this.confirmacionListaEspera.emit({ datosListaEspera: this.listaEsperaSeleccion, paciente: this.paciente });
+          } else {
+            const msg = (res['usrMsg']) ? res['usrMsg'] : 'Se ha producido un error interno. Intente más tarde nuevamente.'
+            this.utils.mDialog("Notificación", msg, 'message');
+          }
+        });
+     
+      }else{
+
+        const msg = (reglaExclusion['usrMsg']) ? reglaExclusion['usrMsg'] : 'Se ha producido un error interno. Intente más tarde nuevamente.'
+        this.utils.mDialog('Notificación', msg, 'message');
+        return false;
+
       }
-    });
+
+    }catch(err){
+
+      this.utils.mDialog('Notificación', 'Se ha producido un error interno. Intente más tarde nuevamente.', 'message');
+
+    }
+
+    
 
   }
 
-  procesarProcedimiento() {
+  async procesarProcedimiento() {
+
+    let reglaExclusionData = {};
 
     if (!this.procedimientoSeleccion.horario) {
       this.utils.mDialog("Error", "Debe seleccionar el horario de preferencia.", "message");
@@ -647,15 +681,38 @@ export class IdentificacionComponent implements OnInit, OnChanges {
       ordenMedica: this.procedimientoSeleccion.archivo.file64
     }
 
-    this.agendaService.postProcedimiento(data).then( res => {
-      if(res['statusCod'] && res['statusCod'] === 'OK'){
-        this.confirmacionProcedimiento.emit({ datosProcedimiento: this.procedimientoSeleccion, paciente: this.paciente });
-      }else{
-        const msj =  res['usrMsg'] ?  res['usrMsg'] : 'No se ha podido guardar la información. Intente más tarde.'
-        this.utils.mDialog('Error', msj, 'message');
-      }
-    })
+    try{
 
+      reglaExclusionData['idServicio'] = this.busquedaInicial.especialidad.idServicio;
+      reglaExclusionData['idCentro'] = this.procedimientoSeleccion.centro.idCentro;
+      
+      const reglaExclusion = await this.agendaService.getReglasExclusion('P', reglaExclusionData);
+
+      if(reglaExclusion['resultadoValidacion'] && reglaExclusion['resultadoValidacion'].toUpperCase() === 'VALIDO'){
+        
+        this.agendaService.postProcedimiento(data).then( res => {
+          if(res['statusCod'] && res['statusCod'] === 'OK'){
+            this.confirmacionProcedimiento.emit({ datosProcedimiento: this.procedimientoSeleccion, paciente: this.paciente });
+          }else{
+            const msj =  res['usrMsg'] ?  res['usrMsg'] : 'No se ha podido guardar la información. Intente más tarde.'
+            this.utils.mDialog('Error', msj, 'message');
+          }
+        })
+    
+     
+      }else{
+
+        const msg = (reglaExclusion['usrMsg']) ? reglaExclusion['usrMsg'] : 'Se ha producido un error interno. Intente más tarde nuevamente.'
+        this.utils.mDialog('Notificación', msg, 'message');
+        return false;
+
+      }
+
+    }catch(err){
+
+      this.utils.mDialog('Notificación', 'Se ha producido un error interno. Intente más tarde nuevamente.', 'message');
+
+    }
 
   }
 

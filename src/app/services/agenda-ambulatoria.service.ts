@@ -128,4 +128,13 @@ export class AgendaAmbulatoriaService {
   postProcedimiento(data){
     return this.http.post(this.baseApi + '/SolicitudProcedimiento', data).toPromise();
   }
+
+  getReglasExclusion(codContexto, data){
+    
+    const idServicio = '&idServicio=' + data.idServicio;
+    const idCentro = data.idCentro ? '&idCentro=' + data.idCentro : '';
+    const idProfesional = data.idProfesional ? '&idProfesional=' + data.idProfesional : ''
+
+    return this.http.get(this.baseApi + '/ValidarReglas?codContexto=' + codContexto + idCentro + idServicio + idProfesional ).toPromise();
+  }
 }

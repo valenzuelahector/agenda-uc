@@ -93,8 +93,10 @@ export class SeleccionComponent implements OnInit, OnChanges {
       this.navigationDate = { min: null, max: null };
       this.counterLoader = 0;
       this.navDirection = 'next';
+
       this.isProcedimiento = this.busquedaInicial.area.id === ENV.idExamenProcedimiento;
-      if (this.busquedaInicial && this.busquedaInicial.especialidad && !this.isProcedimiento) {
+
+      if (this.busquedaInicial && this.busquedaInicial.especialidad) {
         this.displayCalendar = true;
         this.resetCalendario();
         this.crearListaFechas();
