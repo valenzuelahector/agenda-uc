@@ -135,6 +135,6 @@ export class AgendaAmbulatoriaService {
     const idCentro = data.idCentro ? '&idCentro=' + data.idCentro : '';
     const idProfesional = data.idProfesional ? '&idProfesional=' + data.idProfesional : ''
 
-    return this.http.get(this.baseApi + '/ValidarReglas?codContexto=' + codContexto + idCentro + idServicio + idProfesional ).toPromise();
+    return this.http.get(this.baseApi + '/ReglasExclusion/Validar?codContexto=' + codContexto + idCentro + idServicio + idProfesional ).toPromise();
   }
 }
