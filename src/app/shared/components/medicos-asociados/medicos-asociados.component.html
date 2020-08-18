@@ -1,5 +1,5 @@
 <div class="carouselConfig">
-    <span class="iniText" *ngIf="recursos.length > 0">{{ title }}</span>
+    <span class="iniText" *ngIf="!loading && displayRecursos && recursos.length > 0">{{ title }}</span>
     <!-- <mat-spinner [diameter]="30" style="margin:30px auto" *ngIf="loading"></mat-spinner> -->
 
     <div fxLayout="row" *ngIf="!loading && displayRecursos && recursos.length > 0">

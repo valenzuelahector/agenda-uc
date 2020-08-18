@@ -136,7 +136,8 @@ export class MedicosAsociadosComponent implements OnInit, OnDestroy {
       fechaLimite.setMinutes(59);
       fechaLimite.setSeconds(59);
       const nombreCentro = this.detalleBusqueda.centroAtencion.nombre.toUpperCase();
-      const idCentro = nombreCentro === 'TODOS' ? this.detalleBusqueda.centroAtencion.idCentro : this.detalleBusqueda.centroAtencion.idRegion
+      console.log(nombreCentro);
+      const idCentro = nombreCentro === 'TODOS' ?  this.detalleBusqueda.centroAtencion.idRegion : this.detalleBusqueda.centroAtencion.idCentro
       
       this.agendaService.getRecursos({
         todosCentro: nombreCentro === 'TODOS' ? true : false,

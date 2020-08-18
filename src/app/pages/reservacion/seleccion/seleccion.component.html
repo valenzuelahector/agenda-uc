@@ -37,7 +37,7 @@
 	</div>
 	<section class="w-resultados">
 
-		<div class="cwarn" *ngIf="recursos && loadedRecursos" [ngStyle]="{ 'margin-bottom' :recursos && loadedRecursos && recursos.length == 0 ? '30px' : '0px' }">
+		<div class="cwarn" *ngIf="recursos && loadedRecursos && !isProcedimiento" [ngStyle]="{ 'margin-bottom' :recursos && loadedRecursos && recursos.length == 0 ? '30px' : '0px' }">
 			<h5 style="margin:0px" *ngIf="recursos.length > 0">Se han encontrado {{ recursos.length }} resultado(s).
 			</h5>
 			<div class="ctms" *ngIf="recursos.length == 0">
