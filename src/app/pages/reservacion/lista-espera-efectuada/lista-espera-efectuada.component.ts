@@ -19,7 +19,6 @@ export class ListaEsperaEfectuadaComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(){
-    console.log(this.confirmacionListaEsperaData)
   }
 
   get getNotTelemedicina(){

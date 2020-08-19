@@ -85,7 +85,6 @@ export class ProximasHorasComponent implements OnInit {
             }
           }
 
-          console.log(item)
           this.proximasHoras.push(item);
         });
       }

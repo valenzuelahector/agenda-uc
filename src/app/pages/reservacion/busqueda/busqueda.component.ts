@@ -489,7 +489,6 @@ export class BusquedaComponent implements OnInit {
       this.filterEspecialidades = this.especialidades;
 
       if(this.needLoadInitEspecialidades && fromForm){
-        console.log("carga")
         this.getEspecialidades('especialidad');
         this.needLoadInitEspecialidades = false;
       }

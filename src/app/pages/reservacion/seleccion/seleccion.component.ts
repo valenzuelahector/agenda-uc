@@ -206,7 +206,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
 
       fechaHoy.setMonth(fechaHoy.getMonth() + this.counterLoader);
 
-      if(dayToday === 31 && this.counterLoader > 0){
+      if (dayToday === 31 && this.counterLoader > 0) {
         fechaHoy.setMonth(fechaHoy.getMonth() - 1);
       }
 
@@ -392,7 +392,6 @@ export class SeleccionComponent implements OnInit, OnChanges {
 
     let cet = this.centrosProfesional[idxCentro][idxItem];
     if (Object.keys(this.centrosProfesional[idxCentro]).length > 1) {
-      console.log(cet.habilitado);
       this.centrosProfesional[idxCentro][idxItem]['habilitado'] = (cet.habilitado) ? false : true
     } else if (Object.keys(this.centrosProfesional[idxCentro]).length == 1) {
       this.centrosProfesional[idxCentro][idxItem]['habilitado'] = true;
@@ -512,8 +511,33 @@ export class SeleccionComponent implements OnInit, OnChanges {
     this.utils.verPerfilProfesional(re);
   }
 
-  procesarListaEspera(data) {
-    this.listaEspera.emit(data);
+  async procesarListaEspera(data) {
+
+    const bcentro = this.busquedaInicial.centroAtencion;
+    const bprofe = this.busquedaInicial.profesional;
+    const centroTodos = bcentro.codigo && bcentro.codigo === 'todos' ? true : false;
+    const idProfesional = bprofe && bprofe.idProfesional ? bprofe.idProfesional : null;
+    const reglaExclusionData = {
+      idServicio: this.busquedaInicial.especialidad.idServicio,
+      idProfesional: data && data.id ? data.id : idProfesional,
+      idCentro : !centroTodos ? this.busquedaInicial.centroAtencion.idCentro: null
+    };
+
+    const reglaExclusion = await this.agendaService.getReglasExclusion('LE', reglaExclusionData);
+
+    if (reglaExclusion['resultadoValidacion'] && reglaExclusion['resultadoValidacion'].toUpperCase() === 'VALIDO') {
+
+      this.listaEspera.emit(data);
+
+    } else {
+
+      const msg = (reglaExclusion['usrMsg']) ? reglaExclusion['usrMsg'] : 'No se ha podido validar si puede incribirse a la Lista de Espera. Intente más tarde nuevamente.'
+      this.utils.mDialog('Notificación', msg, 'message');
+      return false;
+
+    }
+
+
   }
 
   displayListaEspera(fechasDisponibles, poseeMes) {
@@ -549,7 +573,31 @@ export class SeleccionComponent implements OnInit, OnChanges {
     return display;
   }
 
-  setProcedimiento() {
-    this.procedimiento.emit(true);
+  async setProcedimiento() {
+
+    const bcentro = this.busquedaInicial.centroAtencion;
+    const bprofe = this.busquedaInicial.profesional;
+    const centroTodos = bcentro.codigo && bcentro.codigo === 'todos' ? true : false;
+    const idProfesional = bprofe && bprofe.idProfesional ? bprofe.idProfesional : null;
+    const reglaExclusionData = {
+      idServicio: this.busquedaInicial.especialidad.idServicio,
+      idProfesional: idProfesional,
+      idCentro : !centroTodos ? this.busquedaInicial.centroAtencion.idCentro: null
+    };
+
+    const reglaExclusion = await this.agendaService.getReglasExclusion('P', reglaExclusionData);
+
+    if (reglaExclusion['resultadoValidacion'] && reglaExclusion['resultadoValidacion'].toUpperCase() === 'VALIDO') {
+
+      this.procedimiento.emit(true);
+
+    } else {
+
+      const msg = (reglaExclusion['usrMsg']) ? reglaExclusion['usrMsg'] : 'No se ha podido validar si puede solicitar un Procedimiento. Intente más tarde nuevamente.'
+      this.utils.mDialog('Notificación', msg, 'message');
+      return false;
+
+    }
+
   }
 }

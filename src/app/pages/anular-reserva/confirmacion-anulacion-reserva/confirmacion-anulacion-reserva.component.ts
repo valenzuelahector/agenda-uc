@@ -14,8 +14,6 @@ export class ConfirmacionAnulacionReservaComponent implements OnInit, OnChanges 
   }
 
   ngOnChanges(){
-    console.log(this.respuestaAnular);
-
   }
 
 }
