@@ -61,14 +61,29 @@ export class ProximasHorasComponent implements OnInit {
       if(res['listaCuposInmediatos'] && res['listaCuposInmediatos'].length > 0){
         res['listaCuposInmediatos'].forEach((val, key) => {
           val['listaServicios'][0]['idServicio'] = val['listaServicios'][0]['id'];
-          const esCentro = val['listaCentros'][0]['nombre'].toLowerCase().includes('metropolitana') ? false : true 
+          const esCentro = val['listaCentros'][0]['nombre'].toLowerCase().includes('metropolitana') ? false : true;
+          let profesional = null;
+
+          if(val['listaRecursos'] && val['listaRecursos'].length === 1){
+
+            profesional = {
+              esProfesional: true,
+              idProfesional: val['listaRecursos'][0]['id'],
+              informacionAdicional: "",
+              nombreProfesional: val['listaRecursos'][0]['nombre'],
+              soloAutoPagador: null,
+              urlImagenProfesional:null
+            };
+
+          }
+
           const item = {
             title: val['listaServicios'][0]['nombreEspecialidad'],
             description: `${val['cantidadCupos']} cupos disponibles dentro de las próximas ${val['ventanaTiempo']} horas.`,
             itemSearch: {
               area: ENV.areaConsultaMedica,
               especialidad: val['listaServicios'][0],
-              profesional: null,
+              profesional: profesional,
               centroAtencion: {
                 codigo: esCentro ? this.utils.slugify(val['listaCentros'][0]['nombre'], '-') : 'todos',
                 detalle: esCentro ? val['listaCentros'][0]['nombre'] : 'Todos',

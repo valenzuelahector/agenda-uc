@@ -65,6 +65,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
   ) { }
 
   ngOnInit() {
+
   }
 
   getOffsetTop(element) {
@@ -108,6 +109,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
         } else {
           this.getRecursos();
         }
+        
       } else {
         this.resetCalendario();
       }
@@ -255,7 +257,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
           this.enableScroll = true;
           this.readQuery.emit(true);
           this.restoreCalendar();
-
+          
         } else if (this.keepSearching) {
 
           if (this.counterLoader < 12 && this.navDirection == 'next') {
@@ -599,5 +601,29 @@ export class SeleccionComponent implements OnInit, OnChanges {
 
     }
 
+  }
+
+  alertar(event){
+    console.log(event);
+  }
+
+  templateTooltip(){
+    return `
+      <div class="tooltipCalendar">
+        <p class="itm-centro-tt">
+        <span class="circ-tt></span>Centro Médico San Carlos de Apoquindo
+        </p>
+        <div class="detalle-tt">
+          <div class="itm-tt">
+            <span class="smtt">Próxima Hora:</span>
+            <span>09:00</span>
+          </div>
+          <div class="itm-tt">
+            <span class="smtt">Cupos Disponibles</span>
+            <span>5</span>
+          </div>
+        </div>
+      </div>
+    `
   }
 }

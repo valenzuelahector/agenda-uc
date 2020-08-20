@@ -29,6 +29,8 @@ export class ConfirmacionComponent implements OnInit, OnChanges, OnDestroy {
   reservaSubscribe;
   verMasOpened = false;
   verMasAction = false;
+  idreserva;
+
   constructor(
     public agendaService:AgendaAmbulatoriaService,
     public utils:UtilsService,
@@ -73,7 +75,9 @@ export class ConfirmacionComponent implements OnInit, OnChanges, OnDestroy {
     }).subscribe(data => {
       if(data['statusCod'] == 'OK'){
         this.reservaFinalizada =  true;
+        this.idreserva = data['idCita'];
         this.confirmarReserva.emit({response: true, data:data});
+        console.log(data);
       }else{
         this.errReserva(data['usrMsg']);
       }
@@ -142,6 +146,10 @@ export class ConfirmacionComponent implements OnInit, OnChanges, OnDestroy {
       this.verMasOpened = false;
       this.verMas();
     }
+  }
+
+  pagar(){
+    location.href = 'https://cmv.ucchristus.cl/pago/reserva/' + this.idreserva
   }
 }
 

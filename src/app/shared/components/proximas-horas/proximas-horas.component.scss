@@ -58,6 +58,8 @@ img {
     font-size: 14px;
     line-height: 25px;
     margin-top: 5px;
+    width: 100%;
+    padding: 2px 0px;
 }
 
 .tituloEspc{
@@ -100,5 +102,15 @@ img {
 
     button{
         padding: 5px 2px !important;
+    }
+}
+.infoProf{
+    font-size: 14px;
+    margin-bottom: 13px;
+
+    .tinf{
+        display: block;
+        font-weight: bold;    
+        color:#802e87;
     }
 }

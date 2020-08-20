@@ -33,6 +33,9 @@
             <p *ngIf=" calendario.cupo?.valorConvenio.toString().trim() != '0'"><b>Valor Cita :</b> {{ calendario.cupo.valorConvenio }}</p>
             <span *ngIf=" calendario.cupo?.valorConvenio.toString().trim() != '0'" style="color:#999">(*) El valor cita corresponde a valor referencial, el cual puede variar según plan de salud.</span>
           </div>
+          <div style="text-align: right;" *ngIf="reservaFinalizada" style="text-align: center;padding: 25px;background: #fed377;">
+            <button mat-raised-button class="full-btn btn-morado btn-reser" (click)="pagar()" style="font-size: 14px;" >PAGUE SU RESERVA</button>
+          </div>
         </mat-expansion-panel>
       </mat-accordion>
     </div>
@@ -71,4 +74,6 @@
       </div>
     </div>
   </div>
+
+
 </section>

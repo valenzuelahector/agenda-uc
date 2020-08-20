@@ -10,10 +10,14 @@
         </div>
         <div fxFlex="100%">
             <ngx-slick-carousel class="carousel" #slickModal="slick-carousel" [config]="slideConfig">
-                <div ngxSlickItem *ngFor="let pe of proximasHoras" class="slide">
+                <div ngxSlickItem *ngFor="let pe of proximasHoras; let i = index" class="slide">
                     <div class="itmslide">
                         <span class="tituloEspc">{{ pe?.title }}</span>
                         <span class="descEspc"> {{ pe?.description}}</span>
+                        <div class="infoProf" *ngIf="pe?.itemSearch?.profesional">
+                            <span class="tinf">Profesional:</span>
+                            <span class="nmt">{{ pe?.itemSearch?.profesional.nombreProfesional }}</span>
+                        </div>
                         <button mat-stroked-button class="btn-morado btng" (click)="procesarSeleccion(pe.itemSearch)">
                             Ver Horas Disponibles
                         </button>

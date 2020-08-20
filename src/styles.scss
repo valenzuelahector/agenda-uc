@@ -6764,3 +6764,90 @@ width: 850px;
         font-size: 12px;
     }
 }
+
+.tooltipCalendar{
+    position: absolute;
+    width: 240px;
+    background: #fff;
+    bottom: 128%;
+    left: 50%;
+    margin-left: -120px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+
+  .itm-centro-tt{
+    font-size: 13px !important;
+    line-height: 17px;
+    text-align: left;
+    position: relative;
+    padding-left: 28px;
+    margin-bottom: 15px;
+    
+}
+
+.detalle-tt{
+    font-size: 13px !important;
+    margin: 0px;    
+    display: flex;
+}
+
+.circ-tt{
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    border-radius: 100%;
+    left: 2px;
+    top: 1px;
+}
+
+.cnt-tt{
+    display:flex
+}
+
+.val-tt{
+    display: block;
+    width: 50%;
+    text-align: right;
+    font-size: 22px !important;
+    font-weight: bold;
+    line-height: 23px;
+}
+
+.sminfo-tt{
+    display: block;
+    font-size: 13px !important;
+    text-align: left;
+    width: 60%;
+    text-transform: uppercase;
+}
+
+.padd-tt{
+    padding:15px;
+}
+
+.divider{
+    border-bottom: 1px solid #ccc;
+}
+
+.txtproxhora{
+    display: block;
+    font-style: normal;
+    text-transform: uppercase;
+    margin-bottom: -5px;
+}
+
+.trg-tt {
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-top: 10px solid #ccc;
+    left: 50%;
+    margin-left: -10px;
+}
+
+.cnttt{
+    position: relative;
+}
