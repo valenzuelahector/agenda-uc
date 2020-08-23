@@ -5,7 +5,7 @@ import { FormControl, FormGroup, Validators, FormGroupDirective } from '@angular
 import gtag, { install } from 'ga-gtag';
 import { ErrorReservaComponent } from 'src/app/shared/components/modals/error-reserva/error-reserva.component';
 import { MatDialog } from '@angular/material';
-
+import { ENV } from 'src/environments/environment';
 
 @Component({
   selector: 'app-identificacion',
@@ -23,7 +23,7 @@ export class IdentificacionComponent implements OnInit, OnChanges {
   public paciente: any;
   public findPaciente: boolean = false;
   public planesSalud: any = [];
-
+  public identifText;
   public infoAdicionaPaciente: any = {
     telefono: null,
     correo: null
@@ -72,6 +72,19 @@ export class IdentificacionComponent implements OnInit, OnChanges {
       this.busquedaPaciente.documentoFormateado = this.utils.formatRut(this.rutMatch);
       this.buscarPaciente();
     }
+    if(this.busquedaInicial && this.busquedaInicial.especialidad){
+      const idEspecialidad = this.busquedaInicial.especialidad.idEspecialidad;
+      const idServicio = this.busquedaInicial.especialidad.idServicio;
+  
+      if(idServicio === ENV.donacionBancoDeSangre.idServicio && idEspecialidad === ENV.donacionBancoDeSangre.idEspecialidad){
+        this.identifText = 'Identificación del Donante';
+      }else{
+        this.identifText = 'Identificación del Paciente';
+      }
+    }
+
+
+
   }
 
   ngOnInit() {

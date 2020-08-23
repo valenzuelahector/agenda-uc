@@ -13,7 +13,11 @@ export const ENV = {
    idPlanSaludInit: '0b7a577d-6364-4b28-b2ba-a96e00e243ac',
    idCentrosNoDisponibles: [],
    idCentroPrioritario: '52e43c90-8ab7-4e34-afcb-a96f0106bbd1',
-   mensajeSinCupos : '<h5>Sin disponibilidad en agendamiento web. En caso de requerir atención presencial para vacunación por campaña influenza ministerial, ésta será por orden de llegada.</h5>'
+   mensajeSinCupos : '<h5>Sin disponibilidad en agendamiento web. En caso de requerir atención presencial para vacunación por campaña influenza ministerial, ésta será por orden de llegada.</h5>',
+   donacionBancoDeSangre: {
+     idEspecialidad: '2ae24ffb-8c57-4943-adcd-abd400f8271c',
+     idServicio : '02560c8e-0c28-4e88-9eb4-abd400f8b282'
+   }
 }
 
 
