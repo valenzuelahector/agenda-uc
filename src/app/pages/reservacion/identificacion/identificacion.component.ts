@@ -72,6 +72,7 @@ export class IdentificacionComponent implements OnInit, OnChanges {
       this.busquedaPaciente.documentoFormateado = this.utils.formatRut(this.rutMatch);
       this.buscarPaciente();
     }
+    
     if(this.busquedaInicial && this.busquedaInicial.especialidad){
       const idEspecialidad = this.busquedaInicial.especialidad.idEspecialidad;
       const idServicio = this.busquedaInicial.especialidad.idServicio;
@@ -82,7 +83,6 @@ export class IdentificacionComponent implements OnInit, OnChanges {
         this.identifText = 'Identificación del Paciente';
       }
     }
-
 
 
   }

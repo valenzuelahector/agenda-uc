@@ -42,7 +42,7 @@
           <mat-expansion-panel [expanded]="expanded.info" [hideToggle]="disableExpand" [disabled]="disableExpand" (closed)="expanded.info = false" (opened)="expanded.info = true">
             <mat-expansion-panel-header class="isYellow">
               <mat-panel-title>
-                Estimado paciente favor considerar las siguientes indicaciones
+                {{ identifText }} favor considerar las siguientes indicaciones
               </mat-panel-title>
             </mat-expansion-panel-header>
             <div class="container-pn ylw-cont" id="contIndic">

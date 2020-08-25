@@ -1,11 +1,12 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnChanges, HostListener, OnDestroy } from '@angular/core';
-import { AgendaAmbulatoriaService } from  'src/app/services/agenda-ambulatoria.service';
+import { AgendaAmbulatoriaService } from 'src/app/services/agenda-ambulatoria.service';
 import { UtilsService } from 'src/app/services/utils.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import gtag, { install } from 'ga-gtag';
 import { ErrorReservaComponent } from 'src/app/shared/components/modals/error-reserva/error-reserva.component';
 import { MatDialog } from '@angular/material';
 import * as $ from 'jquery';
+import { ENV } from 'src/environments/environment';
 
 @Component({
   selector: 'app-confirmacion',
@@ -16,47 +17,61 @@ export class ConfirmacionComponent implements OnInit, OnChanges, OnDestroy {
 
   //public reservaFinalizada:boolean = false;
 
-  @Input() paciente:any;
-  @Input() calendario:any;
-  @Input() busquedaInicial:any;
-  @Input() reservaFinalizada:boolean;
-  @Output() confirmarReserva:EventEmitter<any> = new EventEmitter();
-  @Input() mensajes:any = [];
+  @Input() paciente: any;
+  @Input() calendario: any;
+  @Input() busquedaInicial: any;
+  @Input() reservaFinalizada: boolean;
+  @Output() confirmarReserva: EventEmitter<any> = new EventEmitter();
+  @Input() mensajes: any = [];
+  identifText;
   disableExpand = true;
   disableBarReserva = false;
-  expanded = { reserva : true, info : true }
+  expanded = { reserva: true, info: true }
   reservaSubscribe;
   verMasOpened = false;
   verMasAction = false;
   constructor(
-    public agendaService:AgendaAmbulatoriaService,
-    public utils:UtilsService,
-    public sanitizer:DomSanitizer,
+    public agendaService: AgendaAmbulatoriaService,
+    public utils: UtilsService,
+    public sanitizer: DomSanitizer,
     public dialog: MatDialog,
   ) { }
 
   ngOnInit() {
     this.onResize();
-    this.reservaSubscribe = this.utils.getEmitReservar().subscribe( res => {
+    this.reservaSubscribe = this.utils.getEmitReservar().subscribe(res => {
       this.reservar();
     })
   }
 
   ngOnChanges() {
     this.onResize();
-    setTimeout(()=> {
+    setTimeout(() => {
       this.verMas();
       this.setVerMas('close')
-    },300)
+    }, 300)
+
+    if (this.busquedaInicial && this.busquedaInicial.especialidad) {
+
+      const idEspecialidad = this.busquedaInicial.especialidad.idEspecialidad;
+      const idServicio = this.busquedaInicial.especialidad.idServicio;
+
+      if (idServicio === ENV.donacionBancoDeSangre.idServicio && idEspecialidad === ENV.donacionBancoDeSangre.idEspecialidad) {
+        this.identifText = 'Estimado Donante';
+      } else {
+        this.identifText = 'Estimado Paciente';
+      }
+
+    }
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.reservaSubscribe.unsubscribe();
   }
 
-  reservar(){
+  reservar() {
     console.log(this.calendario)
-    let fecha:any = this.utils.toLocalScl(this.calendario.cupo.fechaHora, this.calendario.cupo.compensacion);
+    let fecha: any = this.utils.toLocalScl(this.calendario.cupo.fechaHora, this.calendario.cupo.compensacion);
     this.disableBarReserva = true;
     this.agendaService.postCita({
       fechaInicioDesde: fecha,
@@ -71,26 +86,26 @@ export class ConfirmacionComponent implements OnInit, OnChanges, OnDestroy {
       idDisponibilidad: this.calendario.cupo.disponibilidad.id,
       idTipoCita: this.calendario.cupo.idTipoCita.id
     }).subscribe(data => {
-      if(data['statusCod'] == 'OK'){
-        this.reservaFinalizada =  true;
-        this.confirmarReserva.emit({response: true, data:data});
-      }else{
+      if (data['statusCod'] == 'OK') {
+        this.reservaFinalizada = true;
+        this.confirmarReserva.emit({ response: true, data: data });
+      } else {
         this.errReserva(data['usrMsg']);
       }
       this.disableBarReserva = false;
     })
 
-    gtag('event', 'Clic', { 'event_category': 'Reserva de Hora', 'event_label': 'Paso4:Confirmación'});
+    gtag('event', 'Clic', { 'event_category': 'Reserva de Hora', 'event_label': 'Paso4:Confirmación' });
 
   }
 
-  errReserva(message){
+  errReserva(message) {
 
     let msg = (message) ? message : 'Se ha producido un error. ¿Que desea hacer?';
 
     let dialogRef = this.dialog.open(ErrorReservaComponent, {
       width: '400px',
-      data: { message : msg },
+      data: { message: msg },
       autoFocus: false
     });
 
@@ -107,23 +122,23 @@ export class ConfirmacionComponent implements OnInit, OnChanges, OnDestroy {
       this.disableExpand = false;
     } else {
       this.disableExpand = true;
-      this.expanded = { reserva : true, info : true }
+      this.expanded = { reserva: true, info: true }
     }
-    
+
     this.verMas();
   }
 
-  verMas(){
-    
+  verMas() {
+
     const hDatosReserva = $("#contDatosReserva").height();
     const hIndic = $("#contIndic").height();
-    if(hDatosReserva !== undefined){
-      if(hIndic > hDatosReserva){
+    if (hDatosReserva !== undefined) {
+      if (hIndic > hDatosReserva) {
         this.verMasAction = true;
         $("#contIndic").css({
           height: (hDatosReserva + 42) + 'px'
         })
-      }else{
+      } else {
         this.verMasAction = false;
         $("#contIndic").css({
           height: ''
@@ -132,13 +147,13 @@ export class ConfirmacionComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
 
-  setVerMas(action){
-    if(action === 'open'){
+  setVerMas(action) {
+    if (action === 'open') {
       this.verMasOpened = true;
       $("#contIndic").css({
         height: ''
       })
-    }else{
+    } else {
       this.verMasOpened = false;
       this.verMas();
     }

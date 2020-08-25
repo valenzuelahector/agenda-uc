@@ -88,7 +88,6 @@ export class ReservacionComponent implements OnInit, AfterViewInit, OnDestroy {
       this.busquedaInfo = data;
       this.cambiarEtapa(1);
     }
-
   }
 
 
