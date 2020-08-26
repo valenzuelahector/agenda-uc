@@ -14,10 +14,10 @@
                     <div class="itmslide">
                         <span class="tituloEspc">{{ pe?.title }}</span>
                         <span class="descEspc"> {{ pe?.description}}</span>
-                        <div class="infoProf" *ngIf="pe?.itemSearch?.profesional">
+                        <!-- <div class="infoProf" *ngIf="pe?.itemSearch?.profesional">
                             <span class="tinf">Profesional:</span>
                             <span class="nmt">{{ pe?.itemSearch?.profesional.nombreProfesional }}</span>
-                        </div>
+                        </div> -->
                         <button mat-stroked-button class="btn-morado btng" (click)="procesarSeleccion(pe.itemSearch)">
                             Ver Horas Disponibles
                         </button>
