@@ -357,7 +357,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
   dateClass(datesDs, compensacion) {
     return (date: Date): MatCalendarCellCssClasses => {
       let datesDisabled = JSON.parse(JSON.stringify(datesDs));
-
+      date.setHours(date.getHours() + 6);
       const highlightDate = datesDisabled
         .map(strDate => new Date(this.utils.toLocalScl(strDate, this.compensacion, 'YYYY-MM-DDTHH:mm:ss')))
         .some(d => d.getDate() === date.getDate() && d.getMonth() === date.getMonth() && d.getFullYear() === date.getFullYear());
@@ -385,7 +385,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
   }
 
   onSelect(event, i) {
-    console.log(this.recursos[i]);
+    event.setHours(event.getHours() + 6);
     this.selectedDate[i] = event;
     let fechaDisSel = this.utils.trDateStr(event, 'json');
     let idxFecha = fechaDisSel['year'] + "-" + fechaDisSel['month'] + '-' + fechaDisSel['day'];
