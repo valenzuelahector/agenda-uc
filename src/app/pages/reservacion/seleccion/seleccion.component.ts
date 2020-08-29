@@ -409,6 +409,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
 
   onSelect(event, i) {
 
+    event.setHours(event.getHours() + 6);
     this.selectedDate[i] = event;
     let fechaDisSel = this.utils.trDateStr(event, 'json');
     let idxFecha = fechaDisSel['year'] + "-" + fechaDisSel['month'] + '-' + fechaDisSel['day'];
