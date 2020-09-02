@@ -1,13 +1,13 @@
 <div class="resultados-para" *ngIf="listaEspera">
   <div>
     <h3>{{ busquedaInicial.especialidad.nombreEspecialidad }}
-      <span class="spec">{{ busquedaInicial.especialidad.nombreServicio }} (Lista de Espera)</span>
+      <span class="spec">{{ busquedaInicial.especialidad.nombreServicio }} </span>
     </h3>
     <div class="box-le">
-      <span *ngIf="listaEspera.id && listaEsperaSeleccion.profesional !== 'NA'">Esta lista de espera corresponde específicamente a <b
+      <span *ngIf="listaEspera.id && listaEsperaSeleccion.profesional !== 'NA'">Este formulario de inscripción corresponde específicamente a <b
           style="font-weight: bold;">{{ listaEspera.nombre }}</b>,
         en caso de querer tomar hora con otro especialista, modifíquelo directamente en el siguiente paso.</span>
-      <span *ngIf="listaEsperaSeleccion.profesional === 'NA' || !listaEspera.id">Esta lista de espera <b style="font-weight: bold;">NO
+      <span *ngIf="listaEsperaSeleccion.profesional === 'NA' || !listaEspera.id">Este formulario de inscripción <b style="font-weight: bold;">NO
           CORRESPONDE A ALGÚN ESPECIALISTA EN PARTICULAR</b>,
         en caso de querer tomar hora con algún especialista, modifíquelo directamente en el siguiente paso.</span>
     </div>
