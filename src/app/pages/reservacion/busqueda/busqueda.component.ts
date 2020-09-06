@@ -733,6 +733,7 @@ export class BusquedaComponent implements OnInit {
   }
 
   buscarProximaHora(data){
+    data['fromCuposInmediatos'] = true;
     this.emitBusqueda.emit(data);
   }
 

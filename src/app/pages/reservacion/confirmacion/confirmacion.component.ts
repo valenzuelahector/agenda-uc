@@ -76,6 +76,15 @@ export class ConfirmacionComponent implements OnInit, OnChanges, OnDestroy {
       if(data['statusCod'] == 'OK'){
         this.reservaFinalizada =  true;
         this.idreserva = data['idCita'];
+        
+        if(this.busquedaInicial.fromCuposInmediatos){
+          gtag('event', 'Reserva Cupos Inmediatos', { 'event_category': 'Reserva de Hora', 'event_label': 'Paso5:Reserva-Confirmada' });
+        }
+
+        if(this.busquedaInicial.fromMedicosRelacionados){
+          gtag('event', 'Reserva Profesional Relacionado', { 'event_category': 'Reserva de Hora', 'event_label': 'Paso5:Reserva-Confirmada' });
+        }
+
         this.confirmarReserva.emit({response: true, data:data});
         console.log(data);
       }else{

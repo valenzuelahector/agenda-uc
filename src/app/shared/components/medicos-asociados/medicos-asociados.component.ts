@@ -76,6 +76,7 @@ export class MedicosAsociadosComponent implements OnInit, OnDestroy {
 
     const region = this.detalleBusqueda.centroAtencion.idRegion;
     let detalleBusqueda = clone(this.detalleBusqueda);
+    detalleBusqueda['fromMedicosRelacionados'] = true;
 
     detalleBusqueda.profesional = {
       detalle: re.nombre,
