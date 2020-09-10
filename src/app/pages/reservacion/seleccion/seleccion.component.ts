@@ -377,16 +377,16 @@ export class SeleccionComponent implements OnInit, OnChanges {
       }
     })
   }
-
-  dateClass(datesDs, compensacion) {
+  dateClass(fechasDisponibles) {
     return (date: Date): MatCalendarCellCssClasses => {
-      let datesDisabled = JSON.parse(JSON.stringify(datesDs));
-      date.setHours(date.getHours() + 6);
-      const highlightDate = datesDisabled
-        .map(strDate => new Date(this.utils.toLocalScl(strDate, this.compensacion, 'YYYY-MM-DDTHH:mm:ss')))
-        .some(d => d.getDate() === date.getDate() && d.getMonth() === date.getMonth() && d.getFullYear() === date.getFullYear());
 
-      return highlightDate ? 'day-disabled' : '';
+      let response = '';
+      date.setHours(date.getHours() + 6);
+      const dateStr = date.toISOString().split("T")[0];
+      const highlightDate = fechasDisponibles[dateStr].length === 0 ? true : false;
+      response += highlightDate ? ' day-disabled' : '';
+      return response;
+
     };
   }
 
@@ -462,16 +462,9 @@ export class SeleccionComponent implements OnInit, OnChanges {
     })
 
     recurso['datesToHighlight'] = { dates: [], displayed: false, dateClass: null };
-
-    Object.keys(recurso['fechasDisponibles']).forEach(key => {
-      if (recurso['fechasDisponibles'][key].length == 0) {
-        datesDisabled.push(key + 'T12:00:00.000Z');
-      }
-    })
-
     recurso['datesToHighlight']['displayed'] = true;
     recurso['datesToHighlight']['dates'] = datesDisabled;
-    recurso['datesToHighlight']['dateClass'] = this.dateClass(datesDisabled, this.compensacion);
+    recurso['datesToHighlight']['dateClass'] = this.dateClass(recurso['fechasDisponibles']);
     recurso['proximaFechaEpoch'] = recurso['proximaHoraDisponible']['cupo']['horaEpoch'];
 
     return recurso;
