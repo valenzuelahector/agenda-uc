@@ -572,17 +572,17 @@ export class IdentificacionComponent implements OnInit, OnChanges {
   async procesarListaDeEspera() {
 
     if (!this.listaEsperaSeleccion.profesional) {
-      this.utils.mDialog("Error", "Debe seleccionar el profesional de preferencia.", "message");
+      this.utils.mDialog("Datos Incompletos", "Debe seleccionar el profesional de preferencia.", "message");
       return false;
     }
 
     if (!this.listaEsperaSeleccion.horario) {
-      this.utils.mDialog("Error", "Debe seleccionar el horario de preferencia.", "message");
+      this.utils.mDialog("Datos Incompletos", "Debe seleccionar el horario de preferencia.", "message");
       return false;
     }
 
     if (!this.listaEsperaSeleccion.centro) {
-      this.utils.mDialog("Error", "Debe seleccionar el Centro Médico de preferencia.", "message");
+      this.utils.mDialog("Datos Incompletos", "Debe seleccionar el Centro Médico de preferencia.", "message");
       return false;
     }
 
@@ -617,27 +617,27 @@ export class IdentificacionComponent implements OnInit, OnChanges {
   async procesarProcedimiento() {
 
     if (!this.procedimientoSeleccion.horario) {
-      this.utils.mDialog("Error", "Debe seleccionar el horario de preferencia.", "message");
+      this.utils.mDialog("Datos Incompletos", "Debe seleccionar el horario de preferencia.", "message");
       return false;
     }
 
     if (!this.procedimientoSeleccion.centro) {
-      this.utils.mDialog("Error", "Debe seleccionar el Centro Médico de preferencia.", "message");
+      this.utils.mDialog("Datos Incompletos", "Debe seleccionar el Centro Médico de preferencia.", "message");
       return false;
     }
 
     if(!this.procedimientoSeleccion.celularPref && !this.procedimientoSeleccion.correoPref){
-      this.utils.mDialog("Error", "Debe seleccionar un medio de contacto de preferencia.", "message");
+      this.utils.mDialog("Datos Incompletos", "Debe seleccionar un medio de contacto de preferencia.", "message");
       return false;
     }
 
     if(!this.procedimientoSeleccion.archivo){
-      this.utils.mDialog("Error", "Debe adjuntar la orden médica.", "message");
+      this.utils.mDialog("Datos Incompletos", "Debe adjuntar la orden médica.", "message");
       return false;
     }
 
     if(!this.procedimientoSeleccion.prevision){
-      this.utils.mDialog("Error", "Debe seleccionar la previsión.", "message");
+      this.utils.mDialog("Datos Incompletos", "Debe seleccionar la previsión.", "message");
       return false;
     }
 
