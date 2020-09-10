@@ -246,7 +246,7 @@
 
   <div class="col-md-4 field-margin">
     <mat-form-field class="full bgwhite-input cusSelect" appearance="fill" >
-      <mat-label>Profesional de Preferencia *</mat-label>
+      <mat-label>Profesional de Preferencia <span style="color:red;font-size: 16px;">*</span></mat-label>
       <mat-select [(ngModel)]="listaEsperaSeleccion.profesional" (selectionChange)="selectProfesional($event)">
         <mat-option [value]="'NA'" class="mat-option-smtext">NO TENGO UNA PREFERENCIA</mat-option>
         <ng-container *ngFor="let prof of profesionales">
@@ -258,7 +258,7 @@
   </div>
   <div class="col-md-4 field-margin">
     <mat-form-field class="full bgwhite-input cusSelect" appearance="fill" >
-      <mat-label>Centro Médico de Preferencia *</mat-label>
+      <mat-label>Centro Médico de Preferencia <span style="color:red;font-size: 16px;">*</span></mat-label>
       <mat-select [(ngModel)]="listaEsperaSeleccion.centro" [disabled]="!listaEsperaSeleccion.profesional">
         <mat-option [value]="'NA'" class="mat-option-smtext" *ngIf="centros.length > 1">NO TENGO UNA PREFERENCIA
         </mat-option>
@@ -271,7 +271,7 @@
   </div>
   <div class="col-md-4 field-margin">
     <mat-form-field class="full bgwhite-input cusSelect" appearance="fill" >
-      <mat-label>Horario de Preferencia *</mat-label>
+      <mat-label>Horario de Preferencia <span style="color:red;font-size: 16px;">*</span></mat-label>
       <mat-select [(ngModel)]="listaEsperaSeleccion.horario">
         <mat-option [value]="'Ninguno'" class="mat-option-smtext">NO TENGO UNA PREFERENCIA</mat-option>
         <mat-option [value]="'AM'" class="mat-option-smtext">AM</mat-option>
