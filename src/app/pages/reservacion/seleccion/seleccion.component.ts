@@ -522,7 +522,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
     const reglaExclusion = await this.agendaService.getReglasExclusion('LE', reglaExclusionData);
 
     if (reglaExclusion['resultadoValidacion'] && reglaExclusion['resultadoValidacion'].toUpperCase() === 'VALIDO') {
-      if(!data.id){
+      if(!data.id && this.busquedaInicial.profesional){
         data = {
           id: this.busquedaInicial.profesional.idProfesional,
           nombre: this.busquedaInicial.profesional.nombreProfesional
