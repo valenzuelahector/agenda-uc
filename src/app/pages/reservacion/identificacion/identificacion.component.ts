@@ -370,6 +370,14 @@ export class IdentificacionComponent implements OnInit, OnChanges {
             direccionCentro: (data['listaCentros'] && data['listaCentros'][0] && data['listaCentros'][0]['direccion']) ? data['listaCentros'][0]['direccion'] : null
           });
 
+          if(this.listaEspera){
+            gtag('event', 'Identificación (Lista de Espera)', { 'event_category': 'Reserva de Hora', 'event_label': 'Paso3:Identificación-Siguiente' });
+          }
+
+          if(this.isProcedimiento){
+            gtag('event', 'Identificación (Procedimiento)', { 'event_category': 'Reserva de Hora', 'event_label': 'Paso3:Identificación-Siguiente' });
+          }
+
         })
 
       }).catch(err => {
