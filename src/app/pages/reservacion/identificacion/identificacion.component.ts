@@ -190,6 +190,14 @@ export class IdentificacionComponent implements OnInit, OnChanges {
 
       this.findPaciente = true;
 
+      if(this.isProcedimiento){
+        gtag('event', 'Búsqueda de Paciente (Procedimientos)', { 'event_category': 'Reserva de Hora', 'event_label': 'Paso3:Identificacion-Paciente' });
+      }else if(this.listaEspera){
+        gtag('event', 'Búsqueda de Paciente (Lista de Espera)', { 'event_category': 'Reserva de Hora', 'event_label': 'Paso3:Identificacion-Paciente' });
+      }else{
+        gtag('event', 'Búsqueda de Paciente (Normal)', { 'event_category': 'Reserva de Hora', 'event_label': 'Paso3:Identificacion-Paciente' });
+      }
+
     }, err => {
       this.utils.mDialog("Error", "No se ha podido consultar al paciente, intente nuevamente", "message");
     })
