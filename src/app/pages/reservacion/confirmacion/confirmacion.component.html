@@ -6,7 +6,7 @@
 
 <section class="datos-reserva datos-r2" *ngIf="paciente && calendario && busquedaInicial">
   <div fxLayout="row wrap" class="confirm-panel" fxLayoutAlign="{{ mensajes.length > 0 ? 'space-between' : 'space-evenly' }} start">
-    <div fxFlex="{{ mensajes.length > 0 ? '49%' : '70%' }}" fxFlex.sm="100%" fxFlex.xs="100%" class="cnt-info">
+    <div fxFlex="{{ mensajes.length > 0 ? '49%' : '70%' }}" fxFlex.sm="100%" fxFlex.xs="100%" class="cnt-info" [ngStyle]="{ 'border-color' : reservaFinalizada ? '#2a7de1' : ''}">
       <mat-accordion>
         <mat-expansion-panel [expanded]="expanded.reserva" [hideToggle]="disableExpand" [disabled]="disableExpand"
           (closed)="expanded.reserva = false" (opened)="expanded.reserva = true">
