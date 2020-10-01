@@ -95,10 +95,12 @@
 
       .mat-expansion-panel-header{
         height: 64px !important;;
-
+        background: #888;
         .mat-expansion-panel-header-title{
           border-radius: 0px;
           justify-content: center;
+          font-weight: bold;
+          color:#fff;
         }
         
         &.isBlue{

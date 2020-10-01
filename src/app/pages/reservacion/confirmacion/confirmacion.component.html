@@ -10,9 +10,9 @@
       <mat-accordion>
         <mat-expansion-panel [expanded]="expanded.reserva" [hideToggle]="disableExpand" [disabled]="disableExpand"
           (closed)="expanded.reserva = false" (opened)="expanded.reserva = true">
-          <mat-expansion-panel-header class="isBlue">
+          <mat-expansion-panel-header class="isBlue" [ngClass]="{'isBlue' : reservaFinalizada}">
             <mat-panel-title>
-             Revise sus datos y confirme
+             {{ reservaFinalizada ? 'Datos de la Reserva' : 'Revise sus datos y confirme' }}
             </mat-panel-title>
           </mat-expansion-panel-header>
           <div class="container-pn" id="contDatosReserva">
