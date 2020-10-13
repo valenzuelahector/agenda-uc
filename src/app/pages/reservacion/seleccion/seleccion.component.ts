@@ -55,6 +55,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
   public listaFechas = {};
   public medicosAsociados = dummyData.profesionalesSimilares;
   public isProcedimiento = false;
+  public today;
 
   constructor(
     public agendaService: AgendaAmbulatoriaService,
@@ -65,7 +66,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
   ) { }
 
   ngOnInit() {
-
+    this.today = new Date(this.utils.toLocalScl(new Date(), this.compensacion, 'YYYY-MM-DDTHH:mm:ss'))
   }
 
   getOffsetTop(element) {
@@ -550,10 +551,16 @@ export class SeleccionComponent implements OnInit, OnChanges {
     const end = new Date(this.utils.toLocalScl(new Date(), this.compensacion, 'YYYY-MM-DDTHH:mm:ss'));
 
     end.setMonth(end.getMonth() + 1);
+
+    if (today.getDate() === 31) {
+      end.setMonth(end.getMonth() - 1);
+    }
+
     end.setDate(end.getDate() - 1);
 
     const init = today.toISOString().split("T")[0];
     const endit = end.toISOString().split("T")[0];
+
     let activateInit = false;
 
     Object.keys(fechasDisponibles).forEach(keyDate => {
@@ -603,27 +610,4 @@ export class SeleccionComponent implements OnInit, OnChanges {
 
   }
 
-  alertar(event){
-    console.log(event);
-  }
-
-  templateTooltip(){
-    return `
-      <div class="tooltipCalendar">
-        <p class="itm-centro-tt">
-        <span class="circ-tt></span>Centro Médico San Carlos de Apoquindo
-        </p>
-        <div class="detalle-tt">
-          <div class="itm-tt">
-            <span class="smtt">Próxima Hora:</span>
-            <span>09:00</span>
-          </div>
-          <div class="itm-tt">
-            <span class="smtt">Cupos Disponibles</span>
-            <span>5</span>
-          </div>
-        </div>
-      </div>
-    `
-  }
 }

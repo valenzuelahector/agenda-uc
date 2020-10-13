@@ -18,17 +18,18 @@ export const ENV = {
   idExamenProcedimiento: '97bd5208-60d1-4d6c-9d1e-a96e00ddbc15'
 }*/
 
+
 export const ENV = {
   
   baseApi: 'https://apigw.ucchristus.cl',
-  servRoute: '/agendaambulatoria-test',
-  profRoute: '/profesionales-test',
-  idPlanSaludInit: '4c30555e-5ed3-418f-8f54-a91a00ace99b',
+  servRoute: '/agendaambulatoria-prod',
+  profRoute: '/profesionales-prod',
+  idPlanSaludInit: '0b7a577d-6364-4b28-b2ba-a96e00e243ac',
   idCentrosNoDisponibles: [],
-  idCentroPrioritario: '8ca284cf-482a-4248-bc8f-a92800f90207',
-  mensajeSinCupos : '<h5>No se encontraron cupos disponibles.</h5>',
-  idExamenProcedimiento: 'b2461ac2-9c50-4724-9676-a91a00a91a02',
-  areaConsultaMedica: {
+  idCentroPrioritario: '52e43c90-8ab7-4e34-afcb-a96f0106bbd1',
+  mensajeSinCupos: '<h5>No se encontraron cupos disponibles.</h5>',
+  idExamenProcedimiento: '97bd5208-60d1-4d6c-9d1e-a96e00ddbc15',
+    areaConsultaMedica: {
     id: '2a8202d9-1ebd-4f2e-a359-a91a00a91a02',
     nombre: 'Consultas'
   },
