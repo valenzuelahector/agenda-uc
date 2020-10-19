@@ -33,6 +33,10 @@ export const ENV = {
     id: '2a8202d9-1ebd-4f2e-a359-a91a00a91a02',
     nombre: 'Consultas'
   },
+  donacionBancoDeSangre: {
+    idEspecialidad: '2ae24ffb-8c57-4943-adcd-abd400f8271c',
+    idServicio : '02560c8e-0c28-4e88-9eb4-abd400f8b282'
+  },
   idRegion: '6bad9b25-d5df-4565-b5fe-a6f701444053'
 
 }
