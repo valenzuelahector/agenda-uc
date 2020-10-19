@@ -30,6 +30,7 @@ export class IdentificacionComponent implements OnInit, OnChanges {
   public paciente: any;
   public findPaciente: boolean = false;
   public planesSalud: any = [];
+  public identifText;
 
   public infoAdicionaPaciente: any = {
     telefono: null,
@@ -105,8 +106,15 @@ export class IdentificacionComponent implements OnInit, OnChanges {
 
     if (this.busquedaInicial) {
 
-      const idServicio = this.busquedaInicial.especialidad.idServicio;
       const idArea = this.busquedaInicial.area.id;
+      const idEspecialidad = this.busquedaInicial.especialidad.idEspecialidad;
+      const idServicio = this.busquedaInicial.especialidad.idServicio;
+
+      if(idServicio === ENV.donacionBancoDeSangre.idServicio && idEspecialidad === ENV.donacionBancoDeSangre.idEspecialidad){
+        this.identifText = 'Identificación del Donante';
+      }else{
+        this.identifText = 'Identificación del Paciente';
+      }
 
       this.limpiarFormulario(true);
 
