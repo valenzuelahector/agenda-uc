@@ -6,6 +6,7 @@ import gtag, { install } from 'ga-gtag';
 import { ErrorReservaComponent } from 'src/app/shared/components/modals/error-reserva/error-reserva.component';
 import { MatDialog } from '@angular/material';
 import * as $ from 'jquery';
+import { ENV } from 'src/environments/environment';
 
 @Component({
   selector: 'app-confirmacion',
@@ -30,7 +31,8 @@ export class ConfirmacionComponent implements OnInit, OnChanges, OnDestroy {
   verMasOpened = false;
   verMasAction = false;
   idreserva;
-
+  identifText;
+  
   constructor(
     public agendaService:AgendaAmbulatoriaService,
     public utils:UtilsService,
@@ -46,6 +48,17 @@ export class ConfirmacionComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnChanges() {
+
+    const idEspecialidad = this.busquedaInicial.especialidad.idEspecialidad;
+    const idServicio = this.busquedaInicial.especialidad.idServicio;
+
+    if(idServicio === ENV.donacionBancoDeSangre.idServicio && idEspecialidad === ENV.donacionBancoDeSangre.idEspecialidad){
+      this.identifText = 'Estimado Donante';
+    }else{
+      this.identifText = 'Estimado Paciente';
+    }
+
+    
     this.onResize();
     setTimeout(()=> {
       this.verMas();
