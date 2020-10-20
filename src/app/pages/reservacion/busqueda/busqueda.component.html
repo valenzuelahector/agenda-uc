@@ -32,7 +32,7 @@
       </mat-expansion-panel>
     </mat-accordion>
   </div>
-  <div class="cwarn" style="margin-bottom: 20px;" *ngIf="!areaSelected.nombre.toLowerCase().includes('telemedicina') && !areaSelected.nombre.toLowerCase().includes('urgencia')">
+  <div class="cwarn" style="margin-bottom: 20px;" *ngIf="!areaSelected?.nombre.toLowerCase().includes('telemedicina') && !areaSelected?.nombre.toLowerCase().includes('urgencia')">
     Si Ud. presenta alguno de los siguiente síntomas: fibre, tos, congestión nasal, pérdida del olfato o ha estado en contacto con personas COVID +: 
     Le sugerimos atención vía Telemedicina o acudir a nuestra red de servicio de Urgencia.
   </div>

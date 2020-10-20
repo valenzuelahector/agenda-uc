@@ -48,22 +48,27 @@ export class ConfirmacionComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnChanges() {
+    
+    if(this.busquedaInicial){
 
-    const idEspecialidad = this.busquedaInicial.especialidad.idEspecialidad;
-    const idServicio = this.busquedaInicial.especialidad.idServicio;
+      const idEspecialidad = this.busquedaInicial.especialidad.idEspecialidad;
+      const idServicio = this.busquedaInicial.especialidad.idServicio;
+  
+      if(idServicio === ENV.donacionBancoDeSangre.idServicio && idEspecialidad === ENV.donacionBancoDeSangre.idEspecialidad){
+        this.identifText = 'Estimado Donante';
+      }else{
+        this.identifText = 'Estimado Paciente';
+      }
+  
+      
+      this.onResize();
+      setTimeout(()=> {
+        this.verMas();
+        this.setVerMas('close')
+      },300)
 
-    if(idServicio === ENV.donacionBancoDeSangre.idServicio && idEspecialidad === ENV.donacionBancoDeSangre.idEspecialidad){
-      this.identifText = 'Estimado Donante';
-    }else{
-      this.identifText = 'Estimado Paciente';
     }
 
-    
-    this.onResize();
-    setTimeout(()=> {
-      this.verMas();
-      this.setVerMas('close')
-    },300)
   }
 
   ngOnDestroy(){
