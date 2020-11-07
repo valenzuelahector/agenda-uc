@@ -1,0 +1,203 @@
+<div *ngIf="busquedaInicial && !enableAutoSearch">
+	<div class="resultados-para">
+		<div>
+			<h5>Resultados para:</h5>
+			<h3 *ngIf="!busquedaInicial.profesional">
+				{{ busquedaInicial.especialidad.nombreEspecialidad }}
+				<span class="spec">{{ busquedaInicial.especialidad.nombreServicio }}</span>
+			</h3>
+			<h3 *ngIf="busquedaInicial.profesional">
+				{{ busquedaInicial.profesional.nombreProfesional }}
+				<span class="spec">{{ busquedaInicial.especialidad.nombreEspecialidad }} -
+					{{ busquedaInicial.especialidad.nombreServicio }}</span>
+			</h3>
+
+			<div class="cuadro-res">
+				<div class="item-res">
+					<img src="/assets/images/ic-area.svg" alt="">
+					<p class="infseleccion"><b>Área Médica:</b> {{ busquedaInicial.area.nombre }}</p>
+				</div>
+				<div class="item-res" *ngIf="utils.slugify(busquedaInicial.area.nombre, '-') !== 'telemedicina'
+				&& utils.slugify(busquedaInicial.area.nombre, '-') !== 'consulta-medica-virtual'">
+					<img src="/assets/images/ic-clinica.svg" alt="">
+					<p class="infseleccion"><b>Clínica/Centro:</b> {{ busquedaInicial.centroAtencion.nombre }} </p>
+				</div>
+				<div class="item-res">
+					<img src="/assets/images/ic-esp.svg" alt="">
+					<p class="infseleccion"><b>Especialidad:</b> {{ busquedaInicial.especialidad.nombreEspecialidad }}
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="resultados-para-mobile">
+		<h4>Para tu búsqueda en:</h4>
+		<span class='item-rb'><b>Área Médica:</b> {{ busquedaInicial.area.nombre }}</span>
+		<span class='item-rb'><b>Clínica / Centro:</b> {{ busquedaInicial.centroAtencion.nombre }}</span>
+		<span class='item-rb'><b>Especialidad:</b> {{ busquedaInicial.especialidad.nombreEspecialidad }}</span>
+	</div>
+	<section class="w-resultados">
+
+		<div class="cwarn" *ngIf="recursos && loadedRecursos && !isProcedimiento"
+			[ngStyle]="{ 'margin-bottom' :recursos && loadedRecursos && recursos.length == 0 ? '30px' : '0px' }">
+			<h5 style="margin:0px" *ngIf="recursos.length > 0">Se han encontrado {{ recursos.length }} resultado(s).
+			</h5>
+			<div class="ctms" *ngIf="recursos.length == 0">
+				<div fxLayout="row wrap" fxLayoutAlign="center center">
+					<div fxFlex="69%" fxFlex.sm="100%" fxFlex.xs="100%"
+						[innerHTML]="sanitizer.bypassSecurityTrustHtml(customMensaje)">
+						<div></div>
+					</div>
+					<div fxFlex="30%" fxFlex.sm="100%" fxFlex.xs="100%" style="text-align: right;">
+						<button mat-stroked-button class="btn-morado cus-pad cus" (click)="procesarListaEspera({})">
+							Inscríbase aquí
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div id="dayWeek" *ngIf="recursos.length > 0">
+			<app-days-of-week [contadorMeses]="counterLoader" [dayWeekFixed]="dayWeekFixed"
+				[disableNavigation]="disableNavigation" [minDateIn]="navigationDate['min']"
+				[maxDateIn]="navigationDate['max']" (navigate)="navigateMonth($event, true)">
+			</app-days-of-week>
+		</div>
+		<div class="content-res">
+			<ng-container *ngFor="let re of recursos; let i = index">
+				<div class="item-doc">
+					<div class="row">
+						<div class="col-lg-6">
+							<div class="box-doc">
+								<div fxLayout="row wrap" style="margin-top:00px" fxLayoutAlign="space-evenly">
+									<figure fxFlex="35%">
+										<img [src]="re?.urlImagenProfesional" alt="">
+									</figure>
+									<div class="txt-doc" fxFlex="60%">
+										<h4>{{ re.nombre }}</h4>
+										<!-- <p>Especialidad del Médico</p> -->
+										<button style="margin:20px 0px" class="ver-perfil full-btn" mat-stroked-button
+											(click)="verPerfil(re)">Ver
+											perfil
+											<i class="fa fa-angle-right" aria-hidden="true"></i>
+										</button>
+										<p class="small bxsmall" *ngIf="re?.informacionAdicional">
+											{{ re?.informacionAdicional }}</p>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-lg-6">
+							<div class="cal-doc calendario" data-rel="cal3">
+								<div class="calendar-utils">
+									<div class="container-calendar"
+										*ngIf="!re.datesToHighlight || (selectedDate[i] && centrosProfesional[i] && centrosProfesional[i].length > 0)">
+
+										<div class="sel-hora" style="display: block;"
+											*ngIf="selectedDate[i] && centrosProfesional[i] && centrosProfesional[i].length > 0">
+											<div fxLayout="row wrap" fxLayoutAlign="space-between center"
+												fxLayoutGap="1%">
+												<div fxFlex>
+													<p class="header-sel-hora">
+														Seleccione
+														<span *ngIf="utils.slugify(busquedaInicial.area.nombre, '-') !== 'telemedicina'
+															&& utils.slugify(busquedaInicial.area.nombre, '-') !== 'consulta-medica-virtual'">un Centro y </span>
+														una Hora Disponible para el
+														<b>{{ selectedDate[i] | date:'dd/MM/yyyy'}}</b>
+													</p>
+												</div>
+												<div fxFlex="150px">
+													<button mat-stroked-button (click)="eligeOtroDia(i)"
+														class="btn-otrodia" color="primary">
+														Elegir otro día
+													</button>
+
+												</div>
+											</div>
+
+											<ng-container *ngFor="let cet of centrosProfesional[i]; let idx = index">
+
+												<a class="item-hora" [ngClass]="{ 'active' : cet.habilitado }"
+													(click)="displayCentro(i, idx)" *ngIf="utils.slugify(busquedaInicial.area.nombre, '-') !== 'telemedicina'
+													&& utils.slugify(busquedaInicial.area.nombre, '-') !== 'consulta-medica-virtual'">
+													<div class="centro-medico">
+														<img src="/assets/images/ic-centro.svg">{{ cet.nombreCentro }}
+													</div>
+												</a>
+
+												<ng-container *ngIf="cet.habilitado">
+													<a class="item-hora"
+														[ngClass]="{ 'active-hr' : horaSeleccionada?.cupo.horaEpoch === cupo.horaEpoch && horaSeleccionada?.cupo.idRecurso === cupo.idRecurso}"
+														*ngFor="let cupo of cet.cupos"
+														(click)="seleccionarHora({fecha: selectedDate[i], cupo : cupo, recurso:re})">
+														<div class="hora">
+															{{ cupo.horaEpoch * 1000 | toLocalScl: cupo.compensacion : 'HH:mm' }}
+														</div>
+													</a>
+												</ng-container>
+											</ng-container>
+
+										</div>
+									</div>
+
+									<div *ngIf="re.datesToHighlight && re.datesToHighlight['displayed']">
+										<div *ngIf="!displayCalendar" style="height:283px"></div>
+
+										<mat-calendar *ngIf="displayCalendar" [minDate]="navigationDate['min']"
+											[maxDate]="navigationDate['max']"
+											[dateClass]="re.datesToHighlight.dateClass" [selected]="selectedDate[i]"
+											(selectedChange)="onSelect($event, i)"></mat-calendar>
+										<div class="datos-horas" *ngIf="displayCalendar">
+											<p class="sinHorasMes" *ngIf="!re.poseeMes">Sin disponibilidad de horas este
+												mes. Puedes buscar citas en meses siguientes o llamarnos al 22 676 7000.
+											</p>
+											<p *ngIf="!re.proximaHoraDisponible?.cupo?.horaEpoch && re.poseeMes">Sin
+												próxima hora disponible.</p>
+											<p *ngIf="re.proximaHoraDisponible?.cupo?.horaEpoch && re.poseeMes">Próxima
+												hora disponible:
+												<span>{{ re.proximaHoraDisponible?.cupo.horaEpoch * 1000 | toLocalScl: re.proximaHoraDisponible?.cupo.compensacion : 'dddd DD/MM/YYYY [a las] HH:mm'}}</span>
+											</p>
+										</div>
+									</div>
+									<mat-accordion class="lista-espera-acc"
+										*ngIf="(displayListaEspera(re.fechasDisponibles, re.poseeMes) || (counterLoader > 1 && today.getDate() !== 1) || (counterLoader > 0 && today.getDate() === 1)) && displayCalendar">
+										<mat-expansion-panel>
+											<mat-expansion-panel-header>
+												<mat-panel-title>
+													¿No encuentras una hora que te acomode?
+												</mat-panel-title>
+											</mat-expansion-panel-header>
+											<p style="text-align: center;">Inscríbete <a class="link-le"
+													(click)="procesarListaEspera(re)">aquí</a>. <br />Si se libera una
+												hora te avisaremos.</p>
+										</mat-expansion-panel>
+									</mat-accordion>
+								</div>
+								<div class="clear"></div>
+							</div>
+
+						</div>
+					</div>
+				</div>
+			</ng-container>
+
+		</div>
+	</section>
+	<div class="detalleProcedimiento" *ngIf="isProcedimiento && recursos.length === 0 && loadedRecursos">
+		<p> Estimado paciente, tenemos a su disposición la mayor oferta de procedimientos clínicos de todas las
+			especialidades. Si
+			no ha encontrado un procedimiento para agendamiento directo, es porque requerimos mayor información para
+			contactarlos,
+			explicar el procedimiento y agendar. Por favor, completa el siguiente formulario para que te contactemos a
+			la brevedad.
+		</p>
+		<button mat-stroked-button class="btn-morado cus-pad cus" (click)="setProcedimiento()">
+			Pedir hora para procedimiento
+		</button>
+
+	</div>
+</div>
+<div style="margin-top:20px" *ngIf="busquedaInicial && busquedaInicial.profesional">
+	<app-medicos-asociados [title]="'Otros especialistas del área'"></app-medicos-asociados>
+</div>

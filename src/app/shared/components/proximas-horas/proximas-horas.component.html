@@ -1,0 +1,35 @@
+<div class="carouselConfig">
+    <span class="iniText" *ngIf="!loading && proximasHoras.length > 0">Revisa las próximas horas que tenemos disponibles para tí</span>
+    <!-- <mat-spinner [diameter]="30" style="margin:30px auto" *ngIf="loading"></mat-spinner> -->
+
+    <div fxLayout="row" *ngIf="!loading && proximasHoras.length > 0">
+        <div fxFlex="45px" fxFlex.sm="0px" fxFlex.xs="0px">
+            <div (click)="slickModal.slickPrev()" class="btn-nav" style="margin: 55px 2px;" matRipple>
+                <i class="fas fa-angle-left"></i>
+            </div>
+        </div>
+        <div fxFlex="100%">
+            <ngx-slick-carousel class="carousel" #slickModal="slick-carousel" [config]="slideConfig">
+                <div ngxSlickItem *ngFor="let pe of proximasHoras; let i = index" class="slide">
+                    <div class="itmslide">
+                        <span class="tituloEspc">{{ pe?.title }}</span>
+                        <span class="descEspc"> {{ pe?.description}}</span>
+                        <!-- <div class="infoProf" *ngIf="pe?.itemSearch?.profesional">
+                            <span class="tinf">Profesional:</span>
+                            <span class="nmt">{{ pe?.itemSearch?.profesional.nombreProfesional }}</span>
+                        </div> -->
+                        <button mat-stroked-button class="btn-morado btng" (click)="procesarSeleccion(pe.itemSearch)">
+                            Ver Horas Disponibles
+                        </button>
+                    </div>
+                </div>
+            </ngx-slick-carousel>
+        </div>
+        <div fxFlex="45px" fxFlex.sm="0px" fxFlex.xs="0px">
+            <div (click)="slickModal.slickNext()" class="btn-nav" style="margin: 55px 2px;" matRipple>
+                <i class="fas fa-angle-right"></i>
+            </div>
+        </div>
+    </div> 
+
+</div>

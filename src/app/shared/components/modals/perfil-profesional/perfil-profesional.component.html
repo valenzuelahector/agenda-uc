@@ -1,0 +1,34 @@
+<h2 mat-dialog-title style=" border-bottom: 1px solid #ccc; padding-bottom: 10px;">Perfil del Profesional</h2>
+
+<mat-dialog-content>
+	<div class="row">
+			<div class="col-md-4">
+				<div class="img-doctor">
+					<img [src]="profesionalData.urlFoto" style="width:90%; display: block; margin:10px auto; border-radius:50%">
+				</div>
+			</div>
+			<div class="col-md-8">
+				<div class="texto-ficha">
+					<h5>{{ profesionalData.tratamiento }}</h5>
+					<h3>{{ profesionalData.nombres }} {{ profesionalData.apellidoPaterno }} {{ profesionalData.apellidoMaterno }} </h3>
+					<div class="especialidad" style="margin-bottom:20px;">
+						<span *ngFor="let es of profesionalData.especialidadesHCM; let i = index;"> {{ es.nombreEspecialidadHCM }} {{ (profesionalData.especialidadesHCM.length != (i + 1) ) ? '/' : ''}}</span>
+					</div>
+					<p>{{ profesionalData.descripcion }}</p>
+					<div class="items-ficha">
+						<div class="item-ficha">
+							<h4>Áreas de Interés</h4>
+							<p>{{ profesionalData.areasDeInteres }}</p>
+						</div>
+						<div class="item-ficha atiende">
+							<h4>Atiende en:</h4>
+							<a *ngFor="let cet of profesionalData.centros"> {{ cet.nombreCentro}}</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+</mat-dialog-content>
+<mat-dialog-actions align="end" style="margin:15px 0px 0px 0px">
+	 <button mat-stroked-button [mat-dialog-close]="true">Cerrar</button>
+</mat-dialog-actions>

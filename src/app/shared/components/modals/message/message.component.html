@@ -1,0 +1,6 @@
+<h2 mat-dialog-title>{{title}}</h2>
+<mat-dialog-content><span class="mat-body-2" [innerHTML]="message"></span></mat-dialog-content>
+<mat-dialog-actions align="end" style="margin:10px 0px 0px 0px">
+  <button mat-raised-button mat-dialog-close *ngIf="type == 'confirm'">Cancelar</button>
+  <button mat-raised-button color="primary" [mat-dialog-close]="true">Aceptar</button>
+</mat-dialog-actions>
