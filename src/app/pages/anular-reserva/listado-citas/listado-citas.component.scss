@@ -1,0 +1,185 @@
+
+.contenido-anular {
+    padding: 40px 0;
+  }
+  .contenido-anular .titulo{
+    font-size: 2rem;
+    color: #2A7DE1;
+    font-weight: normal;
+    margin: 0 0 2.5rem;
+  }
+  .contenido-anular .titulo i{
+    font-size: 1.8rem;
+  }
+  @media (max-width: 768px) {
+    .contenido-anular .titulo {
+      font-size: 1.5rem;
+    }
+    .contenido-anular .titulo i{
+      font-size: 1.2rem;
+    }
+  }
+  
+  .datos-paciente {
+    border: 1px solid #B9C6D7;
+    display: flex;
+    margin-bottom: .8rem;
+  }
+  .datos-paciente .item{
+    border-right: 1px solid #B9C6D7;
+    padding: .5rem 2rem .5rem 1rem;
+  }
+  .datos-paciente .item:last-child {
+    border-right: none;
+  }
+  .datos-paciente .item p{
+    font-size: 1rem;
+    font-weight: 600;
+    color: #455A64;
+    margin-bottom: 0;
+  }
+  .datos-paciente .item p b{
+    font-weight: 600;
+    color: #32588B;
+  }
+  
+  table.horas {
+    width: 100%;
+    border:1px solid #B9C6D7;
+  }
+  table.horas tr{}
+  table.horas tr th{
+    color: #fff;
+    font-size: 1.125rem;
+    background: #629FE9;
+    font-weight: 600;
+    padding: .6rem 1.2rem;
+  }
+  table.horas tr td{
+    font-size: .917rem;
+    color: #455A64;
+    font-weight: 300;
+    padding: .5rem 1.2rem;
+    border-bottom: 1px solid #B9C6D7;
+  }
+  /*
+  table.horas tr td:first-child {
+    border-left: 1px solid #B9C6D7;
+  }
+  table.horas tr td:last-child {
+    border-right: 1px solid #B9C6D7;
+  }
+  */
+  .card-horas-bottom{
+    padding: 1rem 2.8rem;
+  }
+  
+  .card-horas-bottom a.volver{
+    font-size: .83rem;
+    color: #2A7DE1;
+    font-weight: bold;
+    margin-left: -2.8rem;
+  }
+  .card-horas-bottom a.volver img {
+    width: 1rem;
+    height: auto;
+  }
+  
+  .botones {
+    display: flex;
+    flex-direction: row-reverse;
+  }
+  .btn-blanco {
+    font-size: .66rem;
+    color: #2A7DE1;
+    text-align: center;
+    border: 2px solid #2A7DE1;
+    display: inline-block;
+    padding: .3rem 1rem .35rem;
+    font-weight: bold;
+    border-radius: 5px;
+  }
+  .btn-azul {
+    font-size: .66rem;
+    color: #fff;
+    text-align: center;
+    border: 2px solid #2A7DE1;
+    background: #2A7DE1;
+    display: inline-block;
+    padding: .25rem 1.2rem .3rem;
+    font-weight: bold;
+    border-radius: 5px;
+    margin-left: 1rem;
+  }
+  
+  @media (max-width: 991px) { 
+  
+    .card-horas-bottom {}
+    .card-horas-bottom a.reservar-hora {
+      width: 200px;
+      min-width: 200px;
+    }
+  
+    .w-table {
+      width: 100%;
+      overflow-x: scroll;
+    }
+  }
+  
+  @media (max-width: 768px) {
+  
+    .card-horas-bottom {
+      padding: 20px 0 0;
+    }
+    .card-horas-bottom a.volver{
+      margin-left: 0;
+    }
+    .datos-paciente {
+      flex-direction: column;
+    }
+    .datos-paciente .item {
+      width: 100%;
+      border-right: none;
+      border-bottom: 1px solid #B9C6D7;
+    }
+   }
+  @media (max-width: 550px) {
+    .wrap {
+      padding: 0 20px;
+    }
+   }
+
+   .cus-pad{
+    padding: 0px 15px !important;
+   }
+
+   .table-responsive{
+
+    display: none;
+
+    .tb-container{
+      background: #eee;
+      border-radius: 8px;
+      padding: 25px;
+      margin-bottom:25px;
+      
+      b{
+        margin-bottom: 5px !important;
+        display: block;
+        font-weight: bolder !important;
+      }
+    }
+
+    .cus-pad{
+      padding: 0px 25px !important;
+    }
+   }
+
+   @media (max-width: 768px) {
+    .table-responsive{
+      display: block !important;
+    }
+    .htb{
+      display: none !important;
+    }
+   }

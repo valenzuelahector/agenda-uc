@@ -1,0 +1,201 @@
+.field-margin{
+  margin-bottom: 13px
+}
+
+.rmvBtn{
+  background: #f44336;
+    color: #fff;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+}
+
+.spec{
+  display: block;
+    font-weight: bold;
+    font-size: 20px;
+    margin-top: 5px;
+}
+
+.box-le{
+  background: #fddd98;
+  font-size: 14px;
+  padding: 15px;
+  margin: 15px 0px 25px 0px;
+}
+
+.cusSelect{
+  
+  ::ng-deep mat-label{
+    font-size: 13px !important;
+  }
+  
+  ::ng-deep .mat-select-value-text{
+    font-size: 14px !important;
+  }
+
+}
+
+.mat-option-smtext{
+  font-size: 14px !important;
+  line-height: 40px;
+  height: 40px;
+}
+
+.btnc{
+  font-size: 14px;
+  text-transform: uppercase;
+}
+
+.wtxt{
+  font-weight: bold;
+    font-size: 14px;
+    margin: 16px 0px;
+}
+
+.iff{
+
+  font-size: 17px;
+  background: #fff;
+  padding: 10px;
+  border-radius: 3px;
+
+  .lbll{
+    display: block;
+    font-size: 16px;
+    font-weight: bold;
+  }
+}
+
+.chkb{
+
+  position: relative;
+
+  span{
+    padding-left: 30px;
+    font-size: 13px;
+    display: block;
+    line-height: 20px;
+  }
+
+  .mat-checkbox{
+    position: absolute;
+    top: 3px;
+  }
+
+}
+
+.btnOM{
+
+  position: relative;
+  cursor: pointer;
+  background: #fff;
+  padding: 13px 10px;
+  padding-left: 55px;
+  text-align: left;
+  font-weight: bold;
+  font-size: 14px;
+  line-height: 22px;
+
+
+  &.suc{
+    
+    background: #50a000;
+    color:#fff !important;
+
+    p{
+      color:#fff !important;
+    }
+
+    .mat-icon.iic{
+      color:#fff !important;
+    }
+
+    &:hover{
+      background: #50a000 !important;
+    }
+
+  }
+  
+  &:hover{
+    background:#f9f9f9  !important;
+  }
+
+  .mat-icon.iic{
+    position: absolute;
+    left: 8px;
+    top: 16px;
+    font-size: 40px;
+    color: #802E87;
+  }
+
+  span{
+    font-weight: 300;
+    display: block;
+    text-transform: uppercase;
+    font-size: 12px;
+  }
+
+}
+
+.rmvFile{
+  
+  background: #fff;
+  right: -15px;
+  position: absolute;
+  top: -15px;
+
+  .mat-icon{
+    color: #50a000!important;
+  }
+}
+.idt-info{
+    background:#802e87;
+    margin:20px 0px;
+    border-radius: 8px;
+    padding:20px;
+    
+    p{
+      margin: 0px;
+      padding: 4px 0px;
+    }
+    p,b{
+      color:#fff
+    }
+}
+
+@media(max-width:720px){
+  .idt-info{
+    b{
+      display: block;
+    }
+  }
+}
+
+.dirInfo{
+
+    background: #fff;
+    line-height: 20px;
+    padding: 10px;
+    border-radius: 3px;
+    font-weight: 500;
+
+    .dirLabel{
+      display: block;
+      font-size: 12px;
+    }
+
+}
+
+.isLink{
+  
+  cursor: pointer;
+  color: #2a7de1;
+  font-weight: 500;
+  display: block;
+  margin: 20px 0px;
+
+  &:hover{
+    text-decoration: underline;
+  }
+}

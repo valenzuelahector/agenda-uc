@@ -1,0 +1,100 @@
+<div class="wrap">
+  <h4 class="title-alert" *ngIf="!reservaFinalizada">Haz click en “Confirmar Reserva” si los datos están correctos</h4>
+<section class="datos-reserva datos-r2" *ngIf="paciente && calendario && busquedaInicial">
+  <div class="mensaje-exito" *ngIf="reservaFinalizada">
+    <img src="assets/images/check-morado.svg" alt=""> {{ successMsg }}
+  </div>
+  <div fxLayout="row" fxLayoutGap="1%" *ngIf="mensajes?.length === 0 && reservaFinalizada && !anulada" style="max-width: 50%; margin:20px auto;">
+    <div fxFlex="100%">
+      <p class="txtanul">¿No es correcta la información de tu Reserva?</p>
+    </div>
+    <div fxFlex>
+      <button mat-stroked-button class="btn-morado cus-pad cus" (click)="anularReserva()">
+        ANULAR ESTA RESERVA
+    </button>
+    </div>
+  </div>
+  <div fxLayout="row wrap" class="confirm-panel" fxLayoutAlign="{{ mensajes.length > 0 ? 'space-between' : 'space-evenly' }} start">
+    <div fxFlex="{{ mensajes.length > 0 ? '49%' : '70%' }}" fxFlex.sm="100%" fxFlex.xs="100%" class="cnt-info">
+      <mat-accordion>
+        <mat-expansion-panel [expanded]="expanded.reserva" [hideToggle]="disableExpand" [disabled]="disableExpand"
+          (closed)="expanded.reserva = false" (opened)="expanded.reserva = true">
+          <mat-expansion-panel-header class="isBlue">
+            <mat-panel-title>
+              Datos de la Reserva
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <div class="container-pn" id="contDatosReserva">
+            <p><b>Hora de la cita:</b>
+              {{ calendario.cupo.fechaHora | toLocalScl: calendario.cupo.compensacion : 'DD/MM/YYYY HH:mm'}}</p>
+            <p><b>Profesional:</b> {{ calendario.recurso.nombre }}</p>
+            <p><b>Especialidad:</b> {{ busquedaInicial.especialidad.detalle }}</p>
+            <p *ngIf="utils.slugify(busquedaInicial.area.nombre, '-') !== 'telemedicina' && 
+            utils.slugify(busquedaInicial.area.nombre, '-') !== 'consulta-medica-virtual'"><b>Centro:</b>
+              {{ calendario.cupo.centro.nombre }}</p>
+            <p><b>Dirección del
+                centro:</b>{{ calendario.cupo.centro.direccion?.calle }}
+              {{ calendario.cupo.centro.direccion?.numero }}
+              {{ calendario.cupo.centro.direccion?.comuna }}</p>
+            <p><b>Nombre:</b> {{ paciente.nombreCompleto }}</p>
+            <p><b>RUT:</b> {{ paciente.numeroDocumentoFormateado }}</p>
+            <p><b>Previsión:</b> {{ paciente.adicional.prevision.nombrePlan }}</p>
+            <p *ngIf=" calendario.cupo?.valorConvenio?.toString().trim() != '0'"><b>Valor Cita :</b> ${{ calendario.cupo.valorConvenio | currency:'CLP':'' }}</p>
+            <span *ngIf=" calendario.cupo?.valorConvenio?.toString().trim() != '0'" style="color:#999">(*) El valor cita corresponde a valor referencial, el cual puede variar según plan de salud.</span>
+          </div>
+          <div class="paybtn" *ngIf="reservaFinalizada && !anulada && calendario.cupo?.valorConvenio?.toString().trim() != '0'" style="">
+            <button mat-raised-button class="full-btn btn-morado btn-reser btn-pay" (click)="pagar()" >PAGUE SU RESERVA</button>
+            <span style="text-align: center;">Puede pagar en forma posterior a través del enlace que recibirá en su correo</span>
+          </div>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </div>
+    <div fxFlex="49%" fxFlex.sm="100%" fxFlex.xs="100%" clasS="mtinf" *ngIf="mensajes?.length > 0">
+        <div fxLayout="row" fxLayoutGap="1%" *ngIf="reservaFinalizada && !anulada">
+          <div fxFlex="100%">
+            <p class="txtanul">¿No es correcta la información de tu Reserva?</p>
+          </div>
+          <div fxFlex>
+            <button mat-stroked-button class="btn-morado cus-pad cus" (click)="anularReserva()">
+              ANULAR ESTA RESERVA
+          </button>
+          </div>
+        </div>
+        <mat-accordion>
+          <mat-expansion-panel [expanded]="expanded.info" [hideToggle]="disableExpand" [disabled]="disableExpand" (closed)="expanded.info = false" (opened)="expanded.info = true">
+            <mat-expansion-panel-header class="isYellow">
+              <mat-panel-title>
+                Estimado paciente favor considerar las siguientes indicaciones
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <div class="container-pn ylw-cont" id="contIndic">
+              <div *ngIf="verMasAction">
+                <div class="verMas" (click)="setVerMas('open')" *ngIf="!verMasOpened">+ Ver más</div>
+                <div class="verMas" (click)="setVerMas('close')" *ngIf="verMasOpened">Cerrar</div>
+              </div>
+              <ng-container *ngFor="let msj of mensajes">
+                <div [innerHTML]="sanitizer.bypassSecurityTrustHtml(msj['mensaje']['contenido'])" *ngIf="msj['mensaje']['mostrar']"></div>
+              </ng-container>
+  
+            </div>
+          </mat-expansion-panel>
+        </mat-accordion>
+    </div>
+  </div>
+
+  <div class="text-right btn-sec-reservar" style="margin-top:25px"
+    *ngIf="!reservaFinalizada && !disableBarReserva && !utils.progressBar">
+    <div fxLayout="row" fxLayoutAlign="space-between center">
+      <div fxFlex="75%" fxFlex.sm="100%" fxFlex.xs="100%" class="desc-s">
+        <h4 class="desc">Para confirmar su reserva, haga clic en Reservar.</h4>
+      </div>
+      <div fxFlex="25%" fxFlex.sm="100%" fxFlex.xs="100%" style="text-align: right;">
+        <button mat-raised-button class="full-btn btn-morado btn-reser" (click)="reservar()">RESERVAR</button>
+      </div>
+    </div>
+  </div>
+
+
+</section>
+</div>
+

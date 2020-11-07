@@ -1,0 +1,238 @@
+<div class="cuadro-reserva">
+    
+  <div class="wrap">
+    <div class="proxHora" *ngIf="etapaActual === 0">
+      <app-proximas-horas (seleccionProximaHora)="buscarProximaHora($event)"></app-proximas-horas>
+    </div>
+    <div fxLayout="row wrap" fxLayoutAlign="space-between">
+      <div fxFlex="32%" fxFlex.sm="100%" fxFlex.xs="100%" style="margin-bottom: 20px;">
+        <div class="panel-info">
+          <mat-accordion>
+            <mat-expansion-panel [expanded]="true" [hideToggle]="true" [disabled]="true">
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  <b>1. Seleccione Área</b>
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <div class="container-pn">
+                <mat-radio-group [(ngModel)]="areaSelected" (change)="changeAreas($event)">
+                  <ng-container *ngFor="let area of areas; let i = index">
+                    <div matRipple class="iit">
+                      <mat-radio-button [value]="area" color="primary">{{ area.nombre }}</mat-radio-button>
+                    </div>
+                  </ng-container>
+                </mat-radio-group>
+              </div>
+
+            </mat-expansion-panel>
+          </mat-accordion>
+        </div>
+      </div>
+      <div fxFlex="32%" fxFlex.sm="100%" fxFlex.xs="100%" style="margin-bottom: 20px;">
+        <div class="panel-info">
+          <mat-accordion>
+            <mat-expansion-panel [expanded]="true" [hideToggle]="true" [disabled]="true">
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  <b>2. Búsqueda</b>
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <div class="panel-pad">
+                <div *ngTemplateOutlet="busquedaForms"></div>
+              </div>
+            </mat-expansion-panel>
+          </mat-accordion>
+        </div>
+      </div>
+      <div fxFlex="32%" fxFlex.sm="100%" fxFlex.xs="100%" style="position: relative; margin-bottom: 20px;">
+        <div class="panel-info" >
+          <mat-accordion>
+            <mat-expansion-panel [expanded]="true" [hideToggle]="true" [disabled]="true">
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  <b>3. {{ tituloIdt }}</b>
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <div class="panel-pad">
+                <div *ngTemplateOutlet="formDatosPaciente"></div>
+                <button mat-stroked-button class="btn-morado cus-pad cus btn-find" (click)="buscarHora()" >
+                  BUSCAR HORA
+                </button>
+              </div>
+            </mat-expansion-panel>
+          </mat-accordion>
+        </div>
+      </div>
+    </div>
+    <div class="cwarn" style="margin-bottom: 20px;" *ngIf="!areaSelected?.nombre.toLowerCase().includes('telemedicina') && !areaSelected?.nombre.toLowerCase().includes('urgencia')">
+      Si Ud. presenta alguno de los siguiente síntomas: fibre, tos, congestión nasal, pérdida del olfato o ha estado en contacto con personas COVID +: 
+      Le sugerimos atención vía Telemedicina o acudir a nuestra red de servicio de Urgencia.
+    </div>
+  </div>
+
+</div>
+
+<ng-template #busquedaForms>
+
+  <div class="busqueda-hora">
+    <button mat-stroked-button class="c-btn btn-azul2" [ngClass]="{'activo' : tipoConsulta == 'especialidad'}"
+      (click)="cambiarTipoBusqueda('especialidad')">ESPECIALIDAD</button>
+    <button mat-stroked-button class="c-btn btn-azul2" [ngClass]="{'activo' : tipoConsulta == 'profesional'}"
+      (click)="cambiarTipoBusqueda('profesional')">PROFESIONALES</button>
+  </div>
+
+  <div *ngIf="tipoConsulta == 'profesional' && loadedProf">
+    <mat-form-field class="full" appearance="fill">
+      <mat-label>Digite nombre del profesional</mat-label>
+      <input matInput type="text" placeholder="Buscar por nombre y apellido" [formControl]="profesionalCtrl"
+        [matAutocomplete]="auto" autocomplete="off">
+      <mat-icon matPrefix style="margin-right: 10px">school</mat-icon>
+      <mat-spinner [diameter]="30" matSuffix *ngIf="loadingProfesionales"></mat-spinner>
+      <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayTextAutocomplete"
+        (optionSelected)="profesionalSelection($event)">
+        <mat-option *ngFor="let prof of filterProfesionales" [value]="prof" matTooltipPosition="right"
+          class="mat-option-smtext twolines">
+          {{ prof.detalle }}
+        </mat-option>
+        <mat-option
+          *ngIf="(!filterProfesionales || filterProfesionales.length == 0) && profesionalCtrl.value !== '' && !loadedProf"
+          [value]="null" matTooltipPosition="right" class="mat-option-smtext">
+          No se encontraron profesionales
+        </mat-option>
+      </mat-autocomplete>
+      <button mat-button matSuffix mat-icon-button aria-label="Clear" (click)="clearSelection('profesional', true)"
+        matTooltip="Limpiar Seleccion"
+        *ngIf="profesionalCtrl.value && profesionalCtrl.value.idProfesional && !loadingProfesionales">
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-form-field>
+  </div>
+
+  <!-- <div
+    *ngIf="((tipoConsulta == 'especialidad' && especialidades.length > 0) || (tipoConsulta == 'profesional' && profesionalSelected && especialidades.length > 0)) && loadedEsp">-->
+  <div>
+    <mat-form-field class="full" appearance="fill">
+      <mat-label>Seleccione una Especialidad</mat-label>
+      <input matInput type="text" class="sm-text-custom"
+        placeholder="Escriba para filtrar por {{ tipoConsulta == 'especialidad' ? 'especialidad' : 'especialidad'}}"
+        [formControl]="especialidadCtrl"  #triggerEspecialidad="matAutocompleteTrigger"  
+        [matAutocomplete]="auto" autocomplete="off">
+      <mat-icon matPrefix style="margin-right: 10px">add_to_photos</mat-icon>
+      <!-- <mat-spinner [diameter]="30" matSuffix *ngIf="loadingEspecialidades"></mat-spinner> -->
+      <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayTextAutocomplete"
+        (optionSelected)="especialidadSelection($event, tipoConsulta)">
+        <div class="layerl" *ngIf="loadingEspecialidades"></div>
+        <mat-option *ngFor="let esp of filterEspecialidades | async" [value]="esp" matTooltipPosition="right"
+          class="mat-option-smtext twolines">
+          {{ esp.detalle }}
+        </mat-option>
+        <mat-option *ngIf="!filterEspecialidades || filterEspecialidades == 0" [value]="null" matTooltipPosition="right"
+          class="mat-option-smtext">
+          No se encontraron especialidades
+        </mat-option>
+      </mat-autocomplete>
+      <button mat-button matSuffix mat-icon-button aria-label="Clear" (click)="clearSelection('especialidad', true)"
+        matTooltip="Limpiar Seleccion"
+        *ngIf="especialidadCtrl.value && especialidadCtrl.value.idEspecialidad && !loadingEspecialidades">
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-form-field>
+  </div>
+  <!-- <div *ngIf="(tipoConsulta == 'especialidad' && especialidadSelected) && loadedServ"> -->
+  <div *ngIf="tipoConsulta == 'especialidad'">
+    <mat-form-field class="full" appearance="fill">
+      <mat-label>Seleccione Área de Interés</mat-label>
+      <input matInput type="text" placeholder="Puede buscar por nombre del Servicio" [formControl]="servicioCtrl"
+        [matAutocomplete]="auto" autocomplete="off"  #triggerServicios="matAutocompleteTrigger">
+      <mat-icon matPrefix style="margin-right: 10px">add_to_photos</mat-icon>
+      <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayTextAutocomplete"
+        (optionSelected)="servicioSelection($event)">
+        <mat-option *ngFor="let serv of filterServicios | async" [value]="serv" matTooltipPosition="right"
+          class="mat-option-smtext twolines">
+          {{ serv.nombreServicio }}
+        </mat-option>
+      </mat-autocomplete>
+      <button mat-button matSuffix mat-icon-button aria-label="Clear" (click)="clearSelection('servicio', true)"
+        matTooltip="Limpiar Seleccion" *ngIf="servicioCtrl.value && servicioCtrl.value.idServicio">
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-form-field>
+  </div>
+
+  <!--  <div class="cAtencion"
+    *ngIf="((especialidadSelected && tipoConsulta == 'profesional') || (servicioSelected && tipoConsulta == 'especialidad')) && centrosAtencion.length > 0 && loadedCen" -->
+  <div class="cAtencion" *ngIf="areaSelected"
+    [hidden]="utils.slugify(areaSelected?.nombre, '-') === 'telemedicina' || utils.slugify(areaSelected?.nombre, '-') === 'consulta-medica-virtual'">
+    <mat-form-field class="full" appearance="fill">
+      <mat-label>Seleccione un Centro de Atención</mat-label>
+      <mat-icon matPrefix style="margin-right: 10px">apartment</mat-icon>
+      <input matInput type="text" placeholder="Puede buscar por nombre del Centro" [formControl]="centroAtencionCtrl"
+        [matAutocomplete]="auto" autocomplete="off"  #triggerCentros="matAutocompleteTrigger">
+      <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayTextAutocomplete"
+        (optionSelected)="centroAtencionSelection($event)">
+        <mat-option *ngFor="let cet of filterCentrosAtencion | async" [value]="cet" matTooltipPosition="right"
+          class="mat-option-smtext twolines">
+          {{ cet.detalle }}
+        </mat-option>
+      </mat-autocomplete>
+      <button mat-button matSuffix mat-icon-button aria-label="Clear" (click)="clearSelection('centros')"
+        matTooltip="Limpiar Seleccion" *ngIf="centroAtencionCtrl.value">
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-form-field>
+  </div>
+
+
+<!-- 
+  <div *ngIf="(tipoConsulta == 'profesional' && !loadedProf) || 
+              (tipoConsulta == 'especialidad' && !loadedEsp) ||
+              (tipoConsulta == 'especialidad' && especialidadSelected && !loadedServ) ||
+              ((tipoConsulta == 'especialidad' && servicioSelected && !loadedCen) || 
+              (tipoConsulta == 'profesional' && especialidadSelected && !loadedCen)) ||
+              (tipoConsulta == 'profesional' && profesionalSelected && !loadedEsp)">
+    <p class="nores" style="position: relative; padding-left:60px; height: 57px; line-height: 22px;">
+      <mat-spinner [diameter]="30" style="position: absolute; left:15px; top:10px;"></mat-spinner>
+      Cargando, por favor espere...
+    </p>
+  </div>
+  -->
+<!--
+  <div *ngIf="tipoConsulta == 'profesional' && profesionales.length == 0 && loadedProf">
+    <p class="nores">No existen Profesionales disponibles </p>
+  </div>
+-->
+  <div
+    *ngIf="((tipoConsulta == 'especialidad' && especialidades.length == 0) || (profesionalSelected && especialidades.length == 0)) && loadedEsp ">
+    <p class="nores">No existen Especialidades disponibles </p>
+  </div>
+
+  <div *ngIf="(tipoConsulta == 'especialidad' && servicios.length == 0) && loadedServ ">
+    <p class="nores mat-option-smtext">No existen Servicios disponibles </p>
+  </div>
+
+  <div *ngIf="especialidadSelected && centrosAtencion.length == 0 && loadedCen">
+    <p class="nores">Sin disponibilidad vía web. Llámanos al 226767000</p>
+  </div>
+
+</ng-template>
+
+<ng-template #formDatosPaciente>
+  <div class="busqueda-hora">
+    <button mat-stroked-button class="c-btn btn-azul2" [ngClass]="{'activo' : datosPaciente.tipoDocumento == 'RUN'}"
+      (click)="cambiarTipoIdentificacion('RUN')">RUT</button>
+    <button mat-stroked-button class="c-btn btn-azul2"
+      [ngClass]="{'activo' : datosPaciente.tipoDocumento == 'PAS'}"
+      (click)="cambiarTipoIdentificacion('PAS')">PASAPORTE</button>
+  </div>
+
+  <mat-form-field class="full bgwhite-input" appearance="fill">
+    <mat-label>Indique su Identificación</mat-label>
+    <input matInput maxlength="{{ (datosPaciente.tipoDocumento == 'PAS') ? 15 : null }}"
+      [(ngModel)]="datosPaciente.documentoFormateado" (focusout)="setFormatRut()" (focusin)="restoreFormatRut()"
+      placeholder="{{ (datosPaciente.tipoDocumento == 'RUN') ? 'Rut sin puntos ni guión' : 'Pasaporte'}}"
+      autocomplete="off" />
+    <mat-icon matPrefix style="margin-right: 10px">chrome_reader_mode</mat-icon>
+  </mat-form-field>
+
+
+</ng-template>

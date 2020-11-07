@@ -1,0 +1,55 @@
+<div class="wrap">
+  <div class="mensaje-exito">
+    <img src="assets/images/check-morado.svg" alt=""> SOLICITUD DE PROCEDIMIENTOS GENERADA EXITOSAMENTE
+  </div>
+  
+  <section class="datos-reserva datos-r2" *ngIf="confirmacionProcedimiento && busquedaInicial">
+    <div fxLayout="row wrap" class="confirm-panel" fxLayoutAlign="center start">
+      <div fxFlex="70%" fxFlex.sm="100%" fxFlex.xs="100%" class="cnt-info">
+        <mat-accordion>
+          <mat-expansion-panel [expanded]="true" [hideToggle]="true" [disabled]="true">
+            <mat-expansion-panel-header class="isBlue">
+              <mat-panel-title>
+                Datos de la Solicitud
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <div class="container-pn" id="contDatosReserva">
+              <p><b>Nombre:</b> {{ confirmacionProcedimiento.paciente.nombreCompleto }}</p>
+              <p><b>RUT:</b> {{ confirmacionProcedimiento.paciente.numeroDocumentoFormateado }}</p>
+              <p><b>Especialidad:</b> {{ busquedaInicial.especialidad.nombreEspecialidad }}</p>
+              <p><b>Área de Interés:</b> {{ busquedaInicial.especialidad.nombreServicio }}</p>
+              <p><b>Hora de Preferencia:</b> {{ confirmacionProcedimiento.datosProcedimiento.horario }}</p>
+              <p><b>Medio de Contacto de Preferencia:</b> {{ confirmacionProcedimiento.datosProcedimiento.celularPref ? 'Teléfono Celular' : 'Correo Electrónico' }}</p>
+              <p *ngIf="getNotTelemedicina && confirmacionProcedimiento.datosProcedimiento.centro === 'NA'"><b>Centro:</b> No tiene preferencia</p>
+              <p *ngIf="getNotTelemedicina && confirmacionProcedimiento.datosProcedimiento.centro !== 'NA'"><b>Centro:</b>{{ confirmacionProcedimiento.datosProcedimiento.centro.nombre }}</p>
+              <p *ngIf="getNotTelemedicina && confirmacionProcedimiento.datosProcedimiento.centro !== 'NA'"><b>Dirección del
+                  centro:</b>{{ confirmacionProcedimiento.datosProcedimiento.centro.direccion?.calle }}
+                {{ confirmacionProcedimiento.datosProcedimiento.centro.direccion?.numero }}
+                {{ confirmacionProcedimiento.datosProcedimiento.centro.direccion?.comuna }}</p>
+            </div>
+          </mat-expansion-panel>
+        </mat-accordion>
+      </div>
+      <!-- 
+      <div fxFlex="49%" fxFlex.sm="100%" fxFlex.xs="100%" clasS="mtinf" >
+  
+          <mat-accordion>
+            <mat-expansion-panel [expanded]="true" [hideToggle]="true" [disabled]="true">
+              <mat-expansion-panel-header class="isYellow">
+                <mat-panel-title>
+                  Estimado paciente favor considerar las siguientes indicaciones
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <div class="container-pn ylw-cont" id="contIndic">
+                  De correr la lista de Espera para esta hora, se le comunicará oportunimanete por el medio de contacto
+                  de preferencia marcado en el formulario anteriormente completado.
+              </div>
+            </mat-expansion-panel>
+          </mat-accordion>
+      </div> -->
+    </div>
+ 
+  </section>
+</div>
+
+  

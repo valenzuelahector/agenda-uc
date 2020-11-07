@@ -1,0 +1,275 @@
+.footerItem{
+    
+
+/*--FOOTER---*/
+footer{
+    padding: 50px 0;
+}
+footer .m-footer h3{
+    font-size: 26px;
+    font-weight: bold;
+    color:#455a64;
+    margin: 0;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #b9b9b9;
+    margin-bottom: 15px;
+}
+footer .m-footer ul{
+    list-style: none;
+    padding-left: 0;
+}
+footer .m-footer ul li{
+    position: relative;
+    padding-left: 15px;
+    margin-bottom: 5px;
+}
+footer .m-footer ul li:before{
+    content:"";
+    width: 6px;
+    height: 6px;
+    background: #63a0e9;
+    border-radius: 100%;
+    display: inline-block;
+    position: absolute;
+    left: 0;
+    top: 8px;
+}
+footer .m-footer ul li a{
+    color:#707070;
+    font-size: 16px;
+}
+
+footer .m-footer .item-contacto{
+    position: relative;
+    padding-left: 30px;
+}
+footer .m-footer .item-contacto .ic-contacto{
+    position: absolute;
+    width: 20px;
+    text-align: center;
+    left: 0;
+    top: 0;
+}
+
+footer .m-footer .item-contacto p{
+    color:#707070;
+    font-size: 16px;
+    line-height: 18px;
+}
+footer .m-footer .item-contacto p span{
+    display: block;
+    color:#2a7de1;
+}
+
+footer .m-footer .redes-footer a{
+    display: inline-block;
+    margin-right: 5px;
+}
+footer .m-footer .redes-footer a img{
+  -webkit-filter: grayscale(100%);
+  filter: grayscale(100%);
+  transition:cubic-bezier(.77,0,.175,1) 0.3s;
+  opacity: 0.6;
+}
+footer .m-footer .redes-footer a:hover img{
+    -webkit-filter: grayscale(0%);
+  filter: grayscale(0%);
+  opacity: 1;
+}
+
+.carrusel-footer{
+    padding-top: 45px;
+}
+.carrusel-footer img{
+    width: 100%;
+}
+.carrusel-footer .owl-prev{
+    position: absolute;
+    right: 45px;
+    top: 0;
+    padding-right: 2px;
+    width: 36px;
+    height: 36px;
+    padding-top: 6px;
+    font-size: 16px;
+    text-align: center;
+    border-radius: 100%;
+    color: #fff;
+    background: #d6d6d6;
+}
+.carrusel-footer .owl-next{
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 36px;
+    height: 36px;
+    padding-top: 6px;
+    font-size: 16px;
+    text-align: center;
+    border-radius: 100%;
+    color: #fff;
+    background: #d6d6d6;
+}
+/*--FIN FOOTER---*/
+
+/*--NEWSLETTER--*/
+.newsletter{
+    background: #2a7de1;
+    position: relative;
+    padding: 30px 0 50px;
+    margin-bottom: 0;
+}
+.newsletter img.logo-footer{
+    left: 0;
+    bottom: 0;
+    position: absolute;
+}
+.newsletter img.fig-footer{
+    position: absolute;
+    right: 0;
+    bottom: 0;
+}
+.newsletter img.borde-footer{
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+}
+
+.texto-news h4{
+    color:#fff;
+    font-size: 20px;
+    text-transform: uppercase;
+    margin: 0 0 10px;
+}
+.texto-news p{
+    font-size: 14px;
+    line-height: 16px;
+    color:#fff;
+    margin-bottom: 0;
+    font-weight: 300;
+}
+
+.form-news{
+    padding-top: 15px;
+}
+.form-news input{
+    width: 220px;
+    height: 40px;
+    background: #fff;
+    border-radius: 4px;
+    padding: 5px 8px;
+    border: none;
+}
+.form-news button{
+    font-size: 14px;
+    font-weight: bold;
+    color: #fff;
+    border: 3px solid #fff;
+    border-radius: 4px;
+    height: 40px;
+    display: inline-block;
+    vertical-align: top;
+    background: none;
+    padding: 5px 20px;
+    width: 140px;
+    transition: all 0.3s ease;
+}
+.form-news button:hover{
+    background: rgba(0,0,0,0.2);
+}
+/*--FIN NEWSLETTER--*/
+
+
+@media (max-width: 991px) {
+
+    figure {
+    margin: 0;
+    }
+
+    div.sigue-logo figure img {
+    width: 100%;
+    }
+
+    .carrusel-footer {
+    padding-top: 0px;
+    }
+}
+
+@media (max-width: 576px) { 
+ div.sigue-logo.christus figure img {
+ width: 70%;
+ }  
+}
+
+
+@media (max-width: 1200px) {
+
+}
+
+@media (max-width: 991px) {
+ 
+}
+
+@media (max-width: 768px) {
+
+  .animated,
+  .animated-delay1,
+  .animated-delay2,
+  .animated-delay3,
+  .animated-delay4,
+  .wow {
+      /*CSS transitions*/
+      -o-transition-property: none !important;
+      -moz-transition-property: none !important;
+      -ms-transition-property: none !important;
+      -webkit-transition-property: none !important;
+      transition-property: none !important;
+      /*CSS transforms*/
+      -o-transform: none !important;
+      -moz-transform: none !important;
+      -ms-transform: none !important;
+      -webkit-transform: none !important;
+      transform: none !important;
+      /*CSS animations*/
+      -webkit-animation: none !important;
+      -moz-animation: none !important;
+      -o-animation: none !important;
+      -ms-animation: none !important;
+      animation: none !important;
+      visibility: visible !important;
+  }
+
+  footer .m-footer{
+      margin-bottom: 40px;
+  }
+ 
+}
+
+@media (max-width: 640px) {
+  .wrap{
+      padding: 0 20px;
+  }
+}
+
+
+@media (max-width: 480px) {
+  .form-news input{
+      width: 100%;
+      margin-bottom: 10px;
+  }
+  .form-news button{
+      width: 100%;
+  }
+ 
+}
+
+div.redes-footer.new-size a img {
+    width: 25px;
+}
+
+.img-fluid{
+    max-width: 280px;
+    width:90%
+}
+}

@@ -1,0 +1,131 @@
+  setTimeout(()=> {
+            $(".mat-calendar").find('.mat-calendar-body-cell').mouseover(function(e, args){
+             $(this).find('.tooltipCalendar').remove()
+             $(this).append(`
+             <div class="tooltipCalendar">
+             <div class="cnttt">
+              <div class="padd-tt">
+               <p class="itm-centro-tt" style="font-size: 13px !important;color: #2A7DE1;font-weight: bold;">
+               <span class="circ-tt" style="background: #2A7DE1;"></span>Centro Médico San Carlos de Apoquindo</p>
+               <p class="detalle-tt" style="font-size:13px !important">
+                  <span class="sminfo-tt" style="font-size: 9px !important;line-height: 18px;">Quedan <b style="font-weight:bold !important;">10</b> cupo(s) disponibles</span>
+                  <span class="val-tt" style="font-size: 24px !important;font-weight: bold;">
+                  <i style="font-size: 9px !important;" class="txtproxhora">Próxima Hora</i>09:00</span>
+               </p>
+              </div>
+              <div class="divider"></div>
+              <div class="padd-tt">
+              <p class="itm-centro-tt" style="font-size: 13px !important;color: #802E87;font-weight: bold;">
+              <span class="circ-tt" style="background: #802E87;"></span>Centro Médico Lira</p>
+              <p class="detalle-tt" style="font-size:13px !important">
+                 <span class="sminfo-tt" style="font-size: 9px !important;line-height: 18px;">Quedan <b style="font-weight:bold !important;">6</b> cupo(s) disponibles</span>
+                 <span class="val-tt" style="font-size: 24px !important;font-weight: bold;">
+                 <i style="font-size: 9px !important;" class="txtproxhora">Próxima Hora</i>14:30</span>
+              </p>
+             </div>
+             <div class="trg-tt"></div>
+             </div>
+              </div>
+           `)
+            }).mouseout(function(){
+              $(this).find('.tooltipCalendar').remove()
+            });
+  
+          },1000)
+
+
+          										<!-- 
+										<div  style="display: flex;border: 3px solid #802E87;border-radius: 10px;margin-bottom: 30px;">
+										<span  style="width: 50%;padding: 13px;color: #802E87;display: block;position: relative;padding-left: 50px;">
+												<mat-icon style="position: absolute;left: 15px;top: 13px;">date_range</mat-icon> Calendario
+										</span>
+										<span  style="width: 50%;padding: 13px;background: #802E87;color: #fff;display: block;position: relative;padding-left: 50px;">
+												<mat-icon _ngcontent-too-c12=""
+													class="mat-icon material-icons mat-icon-no-color" role="img"
+													aria-hidden="true" style="position: absolute;left: 15px;top: 13px;">reorder</mat-icon> 
+													Listado de Días
+											</span>
+										</div>
+
+										<p style="font-weight: bold;">Lunes 24 de Agosto de 2020</p>
+										<div class="calendarMobile" style="border: 1px solid #ccc; margin-bottom: 40px;
+										box-shadow: 0 2px 1px -1px rgba(0,0,0,.2), 0 1px 1px 0 rgba(0,0,0,.14), 0 1px 3px 0 rgba(0,0,0,.12);
+										margin-bottom: 20px;">
+											<div class="cnttt">
+												<div class="padd-tt">
+													<p class="itm-centro-tt"
+														style="font-size: 16px !important;color: #2A7DE1;font-weight: bold;">
+														<span class="circ-tt" style="background: #2A7DE1;"></span>Centro
+														Médico San Carlos de Apoquindo</p>
+													<p class="detalle-tt" style="font-size:16px !important">
+														<span class="sminfo-tt"
+															style="font-size: 13px !important;line-height: 18px;">Quedan
+															<b style="font-weight:bold !important;">10</b> cupo(s)
+															disponibles</span>
+														<span class="val-tt"
+															style="font-size: 24px !important;font-weight: bold;">
+															<i style="font-size: 13px !important;"
+																class="txtproxhora">Próxima Hora</i>09:00</span>
+													</p>
+												</div>
+												<div class="divider"></div>
+												<div class="padd-tt">
+													<p class="itm-centro-tt"
+														style="font-size: 16px !important;color: #802E87;font-weight: bold;">
+														<span class="circ-tt" style="background: #802E87;"></span>Centro
+														Médico Lira</p>
+													<p class="detalle-tt" style="font-size:16px !important">
+														<span class="sminfo-tt"
+															style="font-size: 13px !important;line-height: 18px;">Quedan
+															<b style="font-weight:bold !important;">6</b> cupo(s)
+															disponibles</span>
+														<span class="val-tt"
+															style="font-size: 24px !important;font-weight: bold;">
+															<i style="font-size: 13px !important;"
+																class="txtproxhora">Próxima Hora</i>14:30</span>
+													</p>
+												</div>
+											</div>
+										</div>
+
+										<p style="font-weight: bold;">Jueves 27 de Agosto de 2020</p>
+										<div class="calendarMobile" style="border: 1px solid #ccc;
+										box-shadow: 0 2px 1px -1px rgba(0,0,0,.2), 0 1px 1px 0 rgba(0,0,0,.14), 0 1px 3px 0 rgba(0,0,0,.12);
+										margin-bottom: 20px;">
+											<div class="cnttt">
+												<div class="padd-tt">
+													<p class="itm-centro-tt"
+														style="font-size: 16px !important;color: #2A7DE1;font-weight: bold;">
+														<span class="circ-tt" style="background: #2A7DE1;"></span>Centro
+														Médico San Carlos de Apoquindo</p>
+													<p class="detalle-tt" style="font-size:16px !important">
+														<span class="sminfo-tt"
+															style="font-size: 13px !important;line-height: 18px;">Quedan
+															<b style="font-weight:bold !important;">10</b> cupo(s)
+															disponibles</span>
+														<span class="val-tt"
+															style="font-size: 24px !important;font-weight: bold;">
+															<i style="font-size: 13px !important;"
+																class="txtproxhora">Próxima Hora</i>09:00</span>
+													</p>
+												</div>
+												<div class="divider"></div>
+												<div class="padd-tt">
+													<p class="itm-centro-tt"
+														style="font-size: 16px !important;color: #802E87;font-weight: bold;">
+														<span class="circ-tt" style="background: #802E87;"></span>Centro
+														Médico Lira</p>
+													<p class="detalle-tt" style="font-size:16px !important">
+														<span class="sminfo-tt"
+															style="font-size: 13px !important;line-height: 18px;">Quedan
+															<b style="font-weight:bold !important;">6</b> cupo(s)
+															disponibles</span>
+														<span class="val-tt"
+															style="font-size: 24px !important;font-weight: bold;">
+															<i style="font-size: 13px !important;"
+																class="txtproxhora">Próxima Hora</i>14:30</span>
+													</p>
+												</div>
+											</div>
+										</div>
+-->
