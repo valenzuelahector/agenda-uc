@@ -46,6 +46,7 @@ import { ProximasHorasComponent } from './shared/components/proximas-horas/proxi
 import { ListaEsperaEfectuadaComponent } from './pages/reservacion/lista-espera-efectuada/lista-espera-efectuada.component';
 import { SolicitudProcedimientoEfectuadoComponent } from './pages/reservacion/solicitud-procedimiento-efectuado/solicitud-procedimiento-efectuado.component';
 import { DeviceDetectorService } from 'ngx-device-detector';
+import { EncuestasComponent } from './shared/components/modals/encuestas/encuestas.component';
 
 @NgModule({
   declarations: [
@@ -78,6 +79,7 @@ import { DeviceDetectorService } from 'ngx-device-detector';
     ProximasHorasComponent,
     ListaEsperaEfectuadaComponent,
     SolicitudProcedimientoEfectuadoComponent,
+    EncuestasComponent,
   ],
   imports: [
     BrowserModule,
@@ -104,7 +106,8 @@ import { DeviceDetectorService } from 'ngx-device-detector';
       MessageComponent,
       PerfilProfesionalComponent,
       ConfirmarAnularReservaComponent,
-      ErrorReservaComponent
+      ErrorReservaComponent,
+      EncuestasComponent
   ]
 })
 export class AppModule { }

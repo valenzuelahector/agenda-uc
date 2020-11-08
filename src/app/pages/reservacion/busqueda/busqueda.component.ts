@@ -9,6 +9,8 @@ import { OrderPipe } from 'ngx-order-pipe';
 import { ENV } from 'src/environments/environment';
 import gtag, { install } from 'ga-gtag';
 import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
+import { MatDialog } from '@angular/material';
+import { EncuestasComponent } from 'src/app/shared/components/modals/encuestas/encuestas.component';
 
 @Component({
   selector: 'app-busqueda',
@@ -78,12 +80,13 @@ export class BusquedaComponent implements OnInit {
     public agendaService: AgendaAmbulatoriaService,
     public utils: UtilsService,
     public aRouter: ActivatedRoute,
-    public orderPipe: OrderPipe
+    public orderPipe: OrderPipe,
+    public dialog:MatDialog
   ) { }
 
   ngOnInit() {
     this.getAreas();
-
+    this.mostrarEncuesta({ data: null});
     this.utils.nuevaHora.subscribe(r => {
       this.clearSelection('profesional');
       this.cambiarTipoBusqueda('especialidad');
@@ -906,5 +909,20 @@ export class BusquedaComponent implements OnInit {
       documento: null,
       documentoFormateado: null
     }
+  }
+
+  mostrarEncuesta(data) {
+    
+    const dialogConfirm = this.dialog.open(EncuestasComponent, {
+      width: '840px',
+      autoFocus: false,
+    //  disableClose:true,
+      data,
+    });
+    
+    dialogConfirm.componentInstance.dialogEvent.subscribe(es => {
+
+    });
+
   }
 }

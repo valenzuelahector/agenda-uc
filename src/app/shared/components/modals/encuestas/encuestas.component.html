@@ -1,0 +1,82 @@
+<div class="hdr">
+    <h5>Complete las preguntas que se muestran a continuación.</h5>
+    <span class="tpp">{{ curPregunta }}/{{ preguntas.length }}</span>
+</div>
+    <div class="questions">
+        <div class="stepper">
+            <div class="stepper greenReady" *ngIf="init" [ngStyle]="{'width' : distanceFromOrigin + '%' }"></div>
+            <span 
+                  class="crcc" 
+                  [ngClass]="{'greenReady' : curPregunta > (i + 1), active: curPregunta === i + 1 }"
+                  *ngFor="let item of [].constructor(preguntas.length - 1); let i = index"
+                  [ngStyle]="{'left' : (((100 / (preguntas.length - 1)) * i)) + '%',
+                    'margin-left' : '-17.5px'
+                 }"
+            >{{ i + 1 }}</span>
+            <span class="crcc">{{ preguntas.length }}</span>
+        </div>
+
+        <mat-tab-group dynamicHeight #tabGroup>
+            <mat-tab label="Búsqueda" *ngFor="let item of [].constructor(preguntas.length); let i = index">
+                <div class="content-q">
+                    <div class="isq">
+                        <p>
+                            <mat-icon>live_help</mat-icon>
+                            <span>
+                                ¿ {{ i }}Lorem ipsum dolor sit amet consectetur adipisicing elit. Est dolorem at amet,
+                                quos voluptates repellendus deserunt temporibus?
+                            </span>
+
+                        </p>
+                    </div>
+  
+                    <div class="answers">
+                        <mat-radio-group>
+                            <div fxLayout="row wrap" fxLayoutAlign="space-between strech">                           
+                                <div fxFlex="50%" fxFlex.sm="100%" fxFlex.xs="100%" class="slcc active">
+                                    <mat-radio-button color="primary">Dada todas las opciones marcadas</mat-radio-button>
+                                </div>
+                                <div fxFlex="50%" fxFlex.sm="100%" fxFlex.xs="100%" class="slcc">
+                                    <mat-radio-button color="primary">Opción 1</mat-radio-button>
+                                </div>
+                                <div fxFlex="50%" fxFlex.sm="100%" fxFlex.xs="100%" class="slcc">
+                                    <mat-radio-button color="primary">No lo sé, puede ser que sí</mat-radio-button>
+                                </div>
+                                <div fxFlex="50%" fxFlex.sm="100%" fxFlex.xs="100%" class="slcc">
+                                    <mat-radio-button color="primary">Opción 1</mat-radio-button>
+                                </div>
+                                <div fxFlex="50%" fxFlex.sm="100%" fxFlex.xs="100%" class="slcc">
+                                    <mat-radio-button color="primary">No lo sé, puede ser que sí</mat-radio-button>
+                                </div>
+                                <div fxFlex="50%" fxFlex.sm="100%" fxFlex.xs="100%" class="slcc">
+                                    <mat-radio-button color="primary">Opción 1</mat-radio-button>
+                                </div>
+                                <div fxFlex="50%" fxFlex.sm="100%" fxFlex.xs="100%" class="slcc">
+                                    <mat-radio-button color="primary">No lo sé, puede ser que sí</mat-radio-button>
+                                </div>
+
+                            </div>
+
+                        </mat-radio-group>
+                    </div>
+                </div>
+            </mat-tab>
+            
+        </mat-tab-group>
+    </div>
+    <div fxLayout="row">
+        <div fxFlex="50">
+            <button mat-stroked-button class=" btncs cus-pad cus" *ngIf="curPregunta !== 1 " (click)="cambiarPregunta(curPregunta - 1)">
+                <mat-icon class="anuicon">keyboard_backspace</mat-icon>
+                ANTERIOR PREGUNTA
+            </button>
+        </div>
+        <div fxFlex="50" style="text-align: right;">
+            <button mat-stroked-button class="btncs cus-pad cus" *ngIf="curPregunta < preguntas.length" (click)="cambiarPregunta(curPregunta + 1)">
+                SIGUIENTE PREGUNTA
+                <mat-icon class="anuicon rot">keyboard_backspace</mat-icon>
+            </button>
+        </div>
+  
+    </div>
+

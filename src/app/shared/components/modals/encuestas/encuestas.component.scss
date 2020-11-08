@@ -1,0 +1,163 @@
+.hdr{
+    margin: 15px 0px;
+    position: relative;
+    
+    .tpp{
+        color: #802e87;
+        font-size: 1.2rem;
+        position: absolute;
+        right: 0px;
+        top: 0px;
+    }
+    
+    h5{
+        color: #802e87;
+        padding: 5px 0px;
+        text-transform: uppercase;
+        font-size: 16px;
+        font-weight: bold;
+    }
+}
+::ng-deep .questions .mat-tab-labels { display: none !important}
+::ng-deep  .questions .mat-tab-nav-bar,  ::ng-deep .questions .mat-tab-header{border:none !important}
+
+.questions{
+   
+    position: relative;
+    p{
+        font-size: 14px;
+        color: #fff;
+        text-transform: uppercase;
+        line-height: 27px;
+        padding: 15px 20px 15px 75px;
+        text-align: center;
+        font-weight: 500;
+        margin: 0px;
+        position: relative;
+        background: #802e87;
+
+        span{
+            display: block;
+            text-align: left;
+        }
+        
+        .mat-icon{
+            position: absolute;
+            left: 16px;
+            font-size: 40px;
+            top: 18px;   
+        }
+    }
+
+    .answers{
+        padding: 30px 0px;
+        margin:0px auto;
+
+        .slcc{
+            text-align: left;
+            text-transform: uppercase;
+            font-size: 14px;
+            background: #f1f2f2;
+            border-bottom: 3px solid #fff;
+            border-right:3px solid #fff;
+            &.active{
+                background:#e1ebf8 !important;
+            }
+        }
+        .crr{
+            width: 100%;
+            padding: 10px;
+            &:hover{
+
+            }
+        }
+
+        ::ng-deep .mat-radio-label{
+            margin-bottom: 0px !important;
+            padding: 15px;
+        }
+
+        ::ng-deep .mat-radio-label-content{
+            white-space: break-spaces;
+        }
+    }
+}
+
+.stepper{
+
+    margin: 30px auto 50px auto;
+    height: 5px;
+    background: #fed377;
+    border-radius: 10px;
+    display: block;
+    position: relative;
+    width: 95%;
+    transition: all 0.5s;
+
+    &.greenReady{
+        background: green;
+        width: 50%;
+        margin: 0px !important;
+        transition: all 0.5s;
+    }
+
+    .crcc{
+
+        display: block;
+        position: absolute;
+        width: 35px;
+        height: 35px;
+        background: #fff;
+        border-radius: 100%;
+        top: 50%;
+        margin-top: -17.5px;
+        text-align: center;
+        font-size: 16px;
+        font-weight: bold;
+        line-height: 30px;
+        border: 3px solid #fed377;
+
+        &:last-child{
+            left:initial !important;
+            right:-17.5px;
+        }
+        &.greenReady{
+            background: green;
+            border-color:green;
+            color:#fff !important
+        }
+
+        &.active{
+            background: #fed377;
+        }
+
+    }
+}
+
+.selector{
+    width:95%;
+    margin:0px auto;
+    .trstepper {
+        width: 0;
+        height: 0;
+        border-left: 12px solid transparent;
+        border-right: 12px solid transparent;
+        border-bottom: 20px solid #802e87;
+        position: absolute;
+        top: 23px;
+        left: 6px;
+        transition: all 0.5s;
+    }
+}
+
+.btncs{
+    color: #802e87;
+    border: none;
+    font-weight: bold;
+    .rot{
+        transform: rotate(180deg);
+    }
+    ::ng-deep .mat-button-wrapper{
+        font-weight: bold;
+    }
+}
