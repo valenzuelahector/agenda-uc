@@ -905,7 +905,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
           });
 
           re.listaCupos = listaCupos;
-
+          re.proximaFechaEpoch = listaCupos[0]['cupos']['horaEpoch'];
           re['datesToHighlight'] = { dates: [], displayed: false, dateClass: null };
           re['datesToHighlight']['displayed'] = true;
           re['datesToHighlight']['dateClass'] = this.dateClass(re['fechasDisponibles']);
