@@ -905,7 +905,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
           });
 
           re.listaCupos = listaCupos;
-          re.proximaFechaEpoch = listaCupos[0]['cupos']['horaEpoch'];
+          re.proximaFechaEpoch = re.listaCupos.length > 0 ? re.listaCupos[0]['cupos']['horaEpoch'] : null;
           re['datesToHighlight'] = { dates: [], displayed: false, dateClass: null };
           re['datesToHighlight']['displayed'] = true;
           re['datesToHighlight']['dateClass'] = this.dateClass(re['fechasDisponibles']);
@@ -915,6 +915,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
         this.utils.showProgressBar();
         this.displayCalendar = false;
         this.recursos = this.orderPipe.transform(recursos, 'proximaFechaEpoch');
+        console.log(this.recursos)
         this.determinarMesSinCupo();
 
         const recc = clone(this.recursos);
@@ -934,7 +935,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
         }, 2000);
 
       } catch (err) {
-
+        console.log(err)
       }
     });
 
