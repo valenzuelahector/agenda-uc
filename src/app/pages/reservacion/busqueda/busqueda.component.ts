@@ -751,7 +751,7 @@ export class BusquedaComponent implements OnInit {
     const dateTime = dateTm.split("-04:00").join("");
     const gtagActionName = `(${dateTime}) - ${this.datosPaciente.tipoDocumento} : ${this.datosPaciente.documento}`;
     const gtagName = 'PROCESO DE RESERVA DE HORA';
-    const gtagNameEsp = "PROCESO DE RESERVA DE HORA | ESPECIALIDAD"
+    let gtagNameEsp = "PROCESO DE RESERVA DE HORA"
     let gtagActionEspProf = "";
 
     if (this.tipoConsulta === 'profesional' && !this.profesionalSelected) {
@@ -785,12 +785,14 @@ export class BusquedaComponent implements OnInit {
     }
 
     if (this.tipoConsulta == 'especialidad') {
+      gtagNameEsp += ' | ESPECIALIDAD';
       gtagActionEspProf = this.especialidadSelected.nombreEspecialidad.toUpperCase();
       this.especialidadSelected['idServicio'] = this.servicioSelected['idServicio'];
       this.especialidadSelected['nombreServicio'] = this.servicioSelected['nombreServicio'];
     }
 
     if(this.profesionalSelected){
+      gtagNameEsp += ' | PROFESIONAL';
       gtagActionEspProf = this.profesionalSelected.nombreProfesional.toLowerCase();
       gtag('event', gtagActionName, { 'event_category': gtagName, 'event_label': `a.1) Profesional: ${this.profesionalSelected.nombreProfesional}`, 'value': '0' });
       gtag('event', gtagActionEspProf, { 'event_category': gtagNameEsp, 'event_label': `a.1) Profesional: ${this.profesionalSelected.nombreProfesional}`, 'value': '0' });
