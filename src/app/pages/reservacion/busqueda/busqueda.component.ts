@@ -605,7 +605,10 @@ export class BusquedaComponent implements OnInit {
             this.centroAtencionSelection(matCentro);
             if (this.datosPaciente.documento) {
               this.buscarHora();
+            }else{
+              this.emitterReadQuery(true)
             }
+
           } else {
 
             if (res['centros'].length == 1) {
