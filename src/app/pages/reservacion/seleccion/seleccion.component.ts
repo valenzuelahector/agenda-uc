@@ -91,10 +91,10 @@ export class SeleccionComponent implements OnInit, OnChanges {
   @HostListener('window:scroll', ['$event'])
   onScroll(event) {
     //if (this.enableScroll) {
-      let wPos = window.scrollY;
-      let dayWeekPos = this.getOffsetTop((<HTMLElement>document.getElementById('dayWeek')));
-      this.dayWeekFixed = (wPos >= dayWeekPos) ? true : false
-   // }
+    let wPos = window.scrollY;
+    let dayWeekPos = this.getOffsetTop((<HTMLElement>document.getElementById('dayWeek')));
+    this.dayWeekFixed = (wPos >= dayWeekPos) ? true : false
+    // }
 
   }
 
@@ -671,12 +671,12 @@ export class SeleccionComponent implements OnInit, OnChanges {
   }
 
   seleccionarHora(data) {
-   
+
     this.horaSeleccionada = data;
     this.calendario.emit(data);
     gtag('event', 'Paso 02', { 'event_category': 'Reserva de Hora | Selección', 'event_label': 'Selección-Hora' });
 
-    if(this.busquedaInicial.gtagActionName){
+    if (this.busquedaInicial.gtagActionName) {
 
       gtag('event', this.busquedaInicial.gtagActionName, { 'event_category': this.busquedaInicial.gtagName, 'event_label': `f) Fecha y Hora Consulta: ${data.cupo.fechaHora}`, 'value': '0' });
       gtag('event', this.busquedaInicial.gtagActionName, { 'event_category': this.busquedaInicial.gtagName, 'event_label': `g) Centro de Consulta: ${data.cupo.centro.nombre}`, 'value': '0' });
@@ -880,14 +880,13 @@ export class SeleccionComponent implements OnInit, OnChanges {
                 aplicaHorario = true;
               }
 
+              if (!idCentrosDisp[cupo.centro.id]) {
+                idCentrosDisp[cupo.centro.id] = { nombre: cupo.centro.nombre, cupos: [] }
+              }
+
+
               if (aplicaCentro && aplicaHorario) {
-
-                if (idCentrosDisp[cupo.centro.id]) {
-                  idCentrosDisp[cupo.centro.id]['cupos'].push(cupo);
-                } else {
-                  idCentrosDisp[cupo.centro.id] = { nombre: cupo.centro.nombre, cupos: [] }
-                }
-
+                idCentrosDisp[cupo.centro.id]['cupos'].push(cupo);
                 return cupo;
               }
 
@@ -898,14 +897,17 @@ export class SeleccionComponent implements OnInit, OnChanges {
           });
 
           Object.keys(idCentrosDisp).forEach(key => {
-            listaCupos.push({
-              centro: { id: key, nombre: idCentrosDisp[key]['nombre'], nombreCentro: idCentrosDisp[key]['nombre'] },
-              cupos: idCentrosDisp[key]['cupos']
-            });
+            if ((this.filtro.nombre.toLowerCase().includes('todos') || this.filtro.idCentro === key) && idCentrosDisp[key]['cupos'].length > 0) {
+              listaCupos.push({
+                centro: { id: key, nombre: idCentrosDisp[key]['nombre'], nombreCentro: idCentrosDisp[key]['nombre'] },
+                cupos: idCentrosDisp[key]['cupos']
+              });
+            }
           });
 
           re.listaCupos = listaCupos;
-          re.proximaFechaEpoch = re.listaCupos.length > 0 ? re.listaCupos[0]['cupos']['horaEpoch'] : null;
+
+          re.proximaFechaEpoch = this.getProximaFechaEpoch(listaCupos)
           re['datesToHighlight'] = { dates: [], displayed: false, dateClass: null };
           re['datesToHighlight']['displayed'] = true;
           re['datesToHighlight']['dateClass'] = this.dateClass(re['fechasDisponibles']);
@@ -915,7 +917,6 @@ export class SeleccionComponent implements OnInit, OnChanges {
         this.utils.showProgressBar();
         this.displayCalendar = false;
         this.recursos = this.orderPipe.transform(recursos, 'proximaFechaEpoch');
-        console.log(this.recursos)
         this.determinarMesSinCupo();
 
         const recc = clone(this.recursos);
@@ -930,6 +931,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
           this.restoreCalendar();
           this.prepareTooltip();
           this.utils.hideProgressBar();
+          console.log(this.recursos)
 
           resolve(true);
         }, 2000);
@@ -941,6 +943,18 @@ export class SeleccionComponent implements OnInit, OnChanges {
 
   }
 
+  getProximaFechaEpoch(listaCupos) {
+    if (listaCupos.length > 0) {
+      const horas = listaCupos.map(item => {
+        return item.cupos[0].horaEpoch
+      });
+      return Math.min(...horas);
+    } else {
+      return null;
+    }
+
+
+  }
 
   setRecursosCache() {
     return {
@@ -972,11 +986,11 @@ export class SeleccionComponent implements OnInit, OnChanges {
     }
 
     datesToEvaluate.forEach((val, key) => {
-      if(this.getNCentros(fechasDisponibles[val]).length > 1 ){
+      if (this.getNCentros(fechasDisponibles[val]).length > 1) {
         hasCupoMultiple = true;
       }
     });
 
-    return  hasCupoMultiple;
+    return hasCupoMultiple;
   }
 }
