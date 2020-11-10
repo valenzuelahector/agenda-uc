@@ -297,6 +297,7 @@ export class IdentificacionComponent implements OnInit, OnChanges {
       }
 
       this.findPaciente = true;
+      gtag('event', 'Clic', { 'event_category': 'Reserva de Hora', 'event_label': 'Paso3:Identificación-Buscar' });
 
     }, err => {
       this.utils.mDialog("Error", "No se ha podido consultar al paciente, intente nuevamente", "message");
@@ -639,6 +640,9 @@ export class IdentificacionComponent implements OnInit, OnChanges {
         return false;
       }
     }
+
+    gtag('event', 'Clic', { 'event_category': 'Reserva de Hora', 'event_label': 'Paso3:Identificación-Siguiente' });
+
 
   }
 
