@@ -569,9 +569,6 @@ export class SeleccionComponent implements OnInit, OnChanges {
       this.centrosProfesional[i].push(agrupCentros[key]);
     })
 
-    gtag('event', 'Paso 02', { 'event_category': 'Reserva de Hora | Selección', 'event_label': 'Selección-Calendario' });
-
-
   }
 
   getNCentros(items) {
@@ -676,7 +673,6 @@ export class SeleccionComponent implements OnInit, OnChanges {
 
     this.horaSeleccionada = data;
     this.calendario.emit(data);
-    gtag('event', 'Paso 02', { 'event_category': 'Reserva de Hora | Selección', 'event_label': 'Selección-Hora' });
 
     if (this.busquedaInicial.gtagActionName) {
 

@@ -298,10 +298,6 @@ export class IdentificacionComponent implements OnInit, OnChanges {
 
       this.findPaciente = true;
 
-      gtag('event', 'Clic', { 'event_category': 'Reserva de Hora', 'event_label': 'Paso3:Identificación-Buscar' });
-
-
-
     }, err => {
       this.utils.mDialog("Error", "No se ha podido consultar al paciente, intente nuevamente", "message");
     })
@@ -597,7 +593,6 @@ export class IdentificacionComponent implements OnInit, OnChanges {
                 gtag('event', this.busquedaInicial.gtagActionEspProf, { 'event_category': this.busquedaInicial.gtagNameEsp, 'event_label': `j.1) Inscripción en Lista de Espera`, 'value': '0' });
 
               }
-              gtag('event', 'Identificación (Lista de Espera)', { 'event_category': 'Reserva de Hora | Identificación', 'event_label': 'Paso3:Identificación-Siguiente' });
             }
 
             if (this.isProcedimiento) {
@@ -605,12 +600,6 @@ export class IdentificacionComponent implements OnInit, OnChanges {
                 gtag('event', this.busquedaInicial.gtagActionName, { 'event_category': this.busquedaInicial.gtagName, 'event_label': `j.2) Procedimiento Médico Solicitado`, 'value': '0' });
                 gtag('event', this.busquedaInicial.gtagActionEspProf, { 'event_category': this.busquedaInicial.gtagNameEsp, 'event_label': `j.2) Procedimiento Médico Solicitado`, 'value': '0' });
               }
-              gtag('event', 'Identificación (Procedimiento)', { 'event_category': 'Reserva de Hora | Identificación', 'event_label': 'Paso3:Identificación-Siguiente' });
-            }
-
-            if (!this.listaEspera && !this.isProcedimiento) {
-              gtag('event', 'Paso 03', { 'event_category': 'Reserva de Hora | Identificación', 'event_label': 'Confirmar-Reserva' });
-
             }
 
           }
@@ -650,8 +639,6 @@ export class IdentificacionComponent implements OnInit, OnChanges {
         return false;
       }
     }
-
-    gtag('event', 'Clic', { 'event_category': 'Reserva de Hora', 'event_label': 'Paso3:Identificación-Siguiente' });
 
   }
 

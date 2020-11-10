@@ -422,11 +422,7 @@ export class BusquedaComponent implements OnInit {
     this.filterServicios = null;
     this.filterCentrosAtencion = null;
     this.getEspecialidades('especialidad');
-    
-
-
     this.expanded = false;
-    gtag('event', 'Selección de Area', { 'event_category': 'Reserva de Hora | Búsqueda', 'event_label': event.value, 'value' : '0' });
 
   }
 
@@ -702,12 +698,10 @@ export class BusquedaComponent implements OnInit {
     if (tipo == 'especialidad') {
       this.getServicios();
       this.servicioCtrl.enable();
-      gtag('event', 'Especialidad', { 'event_category': 'Reserva de Hora | Búsqueda', 'event_label': this.especialidadSelected['nombreEspecialidad'], 'value': '0' });
 
     } else {
       this.centroAtencionCtrl.enable();
       this.getCentros(this.especialidadCtrl.value.idServicio);
-      gtag('event', 'Especialidad del Profesional', { 'event_category': 'Reserva de Hora | Búsqueda', 'event_label': this.especialidadSelected['nombreEspecialidad'], 'value': '0' });
 
     }
 
@@ -719,7 +713,6 @@ export class BusquedaComponent implements OnInit {
     this.verificarDonantePaciente();
     this.centroAtencionCtrl.enable();
     this.getCentros(this.servicioCtrl.value.idServicio);
-    gtag('event', 'Área de Interés', { 'event_category': 'Reserva de Hora | Búsqueda', 'event_label': this.servicioSelected.nombreServicio, 'value' : '0' });
   }
 
 
@@ -727,7 +720,6 @@ export class BusquedaComponent implements OnInit {
     this.profesionalCtrl.disable();
     this.profesionalSelected = this.profesionalCtrl.value;
     this.especialidadCtrl.enable();
-    gtag('event', 'Profesional', { 'event_category': 'Reserva de Hora | Búsqueda', 'event_label': this.profesionalSelected['nombreProfesional'], 'value': '0' });
     this.getEspecialidades('profesional');
   }
 
@@ -829,8 +821,6 @@ export class BusquedaComponent implements OnInit {
 
     this.emitterReadQuery(true);
 
-    gtag('event', 'Paso 01', { 'event_category': 'Reserva de Hora | Búsqueda', 'event_label': 'Buscar Hora', 'value': '0' });
-
   }
 
   buscarProximaHora(data) {
@@ -891,7 +881,6 @@ export class BusquedaComponent implements OnInit {
     } else {
       this.datosPaciente.documento = this.datosPaciente.documentoFormateado;
     }
-    gtag('event', 'RUT Paciente', { 'event_category': 'Reserva de Hora | Búsqueda', 'event_label': 'Ingreso de RUT', 'value': '0' });
 
   }
 
