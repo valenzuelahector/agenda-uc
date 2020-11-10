@@ -166,11 +166,13 @@ export class SeleccionComponent implements OnInit, OnChanges {
 
     this.displayCalendar = false;
     this.selectedDate = {};
-    /*
-    if(this.filtroAplicado){
-      await this.filtrarBusqueda();
+    this.filtroAplicado = false;
+    this.filtroHoras = 'ALL';
+    this.filtro = {
+      idCentro: ENV.idRegion,
+      nombre: 'TODOS'
     }
-*/
+
     if (fromBtn) {
       this.maxNumberSearch = 5;
     }
