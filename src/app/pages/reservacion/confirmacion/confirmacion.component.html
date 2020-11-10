@@ -39,7 +39,7 @@
             <p><b>Nombre:</b> {{ paciente.nombreCompleto }}</p>
             <p><b>RUT:</b> {{ paciente.numeroDocumentoFormateado }}</p>
             <p><b>Previsión:</b> {{ paciente.adicional.prevision.nombrePlan }}</p>
-            <p *ngIf=" calendario.cupo?.valorConvenio?.toString().trim() != '0'"><b>Valor Cita :</b> ${{ calendario.cupo.valorConvenio | currency:'CLP':'' }}</p>
+            <p *ngIf=" calendario.cupo?.valorConvenio?.toString().trim() != '0'"><b>Valor Convenio :</b> ${{ calendario.cupo.valorConvenio | currency:'CLP':'' }}</p>
             <span *ngIf=" calendario.cupo?.valorConvenio?.toString().trim() != '0'" style="color:#999">(*) El valor cita es el referencial convenido para la previsión seleccionada, el valor final y el copago a cancelar por el paciente puede cambiar según su plan de salud.</span>
           </div>
           <div class="paybtn" *ngIf="reservaFinalizada && !anulada && calendario.cupo?.valorConvenio?.toString().trim() != '0'" style="">
