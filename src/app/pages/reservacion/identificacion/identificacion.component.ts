@@ -262,6 +262,27 @@ export class IdentificacionComponent implements OnInit, OnChanges {
     this.resetDir();
   }
 
+  cambiarDireccion(){
+    
+    this.editDir = true;
+    const pais = this.paises.filter(item => {
+      if (item.nombre.toLowerCase().includes('chile')) {
+        return item;
+      }
+    });
+    if (pais.length === 1) {
+      this.dirUpdate.pais = pais[0];
+      const rm = this.regiones.filter(item => {
+        if (item.nombre.toLowerCase().includes('metropolitana')) {
+          return item;
+        }
+      });
+      if (rm.length === 1) {
+        this.dirUpdate.region = rm[0];
+      }
+    }
+  }
+
   buscarPaciente() {
 
     this.findPaciente = false;
@@ -355,7 +376,9 @@ export class IdentificacionComponent implements OnInit, OnChanges {
           }
         });
         if (rm.length === 1) {
+          this.dirUpdate.region = rm[0];
           this.pacienteForm.patchValue({ dir_region: rm[0] });
+          console.log(this.dirUpdate)
           this.getComunas({ value: rm[0] });
         }
       }

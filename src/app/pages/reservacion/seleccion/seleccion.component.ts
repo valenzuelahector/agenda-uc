@@ -147,7 +147,27 @@ export class SeleccionComponent implements OnInit, OnChanges {
         }
       })
       this.recursos[key]['poseeMes'] = posee;
-    })
+    });
+
+    this.moverSinCuposAlFinal();
+
+  }
+
+  moverSinCuposAlFinal(){
+    const recursos = clone(this.recursos);
+    const conCupos = recursos.filter( item => {
+      if(item.poseeMes){
+        return item;
+      }
+    });
+
+    const sinCupos = recursos.filter( item => {
+      if(!item.poseeMes){
+        return item;
+      }
+    });
+
+    this.recursos = conCupos.concat(sinCupos)
   }
 
   resetCalendario() {
@@ -166,11 +186,15 @@ export class SeleccionComponent implements OnInit, OnChanges {
 
     this.displayCalendar = false;
     this.selectedDate = {};
-    this.filtroAplicado = false;
-    this.filtroHoras = 'ALL';
-    this.filtro = {
-      idCentro: ENV.idRegion,
-      nombre: 'TODOS'
+
+    if(this.filtroAplicado){
+      this.filtroAplicado = false;
+      this.filtroHoras = 'ALL';
+      this.filtro = {
+        idCentro: ENV.idRegion,
+        nombre: 'TODOS'
+      }
+      await this.filtrarBusqueda();
     }
 
     if (fromBtn) {
@@ -305,6 +329,9 @@ export class SeleccionComponent implements OnInit, OnChanges {
           }
 
         } else {
+          this.setRecursosCache().clearItem();
+          this.setRecursosCache().setItem(JSON.stringify(this.recursos));
+          this.setCentrosBusquedas(this.recursos);
           this.restoreCalendar();
         }
 
@@ -321,7 +348,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
 
     this.busquedaInicial.centrosDisponibles = [];
     recursos.forEach((val, key) => {
-      val['listaCupos'].forEach((valLC, keyLC) => {
+      val['listaCuposMes'].forEach((valLC, keyLC) => {
         let foundCentro = false;
         valLC['centro']['nombreCentro'] = valLC['centro']['nombre'];
         valLC['centro']['idCentro'] = valLC['centro']['id'];
@@ -337,13 +364,13 @@ export class SeleccionComponent implements OnInit, OnChanges {
       });
     });
 
-    if (this.busquedaInicial.centrosDisponibles.length > 1) {
+//    if (this.busquedaInicial.centrosDisponibles.length > 1) {
       this.busquedaInicial.centrosDisponibles.unshift({
         idCentro: ENV.idRegion,
         nombre: 'Todos los centros',
         detalle: 'Todos - Región Metropolitana'
       })
-    }
+//    }
   }
 
   prepareTooltip() {
@@ -440,12 +467,19 @@ export class SeleccionComponent implements OnInit, OnChanges {
     let nRecursos = [];
     let found;
 
+    recursosActuales.forEach((valRa, keyRa) => {
+      valRa['listaCuposMes'] = [];
+    });
+
     recursosNuevos.forEach((valRn, keyRn) => {
+      
+      valRn['listaCuposMes'] = valRn['listaCupos'];
 
       found = false;
       recursosActuales.forEach((valRa, keyRa) => {
-        if (valRn['id'] === valRa['id']) {
 
+        if (valRn['id'] === valRa['id']) {
+          valRa['listaCuposMes'] = valRn['listaCupos'];
           Object.keys(valRa['fechasDisponibles']).forEach(keyRaFd => {
             if (valRa['fechasDisponibles'][keyRaFd].length > 0) {
               valRn['fechasDisponibles'][keyRaFd] = clone(valRa['fechasDisponibles'][keyRaFd]);
@@ -904,7 +938,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
           });
 
           re.listaCupos = listaCupos;
-
+          re.listaCuposMes = listaCupos;
           re.proximaFechaEpoch = this.getProximaFechaEpoch(listaCupos)
           re['datesToHighlight'] = { dates: [], displayed: false, dateClass: null };
           re['datesToHighlight']['displayed'] = true;
@@ -917,25 +951,25 @@ export class SeleccionComponent implements OnInit, OnChanges {
         this.recursos = this.orderPipe.transform(recursos, 'proximaFechaEpoch');
         this.determinarMesSinCupo();
 
-        const recc = clone(this.recursos);
-        this.recursos = recc.filter(item => {
-          if (item.poseeMes) {
-            return item;
-          }
-        })
+        if(this.filtroAplicado){
+          const recc = clone(this.recursos);
+          this.recursos = recc.filter(item => {
+            if (item.poseeMes) {
+              return item;
+            }
+          })
+        }
+
         //  this.setCentrosBusquedas(this.recursos);
 
         setTimeout(() => {
           this.restoreCalendar();
           this.prepareTooltip();
           this.utils.hideProgressBar();
-          console.log(this.recursos)
-
           resolve(true);
         }, 2000);
 
       } catch (err) {
-        console.log(err)
       }
     });
 

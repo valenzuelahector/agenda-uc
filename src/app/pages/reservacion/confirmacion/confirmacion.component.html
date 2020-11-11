@@ -40,7 +40,7 @@
             <p><b>RUT:</b> {{ paciente.numeroDocumentoFormateado }}</p>
             <p><b>Previsión:</b> {{ paciente.adicional.prevision.nombrePlan }}</p>
             <p *ngIf=" calendario.cupo?.valorConvenio?.toString().trim() != '0'"><b>Valor Cita :</b> ${{ calendario.cupo.valorConvenio | currency:'CLP':'' }}</p>
-            <span *ngIf=" calendario.cupo?.valorConvenio?.toString().trim() != '0'" style="color:#999">(*) El valor cita corresponde a valor referencial, el cual puede variar según plan de salud.</span>
+            <span *ngIf=" calendario.cupo?.valorConvenio?.toString().trim() != '0'" style="color:#999">(*) El valor convenio es referencial para la previsión seleccionada. El copago a cancelar por el paciente, puede cambiar según su plan de salud y cobertura</span>
           </div>
           <div class="paybtn" *ngIf="reservaFinalizada && !anulada && calendario.cupo?.valorConvenio?.toString().trim() != '0'" style="">
             <button mat-raised-button class="full-btn btn-morado btn-reser btn-pay" (click)="pagar()" >PAGUE SU RESERVA</button>
