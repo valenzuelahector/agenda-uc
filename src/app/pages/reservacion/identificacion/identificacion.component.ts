@@ -263,7 +263,7 @@ export class IdentificacionComponent implements OnInit, OnChanges {
   }
 
   cambiarDireccion(){
-    
+
     this.editDir = true;
     const pais = this.paises.filter(item => {
       if (item.nombre.toLowerCase().includes('chile')) {
@@ -378,7 +378,6 @@ export class IdentificacionComponent implements OnInit, OnChanges {
         if (rm.length === 1) {
           this.dirUpdate.region = rm[0];
           this.pacienteForm.patchValue({ dir_region: rm[0] });
-          console.log(this.dirUpdate)
           this.getComunas({ value: rm[0] });
         }
       }
