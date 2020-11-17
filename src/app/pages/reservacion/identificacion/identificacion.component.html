@@ -156,8 +156,8 @@
           <ng-container *ngTemplateOutlet="formUpdDir"></ng-container>
         </div>
 
-        <div class="col-md-12 field-margin " *ngIf="!editDir" style="text-align: center;">
-          <button mat-stroked-button class="btn-azul bigbtn cus-pad nopadright" (click)="procesarPaciente()"
+        <div class="col-md-12 fild-margin " *ngIf="!editDir && confirmarReservaEnable" style="text-align: center;">
+          <button appDebounceClick (debounceClick)="procesarPaciente()"e mat-stroked-button class="btn-azul bigbtn cus-pad nopadright"
             style="margin-right:15px">CONFIRMAR RESERVA</button>
         </div>
       </div>

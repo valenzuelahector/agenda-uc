@@ -46,6 +46,7 @@ import { ProximasHorasComponent } from './shared/components/proximas-horas/proxi
 import { ListaEsperaEfectuadaComponent } from './pages/reservacion/lista-espera-efectuada/lista-espera-efectuada.component';
 import { SolicitudProcedimientoEfectuadoComponent } from './pages/reservacion/solicitud-procedimiento-efectuado/solicitud-procedimiento-efectuado.component';
 import { DeviceDetectorService } from 'ngx-device-detector';
+import { DebounceClickDirective } from './shared/directives/preventDbclick.directive';
 
 @NgModule({
   declarations: [
@@ -62,6 +63,7 @@ import { DeviceDetectorService } from 'ngx-device-detector';
     ErrorValidacionComponent,
     ReservacionEfectuadaComponent,
     RutFormaterDirective,
+    DebounceClickDirective,
     DaysOfWeekComponent,
     AnularReservaComponent,
     BuscarCitaComponent,

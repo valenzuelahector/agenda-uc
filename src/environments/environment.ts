@@ -53,8 +53,8 @@ export const ENV = {
 export const ENV = {
   
   baseApi: 'https://apigw.ucchristus.cl',
-  servRoute: '/agendaambulatoria-pre',
-  profRoute: '/profesionales-pre',
+  servRoute: '/agendaambulatoria-prod',
+  profRoute: '/profesionales-prod',
   idPlanSaludInit: '0b7a577d-6364-4b28-b2ba-a96e00e243ac',
   idCentrosNoDisponibles: [],
   idCentroPrioritario: '52e43c90-8ab7-4e34-afcb-a96f0106bbd1',

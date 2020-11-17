@@ -34,6 +34,7 @@ export class IdentificacionComponent implements OnInit, OnChanges {
   public paises: any = [];
   public regiones: any = [];
   public comunas: any = [];
+  public confirmarReservaEnable = true;
   public identifText = 'Identificación del Paciente';
   public infoAdicionaPaciente: any = {
     telefono: null,
@@ -279,6 +280,7 @@ export class IdentificacionComponent implements OnInit, OnChanges {
       });
       if (rm.length === 1) {
         this.dirUpdate.region = rm[0];
+        this.getComunas({ value: rm[0]})
       }
     }
   }
@@ -527,7 +529,11 @@ export class IdentificacionComponent implements OnInit, OnChanges {
       fechaTermino.setMinutes(fechaTermino.getMinutes() + duracion);
       let fTermino = this.utils.toLocalScl(fechaTermino, this.calendario.cupo.compensacion);
 
+      this.confirmarReservaEnable = false;
+
+      
       this.reglasValidacion(fecha, fTermino).then(async data => {
+
 
         if (!data['listaTiposDeCita'] || !data['listaTiposDeCita'][0]) {
           if (data['statusCod'] && data['statusCod'].toUpperCase() == 'ERR') {
@@ -535,6 +541,7 @@ export class IdentificacionComponent implements OnInit, OnChanges {
           } else {
             this.utils.mDialog("Error", "No se ha podido verificar la Disponibilidad del Cupo. Intente nuevamente.", "message");
           }
+          this.confirmarReservaEnable = true;
           return false;
         }
 
@@ -610,6 +617,7 @@ export class IdentificacionComponent implements OnInit, OnChanges {
               direccionCentro: (data['listaCentros'] && data['listaCentros'][0] && data['listaCentros'][0]['direccion']) ? data['listaCentros'][0]['direccion'] : null
             });
 
+
             if (this.listaEspera) {
               if (this.busquedaInicial.gtagActionName) {
                 gtag('event', this.busquedaInicial.gtagActionName, { 'event_category': this.busquedaInicial.gtagName, 'event_label': `j.1) Inscripción en Lista de Espera`, 'value': '0' });
@@ -626,6 +634,8 @@ export class IdentificacionComponent implements OnInit, OnChanges {
             }
 
           }
+
+          this.confirmarReservaEnable = true;
 
 
         });
