@@ -30,6 +30,15 @@ gtag('config', 'UA-143119471-1', { 'optimize_id': 'GTM-WV9NXL6'});
         r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
         a.appendChild(r);
     })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
+      var isIE = /*@cc_on!@*/false || !!document.documentMode;
+      if(isIE){
+        var info = "<div style='position:absolute; width:100%; top:50%; margin-top:-115px'>"
+          + '<img src="assets/images/logo.png" style="margin:30px auto; display:block;">'
+          + "<p style='width:940px; margin:0 auto; text-align:center; font-weight:400;'>Estimado Paciente, la Agenda de Citas no puede ser visualizada en versiones de Internet Explorer. <br />Le invitamos a actualizar su"
+          + "  explorador o usar otro como <b>Google, Edge, Firefox, Opera, Safari o Brave.</b> </p>"
+          + "</div>"
+        document.write(info);
+      }
 </script>
 
 
@@ -47,7 +56,7 @@ gtag('config', 'UA-143119471-1', { 'optimize_id': 'GTM-WV9NXL6'});
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 
 </head>
-<body>
+<body id="body">
      <!-- Google Tag Manager (noscript) -->
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-M8RKJKB"
 height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
