@@ -130,12 +130,16 @@ export class UtilsService {
     }
     return true;
   }
-
+  /*
   compareFn: ((f1: any, f2: any) => boolean) | null = this.compareByValue;
 
   compareByValue(f1: any, f2: any) {
     return f1 && f2 && f1.id === f2.id;
-  }
+  }*/
+
+  compareFn(f1: any, f2: any): boolean {
+    return f1 && f2 ? f1.id === f2.id : f1 === f2;
+}
 
   reiniciarReserva() {
     this.nuevaHora.emit(true);

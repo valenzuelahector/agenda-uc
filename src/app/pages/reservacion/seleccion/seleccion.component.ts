@@ -91,10 +91,10 @@ export class SeleccionComponent implements OnInit, OnChanges {
   @HostListener('window:scroll', ['$event'])
   onScroll(event) {
     //if (this.enableScroll) {
-      let wPos = window.scrollY;
-      let dayWeekPos = this.getOffsetTop((<HTMLElement>document.getElementById('dayWeek')));
-      this.dayWeekFixed = (wPos >= dayWeekPos) ? true : false
-   // }
+    let wPos = window.scrollY;
+    let dayWeekPos = this.getOffsetTop((<HTMLElement>document.getElementById('dayWeek')));
+    this.dayWeekFixed = (wPos >= dayWeekPos) ? true : false
+    // }
 
   }
 
@@ -147,7 +147,27 @@ export class SeleccionComponent implements OnInit, OnChanges {
         }
       })
       this.recursos[key]['poseeMes'] = posee;
-    })
+    });
+
+    this.moverSinCuposAlFinal();
+
+  }
+
+  moverSinCuposAlFinal(){
+    const recursos = clone(this.recursos);
+    const conCupos = recursos.filter( item => {
+      if(item.poseeMes){
+        return item;
+      }
+    });
+
+    const sinCupos = recursos.filter( item => {
+      if(!item.poseeMes){
+        return item;
+      }
+    });
+
+    this.recursos = conCupos.concat(sinCupos)
   }
 
   resetCalendario() {
@@ -166,11 +186,17 @@ export class SeleccionComponent implements OnInit, OnChanges {
 
     this.displayCalendar = false;
     this.selectedDate = {};
-    /*
+
     if(this.filtroAplicado){
+      this.filtroAplicado = false;
+      this.filtroHoras = 'ALL';
+      this.filtro = {
+        idCentro: ENV.idRegion,
+        nombre: 'TODOS'
+      }
       await this.filtrarBusqueda();
     }
-*/
+
     if (fromBtn) {
       this.maxNumberSearch = 5;
     }
@@ -303,6 +329,9 @@ export class SeleccionComponent implements OnInit, OnChanges {
           }
 
         } else {
+          this.setRecursosCache().clearItem();
+          this.setRecursosCache().setItem(JSON.stringify(this.recursos));
+          this.setCentrosBusquedas(this.recursos);
           this.restoreCalendar();
         }
 
@@ -319,7 +348,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
 
     this.busquedaInicial.centrosDisponibles = [];
     recursos.forEach((val, key) => {
-      val['listaCupos'].forEach((valLC, keyLC) => {
+      val['listaCuposMes'].forEach((valLC, keyLC) => {
         let foundCentro = false;
         valLC['centro']['nombreCentro'] = valLC['centro']['nombre'];
         valLC['centro']['idCentro'] = valLC['centro']['id'];
@@ -335,13 +364,13 @@ export class SeleccionComponent implements OnInit, OnChanges {
       });
     });
 
-    if (this.busquedaInicial.centrosDisponibles.length > 1) {
+//    if (this.busquedaInicial.centrosDisponibles.length > 1) {
       this.busquedaInicial.centrosDisponibles.unshift({
         idCentro: ENV.idRegion,
         nombre: 'Todos los centros',
         detalle: 'Todos - Región Metropolitana'
       })
-    }
+//    }
   }
 
   prepareTooltip() {
@@ -438,12 +467,19 @@ export class SeleccionComponent implements OnInit, OnChanges {
     let nRecursos = [];
     let found;
 
+    recursosActuales.forEach((valRa, keyRa) => {
+      valRa['listaCuposMes'] = [];
+    });
+
     recursosNuevos.forEach((valRn, keyRn) => {
+      
+      valRn['listaCuposMes'] = valRn['listaCupos'];
 
       found = false;
       recursosActuales.forEach((valRa, keyRa) => {
-        if (valRn['id'] === valRa['id']) {
 
+        if (valRn['id'] === valRa['id']) {
+          valRa['listaCuposMes'] = valRn['listaCupos'];
           Object.keys(valRa['fechasDisponibles']).forEach(keyRaFd => {
             if (valRa['fechasDisponibles'][keyRaFd].length > 0) {
               valRn['fechasDisponibles'][keyRaFd] = clone(valRa['fechasDisponibles'][keyRaFd]);
@@ -567,9 +603,6 @@ export class SeleccionComponent implements OnInit, OnChanges {
       this.centrosProfesional[i].push(agrupCentros[key]);
     })
 
-    gtag('event', 'Paso 02', { 'event_category': 'Reserva de Hora | Selección', 'event_label': 'Selección-Calendario' });
-
-
   }
 
   getNCentros(items) {
@@ -671,12 +704,11 @@ export class SeleccionComponent implements OnInit, OnChanges {
   }
 
   seleccionarHora(data) {
-   
+
     this.horaSeleccionada = data;
     this.calendario.emit(data);
-    gtag('event', 'Paso 02', { 'event_category': 'Reserva de Hora | Selección', 'event_label': 'Selección-Hora' });
 
-    if(this.busquedaInicial.gtagActionName){
+    if (this.busquedaInicial.gtagActionName) {
 
       gtag('event', this.busquedaInicial.gtagActionName, { 'event_category': this.busquedaInicial.gtagName, 'event_label': `f) Fecha y Hora Consulta: ${data.cupo.fechaHora}`, 'value': '0' });
       gtag('event', this.busquedaInicial.gtagActionName, { 'event_category': this.busquedaInicial.gtagName, 'event_label': `g) Centro de Consulta: ${data.cupo.centro.nombre}`, 'value': '0' });
@@ -880,14 +912,13 @@ export class SeleccionComponent implements OnInit, OnChanges {
                 aplicaHorario = true;
               }
 
+              if (!idCentrosDisp[cupo.centro.id]) {
+                idCentrosDisp[cupo.centro.id] = { nombre: cupo.centro.nombre, cupos: [] }
+              }
+
+
               if (aplicaCentro && aplicaHorario) {
-
-                if (idCentrosDisp[cupo.centro.id]) {
-                  idCentrosDisp[cupo.centro.id]['cupos'].push(cupo);
-                } else {
-                  idCentrosDisp[cupo.centro.id] = { nombre: cupo.centro.nombre, cupos: [] }
-                }
-
+                idCentrosDisp[cupo.centro.id]['cupos'].push(cupo);
                 return cupo;
               }
 
@@ -898,14 +929,17 @@ export class SeleccionComponent implements OnInit, OnChanges {
           });
 
           Object.keys(idCentrosDisp).forEach(key => {
-            listaCupos.push({
-              centro: { id: key, nombre: idCentrosDisp[key]['nombre'], nombreCentro: idCentrosDisp[key]['nombre'] },
-              cupos: idCentrosDisp[key]['cupos']
-            });
+            if ((this.filtro.nombre.toLowerCase().includes('todos') || this.filtro.idCentro === key) && idCentrosDisp[key]['cupos'].length > 0) {
+              listaCupos.push({
+                centro: { id: key, nombre: idCentrosDisp[key]['nombre'], nombreCentro: idCentrosDisp[key]['nombre'] },
+                cupos: idCentrosDisp[key]['cupos']
+              });
+            }
           });
 
           re.listaCupos = listaCupos;
-
+          re.listaCuposMes = listaCupos;
+          re.proximaFechaEpoch = this.getProximaFechaEpoch(listaCupos)
           re['datesToHighlight'] = { dates: [], displayed: false, dateClass: null };
           re['datesToHighlight']['displayed'] = true;
           re['datesToHighlight']['dateClass'] = this.dateClass(re['fechasDisponibles']);
@@ -917,29 +951,42 @@ export class SeleccionComponent implements OnInit, OnChanges {
         this.recursos = this.orderPipe.transform(recursos, 'proximaFechaEpoch');
         this.determinarMesSinCupo();
 
-        const recc = clone(this.recursos);
-        this.recursos = recc.filter(item => {
-          if (item.poseeMes) {
-            return item;
-          }
-        })
+        if(this.filtroAplicado){
+          const recc = clone(this.recursos);
+          this.recursos = recc.filter(item => {
+            if (item.poseeMes) {
+              return item;
+            }
+          })
+        }
+
         //  this.setCentrosBusquedas(this.recursos);
 
         setTimeout(() => {
           this.restoreCalendar();
           this.prepareTooltip();
           this.utils.hideProgressBar();
-
           resolve(true);
         }, 2000);
 
       } catch (err) {
-
       }
     });
 
   }
 
+  getProximaFechaEpoch(listaCupos) {
+    if (listaCupos.length > 0) {
+      const horas = listaCupos.map(item => {
+        return item.cupos[0].horaEpoch
+      });
+      return Math.min(...horas);
+    } else {
+      return null;
+    }
+
+
+  }
 
   setRecursosCache() {
     return {
@@ -971,11 +1018,11 @@ export class SeleccionComponent implements OnInit, OnChanges {
     }
 
     datesToEvaluate.forEach((val, key) => {
-      if(this.getNCentros(fechasDisponibles[val]).length > 1 ){
+      if (this.getNCentros(fechasDisponibles[val]).length > 1) {
         hasCupoMultiple = true;
       }
     });
 
-    return  hasCupoMultiple;
+    return hasCupoMultiple;
   }
 }

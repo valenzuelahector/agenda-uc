@@ -34,6 +34,7 @@ export class IdentificacionComponent implements OnInit, OnChanges {
   public paises: any = [];
   public regiones: any = [];
   public comunas: any = [];
+  public confirmarReservaEnable = true;
   public identifText = 'Identificación del Paciente';
   public infoAdicionaPaciente: any = {
     telefono: null,
@@ -262,6 +263,28 @@ export class IdentificacionComponent implements OnInit, OnChanges {
     this.resetDir();
   }
 
+  cambiarDireccion(){
+
+    this.editDir = true;
+    const pais = this.paises.filter(item => {
+      if (item.nombre.toLowerCase().includes('chile')) {
+        return item;
+      }
+    });
+    if (pais.length === 1) {
+      this.dirUpdate.pais = pais[0];
+      const rm = this.regiones.filter(item => {
+        if (item.nombre.toLowerCase().includes('metropolitana')) {
+          return item;
+        }
+      });
+      if (rm.length === 1) {
+        this.dirUpdate.region = rm[0];
+        this.getComunas({ value: rm[0]})
+      }
+    }
+  }
+
   buscarPaciente() {
 
     this.findPaciente = false;
@@ -297,10 +320,7 @@ export class IdentificacionComponent implements OnInit, OnChanges {
       }
 
       this.findPaciente = true;
-
       gtag('event', 'Clic', { 'event_category': 'Reserva de Hora', 'event_label': 'Paso3:Identificación-Buscar' });
-
-
 
     }, err => {
       this.utils.mDialog("Error", "No se ha podido consultar al paciente, intente nuevamente", "message");
@@ -358,6 +378,7 @@ export class IdentificacionComponent implements OnInit, OnChanges {
           }
         });
         if (rm.length === 1) {
+          this.dirUpdate.region = rm[0];
           this.pacienteForm.patchValue({ dir_region: rm[0] });
           this.getComunas({ value: rm[0] });
         }
@@ -508,7 +529,11 @@ export class IdentificacionComponent implements OnInit, OnChanges {
       fechaTermino.setMinutes(fechaTermino.getMinutes() + duracion);
       let fTermino = this.utils.toLocalScl(fechaTermino, this.calendario.cupo.compensacion);
 
+      this.confirmarReservaEnable = false;
+
+      
       this.reglasValidacion(fecha, fTermino).then(async data => {
+
 
         if (!data['listaTiposDeCita'] || !data['listaTiposDeCita'][0]) {
           if (data['statusCod'] && data['statusCod'].toUpperCase() == 'ERR') {
@@ -516,6 +541,7 @@ export class IdentificacionComponent implements OnInit, OnChanges {
           } else {
             this.utils.mDialog("Error", "No se ha podido verificar la Disponibilidad del Cupo. Intente nuevamente.", "message");
           }
+          this.confirmarReservaEnable = true;
           return false;
         }
 
@@ -591,13 +617,13 @@ export class IdentificacionComponent implements OnInit, OnChanges {
               direccionCentro: (data['listaCentros'] && data['listaCentros'][0] && data['listaCentros'][0]['direccion']) ? data['listaCentros'][0]['direccion'] : null
             });
 
+
             if (this.listaEspera) {
               if (this.busquedaInicial.gtagActionName) {
                 gtag('event', this.busquedaInicial.gtagActionName, { 'event_category': this.busquedaInicial.gtagName, 'event_label': `j.1) Inscripción en Lista de Espera`, 'value': '0' });
                 gtag('event', this.busquedaInicial.gtagActionEspProf, { 'event_category': this.busquedaInicial.gtagNameEsp, 'event_label': `j.1) Inscripción en Lista de Espera`, 'value': '0' });
 
               }
-              gtag('event', 'Identificación (Lista de Espera)', { 'event_category': 'Reserva de Hora | Identificación', 'event_label': 'Paso3:Identificación-Siguiente' });
             }
 
             if (this.isProcedimiento) {
@@ -605,15 +631,11 @@ export class IdentificacionComponent implements OnInit, OnChanges {
                 gtag('event', this.busquedaInicial.gtagActionName, { 'event_category': this.busquedaInicial.gtagName, 'event_label': `j.2) Procedimiento Médico Solicitado`, 'value': '0' });
                 gtag('event', this.busquedaInicial.gtagActionEspProf, { 'event_category': this.busquedaInicial.gtagNameEsp, 'event_label': `j.2) Procedimiento Médico Solicitado`, 'value': '0' });
               }
-              gtag('event', 'Identificación (Procedimiento)', { 'event_category': 'Reserva de Hora | Identificación', 'event_label': 'Paso3:Identificación-Siguiente' });
-            }
-
-            if (!this.listaEspera && !this.isProcedimiento) {
-              gtag('event', 'Paso 03', { 'event_category': 'Reserva de Hora | Identificación', 'event_label': 'Confirmar-Reserva' });
-
             }
 
           }
+
+          this.confirmarReservaEnable = true;
 
 
         });
@@ -652,6 +674,7 @@ export class IdentificacionComponent implements OnInit, OnChanges {
     }
 
     gtag('event', 'Clic', { 'event_category': 'Reserva de Hora', 'event_label': 'Paso3:Identificación-Siguiente' });
+
 
   }
 

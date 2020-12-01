@@ -47,6 +47,7 @@ import { ListaEsperaEfectuadaComponent } from './pages/reservacion/lista-espera-
 import { SolicitudProcedimientoEfectuadoComponent } from './pages/reservacion/solicitud-procedimiento-efectuado/solicitud-procedimiento-efectuado.component';
 import { DeviceDetectorService } from 'ngx-device-detector';
 import { EncuestasComponent } from './shared/components/modals/encuestas/encuestas.component';
+import { DebounceClickDirective } from './shared/directives/preventDbclick.directive';
 
 @NgModule({
   declarations: [
@@ -63,6 +64,7 @@ import { EncuestasComponent } from './shared/components/modals/encuestas/encuest
     ErrorValidacionComponent,
     ReservacionEfectuadaComponent,
     RutFormaterDirective,
+    DebounceClickDirective,
     DaysOfWeekComponent,
     AnularReservaComponent,
     BuscarCitaComponent,

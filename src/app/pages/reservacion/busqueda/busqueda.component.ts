@@ -425,11 +425,7 @@ export class BusquedaComponent implements OnInit {
     this.filterServicios = null;
     this.filterCentrosAtencion = null;
     this.getEspecialidades('especialidad');
-    
-
-
     this.expanded = false;
-    gtag('event', 'Selección de Area', { 'event_category': 'Reserva de Hora | Búsqueda', 'event_label': event.value, 'value' : '0' });
 
   }
 
@@ -608,7 +604,10 @@ export class BusquedaComponent implements OnInit {
             this.centroAtencionSelection(matCentro);
             if (this.datosPaciente.documento) {
               this.buscarHora();
+            }else{
+              this.emitterReadQuery(true)
             }
+
           } else {
 
             if (res['centros'].length == 1) {
@@ -702,12 +701,10 @@ export class BusquedaComponent implements OnInit {
     if (tipo == 'especialidad') {
       this.getServicios();
       this.servicioCtrl.enable();
-      gtag('event', 'Especialidad', { 'event_category': 'Reserva de Hora | Búsqueda', 'event_label': this.especialidadSelected['nombreEspecialidad'], 'value': '0' });
 
     } else {
       this.centroAtencionCtrl.enable();
       this.getCentros(this.especialidadCtrl.value.idServicio);
-      gtag('event', 'Especialidad del Profesional', { 'event_category': 'Reserva de Hora | Búsqueda', 'event_label': this.especialidadSelected['nombreEspecialidad'], 'value': '0' });
 
     }
 
@@ -719,7 +716,6 @@ export class BusquedaComponent implements OnInit {
     this.verificarDonantePaciente();
     this.centroAtencionCtrl.enable();
     this.getCentros(this.servicioCtrl.value.idServicio);
-    gtag('event', 'Área de Interés', { 'event_category': 'Reserva de Hora | Búsqueda', 'event_label': this.servicioSelected.nombreServicio, 'value' : '0' });
   }
 
 
@@ -727,7 +723,6 @@ export class BusquedaComponent implements OnInit {
     this.profesionalCtrl.disable();
     this.profesionalSelected = this.profesionalCtrl.value;
     this.especialidadCtrl.enable();
-    gtag('event', 'Profesional', { 'event_category': 'Reserva de Hora | Búsqueda', 'event_label': this.profesionalSelected['nombreProfesional'], 'value': '0' });
     this.getEspecialidades('profesional');
   }
 
@@ -754,7 +749,7 @@ export class BusquedaComponent implements OnInit {
     const dateTime = dateTm.split("-04:00").join("");
     const gtagActionName = `(${dateTime}) - ${this.datosPaciente.tipoDocumento} : ${this.datosPaciente.documento}`;
     const gtagName = 'PROCESO DE RESERVA DE HORA';
-    const gtagNameEsp = "PROCESO DE RESERVA DE HORA | ESPECIALIDAD"
+    let gtagNameEsp = "PROCESO DE RESERVA DE HORA"
     let gtagActionEspProf = "";
 
     if (this.tipoConsulta === 'profesional' && !this.profesionalSelected) {
@@ -788,12 +783,14 @@ export class BusquedaComponent implements OnInit {
     }
 
     if (this.tipoConsulta == 'especialidad') {
+      gtagNameEsp += ' | ESPECIALIDAD';
       gtagActionEspProf = this.especialidadSelected.nombreEspecialidad.toUpperCase();
       this.especialidadSelected['idServicio'] = this.servicioSelected['idServicio'];
       this.especialidadSelected['nombreServicio'] = this.servicioSelected['nombreServicio'];
     }
 
     if(this.profesionalSelected){
+      gtagNameEsp += ' | PROFESIONAL';
       gtagActionEspProf = this.profesionalSelected.nombreProfesional.toLowerCase();
       gtag('event', gtagActionName, { 'event_category': gtagName, 'event_label': `a.1) Profesional: ${this.profesionalSelected.nombreProfesional}`, 'value': '0' });
       gtag('event', gtagActionEspProf, { 'event_category': gtagNameEsp, 'event_label': `a.1) Profesional: ${this.profesionalSelected.nombreProfesional}`, 'value': '0' });
@@ -826,8 +823,6 @@ export class BusquedaComponent implements OnInit {
     })
 
     this.emitterReadQuery(true);
-
-    gtag('event', 'Paso 01', { 'event_category': 'Reserva de Hora | Búsqueda', 'event_label': 'Buscar Hora', 'value': '0' });
 
   }
 
@@ -889,7 +884,6 @@ export class BusquedaComponent implements OnInit {
     } else {
       this.datosPaciente.documento = this.datosPaciente.documentoFormateado;
     }
-    gtag('event', 'RUT Paciente', { 'event_category': 'Reserva de Hora | Búsqueda', 'event_label': 'Ingreso de RUT', 'value': '0' });
 
   }
 

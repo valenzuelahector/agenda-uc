@@ -47,10 +47,12 @@
         <p>Centro de Atención: <b>{{ calendario.cupo.centro.nombre }}</b></p>
       </div>
       <div fxFlex="38%" fxFlex.sm="100%" fxFlex.xs="100%" *ngIf="calendario.cupo?.valorConvenio && calendario.cupo?.valorConvenio?.toString().trim() != '0'">
-        <p>Precio Convenio:
-          <b *ngIf="calendario.cupo?.valorConvenio && calendario.cupo?.valorConvenio?.toString().trim() != '0'">${{ calendario.cupo?.valorConvenio | currency:'CLP':'' }}</b>
+        <p>Valor Convenio *:
+          <b>${{ calendario.cupo?.valorConvenio | currency:'CLP':'' }}</b>
           <!-- <b *ngIf="!calendario.cupo?.valorConvenio || !calendario.cupo?.valorConvenio?.toString().trim() === '0'">Sin precio definido</b> -->
         </p>
+        <p style="font-size: 12px; line-height: 18px;">(*) El valor convenio es referencial para la previsión seleccionada. El copago a cancelar por el paciente, puede cambiar según su plan de salud y cobertura.</p>
+
       </div>
     </div>
   </div>
@@ -147,15 +149,15 @@
 
         </div>
         <div class="col-md-3 field-margin" *ngIf="!editDir">
-          <span class="isLink" (click)="editDir = true;">Cambiar Dirección</span>
+          <span class="isLink" (click)="cambiarDireccion()">Cambiar Dirección</span>
         </div>
 
         <div class="col-md-12 field-margin" *ngIf="editDir">
           <ng-container *ngTemplateOutlet="formUpdDir"></ng-container>
         </div>
 
-        <div class="col-md-12 field-margin " *ngIf="!editDir" style="text-align: center;">
-          <button mat-stroked-button class="btn-azul bigbtn cus-pad nopadright" (click)="procesarPaciente()"
+        <div class="col-md-12 fild-margin " *ngIf="!editDir && confirmarReservaEnable" style="text-align: center;">
+          <button appDebounceClick (debounceClick)="procesarPaciente()"e mat-stroked-button class="btn-azul bigbtn cus-pad nopadright"
             style="margin-right:15px">CONFIRMAR RESERVA</button>
         </div>
       </div>
@@ -171,7 +173,7 @@
       <div *ngIf="!paciente && findPaciente">
         <form [formGroup]="pacienteForm" #formDirective="ngForm" (keyup)="eventEnter($event, 'buscarPaciente')">
           <div>
-            <p>Por favor ingrese sus datos para otorgarle un mejor servicio</p>
+            <p>Ingrese sus datos para otorgarle un mejor servicio</p>
             <div class="row" style="margin-top:20px;">
               <div class="col-md-4 field-margin">
                 <mat-form-field class="full bgwhite-input" appearance="fill">
@@ -275,7 +277,7 @@
             </div>
           </div>
           <div>
-            <p>Por favor ingrese su dirección de residencia o temporal</p>
+            <p>Ingrese su dirección de residencia. Si su país no aparece en la lista favor ingresar Chile, Región Metropolitana, Alhué, Calle: NN Número: 1234</p>
             <div class="row">
               <div class="col-md-4 field-margin">
                 <mat-form-field class="full bgwhite-input" appearance="fill">
@@ -512,17 +514,15 @@
 
   <ng-template #formUpdDir>
     <p class="cwarn">
-      Usted está actualizando su dirección de habitación. <br />
+      Usted está actualizando su dirección de residencia. <br />
       Para guardar cambios haga clic en <b>"Actualizar Dirección"</b> sino en <b>"Cerrar"</b> para continuar con la reserva.</p>
-    <p>Por favor ingrese su dirección de habitación o temporal para actualizarla</p>
+    <p>Ingrese su dirección de residencia para actualizar. Si su país no aparece en la lista favor ingresar Chile, Región Metropolitana, Alhué, Calle: NN Número: 1234</p>
     <div class="row">
       <div class="col-md-4 field-margin">
         <mat-form-field class="full bgwhite-input" appearance="fill">
           <mat-label>País</mat-label>
-          <mat-select [(ngModel)]="dirUpdate.pais" (selectionChange)="getRegiones($event.codigo)">
-            <ng-container *ngFor="let pais of paises">
-              <mat-option [value]="pais">{{ pais.nombre }}</mat-option>
-            </ng-container>
+          <mat-select [(ngModel)]="dirUpdate.pais"  [compareWith]="utils.compareFn" (selectionChange)="getRegiones($event.codigo)" >
+              <mat-option *ngFor="let pais of paises" [value]="pais">{{ pais.nombre }}</mat-option>
           </mat-select>
           <mat-icon matSuffix>map</mat-icon>
         </mat-form-field>
@@ -531,10 +531,8 @@
       <div class="col-md-4 field-margin">
         <mat-form-field class="full bgwhite-input" appearance="fill">
           <mat-label>Región</mat-label>
-          <mat-select [(ngModel)]="dirUpdate.region" (selectionChange)="getComunas($event)">
-            <ng-container *ngFor="let region of regiones">
-              <mat-option [value]="region">{{ region.nombre }}</mat-option>
-            </ng-container>
+          <mat-select [(ngModel)]="dirUpdate.region"  [compareWith]="utils.compareFn" (selectionChange)="getComunas($event)">
+              <mat-option *ngFor="let region of regiones" [value]="region">{{ region.nombre }}</mat-option>
           </mat-select>
           <mat-icon matSuffix>map</mat-icon>
         </mat-form-field>

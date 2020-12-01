@@ -76,7 +76,6 @@
 
 							<div fxLayout="row wrap" fxLayoutAlign="start" fxLayoutGap="1%">
 							
-								<ng-container *ngIf="busquedaInicial.centrosDisponibles.length > 1">
 									<div fxFlex="24%" fxFlex.sm="100%" fxFlex.xs="100%"
 										*ngFor="let cent of busquedaInicial.centrosDisponibles">
 										<p class="ily" matRipple (click)="cambiarFiltroCentro(cent)"
@@ -86,7 +85,6 @@
 											{{ cent.nombre}}
 										</p>
 									</div>
-								</ng-container>
 							</div>
 
 							<div fxLayout="row wrap" fxLayoutAlign="start" fxLayoutGap="1%" style="padding-top:20px;">
@@ -154,10 +152,10 @@
 								</div>
 								<p class="small bxsmall" *ngIf="re?.informacionAdicional">
 									{{ re?.informacionAdicional }}</p>
-								<div class="leyenda" style="margin-top: 20px;">
+								<div class="leyenda" style="margin-top: 20px;" *ngIf="re?.listaCuposMes.length > 0">
 									<b class="smly">Este profesional atiende en:</b>
 									<div fxLayout="row wrap" fxLayoutAlign="space-between">
-										<div *ngFor="let ct of re?.listaCupos" fxFlex="49%" fxFlex.sm="100%"
+										<div *ngFor="let ct of re?.listaCuposMes" fxFlex="49%" fxFlex.sm="100%"
 											fxFlex.xs="100%">
 											<p class="ily">
 												<span class="circl-ily"
