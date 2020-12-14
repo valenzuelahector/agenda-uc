@@ -61,6 +61,7 @@ export class BusquedaComponent implements OnInit {
 
   public needLoadInitEspecialidades: boolean = false;
   public needLoadInitProfesionales: boolean = false;
+  public aplicaMedioContraste = false;
   public tituloIdt = 'Datos del Paciente';
   public datosPaciente = {
     tipoDocumento: 'RUN',
@@ -86,7 +87,7 @@ export class BusquedaComponent implements OnInit {
 
   ngOnInit() {
     this.getAreas();
-    this.mostrarEncuesta({ data: null});
+   // this.mostrarEncuesta({ data: null});
     this.utils.nuevaHora.subscribe(r => {
       this.clearSelection('profesional');
       this.cambiarTipoBusqueda('especialidad');
@@ -743,7 +744,7 @@ export class BusquedaComponent implements OnInit {
 
   }
 
-  buscarHora() {
+  async buscarHora() {
 
     const dateTm:any = this.utils.trDateStr(new Date(), null, -240);
     const dateTime = dateTm.split("-04:00").join("");
@@ -808,6 +809,27 @@ export class BusquedaComponent implements OnInit {
     gtag('event', gtagActionEspProf, { 'event_category': gtagNameEsp, 'event_label': `c) Área de Interés: ${this.especialidadSelected.nombreServicio}`, 'value': '0' });
     gtag('event', gtagActionEspProf, { 'event_category': gtagNameEsp, 'event_label': `d) Centro Médico: ${this.centroAtencionSelected.nombre}`, 'value': '0' });
     gtag('event', gtagActionEspProf, { 'event_category': gtagNameEsp, 'event_label': 'e) ETAPA 1 COMPLETADA', 'value': '0' });
+
+    let continueEncuesta:any = true;
+
+    try{
+
+      if(this.areaSelected.id === 'RIS_IMAGENES' ){
+        console.log(this.servicioSelected)
+        console.log(this.centroAtencionSelected)
+        const respEnc:any = await this.agendaService.getEncuesta(this.servicioSelected.id, this.centroAtencionSelected.idCentro, this.aplicaMedioContraste);
+        if(respEnc && respEnc.encuesta && respEnc.encuesta.length > 0){
+          continueEncuesta = await this.mostrarEncuesta({...this.datosPaciente, ...respEnc});
+        }
+      }
+
+    }catch(err){
+      continueEncuesta = false;
+    }
+
+    if(!continueEncuesta){
+      return;
+    }
 
     this.emitBusqueda.emit({
       area: this.areaSelected,
@@ -905,18 +927,18 @@ export class BusquedaComponent implements OnInit {
     }
   }
 
-  mostrarEncuesta(data) {
-    
-    const dialogConfirm = this.dialog.open(EncuestasComponent, {
-      width: '840px',
-      autoFocus: false,
-    //  disableClose:true,
-      data,
+  mostrarEncuesta(respEnc) {
+    return new Promise((resolve, reject) => {
+      const dialogConfirm = this.dialog.open(EncuestasComponent, {
+        width: '840px',
+        autoFocus: false,
+        disableClose: true,
+        data: respEnc,
+      });
+      
+      dialogConfirm.componentInstance.dialogEvent.subscribe(res => {
+        resolve(res)
+      });
     });
-    
-    dialogConfirm.componentInstance.dialogEvent.subscribe(es => {
-
-    });
-
   }
 }

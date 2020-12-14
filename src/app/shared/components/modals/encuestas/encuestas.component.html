@@ -1,23 +1,28 @@
-<div class="hdr">
+<div class="hdr" style="margin-top: 0px;">
     <h5>Complete las preguntas que se muestran a continuación.</h5>
     <!-- <span class="tpp">{{ curPregunta }}/{{ preguntas.length }}</span> -->
  </div>
-<mat-dialog-content>
-    <div class="questionList">
-        <div *ngFor="let item of [].constructor(preguntas.length - 1); let i = index" style="margin-bottom:25px">
-            <h4><b>{{ i + 1 }})</b> ¿Esta es una pregunta referente al examen de radiología?</h4>
-            <mat-radio-group>
-                <div>
-                    <mat-radio-button color="primary" value="1">Dada todas las opciones marcadas</mat-radio-button>
-                </div>
-                <div>
-                    <mat-radio-button color="primary" value="2">Opción 1</mat-radio-button>
-                </div>  
-                <div>
-                    <mat-radio-button color="primary" value="2">Opción 2</mat-radio-button>
-                </div>
-            </mat-radio-group>
-        </div>
-    
+<mat-dialog-content [ngClass]="{'noscroll' : loading}">
+    <div class="cmatspin" *ngIf="loading">
+        <mat-spinner [diameter]="60"></mat-spinner>
     </div>
+    <div style="height:80px" *ngIf="loading"></div>
+    <div class="questionList" *ngIf="!loading">
+        <div *ngFor="let item of preguntas; let i = index" style="margin-bottom:25px">
+
+            <h4><b>{{ i + 1 }}) </b>{{ item.texto }}</h4>
+            <mat-radio-group *ngIf="item.tipo === 'seleccion_unitaria'" [(ngModel)]="item.seleccion">
+                <mat-radio-button *ngFor="let op of item.opciones" color="primary" [value]="op" style="margin-right: 15px;">{{ op.texto }}</mat-radio-button>
+            </mat-radio-group>
+            <div *ngIf="item.tipo === 'seleccion_multiple'">
+                <mat-checkbox [(ngModel)]="op.enable" *ngFor="let op of item.opciones" color="primary" style="margin-right: 15px;">{{ op.texto }}</mat-checkbox>
+            </div>
+        </div>
+    </div>
+
 </mat-dialog-content>
+<mat-dialog-actions align="end" style="margin:10px 0px 0px 0px" *ngIf="!loading">
+    <button mat-stroked-button style="margin-right: 15px;" class="btnm"  (click)="confirmar(false)">SALIR</button>
+    <button mat-stroked-button color="primary" class="btn-morado btnm" (click)="confirmar(true)">COMPLETAR ENCUESTA</button>
+  </mat-dialog-actions>
+  

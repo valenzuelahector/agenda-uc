@@ -155,4 +155,12 @@ export class AgendaAmbulatoriaService {
 
     return this.http.get(this.baseApi + '/ReglasExclusion/Validar?codContexto=' + codContexto + idCentro + idServicio + idProfesional ).toPromise();
   }
+
+  getEncuesta(idServicio, idCentro, medioContraste){
+    return this.http.get(this.baseApi + `/Encuesta/Obtener?codExamen=${idServicio}&codCentro=${idCentro}&medioContraste=${medioContraste}`).toPromise();
+  }
+
+  postEncuesta(data){
+    return this.http.post(this.baseApi + `/Encuesta/Registrar`, data).toPromise();
+  }
 }
