@@ -282,7 +282,8 @@ export class SeleccionComponent implements OnInit, OnChanges {
         fechaTermino: this.utils.trDateStr(fechaLimite, null, this.compensacion),
         idServicio: this.busquedaInicial.especialidad.idServicio,
         idPlanSalud: ENV.idPlanSaludInit,
-        idProfesional: idProfesional
+        idProfesional: idProfesional,
+        idArea: this.busquedaInicial.area.id
       }).subscribe(data => {
 
         data = this.filtrarRecursosSoloProfesional(data);

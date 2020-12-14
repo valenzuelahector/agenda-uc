@@ -46,7 +46,8 @@ export class UtilsService {
 
   mDialog(title: string, message: string, type: string) {
     let dialogConfirm = this.dialog.open(MessageComponent, {
-      width: '400px',
+      minWidth: '420px',
+      maxWidth: '720px',
       data: { title: title, message: message, type: type },
       autoFocus: false,
       disableClose:true

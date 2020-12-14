@@ -1,5 +1,7 @@
 <div class="hdr" style="margin-top: 0px;">
-    <h5>Complete las preguntas que se muestran a continuación.</h5>
+    <h5 *ngIf="!loading">Complete las preguntas que se muestran a continuación.</h5>
+    <h5 *ngIf="loading">Validando encuesta, por favor espere...</h5>
+
     <!-- <span class="tpp">{{ curPregunta }}/{{ preguntas.length }}</span> -->
  </div>
 <mat-dialog-content [ngClass]="{'noscroll' : loading}">

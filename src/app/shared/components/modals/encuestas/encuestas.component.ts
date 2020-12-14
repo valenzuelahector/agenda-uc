@@ -36,8 +36,19 @@ export class EncuestasComponent implements OnInit {
     }, 1500)
   }
 
-  test() {
-    console.log(this.preguntas)
+  validar(){
+
+    const preguntasFaltantes = [];
+
+    this.preguntas.forEach((val, key) => {
+
+      if (val.tipo === 'seleccion_unitaria' && !val.seleccion) {
+        preguntasFaltantes.push(key + 1)
+      }
+
+    });
+
+    return preguntasFaltantes;
   }
 
   async confirmar(action) {
@@ -48,7 +59,12 @@ export class EncuestasComponent implements OnInit {
         idEncuesta: String(this.inp.idEncuesta),
         respuestas: []
       }
-      console.log(this.preguntas)
+      const preguntasFaltantes = this.validar();
+      
+      if(preguntasFaltantes.length > 0){
+        this.utils.mDialog("Estimado Paciente", "Aún falta por contestar las preguntas: " + preguntasFaltantes.join(','), "message");
+        return false;
+      }
 
       this.preguntas.forEach((val, key) => {
 
@@ -89,7 +105,7 @@ export class EncuestasComponent implements OnInit {
 
       } else if (resp.resultado && (resp.resultado.toUpperCase() === 'POSITIVO' || resp.resultado.toUpperCase().includes('PRECAUC'))) {
 
-        action = false;
+        action = true;
 
       } else {
 
