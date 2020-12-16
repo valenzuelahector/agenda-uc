@@ -85,6 +85,7 @@ export class EncuestasComponent implements OnInit {
         }
 
       });
+
       this.loading = true;
       const resp: any = await this.agendaService.postEncuesta(data);
 
@@ -95,7 +96,7 @@ export class EncuestasComponent implements OnInit {
         });
       }
 
-      if(mensajes !== ''){
+      if(mensajes !== '' && (resp.resultado.toUpperCase() === 'NEGATIVO' || resp.resultado.toUpperCase().includes('PRECAUC'))){
         this.utils.mDialog("Estimado Paciente", mensajes, 'message');
       }
 
