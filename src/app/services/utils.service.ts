@@ -316,4 +316,62 @@ export class UtilsService {
     });
     return color;
   }
+
+  async prepareFile(file: any) {
+
+    const datasUpload = [];
+    let reader = new FileReader();
+    let size = Math.round((file['size'] / 1000) * 100) / 100;
+
+    return new Promise((resolve, reject) => {
+
+      if (size <= 5000) {
+
+        reader.readAsDataURL(file);
+        reader.onload = () => {
+
+          let file64 = String(reader.result).split(";");
+          let namesplit = file['name'].split(".");
+
+          let data = {
+            name: file['name'],
+            size: size + "KB",
+            displayName: `${namesplit[0].substring(0, 16)}....${namesplit[1]}`,
+            mimetype: file64[0].split(":")[1],
+            file64: file64[1].split(",")[1],
+            file: String(reader.result)
+          }
+
+          if (this.validarMimetype(data.mimetype)) {
+            datasUpload.push(data);
+            resolve(datasUpload);
+          } else {
+            reject(false);
+            this.mDialog("Error", "El tipo de archivo no es permitido.", "message");
+          }
+
+        };
+
+      } else {
+        this.mDialog("Error", "El tamaño máximo permitido del archivo es 5MB.", "message");
+      }
+
+    });
+
+  }
+
+  validarMimetype(mimeType) {
+
+    let isValid = false;
+
+    switch (mimeType) {
+      case 'image/png': isValid = true; break;
+      case 'image/jpeg': isValid = true; break;
+      case 'image/gif': isValid = true; break;
+      case 'application/pdf': isValid = true; break;
+    }
+
+    return isValid;
+  }
+
 }

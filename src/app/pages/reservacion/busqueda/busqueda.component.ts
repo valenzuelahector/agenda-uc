@@ -63,11 +63,21 @@ export class BusquedaComponent implements OnInit {
   public needLoadInitProfesionales: boolean = false;
   public aplicaMedioContraste = false;
   public tituloIdt = 'Datos del Paciente';
-  public datosPaciente = {
+  
+  public datosPaciente: any = {
     tipoDocumento: 'RUN',
     documento: null,
     documentoFormateado: null
   }
+
+  public datosImagenes = {
+    aplicaMedioContraste: false,
+    archivo: null,
+    requierePresupuesto: false,
+    idEncuesta:null
+  }
+
+  public datasUpload = [];
 
   @Output() public emitReadQuery: EventEmitter<boolean> = new EventEmitter();
   @Output() public emitBusqueda: EventEmitter<any> = new EventEmitter();
@@ -798,27 +808,20 @@ export class BusquedaComponent implements OnInit {
 
     }
 
-    gtag('event', gtagActionName, { 'event_category': gtagName, 'event_label': `a) Área Médica: ${this.areaSelected.nombre}`, 'value': '0' });
-    gtag('event', gtagActionName, { 'event_category': gtagName, 'event_label': `b) Especiallidad: ${this.especialidadSelected.nombreEspecialidad}`, 'value': '0' });
-    gtag('event', gtagActionName, { 'event_category': gtagName, 'event_label': `c) Área de Interés: ${this.especialidadSelected.nombreServicio}`, 'value': '0' });
-    gtag('event', gtagActionName, { 'event_category': gtagName, 'event_label': `d) Centro Médico: ${this.centroAtencionSelected.nombre}`, 'value': '0' });
-    gtag('event', gtagActionName, { 'event_category': gtagName, 'event_label': 'e) ETAPA 1 COMPLETADA', 'value': '0' });
-
-    gtag('event', gtagActionEspProf, { 'event_category': gtagNameEsp, 'event_label': `a) Área Médica: ${this.areaSelected.nombre}`, 'value': '0' });
-    gtag('event', gtagActionEspProf, { 'event_category': gtagNameEsp, 'event_label': `b) Especiallidad: ${this.especialidadSelected.nombreEspecialidad}`, 'value': '0' });
-    gtag('event', gtagActionEspProf, { 'event_category': gtagNameEsp, 'event_label': `c) Área de Interés: ${this.especialidadSelected.nombreServicio}`, 'value': '0' });
-    gtag('event', gtagActionEspProf, { 'event_category': gtagNameEsp, 'event_label': `d) Centro Médico: ${this.centroAtencionSelected.nombre}`, 'value': '0' });
-    gtag('event', gtagActionEspProf, { 'event_category': gtagNameEsp, 'event_label': 'e) ETAPA 1 COMPLETADA', 'value': '0' });
-
     let continueEncuesta:any = true;
 
     try{
 
       if(this.areaSelected.id === 'RIS_IMAGENES' ){
-        console.log(this.servicioSelected)
-        console.log(this.centroAtencionSelected)
-        const respEnc:any = await this.agendaService.getEncuesta(this.servicioSelected.id, this.centroAtencionSelected.idCentro, this.aplicaMedioContraste);
+        
+        if(!this.datosImagenes.archivo){
+          this.utils.mDialog("Error", "Debe adjuntar orden médica.", "message");
+          return;
+        }
+
+        const respEnc:any = await this.agendaService.getEncuesta(this.servicioSelected.id, this.centroAtencionSelected.idCentro, this.datosImagenes.aplicaMedioContraste);
         if(respEnc && respEnc.encuesta && respEnc.encuesta.length > 0){
+          this.datosImagenes.idEncuesta = respEnc.idEncuesta;
           continueEncuesta = await this.mostrarEncuesta({...this.datosPaciente, ...respEnc});
         }
       }
@@ -831,6 +834,20 @@ export class BusquedaComponent implements OnInit {
       return;
     }
 
+
+    gtag('event', gtagActionName, { 'event_category': gtagName, 'event_label': `a) Área Médica: ${this.areaSelected.nombre}`, 'value': '0' });
+    gtag('event', gtagActionName, { 'event_category': gtagName, 'event_label': `b) Especiallidad: ${this.especialidadSelected.nombreEspecialidad}`, 'value': '0' });
+    gtag('event', gtagActionName, { 'event_category': gtagName, 'event_label': `c) Área de Interés: ${this.especialidadSelected.nombreServicio}`, 'value': '0' });
+    gtag('event', gtagActionName, { 'event_category': gtagName, 'event_label': `d) Centro Médico: ${this.centroAtencionSelected.nombre}`, 'value': '0' });
+    gtag('event', gtagActionName, { 'event_category': gtagName, 'event_label': 'e) ETAPA 1 COMPLETADA', 'value': '0' });
+
+    gtag('event', gtagActionEspProf, { 'event_category': gtagNameEsp, 'event_label': `a) Área Médica: ${this.areaSelected.nombre}`, 'value': '0' });
+    gtag('event', gtagActionEspProf, { 'event_category': gtagNameEsp, 'event_label': `b) Especiallidad: ${this.especialidadSelected.nombreEspecialidad}`, 'value': '0' });
+    gtag('event', gtagActionEspProf, { 'event_category': gtagNameEsp, 'event_label': `c) Área de Interés: ${this.especialidadSelected.nombreServicio}`, 'value': '0' });
+    gtag('event', gtagActionEspProf, { 'event_category': gtagNameEsp, 'event_label': `d) Centro Médico: ${this.centroAtencionSelected.nombre}`, 'value': '0' });
+    gtag('event', gtagActionEspProf, { 'event_category': gtagNameEsp, 'event_label': 'e) ETAPA 1 COMPLETADA', 'value': '0' });
+
+
     this.emitBusqueda.emit({
       area: this.areaSelected,
       profesional: this.profesionalSelected,
@@ -838,6 +855,7 @@ export class BusquedaComponent implements OnInit {
       centroAtencion: this.centroAtencionSelected,
       documentoPaciente: this.datosPaciente,
       centrosDisponibles: [],
+      datosImagenes: this.datosImagenes,
       gtagActionName,
       gtagName, 
       gtagActionEspProf,
@@ -941,4 +959,43 @@ export class BusquedaComponent implements OnInit {
       });
     });
   }
+
+  
+  resetInputFile() {
+    let input = document.getElementById("ordenmedica");
+    input['value'] = "";
+  }
+
+  openInputFile() {
+    document.getElementById("ordenmedica").click();
+  }
+
+  async fileChange(files: File[]) {
+
+    let datasUpload = [];
+    this.datasUpload = []
+
+    try {
+
+      for await (let a of Object.keys(files)) {
+        const filesArr = await this.utils.prepareFile(files[a]);
+        datasUpload = datasUpload.concat(filesArr)
+      }
+      
+      this.datasUpload = datasUpload;
+      this.datosImagenes.archivo = this.datasUpload[0];
+      this.resetInputFile();
+
+    } catch (err) {
+
+      return;
+
+    }
+
+  }
+
+  borrarArchivo() {
+    this.datosImagenes.archivo = null;
+  }
+
 }

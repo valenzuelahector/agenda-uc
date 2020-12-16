@@ -7028,3 +7028,68 @@ width: 850px;
     padding: 10px 21px !important;
     text-transform: uppercase;
 }
+
+.btnOM{
+
+    position: relative;
+    cursor: pointer;
+    background: #fff;
+    padding: 13px 10px;
+    padding-left: 55px;
+    text-align: left;
+    font-weight: bold;
+    font-size: 14px;
+    line-height: 22px;
+  
+  
+    &.suc{
+      
+      background: #50a000;
+      color:#fff !important;
+  
+      p{
+        color:#fff !important;
+      }
+  
+      .mat-icon.iic{
+        color:#fff !important;
+      }
+  
+      &:hover{
+        background: #50a000 !important;
+      }
+  
+    }
+    
+    &:hover{
+      background:#f9f9f9  !important;
+    }
+  
+    .mat-icon.iic{
+      position: absolute !important;
+      left: 8px;
+      top: 18px;
+      font-size: 40px;
+      color: #802E87;
+    }
+  
+    span{
+      font-weight: 300;
+      display: block;
+      text-transform: uppercase;
+      font-size: 12px;
+    }
+  
+  }
+  
+  .rmvFile{
+    
+    background: #fff;
+    right: -15px;
+    position: absolute !important;
+    top: -15px;
+  
+    .mat-icon{
+      color: #50a000!important;
+    }
+  }

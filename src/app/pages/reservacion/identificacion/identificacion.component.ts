@@ -1000,13 +1000,17 @@ export class IdentificacionComponent implements OnInit, OnChanges {
 
   async fileChange(files: File[]) {
 
+    let datasUpload = [];
     this.datasUpload = []
 
     try {
 
       for await (let a of Object.keys(files)) {
-        await this.prepareFile(files[a]);
+        const filesArr = await this.utils.prepareFile(files[a]);
+        datasUpload = datasUpload.concat(filesArr)
       }
+
+      this.datasUpload = datasUpload;
       this.procedimientoSeleccion.archivo = this.datasUpload[0];
       this.resetInputFile();
 
@@ -1016,62 +1020,6 @@ export class IdentificacionComponent implements OnInit, OnChanges {
 
     }
 
-  }
-
-  async prepareFile(file: any) {
-
-    let reader = new FileReader();
-    let size = Math.round((file['size'] / 1000) * 100) / 100;
-
-    return new Promise((resolve, reject) => {
-
-      if (size <= 5000) {
-
-        reader.readAsDataURL(file);
-        reader.onload = () => {
-
-          let file64 = String(reader.result).split(";");
-          let namesplit = file['name'].split(".");
-
-          let data = {
-            name: file['name'],
-            size: size + "KB",
-            displayName: `${namesplit[0].substring(0, 16)}....${namesplit[1]}`,
-            mimetype: file64[0].split(":")[1],
-            file64: file64[1].split(",")[1],
-            file: String(reader.result)
-          }
-
-          if (this.validarMimetype(data.mimetype)) {
-            this.datasUpload.push(data);
-            resolve(true);
-          } else {
-            reject(false);
-            this.utils.mDialog("Error", "El tipo de archivo no es permitido.", "message");
-          }
-
-        };
-
-      } else {
-        this.utils.mDialog("Error", "El tamaño máximo permitido del archivo es 5MB.", "message");
-      }
-
-    });
-
-  }
-
-  validarMimetype(mimeType) {
-
-    let isValid = false;
-
-    switch (mimeType) {
-      case 'image/png': isValid = true; break;
-      case 'image/jpeg': isValid = true; break;
-      case 'image/gif': isValid = true; break;
-      case 'application/pdf': isValid = true; break;
-    }
-
-    return isValid;
   }
 
   borrarArchivo() {

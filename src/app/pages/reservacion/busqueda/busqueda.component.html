@@ -181,7 +181,6 @@
       </button>
     </mat-form-field>
 
-    <mat-checkbox [(ngModel)]="aplicaMedioContraste" *ngIf="areaSelected.id === 'RIS_IMAGENES'" color="primary">Usar medio de contraste</mat-checkbox>
 
   </div>
 
@@ -221,4 +220,30 @@
   </mat-form-field>
   <span class="txtpp" *ngIf="datosPaciente.tipoDocumento == 'PAS'">Inscripción con pasaporte aplica sólo para extranjeros sin RUT</span>
 
+  
+  <mat-checkbox [(ngModel)]="datosImagenes.aplicaMedioContraste" *ngIf="areaSelected?.id === 'RIS_IMAGENES'" color="primary" style="display:block; margin:0px 0px 10px 0px;">Usar medio de contraste</mat-checkbox>
+
+  <mat-checkbox [(ngModel)]="datosImagenes.requierePresupuesto" *ngIf="areaSelected?.id === 'RIS_IMAGENES'" color="primary" style="display:block; margin:10px 0px;">Generar presupuesto</mat-checkbox>
+
+  <div class="ordenMedica" *ngIf="areaSelected?.id === 'RIS_IMAGENES'">
+    <p matRipple class="btnOM" (click)="openInputFile()" *ngIf="!datosImagenes.archivo">
+      <mat-icon class="iic">publish</mat-icon>
+      <span>Haz clic aquí para</span>
+      ADJUNTAR ORDEN MÉDICA
+    </p>
+    <p class="btnOM suc" *ngIf="datosImagenes.archivo">
+      <button mat-icon-button class="rmvFile" (click)="borrarArchivo()">
+        <mat-icon>close</mat-icon>
+      </button>
+      <mat-icon class="iic">done</mat-icon>
+      <span>{{ datosImagenes.archivo.displayName}}</span>
+      ORDEN MÉDICA CARGADA
+    </p>
+    <div class="chkb">
+      <span style="padding:0px !important;">Solo se permiten archivos en formato PNG, JPG y PDF.</span>
+    </div>
+    <input type="file" id="ordenmedica" hidden (change)="fileChange($event.target.files)">
+  </div>
+
+  
 </ng-template>
