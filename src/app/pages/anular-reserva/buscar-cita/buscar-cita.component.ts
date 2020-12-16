@@ -141,7 +141,7 @@ export class BuscarCitaComponent implements OnInit, OnDestroy {
 
   getPaciente(documento, tipoDocumento){
     return new Promise((resolve, reject) => {
-      this.agendaService.getPaciente(documento, tipoDocumento).subscribe( data => {
+      this.agendaService.getPaciente(documento, tipoDocumento, null).subscribe( data => {
         if (data['listaPacientes'] && data['listaPacientes'][0]) {
           resolve(data['listaPacientes'][0]);
         }else{
