@@ -78,22 +78,44 @@ export class ConfirmacionComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   reservar() {
-    
-    let fecha: any = this.utils.toLocalScl(this.calendario.cupo.fechaHora, this.calendario.cupo.compensacion);
+
     this.disableBarReserva = true;
-    this.agendaService.postCita({
+    let adicionalData = {};
+    let fecha: any = this.utils.toLocalScl(this.calendario.cupo.fechaHora, this.calendario.cupo.compensacion);
+    let postData = {
       fechaInicioDesde: fecha,
       idCentro: this.calendario.cupo.centro.id,
-      idRecurso: this.calendario.recurso.id,
-      idServicio: this.busquedaInicial.especialidad.idServicio,
       duracion: this.calendario.cupo.duracion,
       idPaciente: this.paciente.adicional.documento,
-      tipoIdPaciente: this.paciente.adicional.tipoDocumento,
-      paisIdentificador: 'CL',
-      idPlanCobertura: this.paciente.adicional.prevision.idPlan,
-      idDisponibilidad: this.calendario.cupo.disponibilidad.id,
-      idTipoCita: this.calendario.cupo.idTipoCita.id
-    }).subscribe(data => {
+      idServicio: this.busquedaInicial.especialidad.idServicio,
+    }
+
+
+    if(this.busquedaInicial.area.id === 'RIS_IMAGENES'){
+
+      adicionalData = { 
+        idArea: 'RIS_IMAGENES',
+        idEncuesta: this.busquedaInicial.datosImagenes.idEncuesta,
+        requierePresupuesto: this.busquedaInicial.datosImagenes.requierePresupuesto ? 1 : 0,
+        ordenMedica: this.busquedaInicial.datosImagenes.archivo.file64
+      }
+
+    }else{
+
+      adicionalData = {
+        idRecurso: this.calendario.recurso.id,
+        tipoIdPaciente: this.paciente.adicional.tipoDocumento,
+        paisIdentificador: 'CL',
+        idPlanCobertura: this.paciente.adicional.prevision.idPlan,
+        idDisponibilidad: this.calendario.cupo.disponibilidad.id,
+        idTipoCita: this.calendario.cupo.idTipoCita.id  
+      }
+    }
+
+    postData = {...postData, ...adicionalData}
+
+
+    this.agendaService.postCita(postData).subscribe(data => {
       if (data['statusCod'] == 'OK') {
         this.reservaFinalizada = true;
         this.idreserva = data['idCita'];

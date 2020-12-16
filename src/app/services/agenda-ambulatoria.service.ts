@@ -104,7 +104,8 @@ export class AgendaAmbulatoriaService {
   }
 
   geReglasValidacion(query:any){
-    return this.http.get(this.baseApi + '/Agenda/CuposDisponibilidad?idCentro=' + query.idCentro + '&fechaInicio=' + query.fechaInicio + '&fechaTermino=' + query.fechaTermino + '&idServicio=' + query.idServicio + '&idPlanSalud=' + query.idPlanSalud + '&idPaciente='+query.idPaciente+'&idDisponibilidad='+query.idDisponibilidad+'&idProfesional='+query.idProfesional+'&codCanal=PatientPortal')
+    const idArea = query.idArea === 'RIS_IMAGENES' ? '&idArea=RIS_IMAGENES' : '';
+    return this.http.get(this.baseApi + '/Agenda/CuposDisponibilidad?idCentro=' + query.idCentro + '&fechaInicio=' + query.fechaInicio + '&fechaTermino=' + query.fechaTermino + '&idServicio=' + query.idServicio + '&idPlanSalud=' + query.idPlanSalud + '&idPaciente='+query.idPaciente+'&idDisponibilidad='+query.idDisponibilidad+'&idProfesional='+query.idProfesional+'&codCanal=PatientPortal' + idArea)
   }
 
   getMensajes(data, type = null){

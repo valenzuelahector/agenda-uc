@@ -730,7 +730,8 @@ export class IdentificacionComponent implements OnInit, OnChanges {
         idPaciente: this.paciente.id,
         idDisponibilidad: this.calendario.cupo.disponibilidad.id,
         idProfesional: this.calendario.recurso.id,
-        idPlanSalud: this.busquedaPaciente.prevision.id
+        idPlanSalud: this.busquedaPaciente.prevision.id,
+        idArea: this.busquedaInicial.area.id
 
       }).subscribe(data => {
 
