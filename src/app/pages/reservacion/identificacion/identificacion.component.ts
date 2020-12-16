@@ -305,7 +305,7 @@ export class IdentificacionComponent implements OnInit, OnChanges {
       return false;
     }
 
-    this.agendaService.getPaciente(this.busquedaPaciente.documento, this.busquedaPaciente.tipoDocumento).subscribe(res => {
+    this.agendaService.getPaciente(this.busquedaPaciente.documento, this.busquedaPaciente.tipoDocumento, this.busquedaInicial.area.id).subscribe(res => {
 
       if (res['listaPacientes'] && res['listaPacientes'][0]) {
         this.paciente = res['listaPacientes'][0];
