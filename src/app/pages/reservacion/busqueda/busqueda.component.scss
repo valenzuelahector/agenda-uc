@@ -138,10 +138,18 @@
           margin:0px;
           font-size: 13px;
           text-transform: uppercase;
+          position: relative;
+
+          .mat-radio-label-content{
+            white-space: break-spaces;
+            padding-left: 30px;
+          }
+
           .mat-radio-container{
-            top: 5px;
+            top: 10px;
             background:#fff;
             border-radius: 100%;
+            position: absolute;
           }
         }
 
