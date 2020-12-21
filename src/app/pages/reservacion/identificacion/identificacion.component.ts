@@ -504,7 +504,7 @@ export class IdentificacionComponent implements OnInit, OnChanges {
 
   async procesarPaciente() {
 
-    if (this.busquedaPaciente.documento && this.busquedaPaciente.prevision && this.busquedaPaciente.telefono && this.busquedaPaciente.correo) {
+    if (this.busquedaPaciente.documento && (this.busquedaPaciente.prevision || this.busquedaInicial.area.id === 'RIS_IMAGENES') && this.busquedaPaciente.telefono && this.busquedaPaciente.correo) {
 
       let updInfo = this.procesarDatosBusqCliente();
 
@@ -535,7 +535,7 @@ export class IdentificacionComponent implements OnInit, OnChanges {
       this.reglasValidacion(fecha, fTermino).then(async data => {
 
 
-        if (!data['listaTiposDeCita'] || !data['listaTiposDeCita'][0]) {
+        if ((!data['listaTiposDeCita'] || !data['listaTiposDeCita'][0]) && this.busquedaInicial.area.id !== 'RIS_IMAGENES') {
           if (data['statusCod'] && data['statusCod'].toUpperCase() == 'ERR') {
             await this.errReserva(data['usrMsg']);
           } else {
@@ -557,10 +557,12 @@ export class IdentificacionComponent implements OnInit, OnChanges {
           let mensajes = '';
 
           const mejs = (dt && dt['mensajes']) ? dt['mensajes'] : [];
-
-          data['reglas'].forEach(item => {
-            mensajeDeRegla += `<div style="margin-botton:15px;">${item.nombre}.</div>`;
-          });
+          
+          if(data['reglas']){
+            data['reglas'].forEach(item => {
+              mensajeDeRegla += `<div style="margin-botton:15px;">${item.nombre}.</div>`;
+            });
+          }
 
           mejs.forEach(item => {
             mensajes += item.mensaje.contenido;
@@ -641,7 +643,7 @@ export class IdentificacionComponent implements OnInit, OnChanges {
         });
 
       }).catch(async err => {
-
+        console.log(err)
         if (err === 'no-reservable') {
           await this.errReserva('El cupo seleccionado no se encuentra disponible. Seleccione otra hora.');
         } else {
@@ -730,7 +732,7 @@ export class IdentificacionComponent implements OnInit, OnChanges {
         idPaciente: this.paciente.id,
         idDisponibilidad: this.calendario.cupo.disponibilidad.id,
         idProfesional: this.calendario.recurso.id,
-        idPlanSalud: this.busquedaPaciente.prevision.id,
+        idPlanSalud: this.busquedaPaciente.prevision ? this.busquedaPaciente.prevision.id : null,
         idArea: this.busquedaInicial.area.id
 
       }).subscribe(data => {
