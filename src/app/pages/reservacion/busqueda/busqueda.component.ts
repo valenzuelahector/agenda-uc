@@ -624,7 +624,7 @@ export class BusquedaComponent implements OnInit {
             if (res['centros'].length == 1) {
               this.centroAtencionCtrl.patchValue(res['centros'][0]);
               this.centroAtencionSelection(res['centros'][0]);
-            } else if (objTodos && (this.utils.slugify(this.areaSelected.nombre, "-") === 'telemedicina' || this.utils.slugify(this.areaSelected.nombre, "-") === 'consulta-medica-virtual')) {
+            } else if (objTodos && this.areaSelected.id === 'RIS_IMAGENES') {
               this.centroAtencionCtrl.patchValue(objTodos);
               this.centroAtencionSelection(objTodos);
             }
