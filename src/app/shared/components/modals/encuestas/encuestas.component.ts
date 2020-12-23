@@ -52,6 +52,8 @@ export class EncuestasComponent implements OnInit {
   }
 
   async confirmar(action) {
+    
+    let idRespuesta = null;
 
     if (action) {
       const data = {
@@ -107,7 +109,7 @@ export class EncuestasComponent implements OnInit {
       } else if (resp.resultado && (resp.resultado.toUpperCase() === 'POSITIVO' || resp.resultado.toUpperCase().includes('PRECAUC'))) {
 
         action = true;
-
+        idRespuesta = resp.idRespuesta;
       } else {
 
         this.utils.mDialog("Error", 'No se pudo evaluar la encuesta. Intente de nuevo más tarde.', 'message');
@@ -120,7 +122,7 @@ export class EncuestasComponent implements OnInit {
     }
 
 
-    this.dialogEvent.emit(action);
+    this.dialogEvent.emit({action, idRespuesta: idRespuesta});
     this.dialogRef.close();
   }
 }

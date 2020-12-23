@@ -821,8 +821,9 @@ export class BusquedaComponent implements OnInit {
 
         const respEnc:any = await this.agendaService.getEncuesta(this.servicioSelected.id, this.centroAtencionSelected.idCentro, this.datosImagenes.aplicaMedioContraste);
         if(respEnc && respEnc.encuesta && respEnc.encuesta.length > 0){
-          this.datosImagenes.idEncuesta = respEnc.idEncuesta;
-          continueEncuesta = await this.mostrarEncuesta({...this.datosPaciente, ...respEnc});
+          const ressp:any = await this.mostrarEncuesta({...this.datosPaciente, ...respEnc});
+          continueEncuesta = ressp.action;
+          this.datosImagenes.idEncuesta = ressp.idRespuesta;
         }
       }
 

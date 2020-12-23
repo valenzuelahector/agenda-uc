@@ -78,7 +78,7 @@
     <button mat-stroked-button class="c-btn btn-azul2" [ngClass]="{'activo' : tipoConsulta == 'especialidad'}"
       (click)="cambiarTipoBusqueda('especialidad')">ESPECIALIDAD</button>
     <button mat-stroked-button class="c-btn btn-azul2" [ngClass]="{'activo' : tipoConsulta == 'profesional'}"
-      (click)="cambiarTipoBusqueda('profesional')">PROFESIONALES</button>
+      (click)="cambiarTipoBusqueda('profesional')" *ngIf="areaSelected?.id !== 'RIS_IMAGENES'">PROFESIONALES</button>
   </div>
 
   <div *ngIf="tipoConsulta == 'profesional' && loadedProf">
@@ -141,7 +141,7 @@
   <!-- <div *ngIf="(tipoConsulta == 'especialidad' && especialidadSelected) && loadedServ"> -->
   <div *ngIf="tipoConsulta == 'especialidad'">
     <mat-form-field class="full" appearance="fill">
-      <mat-label>Seleccione Área de Interés</mat-label>
+      <mat-label>{{ areaSelected?.id === 'RIS_IMAGENES' ? 'Seleccione un Examen' : 'Seleccione Área de Interés'  }}</mat-label>
       <input matInput type="text" placeholder="Puede buscar por nombre del Servicio" [formControl]="servicioCtrl"
         [matAutocomplete]="auto" autocomplete="off"  #triggerServicios="matAutocompleteTrigger">
       <mat-icon matPrefix style="margin-right: 10px">add_to_photos</mat-icon>
