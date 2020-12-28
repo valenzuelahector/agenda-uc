@@ -488,11 +488,18 @@
       <mat-form-field class="full bgwhite-input cusSelect" appearance="fill">
         <mat-label>Prevision *</mat-label>
         <mat-select [(ngModel)]="procedimientoSeleccion.prevision" [compareWith]="utils.compareFn">
-          <mat-optgroup *ngFor="let com of planesSalud" [label]="com.nombreCompania" class="mat-option-smtext">
-            <mat-option *ngFor="let plan of com.planes" [value]="plan" class="mat-option-smtext">
-              {{plan.nombrePlan}}
+
+          <mat-optgroup [label]="'Previsión Recomendada'">
+            <mat-option *ngFor="let com of planesSalud.companias" [value]="com.planes[0]">
+              {{com.planes[0]?.nombrePlan}}
             </mat-option>
           </mat-optgroup>
+          <mat-optgroup [label]="'Otras Previsiones'">
+            <mat-option *ngFor="let com of planesSalud.companiasExtendido" [value]="com.planes[0]">
+              {{com.planes[0]?.nombrePlan}}
+            </mat-option>
+          </mat-optgroup>
+          
         </mat-select>
         <mat-icon matSuffix>local_hospital</mat-icon>
       </mat-form-field>
