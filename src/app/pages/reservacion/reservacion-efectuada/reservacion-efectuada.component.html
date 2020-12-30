@@ -45,7 +45,7 @@
             <div class="col-lg-12">
               <p><b>Nombre:</b> {{ paciente.nombreCompleto }}</p>
               <p><b>RUT:</b> {{ paciente.numeroDocumentoFormateado }}</p>
-              <p><b>Previsión:</b> {{ paciente.adicional.prevision.nombrePlan }}</p>
+              <p><b>Previsión:</b> {{ paciente.adicional?.prevision?.nombrePlan }}</p>
             </div>
           </div>
         </div>
