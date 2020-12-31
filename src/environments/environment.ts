@@ -8,15 +8,16 @@ export const environment = {
 
 
 export const ENV = {
+  
   baseApi: 'https://apigw.ucchristus.cl',
-  servRoute: '/agendaambulatoria-dev',
-  profRoute: '/profesionales-dev',
+  servRoute: '/agendaambulatoria-prod',
+  profRoute: '/profesionales-prod',
   idPlanSaludInit: '0b7a577d-6364-4b28-b2ba-a96e00e243ac',
   idCentrosNoDisponibles: [],
   idCentroPrioritario: '52e43c90-8ab7-4e34-afcb-a96f0106bbd1',
-  mensajeSinCupos: '<h5>No se encontraron cupos disponibles.</h5>',
-  idExamenProcedimiento: '97bd5208-60d1-4d6c-9d1e-a96e00ddbc15',
-    areaConsultaMedica: {
+  mensajeSinCupos : '<h5>Sin disponibilidad en agendamiento web. En caso de requerir atención presencial para vacunación por campaña influenza ministerial, ésta será por orden de llegada.</h5>',
+  idExamenProcedimiento: 'b2461ac2-9c50-4724-9676-a91a00a91a02',
+  areaConsultaMedica: {
     id: '2a8202d9-1ebd-4f2e-a359-a91a00a91a02',
     nombre: 'Consultas'
   },
@@ -25,6 +26,7 @@ export const ENV = {
     idServicio : '02560c8e-0c28-4e88-9eb4-abd400f8b282'
   },
   idRegion: '6bad9b25-d5df-4565-b5fe-a6f701444053'
+
 }
 /*
 export const ENV = {

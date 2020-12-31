@@ -251,14 +251,22 @@ export class SeleccionComponent implements OnInit, OnChanges {
       let fechaLimite;
       const dayToday = fechaHoy.getDate();
 
-      fechaHoy.setMonth(fechaHoy.getMonth() + this.counterLoader);
+      if(this.counterLoader > 0){
+        fechaHoy.setDate(1)
+        fechaHoy.setHours(12);
+        fechaHoy.setMinutes(0);
+        fechaHoy.setSeconds(0);
+      }
 
+      fechaHoy.setMonth(fechaHoy.getMonth() + this.counterLoader);
+      console.log(fechaHoy)
       if (dayToday === 31 && this.counterLoader > 0) {
         fechaHoy.setMonth(fechaHoy.getMonth() - 1);
       }
 
       fechaLimite = new Date(fechaHoy.getFullYear(), fechaHoy.getMonth() + 1, 0);
       fechaHoy = new Date(this.utils.toLocalScl(fechaHoy, this.compensacion, 'YYYY-MM-DDTHH:mm:ss'));
+      console.log(fechaHoy)
 
       if (this.counterLoader > 0) {
         fechaHoy.setDate(1)
