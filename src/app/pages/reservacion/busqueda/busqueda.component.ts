@@ -104,6 +104,16 @@ export class BusquedaComponent implements OnInit {
     })
   }
 
+  setIdentificacion(params){
+    if(params.rut && params.tipoDocumento){
+      this.datosPaciente = {
+        tipoDocumento : params.tipoDocumento,
+        documento: params.rut,
+        documentoFormateado: this.utils.formatRut(params.rut)
+      }
+    }
+  }
+
   getAreas() {
     this.agendaService.getAreas().subscribe(res => {
 
@@ -112,6 +122,7 @@ export class BusquedaComponent implements OnInit {
 
         this.setDataQueryParams().then(async params => {
           let qp = params;
+          this.setIdentificacion(params);
           this.areaSelected = {};
           let paramArea = await this.getParamsArea();
 
