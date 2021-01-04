@@ -251,6 +251,13 @@ export class SeleccionComponent implements OnInit, OnChanges {
       let fechaLimite;
       const dayToday = fechaHoy.getDate();
 
+      if(this.counterLoader > 0){
+        fechaHoy.setDate(1)
+        fechaHoy.setHours(12);
+        fechaHoy.setMinutes(0);
+        fechaHoy.setSeconds(0);
+      }
+
       fechaHoy.setMonth(fechaHoy.getMonth() + this.counterLoader);
 
       if (dayToday === 31 && this.counterLoader > 0) {
@@ -274,7 +281,6 @@ export class SeleccionComponent implements OnInit, OnChanges {
       fechaLimite.setSeconds(59);
 
       this.navigationDate = { min: fechaHoy, max: fechaLimite };
-
       this.agendaService.getRecursos({
         todosCentro: (this.busquedaInicial.centroAtencion.codigo == 'todos') ? true : false,
         idCentro: this.busquedaInicial.centroAtencion.idCentro,

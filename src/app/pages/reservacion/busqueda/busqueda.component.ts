@@ -118,6 +118,18 @@ export class BusquedaComponent implements OnInit {
     })
   }
 
+  setIdentificacion(params){
+    console.log(params)
+    if(params.rut && params.tipoDocumento){
+      this.datosPaciente = {
+        tipoDocumento : params.tipoDocumento,
+        documento: params.rut,
+        documentoFormateado: this.utils.formatRut(params.rut)
+      }
+      console.log(this.datosPaciente);
+    }
+  }
+
   getAreas() {
     this.agendaService.getAreas().subscribe(res => {
 
@@ -125,7 +137,8 @@ export class BusquedaComponent implements OnInit {
         this.areas = res['areas'];
 
         this.setDataQueryParams().then(async params => {
-          let qp = params;
+          let qp = params;  
+          this.setIdentificacion(params);
           this.areaSelected = {};
           let paramArea = await this.getParamsArea();
 
@@ -211,7 +224,6 @@ export class BusquedaComponent implements OnInit {
           })
 
           this.profesionales = this.orderPipe.transform(res['profesionales'], 'detalle');
-          //this.filterProfesionales = this.orderPipe.transform(res['profesionales'], 'detalle');
 
           if (matchProfesional) {
             this.profesionalCtrl.patchValue(matchProfesional);
