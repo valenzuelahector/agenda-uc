@@ -23,41 +23,41 @@ export class AgendaAmbulatoriaService {
   }
 
   getAreas(){
-    return this.http.get(this.baseApi + '/Areas');
+    return this.http.get(this.baseApi + '/Areas?codCanal=PatientPortal');
   }
 
   getEspecialidadesByGeneric(idArea:any, filtro:any = null, idServicio:string = null){
     let keyf = (filtro) ? '&filtro=' + filtro : '';
     let ids = (idServicio) ? '&idServicio=' + idServicio : '';
 
-    return this.http.get(this.baseApi + '/Especialidades?idArea=' + idArea + keyf + ids);
+    return this.http.get(this.baseApi + '/Especialidades?codCanal=PatientPortal&idArea=' + idArea + keyf + ids);
   }
 
   getEspecialidadesByProfesional(idProfesional: string, idArea:string, filtro:any = null){
     let keyf = (filtro) ? '&filtro=' + filtro : '';
-    return this.http.get(this.baseApi + '/Servicios/Rel/Especialidades?idProfesional=' + idProfesional + '&idArea=' + idArea + keyf);
+    return this.http.get(this.baseApi + '/Servicios/Rel/Especialidades?codCanal=PatientPortal&idProfesional=' + idProfesional + '&idArea=' + idArea + keyf);
   }
 
   getProfesionales(idArea:string, filtro:any = null, idProfesional:string = null){
     let keyf = (filtro) ? '&patronNombre=' + filtro : '';
     let idp = (idProfesional) ? '&idProfesional=' + idProfesional : '';
 
-    return this.http.get(this.baseApi + '/Profesionales?idArea=' + idArea + keyf + idp);
+    return this.http.get(this.baseApi + '/Profesionales?codCanal=PatientPortal&idArea=' + idArea + keyf + idp);
   }
 
   getServiciosByEspecialidad(idEspecialidad, idArea){
-    return this.http.get(this.baseApi + '/Servicios?idArea='+idArea+'&idEspecialidad='+idEspecialidad).toPromise();
+    return this.http.get(this.baseApi + '/Servicios?codCanal=PatientPortal&idArea='+idArea+'&idEspecialidad='+idEspecialidad).toPromise();
 
   }
 
   getProfesionalesByQuery(query:string){
-    return this.http.get(this.baseApi + '/Profesionales?' + query);
+    return this.http.get(this.baseApi + '/Profesionales?codCanal=PatientPortal&' + query);
   }
 
   getCentrosByEspecialidad(idServicio:string, idArea:string, idProfesional = null, fromSel = false){
     let queryProfesional = (idProfesional) ? '&idProfesional=' + idProfesional : '';
     queryProfesional += fromSel ? '&fromSelCentros=true' : '';
-    return this.http.get(this.baseApi + '/Centros?idServicio=' + idServicio + '&idArea=' + idArea + queryProfesional);
+    return this.http.get(this.baseApi + '/Centros?codCanal=PatientPortal&idServicio=' + idServicio + '&idArea=' + idArea + queryProfesional);
   }
 
   getRecursos(queryData:any){
@@ -77,7 +77,7 @@ export class AgendaAmbulatoriaService {
 
   getPaciente(idn:string, tipoIdPaciente:string, idArea){
     const area = idArea === 'RIS_IMAGENES' ? '&contextoCod=RIS' : ''
-    return this.http.get(this.baseApi + '/Pacientes?idPaciente='+idn+'&tipoIdPaciente='+tipoIdPaciente+'&paisIdentificador=CL' + area);
+    return this.http.get(this.baseApi + '/Pacientes?codCanal=PatientPortal&idPaciente='+idn+'&tipoIdPaciente='+tipoIdPaciente+'&paisIdentificador=CL' + area);
   }
 
   postPaciente(data:any){
@@ -97,16 +97,16 @@ export class AgendaAmbulatoriaService {
                       'idPaciente=' + idPaciente : 
                       'tipoIdPaciente=' + data['tipoDocumento'] + '&idPaciente=' + data['documento'] + '&paisIdentificador=CL'
     
-                      return this.http.get(this.baseApi + '/PlanesDeSalud?' + queryString);
+                      return this.http.get(this.baseApi + '/PlanesDeSalud?codCanal=PatientPortal&' + queryString);
   }
 
   getDatosProfesional(idProfesional:any){
-    return this.http.get(ENV.baseApi + this.profRoute + '/Perfil?idProfesional=' + idProfesional + "&tipoIdProfesional=PRM");
+    return this.http.get(ENV.baseApi + this.profRoute + '/Perfil?codCanal=PatientPortal&idProfesional=' + idProfesional + "&tipoIdProfesional=PRM");
   }
 
   geReglasValidacion(query:any){
     const idArea = query.idArea === 'RIS_IMAGENES' ? '&idArea=RIS_IMAGENES' : '';
-    return this.http.get(this.baseApi + '/Agenda/CuposDisponibilidad?idCentro=' + query.idCentro + '&fechaInicio=' + query.fechaInicio + '&fechaTermino=' + query.fechaTermino + '&idServicio=' + query.idServicio + '&idPlanSalud=' + query.idPlanSalud + '&idPaciente='+query.idPaciente+'&idDisponibilidad='+query.idDisponibilidad+'&idProfesional='+query.idProfesional+'&codCanal=PatientPortal' + idArea)
+    return this.http.get(this.baseApi + '/Agenda/CuposDisponibilidad?codCanal=PatientPortal&idCentro=' + query.idCentro + '&fechaInicio=' + query.fechaInicio + '&fechaTermino=' + query.fechaTermino + '&idServicio=' + query.idServicio + '&idPlanSalud=' + query.idPlanSalud + '&idPaciente='+query.idPaciente+'&idDisponibilidad='+query.idDisponibilidad+'&idProfesional='+query.idProfesional+'&codCanal=PatientPortal' + idArea)
   }
 
   getMensajes(data, type = null){
@@ -120,7 +120,7 @@ export class AgendaAmbulatoriaService {
   }
 
   buscarCita(data){
-    return this.http.get(this.baseApi + '/Citas/Lista?idPaciente='+data.idPaciente+'&tipoIdPaciente='+data.tipoIdPaciente+'&paisIdentificador=CL&fechaCita='+data.fechaCita);
+    return this.http.get(this.baseApi + '/Citas/Lista?codCanal=PatientPortal&idPaciente='+data.idPaciente+'&tipoIdPaciente='+data.tipoIdPaciente+'&paisIdentificador=CL&fechaCita='+data.fechaCita);
   }
 
   cambiarEstadoCita(data){
@@ -132,19 +132,19 @@ export class AgendaAmbulatoriaService {
   }
 
   getCuposInmediatos(){
-    return this.http.get(this.baseApi + '/Agenda/CuposInmediatos?idArea=' + ENV.areaConsultaMedica.id ).toPromise();
+    return this.http.get(this.baseApi + '/Agenda/CuposInmediatos?codCanal=PatientPortal&idArea=' + ENV.areaConsultaMedica.id ).toPromise();
   }
 
   getPaises(){
-    return this.http.get(this.baseApi + '/Paises').toPromise();
+    return this.http.get(this.baseApi + '/Paises?codCanal=PatientPortal').toPromise();
   }
 
   getRegiones(codPais){
-    return this.http.get(this.baseApi + '/Regiones/Pais?codPais=' + codPais).toPromise();
+    return this.http.get(this.baseApi + '/Regiones/Pais?codCanal=PatientPortal&codPais=' + codPais).toPromise();
   }
 
   getComunas(idRegion){
-    return this.http.get(this.baseApi + '/Comunas/Region?idRegion=' + idRegion).toPromise();
+    return this.http.get(this.baseApi + '/Comunas/Region?codCanal=PatientPortal&idRegion=' + idRegion).toPromise();
   }
 
   postProcedimiento(data){
@@ -157,11 +157,11 @@ export class AgendaAmbulatoriaService {
     const idCentro = data.idCentro ? '&idCentro=' + data.idCentro : '';
     const idProfesional = data.idProfesional ? '&idProfesional=' + data.idProfesional : ''
 
-    return this.http.get(this.baseApi + '/ReglasExclusion/Validar?codContexto=' + codContexto + idCentro + idServicio + idProfesional ).toPromise();
+    return this.http.get(this.baseApi + '/ReglasExclusion/Validar?codCanal=PatientPortal&codContexto=' + codContexto + idCentro + idServicio + idProfesional ).toPromise();
   }
 
   getEncuesta(idServicio, idCentro, medioContraste){
-    return this.http.get(this.baseApi + `/Encuesta/Obtener?codExamen=${idServicio}&codCentro=${idCentro}&medioContraste=${medioContraste}`).toPromise();
+    return this.http.get(this.baseApi + `/Encuesta/Obtener?codCanal=PatientPortal&codExamen=${idServicio}&codCentro=${idCentro}&medioContraste=${medioContraste}`).toPromise();
   }
 
   postEncuesta(data){
