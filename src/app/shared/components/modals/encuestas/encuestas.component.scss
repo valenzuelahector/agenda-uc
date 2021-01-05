@@ -188,6 +188,11 @@ mat-checkbox{
     &.btn-morado{
         color: #fff;
     }
+
+    &.btn-morado:hover{
+        background: #802e87 !important;
+        color:#fff !important;
+    }
 }
 
 mat-dialog-content{

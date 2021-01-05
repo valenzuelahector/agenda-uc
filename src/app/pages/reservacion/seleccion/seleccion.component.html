@@ -34,11 +34,11 @@
 			</h5> -->
 			<div class="ctms" *ngIf="recursos.length == 0 ">
 				<div fxLayout="row wrap" fxLayoutAlign="center center" *ngIf="!filtroAplicado">
-					<div fxFlex="69%" fxFlex.sm="100%" fxFlex.xs="100%"
+					<div fxFlex="{{ busquedaInicial.area.id !== 'RIS_IMAGENES' ? '100%' : '69%'}}" fxFlex.sm="100%" fxFlex.xs="100%"
 						[innerHTML]="sanitizer.bypassSecurityTrustHtml(customMensaje)">
 						<div></div>
 					</div>
-					<div fxFlex="30%" fxFlex.sm="100%" fxFlex.xs="100%" style="text-align: right;">
+					<div fxFlex="30%" fxFlex.sm="100%" fxFlex.xs="100%" style="text-align: right;"  *ngIf="busquedaInicial.area.id !== 'RIS_IMAGENES'">
 						<button mat-stroked-button class="btn-morado cus-pad cus" (click)="procesarListaEspera({})">
 							Inscríbase aquí
 						</button>

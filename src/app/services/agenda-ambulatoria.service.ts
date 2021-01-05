@@ -77,7 +77,7 @@ export class AgendaAmbulatoriaService {
 
   getPaciente(idn:string, tipoIdPaciente:string, idArea){
     const area = idArea === 'RIS_IMAGENES' ? '&contextoCod=RIS' : ''
-    return this.http.get(this.baseApi + '/Pacientes?codCanal=PatientPortal&idPaciente='+idn+'&tipoIdPaciente='+tipoIdPaciente+'&paisIdentificador=CL' + area);
+    return this.http.get(this.baseApi + '/Pacientes?codCanal=PatientPortal&idPaciente='+idn+'&tipoIdPaciente='+tipoIdPaciente+'&paisIdentificador=CL');
   }
 
   postPaciente(data:any){
