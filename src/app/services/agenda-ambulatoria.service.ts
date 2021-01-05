@@ -109,13 +109,17 @@ export class AgendaAmbulatoriaService {
     return this.http.get(this.baseApi + '/Agenda/CuposDisponibilidad?codCanal=PatientPortal&idCentro=' + query.idCentro + '&fechaInicio=' + query.fechaInicio + '&fechaTermino=' + query.fechaTermino + '&idServicio=' + query.idServicio + '&idPlanSalud=' + query.idPlanSalud + '&idPaciente='+query.idPaciente+'&idDisponibilidad='+query.idDisponibilidad+'&idProfesional='+query.idProfesional+'&codCanal=PatientPortal' + idArea)
   }
 
-  getMensajes(data, type = null){
+  getMensajes(data, idArea, type = null){
 
     let qrProf = "";
     if(data.ResourceId && data.ResourceId != ""){
-      qrProf = '&idProfesional=' + data.ResourceId;
+      qrProf += '&idProfesional=' + data.ResourceId;
     }
 
+    if(idArea === 'RIS_IMAGENES'){
+      qrProf  += '&idArea=RIS_IMAGENES'
+    }
+    
     return this.http.get(this.baseApi + '/Mensajes?idCentro=' + data.CenterId + '&codCanal=PatientPortal&idServicio=' + data.ServiceId + qrProf);
   }
 

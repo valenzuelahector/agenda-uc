@@ -106,6 +106,14 @@ export class BusquedaComponent implements OnInit {
         documento: null,
         documentoFormateado: null
       }
+
+      this.datosImagenes = {
+        aplicaMedioContraste: false,
+        archivo: null,
+        requierePresupuesto: false,
+        idEncuesta:null
+      }
+      
     });
 
   }

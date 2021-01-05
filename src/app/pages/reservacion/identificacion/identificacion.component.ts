@@ -550,7 +550,7 @@ export class IdentificacionComponent implements OnInit, OnChanges {
           CenterId: this.calendario.cupo.centro.id,
           ServiceId: this.busquedaInicial.especialidad.idServicio,
           Channel: 'PatientPortal'
-        }).subscribe(async dt => {
+        }, this.busquedaInicial.area.id).subscribe(async dt => {
 
           let action: any = '';
           let mensajeDeRegla = '';
