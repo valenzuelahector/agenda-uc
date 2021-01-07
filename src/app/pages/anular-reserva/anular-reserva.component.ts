@@ -97,7 +97,7 @@ export class AnularReservaComponent implements OnInit {
       if(result){
 
         const dataCita = {
-          codCita: data['Numero'],
+          codCita: data['Id'],
           codPaciente: this.dataAnularCita.dataBusqueda.documento,
           tipoIdPaciente:this.dataAnularCita.dataBusqueda.tipoDocumento,
           paisIdentificador:'CL',
