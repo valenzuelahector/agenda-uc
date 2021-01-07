@@ -109,7 +109,7 @@ export class EncuestasComponent implements OnInit {
       } else if (resp.resultado && (resp.resultado.toUpperCase() === 'POSITIVO' || resp.resultado.toUpperCase().includes('PRECAUC'))) {
 
         action = true;
-        idRespuesta = resp.idRespuesta;
+        idRespuesta = resp.id;
       } else {
 
         this.utils.mDialog("Error", 'No se pudo evaluar la encuesta. Intente de nuevo más tarde.', 'message');
