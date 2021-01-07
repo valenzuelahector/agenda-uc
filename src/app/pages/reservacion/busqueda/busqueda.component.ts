@@ -843,7 +843,7 @@ export class BusquedaComponent implements OnInit {
         if(respEnc && respEnc.encuesta && respEnc.encuesta.length > 0){
           const ressp:any = await this.mostrarEncuesta({...this.datosPaciente, ...respEnc});
           continueEncuesta = ressp.action;
-          this.datosImagenes.idEncuesta = ressp.idRespuesta;
+          this.datosImagenes.idEncuesta = ressp.id;
         }
       }
 
