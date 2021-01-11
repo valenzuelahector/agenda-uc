@@ -684,6 +684,8 @@ export class BusquedaComponent implements OnInit {
         this.readQuery = true;
       }
 
+      this.servicios = this.transformarRepuestaGeneral(this.servicios);
+
       this.filterServicios = this.servicioCtrl.valueChanges.pipe(
         startWith<string | any>(''),
         map(value => typeof value === 'string' ? value : value.detalle),
@@ -694,6 +696,26 @@ export class BusquedaComponent implements OnInit {
 
     });
 
+  }
+
+  transformarRepuestaGeneral(servicios){
+
+    const arrWithGeneral = [];
+    const arrWithoutGeneral = [];
+
+    servicios.forEach((val, key) => {
+      if(val.nombre.toLowerCase().includes('general')){
+        arrWithGeneral.push(val);
+      }else{
+        arrWithoutGeneral.push(val);
+      }
+    });
+    
+    const orderedArrWithGeneral = this.orderPipe.transform(arrWithGeneral, 'nombre');
+    const orderedArrWithoutGeneral = this.orderPipe.transform(arrWithoutGeneral, 'nombre');
+    
+    return orderedArrWithGeneral.concat(orderedArrWithoutGeneral);
+    
   }
 
   especialidadSelection(event, tipo = null) {
