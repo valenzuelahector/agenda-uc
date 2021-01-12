@@ -187,12 +187,12 @@ export class ConfirmacionComponent implements OnInit, OnChanges, OnDestroy {
       if (hIndic > hDatosReserva) {
         this.verMasAction = true;
         $("#contIndic").css({
-          height: (hDatosReserva + 102) + 'px'
+          height: (hDatosReserva + 42) + 'px'
         })
       } else {
         this.verMasAction = false;
         $("#contIndic").css({
-          height: ''
+          height: '',
         })
       }
     }
@@ -202,7 +202,8 @@ export class ConfirmacionComponent implements OnInit, OnChanges, OnDestroy {
     if (action === 'open') {
       this.verMasOpened = true;
       $("#contIndic").css({
-        height: ''
+        height: '',
+        paddingBottom: '30px'
       })
     } else {
       this.verMasOpened = false;
