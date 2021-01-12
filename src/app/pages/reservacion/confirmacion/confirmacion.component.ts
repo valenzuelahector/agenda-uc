@@ -180,7 +180,8 @@ export class ConfirmacionComponent implements OnInit, OnChanges, OnDestroy {
     if (action === 'open') {
       this.verMasOpened = true;
       $("#contIndic").css({
-        height: ''
+        height: '',
+        paddingBottom: '30px'
       })
     } else {
       this.verMasOpened = false;
