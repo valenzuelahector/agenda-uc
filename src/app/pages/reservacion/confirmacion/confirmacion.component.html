@@ -73,7 +73,7 @@
                 <div class="verMas" (click)="setVerMas('close')" *ngIf="verMasOpened">Cerrar</div>
               </div>
               <ng-container *ngFor="let msj of mensajes">
-                <div [innerHTML]="sanitizer.bypassSecurityTrustHtml(msj['mensaje']['contenido'])" *ngIf="msj['mensaje']['mostrar'] || !msj['mensaje'].hasOwnProperty('mostrar')"></div>
+                <div style="padding-bottom: 40px;" [innerHTML]="sanitizer.bypassSecurityTrustHtml(msj['mensaje']['contenido'])" *ngIf="msj['mensaje']['mostrar'] || !msj['mensaje'].hasOwnProperty('mostrar')"></div>
               </ng-container>
   
             </div>
