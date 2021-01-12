@@ -504,7 +504,7 @@ export class IdentificacionComponent implements OnInit, OnChanges {
 
   async procesarPaciente() {
 
-    if (this.busquedaPaciente.documento && (this.busquedaPaciente.prevision || this.busquedaInicial.area.id === 'RIS_IMAGENES') && this.busquedaPaciente.telefono && this.busquedaPaciente.correo) {
+    if (this.busquedaPaciente.documento && this.busquedaPaciente.prevision && this.busquedaPaciente.telefono && this.busquedaPaciente.correo) {
 
       let updInfo = this.procesarDatosBusqCliente();
 

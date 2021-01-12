@@ -88,6 +88,7 @@ export class ConfirmacionComponent implements OnInit, OnChanges, OnDestroy {
       duracion: this.calendario.cupo.duracion,
       idPaciente: this.paciente.adicional.documento,
       idServicio: this.busquedaInicial.especialidad.idServicio,
+      idPlanCobertura: this.paciente.adicional.prevision.idPlan
     }
 
 
@@ -97,7 +98,7 @@ export class ConfirmacionComponent implements OnInit, OnChanges, OnDestroy {
         idArea: 'RIS_IMAGENES',
         idEncuesta: this.busquedaInicial.datosImagenes.idEncuesta,
         requierePresupuesto: this.busquedaInicial.datosImagenes.requierePresupuesto ? 1 : 0,
-        ordenMedica: this.busquedaInicial.datosImagenes.archivo.file64
+        ordenMedica: this.busquedaInicial.datosImagenes.archivo.file64,
       }
 
     }else{
@@ -106,7 +107,6 @@ export class ConfirmacionComponent implements OnInit, OnChanges, OnDestroy {
         idRecurso: this.calendario.recurso.id,
         tipoIdPaciente: this.paciente.adicional.tipoDocumento,
         paisIdentificador: 'CL',
-        idPlanCobertura: this.paciente.adicional.prevision.idPlan,
         idDisponibilidad: this.calendario.cupo.disponibilidad.id,
         idTipoCita: this.calendario.cupo.idTipoCita.id  
       }
@@ -187,7 +187,7 @@ export class ConfirmacionComponent implements OnInit, OnChanges, OnDestroy {
       if (hIndic > hDatosReserva) {
         this.verMasAction = true;
         $("#contIndic").css({
-          height: (hDatosReserva + 42) + 'px'
+          height: (hDatosReserva + 102) + 'px'
         })
       } else {
         this.verMasAction = false;
