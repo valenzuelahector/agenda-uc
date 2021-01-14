@@ -1023,7 +1023,7 @@ export class BusquedaComponent implements OnInit {
     try {
 
       for await (let a of Object.keys(files)) {
-        const filesArr = await this.utils.prepareFile(files[a]);
+        const filesArr = await this.utils.prepareFile(files[a], false);
         datasUpload = datasUpload.concat(filesArr)
       }
       

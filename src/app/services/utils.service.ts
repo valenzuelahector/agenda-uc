@@ -317,7 +317,7 @@ export class UtilsService {
     return color;
   }
 
-  async prepareFile(file: any) {
+  async prepareFile(file: any, withPdf = true) {
 
     const datasUpload = [];
     let reader = new FileReader();
@@ -342,7 +342,7 @@ export class UtilsService {
             file: String(reader.result)
           }
 
-          if (this.validarMimetype(data.mimetype)) {
+          if ((withPdf && this.validarMimetype(data.mimetype)) || (!withPdf && this.validarMimeTypeRadiologia(data.mimetype)) ) {
             datasUpload.push(data);
             resolve(datasUpload);
           } else {
@@ -367,11 +367,22 @@ export class UtilsService {
     switch (mimeType) {
       case 'image/png': isValid = true; break;
       case 'image/jpeg': isValid = true; break;
-      case 'image/gif': isValid = true; break;
       case 'application/pdf': isValid = true; break;
     }
 
     return isValid;
   }
 
+  validarMimeTypeRadiologia(mimeType){
+
+    let isValid = false;
+
+    switch (mimeType) {
+      case 'image/png': isValid = true; break;
+      case 'image/jpeg': isValid = true; break;
+    }
+
+    return isValid;
+
+  }
 }
