@@ -38,7 +38,7 @@
 						[innerHTML]="sanitizer.bypassSecurityTrustHtml(customMensaje)">
 						<div></div>
 					</div>
-					<div fxFlex="30%" fxFlex.sm="100%" fxFlex.xs="100%" style="text-align: right;"  *ngIf="busquedaInicial.area.id !== 'RIS_IMAGENES'">
+					<div fxFlex="30%" fxFlex.sm="100%" fxFlex.xs="100%" style="text-align: right;"  *ngIf="busquedaInicial.area.id !== 'RIS_IMAGENES' && busquedaInicial.area.id !== idLaboratorioClínico">
 						<button mat-stroked-button class="btn-morado cus-pad cus" (click)="procesarListaEspera({})">
 							Inscríbase aquí
 						</button>
@@ -246,7 +246,7 @@
 									</div>
 									<div *ngIf="busquedaInicial.area.id !== 'RIS_IMAGENES'">
 										<mat-accordion class="lista-espera-acc"
-										*ngIf="(displayListaEspera(re.fechasDisponibles, re.poseeMes) || (counterLoader > 1 && today.getDate() !== 1) || (counterLoader > 0 && today.getDate() === 1)) && displayCalendar && !filtroAplicado">
+										*ngIf="(displayListaEspera(re.fechasDisponibles, re.poseeMes) || (counterLoader > 1 && today.getDate() !== 1) || (counterLoader > 0 && today.getDate() === 1)) && displayCalendar && !filtroAplicado && busquedaInicial.area.id !== idLaboratorioClínico">
 											<mat-expansion-panel>
 												<mat-expansion-panel-header>
 													<mat-panel-title>
