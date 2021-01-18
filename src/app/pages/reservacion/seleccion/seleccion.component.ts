@@ -11,6 +11,7 @@ import 'moment-timezone';
 import { DomSanitizer } from '@angular/platform-browser';
 import { DeviceDetectorService } from 'ngx-device-detector';
 import * as clone from 'clone';
+import { env } from 'process';
 
 @Component({
   selector: 'app-seleccion',
@@ -66,6 +67,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
     idCentro: ENV.idRegion,
     nombre: 'TODOS'
   }
+
   constructor(
     public agendaService: AgendaAmbulatoriaService,
     public utils: UtilsService,

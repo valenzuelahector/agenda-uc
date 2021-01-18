@@ -17,6 +17,7 @@ export const ENV = {
   idCentroPrioritario: '52e43c90-8ab7-4e34-afcb-a96f0106bbd1',
   mensajeSinCupos : '<h5>Sin disponibilidad en agendamiento web. En caso de requerir atención presencial para vacunación por campaña influenza ministerial, ésta será por orden de llegada.</h5>',
   idExamenProcedimiento: 'b2461ac2-9c50-4724-9676-a91a00a91a02',
+  idLaboratorioClínico: '86399d7e-7bd3-4bed-b18a-aca100fc732c',
   areaConsultaMedica: {
     id: '2a8202d9-1ebd-4f2e-a359-a91a00a91a02',
     nombre: 'Consultas'
