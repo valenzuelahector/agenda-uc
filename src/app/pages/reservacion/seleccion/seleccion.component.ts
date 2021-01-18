@@ -63,6 +63,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
   public filtroAplicado = false;
   public centrosFiltros = [];
   public recursoCache: string = "";
+  public idLaboratorioClínico = ENV.idLaboratorioClínico;
   public filtro: any = {
     idCentro: ENV.idRegion,
     nombre: 'TODOS'
