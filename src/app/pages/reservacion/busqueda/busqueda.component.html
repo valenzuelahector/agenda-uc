@@ -112,7 +112,7 @@
     *ngIf="((tipoConsulta == 'especialidad' && especialidades.length > 0) || (tipoConsulta == 'profesional' && profesionalSelected && especialidades.length > 0)) && loadedEsp">-->
   <div>
     <mat-form-field class="full" appearance="fill">
-      <mat-label>Seleccione una Especialidad</mat-label>
+      <mat-label>{{ areaSelected?.id === 'RIS_IMAGENES' ? 'Seleccione un Tipo de Examen' : 'Seleccione una Especialidad'  }}</mat-label>
       <input matInput type="text" class="sm-text-custom"
         placeholder="Escriba para filtrar por {{ tipoConsulta == 'especialidad' ? 'especialidad' : 'especialidad'}}"
         [formControl]="especialidadCtrl"  #triggerEspecialidad="matAutocompleteTrigger"  
@@ -180,8 +180,6 @@
         <mat-icon>close</mat-icon>
       </button>
     </mat-form-field>
-
-
   </div>
 
 
@@ -199,6 +197,7 @@
     <p class="nores">Sin disponibilidad vía web. Llámanos al 226767000</p>
   </div>
 
+  <p class="mini-info-rad" *ngIf="areaSelected?.id === 'RIS_IMAGENES'">Para exámenes de PET CT, Medicina Nuclear, procedimientos médicos (punciones y biopsias) y exámenes pediátricos llamar a call center 6767000 opción 3  </p>
 </ng-template>
 
 <ng-template #formDatosPaciente>
