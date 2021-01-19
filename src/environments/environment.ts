@@ -16,7 +16,7 @@ export const ENV = {
   idCentroPrioritario: '52e43c90-8ab7-4e34-afcb-a96f0106bbd1',
   mensajeSinCupos: '<h5>No se encontraron cupos disponibles.</h5>',
   idExamenProcedimiento: '97bd5208-60d1-4d6c-9d1e-a96e00ddbc15',
-  idLaboratorioClínico: '86399d7e-7bd3-4bed-b18a-aca100fc732c',
+  idLaboratorioClinico: '86399d7e-7bd3-4bed-b18a-aca100fc732c',
   areaConsultaMedica: {
     id: '2a8202d9-1ebd-4f2e-a359-a91a00a91a02',
     nombre: 'Consultas'
