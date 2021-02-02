@@ -47,7 +47,7 @@ export class ConfirmacionComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnInit() {
     this.onResize();
-    
+
     this.reservaSubscribe = this.utils.getEmitReservar().subscribe(res => {
       this.reservar();
     });
@@ -92,50 +92,55 @@ export class ConfirmacionComponent implements OnInit, OnChanges, OnDestroy {
     }
 
 
-    if(this.busquedaInicial.area.id === 'RIS_IMAGENES'){
+    if (this.busquedaInicial.area.id === 'RIS_IMAGENES') {
 
-      adicionalData = { 
+      adicionalData = {
         idArea: 'RIS_IMAGENES',
         idEncuesta: this.busquedaInicial.datosImagenes.idEncuesta,
         requierePresupuesto: this.busquedaInicial.datosImagenes.requierePresupuesto ? 1 : 0,
         ordenMedica: this.busquedaInicial.datosImagenes.archivo.file64,
       }
 
-    }else{
+    } else {
 
       adicionalData = {
         idRecurso: this.calendario.recurso.id,
         tipoIdPaciente: this.paciente.adicional.tipoDocumento,
         paisIdentificador: 'CL',
         idDisponibilidad: this.calendario.cupo.disponibilidad.id,
-        idTipoCita: this.calendario.cupo.idTipoCita.id  
+        idTipoCita: this.calendario.cupo.idTipoCita.id
       }
     }
 
-    postData = {...postData, ...adicionalData}
+    postData = { ...postData, ...adicionalData }
 
 
-    this.agendaService.postCita(postData).subscribe(data => {
+    this.agendaService.postCita(postData).subscribe((data: any) => {
+
       if (data['statusCod'] == 'OK') {
+
         this.reservaFinalizada = true;
         this.idreserva = data['idCita'];
         this.codCita = this.busquedaInicial.area.id === 'RIS_IMAGENES' ? data['idCita'] : data['codCita'];
-        
-        if(this.busquedaInicial.fromCuposInmediatos){
+
+        if (this.busquedaInicial.fromCuposInmediatos) {
           gtag('event', 'Reserva Cupos Inmediatos', { 'event_category': 'Reserva de Hora', 'event_label': 'Paso5:Reserva-Confirmada' });
         }
 
-        if(this.busquedaInicial.fromMedicosRelacionados){
+        if (this.busquedaInicial.fromMedicosRelacionados) {
           gtag('event', 'Reserva Profesional Relacionado', { 'event_category': 'Reserva de Hora', 'event_label': 'Paso5:Reserva-Confirmada' });
         }
 
-        if(this.busquedaInicial.gtagActionName){
+        if (this.busquedaInicial.gtagActionName) {
           gtag('event', this.busquedaInicial.gtagActionName, { 'event_category': this.busquedaInicial.gtagName, 'event_label': `k) ETAPA 4: RESERVA CONFIRMADA`, 'value': '0' });
           gtag('event', this.busquedaInicial.gtagActionEspProf, { 'event_category': this.busquedaInicial.gtagNameEsp, 'event_label': `k) ETAPA 4: RESERVA CONFIRMADA`, 'value': '0' });
-
         }
 
-        this.confirmarReserva.emit({response: true, data:data});
+        if (data.hasOwnProperty('listaRecetas') && data.listaRecetas.length > 0) {
+          this.setListaRecetas(data.listaRecetas);
+        }
+
+        this.confirmarReserva.emit({ response: true, data: data });
 
       } else {
 
@@ -149,6 +154,19 @@ export class ConfirmacionComponent implements OnInit, OnChanges, OnDestroy {
 
   }
 
+  setListaRecetas(items) {
+
+    const mensajes = [];
+    mensajes.push({ mensaje: { contenido: `<b>Recetas:</b>` } });
+    items.forEach((val, key) => {
+      mensajes.push({ mensaje: { contenido: `<p>- <a href="${val.urlReceta}">${val.nombreReceta}</a></p>` } });
+    });
+
+    this.mensajes = this.mensajes.concat(mensajes);
+    this.onResize();
+    
+  }
+
   errReserva(message) {
 
     let msg = (message) ? message : 'Se ha producido un error. ¿Que desea hacer?';
@@ -157,7 +175,7 @@ export class ConfirmacionComponent implements OnInit, OnChanges, OnDestroy {
       width: '720px',
       data: { message: msg },
       autoFocus: false,
-      disableClose:true
+      disableClose: true
     });
 
     dialogRef.componentInstance.dialogEvent.subscribe((result) => {
@@ -249,7 +267,7 @@ export class ConfirmacionComponent implements OnInit, OnChanges, OnDestroy {
             this.successMsg = '¡Reserva ha sido anulada correctamente!';
             gtag('event', this.busquedaInicial.gtagActionName, { 'event_category': this.busquedaInicial.gtagName, 'event_label': `l) RESERVA CONFIRMADA HA SIDO ANULADA`, 'value': '0' });
             gtag('event', this.busquedaInicial.gtagActionEspProf, { 'event_category': this.busquedaInicial.gtagNameEsp, 'event_label': `l) RESERVA CONFIRMADA HA SIDO ANULADA`, 'value': '0' });
-  
+
           } else {
             this.utils.mDialog("Error", "La Hora ha sido no pudo ser anulada. Intente nuevamente.", "message");
           }
