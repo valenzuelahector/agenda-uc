@@ -157,9 +157,9 @@ export class ConfirmacionComponent implements OnInit, OnChanges, OnDestroy {
   setListaRecetas(items) {
 
     const mensajes = [];
-    mensajes.push({ mensaje: { contenido: `<b>Recetas:</b>` } });
+    mensajes.push({ mensaje: { contenido: `<b style="margin: 20px 0px;font-weight: bold;font-size: 16px; display:block;">Recetas:</b>` } });
     items.forEach((val, key) => {
-      mensajes.push({ mensaje: { contenido: `<p>- <a href="${val.urlReceta}">${val.nombreReceta}</a></p>` } });
+      mensajes.push({ mensaje: { contenido: `<p style="margin:0px !important">- <a href="${val.urlReceta}" target="_blank">${val.nombreReceta}</a></p>` } });
     });
 
     this.mensajes = this.mensajes.concat(mensajes);
