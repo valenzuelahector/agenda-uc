@@ -100,8 +100,9 @@ export class AgendaAmbulatoriaService {
                       return this.http.get(this.baseApi + '/PlanesDeSalud?codCanal=PatientPortal&' + queryString);
   }
 
-  getDatosProfesional(idProfesional:any){
-    return this.http.get(ENV.baseApi + this.profRoute + '/Perfil?codCanal=PatientPortal&idProfesional=' + idProfesional + "&tipoIdProfesional=PRM");
+  getDatosProfesional(idProfesional:any, rut: string = null){
+    const qstr = (rut) ? `rutProfesional=${rut}` : `codCanal=PatientPortal&idProfesional=${idProfesional}&tipoIdProfesional=PRM`;
+    return this.http.get(ENV.baseApi + this.profRoute + '/Perfil?' + qstr);
   }
 
   geReglasValidacion(query:any){
@@ -171,4 +172,9 @@ export class AgendaAmbulatoriaService {
   postEncuesta(data){
     return this.http.post(this.baseApi + `/Encuesta/Registrar`, data).toPromise();
   }
+
+  validarEnrolamiento(rut){
+    return this.http.get(`${ENV.validarEnrolamiento}?rut=${rut}`).toPromise();
+  }
+
 }

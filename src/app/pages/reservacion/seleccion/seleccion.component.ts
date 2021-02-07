@@ -4,7 +4,7 @@ import { AgendaAmbulatoriaService } from 'src/app/services/agenda-ambulatoria.se
 import { MatCalendarCellCssClasses } from '@angular/material';
 import { MatDialog } from '@angular/material';
 import { OrderPipe } from 'ngx-order-pipe';
-import { ENV, dummyData } from 'src/environments/environment';
+import { ENV } from 'src/environments/environment';
 import gtag, { install } from 'ga-gtag';
 import * as $ from 'jquery';
 import 'moment-timezone';
@@ -52,7 +52,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
   public customMensaje: string = "";
   public keepSearching = true;
   public listaFechas = {};
-  public medicosAsociados = dummyData.profesionalesSimilares;
+  public medicosAsociados = [];
   public isProcedimiento = false;
   public nActivosFiltroCentro = 0;
   public nActivosFiltroHoras = 0;

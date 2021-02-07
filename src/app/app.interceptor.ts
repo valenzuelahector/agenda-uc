@@ -22,6 +22,8 @@ export class Interceptor implements HttpInterceptor {
       !request.url.includes('/Profesionales?idArea') && 
       !request.url.includes('fromProfRel=true') && !request.url.includes('/CuposInmediatos') && 
       !request.url.includes('Areas') && !request.url.includes('Paises') &&  !request.url.includes('/Especialidades') &&
+      !request.url.includes('/validarenrolamiento') &&
+      !request.url.includes('/Perfil?rutProfesional') &&
       !request.url.includes('/Servicios?codCanal') &&
       !request.url.includes('/Servicios?idArea') &&  !request.url.includes('fromSelCentros=true')){
       setTimeout(() => {

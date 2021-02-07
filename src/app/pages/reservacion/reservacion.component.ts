@@ -4,7 +4,7 @@ import { SeleccionComponent } from './seleccion/seleccion.component';
 import { IdentificacionComponent } from './identificacion/identificacion.component';
 import { ConfirmacionComponent } from './confirmacion/confirmacion.component';
 import { UtilsService } from 'src/app/services/utils.service';
-import { ENV, dummyData } from 'src/environments/environment';
+import { ENV } from 'src/environments/environment';
 import gtag, { install } from 'ga-gtag';
 import { ActivatedRoute } from '@angular/router';
 import { IfStmt } from '@angular/compiler';
@@ -30,8 +30,8 @@ export class ReservacionComponent implements OnInit, AfterViewInit, OnDestroy {
   public valorConvenio: number;
   public emitterReloadBusqueda:any;
   public reloadNumber = 0;
-  public conoceTuMedico = false;
-  public checkConoceTuMedico = false;
+  public saludIntegral = false;
+  public checkSaludIntegral = false;
   public verMedicoAsociado = false;
   public datosBeneficiarioMedico;
   public rutMatch;
@@ -126,6 +126,7 @@ export class ReservacionComponent implements OnInit, AfterViewInit, OnDestroy {
 
   busquedaEmitter(data){
     if (data && data.area && data.especialidad && data.centroAtencion) {
+      console.log(JSON.stringify(data))
       this.busquedaInfo = data;
       this.cambiarEtapa(1);
     }
@@ -135,13 +136,13 @@ export class ReservacionComponent implements OnInit, AfterViewInit, OnDestroy {
   getParamsArea(){
 
     this.aRouter.params.subscribe( params => {
-      if(params['area'] === 'conoce-tu-medico'){
-        this.conoceTuMedico = true;
+      if(params['area'] === 'salud-integral'){
+        this.saludIntegral = true;
         setTimeout(()=> {
           this.readQuery = true;
         },2000)
       }
-      this.checkConoceTuMedico = true;
+      this.checkSaludIntegral = true;
     })
   
   }
@@ -190,7 +191,7 @@ export class ReservacionComponent implements OnInit, AfterViewInit, OnDestroy {
     this.confirmacionProcedimiento = null;
     this.cambiarEtapa(0);
 
-    if(this.conoceTuMedico){
+    if(this.saludIntegral){
         this.nuevaBusquedaCM()
     }
 
@@ -233,9 +234,10 @@ export class ReservacionComponent implements OnInit, AfterViewInit, OnDestroy {
   setDatosBeneficiario(data){
 
     this.datosBeneficiarioMedico = data;
-    this.rutMatch = data.rut;
+    this.busquedaInfo = data;
     this.verMedicoAsociado = true;
     this.readQuery = false;
+    this.cambiarEtapa(1);
 
     setTimeout(()=> {
       this.readQuery = true;

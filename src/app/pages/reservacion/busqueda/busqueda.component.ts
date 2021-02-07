@@ -891,8 +891,6 @@ export class BusquedaComponent implements OnInit {
     gtag('event', gtagActionEspProf, { 'event_category': gtagNameEsp, 'event_label': `d) Centro Médico: ${this.centroAtencionSelected.nombre}`, 'value': '0' });
     gtag('event', gtagActionEspProf, { 'event_category': gtagNameEsp, 'event_label': 'e) ETAPA 1 COMPLETADA', 'value': '0' });
 
-    console.log(this.datosImagenes)
-
     this.emitBusqueda.emit({
       area: this.areaSelected,
       profesional: this.profesionalSelected,
