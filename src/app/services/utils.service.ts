@@ -347,13 +347,14 @@ export class UtilsService {
             resolve(datasUpload);
           } else {
             reject(false);
-            this.mDialog("Error", "El tipo de archivo no es permitido.", "message");
+            const extratxt = withPdf ? 'PNG, jPG o PDF.' : 'PNG o JPG.';
+            this.mDialog("Atención", "Por favor, adjunte la orden médica en formato " + extratxt, "message");
           }
 
         };
 
       } else {
-        this.mDialog("Error", "El tamaño máximo permitido del archivo es 5MB.", "message");
+        this.mDialog("Atención", "El tamaño máximo permitido del archivo es 5MB.", "message");
       }
 
     });

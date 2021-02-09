@@ -28,11 +28,11 @@
             <p><b>Hora de la cita:</b>
               {{ calendario.cupo.fechaHora | toLocalScl: calendario.cupo.compensacion : 'DD/MM/YYYY HH:mm'}}</p>
             <p><b>{{ busquedaInicial.area.id === 'RIS_IMAGENES' ? 'Examen' : 'Profesional'}}:</b> {{ calendario.recurso.nombre }}</p>
-            <p><b>Especialidad:</b> {{ busquedaInicial.especialidad.detalle }}</p>
+            <p *ngIf="busquedaInicial.area.id !== 'RIS_IMAGENES'"><b>Especialidad:</b> {{ busquedaInicial.especialidad.detalle }}</p>
             <p *ngIf="utils.slugify(busquedaInicial.area.nombre, '-') !== 'telemedicina' && 
             utils.slugify(busquedaInicial.area.nombre, '-') !== 'consulta-medica-virtual'"><b>Centro:</b>
               {{ calendario.cupo.centro.nombre }}</p>
-            <p><b>Dirección del
+            <p *ngIf="busquedaInicial.area.id !== 'RIS_IMAGENES'"><b>Dirección del
                 centro:</b>{{ calendario.cupo.centro.direccion?.calle }}
               {{ calendario.cupo.centro.direccion?.numero }}
               {{ calendario.cupo.centro.direccion?.comuna }}</p>

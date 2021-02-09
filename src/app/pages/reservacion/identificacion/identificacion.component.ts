@@ -157,7 +157,7 @@ export class IdentificacionComponent implements OnInit, OnChanges {
       }
 
       
-      if(this.calendario){
+      if(this.calendario || this.listaEspera){
         this.getPaises();
       }
 
