@@ -157,7 +157,7 @@ export class ConfirmacionComponent implements OnInit, OnChanges, OnDestroy {
   setListaRecetas(items) {
 
     const mensajes = [];
-    mensajes.push({ mensaje: { contenido: `<b style="margin: 20px 0px;font-weight: bold;font-size: 16px; display:block;">Recetas:</b>` } });
+    mensajes.push({ mensaje: { contenido: `<b style="margin: 20px 0px;font-weight: bold;font-size: 16px; display:block;">Documentos de la Cita:</b>` } });
     items.forEach((val, key) => {
       mensajes.push({ mensaje: { contenido: `<p style="margin:0px !important">- <a href="${val.urlReceta}" target="_blank">${val.nombreReceta}</a></p>` } });
     });
@@ -241,7 +241,8 @@ export class ConfirmacionComponent implements OnInit, OnChanges, OnDestroy {
       fechaHora: this.calendario.cupo.fechaHora,
       compensacion: this.calendario.cupo.compensacion,
       IdArea: this.busquedaInicial.area.id,
-      nombreEspecialidad: this.busquedaInicial.especialidad.detalle
+      nombreEspecialidad: this.busquedaInicial.especialidad.detalle,
+      nombreServicio: this.busquedaInicial.especialidad.nombreServicio
     };
 
     let dialogConfirm = this.dialog.open(ConfirmarAnularReservaComponent, {

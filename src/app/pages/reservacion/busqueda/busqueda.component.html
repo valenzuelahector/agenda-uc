@@ -65,7 +65,7 @@
       </div>
     </div>
     <div class="cwarn" style="margin-bottom: 20px;" *ngIf="!areaSelected?.nombre.toLowerCase().includes('telemedicina') && !areaSelected?.nombre.toLowerCase().includes('urgencia')">
-      Si Ud. presenta alguno de los siguiente síntomas: fibre, tos, congestión nasal, pérdida del olfato o ha estado en contacto con personas COVID +: 
+      Si Ud. presenta alguno de los siguiente síntomas: fiebre, tos, congestión nasal, pérdida del olfato o ha estado en contacto con personas COVID +: 
       Le sugerimos atención vía Telemedicina o acudir a nuestra red de servicio de Urgencia.
     </div>
   </div>
@@ -197,7 +197,9 @@
     <p class="nores">Sin disponibilidad vía web. Llámanos al 226767000</p>
   </div>
 
-  <p class="mini-info-rad" *ngIf="areaSelected?.id === 'RIS_IMAGENES'">Para exámenes de PET CT, Medicina Nuclear, procedimientos médicos (punciones y biopsias) y exámenes pediátricos llamar a call center 6767000 opción 3  </p>
+  <p class="mini-info-rad" *ngIf="areaSelected?.id === 'RIS_IMAGENES'">
+    Para exámenes de PET CT, Medicina Nuclear, procedimientos médicos (punciones y biopsias) y exámenes pediátricos llamar a call center 6767000 opción 3. 
+    Exámenes de Radiografía Simple no requieren agendamiento, dirigirse directamente a cada centro.</p>
 </ng-template>
 
 <ng-template #formDatosPaciente>

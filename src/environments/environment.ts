@@ -6,7 +6,6 @@ export const environment = {
   production: true
 };
 
-/*
 export const ENV = {
   baseApi: 'https://apigw.ucchristus.cl',
   servRoute: '/agendaambulatoria-test',
@@ -14,7 +13,7 @@ export const ENV = {
   idPlanSaludInit: '0b7a577d-6364-4b28-b2ba-a96e00e243ac',
   idCentrosNoDisponibles: [],
   idCentroPrioritario: '52e43c90-8ab7-4e34-afcb-a96f0106bbd1',
-  mensajeSinCupos: '<h5>No se encontraron cupos disponibles.</h5>',
+  mensajeSinCupos: '<h5>Estimado paciente, actualmente no encontramos citas disponibles en el centro de su elección. Intente nueva búsqueda en todos los centros.</h5>',
   idExamenProcedimiento: '97bd5208-60d1-4d6c-9d1e-a96e00ddbc15',
   idLaboratorioClinico: '86399d7e-7bd3-4bed-b18a-aca100fc732c',
   areaConsultaMedica: {
@@ -26,8 +25,9 @@ export const ENV = {
     idServicio : '02560c8e-0c28-4e88-9eb4-abd400f8b282'
   },
   idRegion: '6bad9b25-d5df-4565-b5fe-a6f701444053'
-}*/
+}
 
+/*
 export const ENV = {
   baseApi: 'https://apigw.ucchristus.cl',
     servRoute: '/agendaambulatoria-prod',
@@ -35,7 +35,7 @@ export const ENV = {
     idPlanSaludInit: '0b7a577d-6364-4b28-b2ba-a96e00e243ac',
     idCentrosNoDisponibles: [],
     idCentroPrioritario: '52e43c90-8ab7-4e34-afcb-a96f0106bbd1',
-    mensajeSinCupos : '<h5>Sin disponibilidad en agendamiento web. En caso de requerir atención presencial para vacunación por campaña influenza ministerial, ésta será por orden de llegada.</h5>',
+    mensajeSinCupos : '<h5>Estimado paciente, actualmente no encontramos citas disponibles en el centro de su elección. Intente nueva búsqueda en todos los centros.</h5>',
     idExamenProcedimiento: 'b2461ac2-9c50-4724-9676-a91a00a91a02',
     idLaboratorioClinico: 'baa46005-a0ff-4715-a074-ac4601235504',
     areaConsultaMedica: {
@@ -47,7 +47,7 @@ export const ENV = {
       idServicio : '02560c8e-0c28-4e88-9eb4-abd400f8b282'
     },
     idRegion: '6bad9b25-d5df-4565-b5fe-a6f701444053'
-}
+}*/
 
 export const dummyData = {
   profesionalAsignado: {
