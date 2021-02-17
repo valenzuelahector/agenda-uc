@@ -121,20 +121,18 @@ export class BusquedaComponent implements OnInit {
   getParamsArea() {
     return new Promise((resolve, reject) => {
       this.aRouter.params.subscribe(params => {
-        resolve(params)
+        resolve(params);
       })
     })
   }
 
   setIdentificacion(params){
-    console.log(params)
     if(params.rut && params.tipoDocumento){
       this.datosPaciente = {
         tipoDocumento : params.tipoDocumento,
         documento: params.rut,
         documentoFormateado: this.utils.formatRut(params.rut)
       }
-      console.log(this.datosPaciente);
     }
   }
 
@@ -160,7 +158,7 @@ export class BusquedaComponent implements OnInit {
             if (
               (
                 (val['nombre'].toLowerCase() == 'consultas' && !qp['area']) ||
-                (qp['area'] && qp['area'].toLowerCase() == val['id'].toLowerCase())
+                (qp['area'] && qp['area'].toLowerCase() == val['id'].toString().toLowerCase())
               ) && !setParamArea
             ) {
               this.areaSelected = val;
@@ -226,7 +224,7 @@ export class BusquedaComponent implements OnInit {
           res['profesionales'].forEach((val, key) => {
 
             res['profesionales'][key]['detalle'] = val['nombreProfesional'];
-            if (qp['profesional'] && qp['profesional'].toLowerCase() == val['idProfesional'].toLowerCase()) {
+            if (qp['profesional'] && qp['profesional'].toLowerCase() == val['idProfesional'].toString().toLowerCase()) {
               matchProfesional = val;
             }
           })
@@ -355,8 +353,8 @@ export class BusquedaComponent implements OnInit {
               res['especialidadesPorServicio'][key]['detalle'] = val['nombreEspecialidad'] + " - " + val['nombreServicio'];
             }
 
-            if ((tipo == 'profesional' && qp['especialidad'] && qp['especialidad'].toLowerCase() == val['idServicio'].toLowerCase()) ||
-              (tipo == 'especialidad' && qp['especialidad'] && qp['especialidad'].toLowerCase() == val['idEspecialidad'].toLowerCase())) {
+            if ((tipo == 'profesional' && qp['especialidad'] && qp['especialidad'].toLowerCase() == val['idServicio'].toString().toLowerCase()) ||
+              (tipo == 'especialidad' && qp['especialidad'] && qp['especialidad'].toLowerCase() == val['idEspecialidad'].toString().toLowerCase())) {
               matEspecialidad = val;
             }
 
@@ -605,8 +603,8 @@ export class BusquedaComponent implements OnInit {
             direccion: { calle: null, numero: null, piso: null, comuna: 'Región Metropolitana' },
             horaApertura: null,
             horaCierre: null,
-            idCentro: region,
-            idRegion: region,
+            idCentro: ENV.idRegion,
+            idRegion: ENV.idRegion,
             latitud: null,
             longitud: null,
             nombre: "Todos",
@@ -621,7 +619,7 @@ export class BusquedaComponent implements OnInit {
         if (res['centros'] && res['centros'].length > 0) {
           res['centros'].forEach((val, key) => {
             res['centros'][key]['detalle'] = val['detalle'] ? val['detalle'] : val['nombre'];
-            if (qp['centro'] && qp['centro'].toLowerCase() == val['idCentro'].toLowerCase()) {
+            if (qp['centro'] && qp['centro'].toLowerCase() == val['idCentro'].toString().toLowerCase()) {
               matCentro = res['centros'][key];
             }
           })
@@ -633,7 +631,7 @@ export class BusquedaComponent implements OnInit {
           if (matCentro) {
             this.centroAtencionCtrl.patchValue(matCentro);
             this.centroAtencionSelection(matCentro);
-            if (this.datosPaciente.documento) {
+            if (this.datosPaciente.documento && this.areaSelected.id !== 'RIS_IMAGENES') {
               this.buscarHora();
             }else{
               this.emitterReadQuery(true)
