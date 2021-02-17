@@ -239,7 +239,9 @@ export class ConfirmacionComponent implements OnInit, OnChanges, OnDestroy {
       fromReserva: true,
       nombreProfesional: this.calendario.recurso.nombre,
       fechaHora: this.calendario.cupo.fechaHora,
-      compensacion: this.calendario.cupo.compensacion
+      compensacion: this.calendario.cupo.compensacion,
+      IdArea: this.busquedaInicial.area.id,
+      nombreEspecialidad: this.busquedaInicial.especialidad.detalle
     };
 
     let dialogConfirm = this.dialog.open(ConfirmarAnularReservaComponent, {

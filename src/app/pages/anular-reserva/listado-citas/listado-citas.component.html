@@ -27,7 +27,7 @@
                 <tr *ngFor="let cita of dataAnularCita.citas">
                     <td>{{ cita.FechaHoraDesde | date:'HH:mm' }}</td>
                     <td>{{ utils.matchRecursoTrue(cita.RecursosCita) }}</td>
-                    <td>{{ cita.Servicio.NombreEspecialidad }}</td>
+                    <td>{{ cita.Servicio.NombreEspecialidad }} - {{ cita.Servicio.Nombre }} </td>
                     <td>{{ cita.Centro.Nombre }}</td>
                     <td>
                         <div class="botones">
