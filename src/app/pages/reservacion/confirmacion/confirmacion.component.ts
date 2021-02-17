@@ -121,7 +121,7 @@ export class ConfirmacionComponent implements OnInit, OnChanges, OnDestroy {
 
         this.reservaFinalizada = true;
         this.idreserva = data['idCita'];
-        this.codCita = this.busquedaInicial.area.id === 'RIS_IMAGENES' ? data['idCita'] : data['codCita'];
+       // this.codCita = this.busquedaInicial.area.id === 'RIS_IMAGENES' ? data['idCita'] : data['codCita'];
 
         if (this.busquedaInicial.fromCuposInmediatos) {
           gtag('event', 'Reserva Cupos Inmediatos', { 'event_category': 'Reserva de Hora', 'event_label': 'Paso5:Reserva-Confirmada' });
@@ -255,7 +255,7 @@ export class ConfirmacionComponent implements OnInit, OnChanges, OnDestroy {
       if (result) {
 
         const dataCita = {
-          codCita: this.codCita,
+          idCita: this.idreserva,
           codPaciente: this.busquedaInicial.documentoPaciente.documento,
           tipoIdPaciente: this.busquedaInicial.documentoPaciente.tipoDocumento,
           paisIdentificador: 'CL',
