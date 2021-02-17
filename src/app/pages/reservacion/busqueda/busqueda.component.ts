@@ -858,12 +858,11 @@ export class BusquedaComponent implements OnInit {
           this.utils.mDialog("Error", "Debe adjuntar orden médica.", "message");
           return;
         }
-
-        const respEnc:any = await this.agendaService.getEncuesta(this.servicioSelected.id, this.centroAtencionSelected.idCentro, this.datosImagenes.aplicaMedioContraste);
+        const codCentro = this.centroAtencionSelected.codigo && this.centroAtencionSelected.codigo === 'todos' ? null : this.centroAtencionSelected.idCentro;
+        const respEnc:any = await this.agendaService.getEncuesta(this.servicioSelected.id, codCentro, this.datosImagenes.aplicaMedioContraste);
         if(respEnc && respEnc.encuesta && respEnc.encuesta.length > 0){
           const ressp:any = await this.mostrarEncuesta({...this.datosPaciente, ...respEnc});
           continueEncuesta = ressp.action;
-          console.log(ressp)
           this.datosImagenes.idEncuesta = ressp.idRespuesta;
         }
       }
@@ -888,8 +887,6 @@ export class BusquedaComponent implements OnInit {
     gtag('event', gtagActionEspProf, { 'event_category': gtagNameEsp, 'event_label': `c) Área de Interés: ${this.especialidadSelected.nombreServicio}`, 'value': '0' });
     gtag('event', gtagActionEspProf, { 'event_category': gtagNameEsp, 'event_label': `d) Centro Médico: ${this.centroAtencionSelected.nombre}`, 'value': '0' });
     gtag('event', gtagActionEspProf, { 'event_category': gtagNameEsp, 'event_label': 'e) ETAPA 1 COMPLETADA', 'value': '0' });
-
-    console.log(this.datosImagenes)
 
     this.emitBusqueda.emit({
       area: this.areaSelected,
