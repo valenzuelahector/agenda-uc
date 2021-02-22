@@ -125,7 +125,7 @@ export class ReservacionComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   busquedaEmitter(data){
-    if (data && data.area && data.especialidad && data.centroAtencion) {
+    if (data && data.area && data.especialidad) {
       this.busquedaInfo = data;
       this.cambiarEtapa(1);
     }

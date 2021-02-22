@@ -616,6 +616,7 @@ export class BusquedaComponent implements OnInit {
 
         }
 
+       
         if (res['centros'] && res['centros'].length > 0) {
           res['centros'].forEach((val, key) => {
             res['centros'][key]['detalle'] = val['detalle'] ? val['detalle'] : val['nombre'];
@@ -627,7 +628,6 @@ export class BusquedaComponent implements OnInit {
           res['centros'] = this.orderPipe.transform(res['centros'], 'detalle');
 
           this.centrosAtencion = this.priorizarCentro(res['centros']);
-
           if (matCentro) {
             this.centroAtencionCtrl.patchValue(matCentro);
             this.centroAtencionSelection(matCentro);
@@ -642,7 +642,7 @@ export class BusquedaComponent implements OnInit {
             if (res['centros'].length == 1) {
               this.centroAtencionCtrl.patchValue(res['centros'][0]);
               this.centroAtencionSelection(res['centros'][0]);
-            } else if (objTodos && this.areaSelected.id === 'RIS_IMAGENES') {
+            } else if (objTodos && (this.areaSelected.id === 'RIS_IMAGENES' || this.areaSelected.nombre.toLowerCase() === 'telemedicina') ) {
               this.centroAtencionCtrl.patchValue(objTodos);
               this.centroAtencionSelection(objTodos);
             }
@@ -779,7 +779,7 @@ export class BusquedaComponent implements OnInit {
 
   centroAtencionSelection(event) {
     this.centroAtencionCtrl.disable();
-    this.centroAtencionSelected = this.centroAtencionCtrl.value;
+    this.centroAtencionSelected = event ? event : this.centroAtencionCtrl.value;
   }
 
   verificarDonantePaciente() {
@@ -879,13 +879,13 @@ export class BusquedaComponent implements OnInit {
     gtag('event', gtagActionName, { 'event_category': gtagName, 'event_label': `a) Área Médica: ${this.areaSelected.nombre}`, 'value': '0' });
     gtag('event', gtagActionName, { 'event_category': gtagName, 'event_label': `b) Especiallidad: ${this.especialidadSelected.nombreEspecialidad}`, 'value': '0' });
     gtag('event', gtagActionName, { 'event_category': gtagName, 'event_label': `c) Área de Interés: ${this.especialidadSelected.nombreServicio}`, 'value': '0' });
-    gtag('event', gtagActionName, { 'event_category': gtagName, 'event_label': `d) Centro Médico: ${this.centroAtencionSelected.nombre}`, 'value': '0' });
+    gtag('event', gtagActionName, { 'event_category': gtagName, 'event_label': `d) Centro Médico:  ${this.centroAtencionSelected ? this.centroAtencionSelected.nombre : ''}`, 'value': '0' });
     gtag('event', gtagActionName, { 'event_category': gtagName, 'event_label': 'e) ETAPA 1 COMPLETADA', 'value': '0' });
 
     gtag('event', gtagActionEspProf, { 'event_category': gtagNameEsp, 'event_label': `a) Área Médica: ${this.areaSelected.nombre}`, 'value': '0' });
     gtag('event', gtagActionEspProf, { 'event_category': gtagNameEsp, 'event_label': `b) Especiallidad: ${this.especialidadSelected.nombreEspecialidad}`, 'value': '0' });
     gtag('event', gtagActionEspProf, { 'event_category': gtagNameEsp, 'event_label': `c) Área de Interés: ${this.especialidadSelected.nombreServicio}`, 'value': '0' });
-    gtag('event', gtagActionEspProf, { 'event_category': gtagNameEsp, 'event_label': `d) Centro Médico: ${this.centroAtencionSelected.nombre}`, 'value': '0' });
+    gtag('event', gtagActionEspProf, { 'event_category': gtagNameEsp, 'event_label': `d) Centro Médico: ${this.centroAtencionSelected ? this.centroAtencionSelected.nombre : ''}`, 'value': '0' });
     gtag('event', gtagActionEspProf, { 'event_category': gtagNameEsp, 'event_label': 'e) ETAPA 1 COMPLETADA', 'value': '0' });
 
     this.emitBusqueda.emit({
