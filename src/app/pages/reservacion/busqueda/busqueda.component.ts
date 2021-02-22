@@ -779,7 +779,7 @@ export class BusquedaComponent implements OnInit {
 
   centroAtencionSelection(event) {
     this.centroAtencionCtrl.disable();
-    this.centroAtencionSelected = event ? event : this.centroAtencionCtrl.value;
+    this.centroAtencionSelected = this.centroAtencionCtrl.value;
   }
 
   verificarDonantePaciente() {
