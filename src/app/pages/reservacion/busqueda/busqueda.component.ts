@@ -818,7 +818,7 @@ export class BusquedaComponent implements OnInit {
       return false;
     }
 
-    if (!this.centroAtencionSelected) {
+    if (!this.centroAtencionSelected && this.areaSelected.nombre.toLowerCase() !== 'telemedicina') {
       this.utils.mDialog('Error', 'Debe seleccionar un Centro de Atención.', 'message');
       return false;
     }
