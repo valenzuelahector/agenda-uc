@@ -121,7 +121,7 @@ export class ConfirmacionComponent implements OnInit, OnChanges, OnDestroy {
 
         this.reservaFinalizada = true;
         this.idreserva = data['idCita'];
-        this.codCita = this.busquedaInicial.area.id === 'RIS_IMAGENES' ? data['idCita'] : data['codCita'];
+       // this.codCita = this.busquedaInicial.area.id === 'RIS_IMAGENES' ? data['idCita'] : data['codCita'];
 
         if (this.busquedaInicial.fromCuposInmediatos) {
           gtag('event', 'Reserva Cupos Inmediatos', { 'event_category': 'Reserva de Hora', 'event_label': 'Paso5:Reserva-Confirmada' });
@@ -157,7 +157,7 @@ export class ConfirmacionComponent implements OnInit, OnChanges, OnDestroy {
   setListaRecetas(items) {
 
     const mensajes = [];
-    mensajes.push({ mensaje: { contenido: `<b style="margin: 20px 0px;font-weight: bold;font-size: 16px; display:block;">Recetas:</b>` } });
+    mensajes.push({ mensaje: { contenido: `<b style="margin: 20px 0px;font-weight: bold;font-size: 16px; display:block;">Documentos de la Cita:</b>` } });
     items.forEach((val, key) => {
       mensajes.push({ mensaje: { contenido: `<p style="margin:0px !important">- <a href="${val.urlReceta}" target="_blank">${val.nombreReceta}</a></p>` } });
     });
@@ -239,7 +239,10 @@ export class ConfirmacionComponent implements OnInit, OnChanges, OnDestroy {
       fromReserva: true,
       nombreProfesional: this.calendario.recurso.nombre,
       fechaHora: this.calendario.cupo.fechaHora,
-      compensacion: this.calendario.cupo.compensacion
+      compensacion: this.calendario.cupo.compensacion,
+      IdArea: this.busquedaInicial.area.id,
+      nombreEspecialidad: this.busquedaInicial.especialidad.detalle,
+      nombreServicio: this.busquedaInicial.especialidad.nombreServicio
     };
 
     let dialogConfirm = this.dialog.open(ConfirmarAnularReservaComponent, {
@@ -253,7 +256,7 @@ export class ConfirmacionComponent implements OnInit, OnChanges, OnDestroy {
       if (result) {
 
         const dataCita = {
-          codCita: this.codCita,
+          idCita: this.idreserva,
           codPaciente: this.busquedaInicial.documentoPaciente.documento,
           tipoIdPaciente: this.busquedaInicial.documentoPaciente.tipoDocumento,
           paisIdentificador: 'CL',

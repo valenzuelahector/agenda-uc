@@ -120,7 +120,9 @@ export class BuscarTuMedicoComponent implements OnInit {
 
           if (srvRequest && srvRequest.especialidadesPorServicio && srvRequest.especialidadesPorServicio.length > 0) {
 
-            servicio = srvRequest.especialidadesPorServicio[0];
+            servicio = srvRequest.especialidadesPorServicio.find( item => {
+              return item.idEspecialidad === ENV.saludIntegral.idEspecialidad
+            });
 
             if (!servicio) {
               reject(false);

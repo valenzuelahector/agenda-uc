@@ -141,7 +141,7 @@
 								<p class="small bxsmall" *ngIf="re?.informacionAdicional">
 									{{ re?.informacionAdicional }}</p>
 								<div class="leyenda" style="margin-top: 20px;" *ngIf="re?.listaCuposMes.length > 0">
-									<b class="smly">Este profesional atiende en:</b>
+									<b class="smly">{{ busquedaInicial.area.id === 'RIS_IMAGENES' ? 'Este examen está disponible en:' : 'Este profesional atiende en:' }}</b>
 									<div fxLayout="row wrap" fxLayoutAlign="space-between">
 										<div *ngFor="let ct of re?.listaCuposMes" fxFlex="49%" fxFlex.sm="100%"
 											fxFlex.xs="100%">

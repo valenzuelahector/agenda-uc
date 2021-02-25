@@ -1,10 +1,13 @@
 <mat-dialog-content>
     <div class="cntmodal" *ngIf="!cita.fromReserva">
-        <h3>¿Deseas anular la hora reservada {{ utils.matchRecursoTrue(cita?.RecursosCita) ? 'con el Dr(a). ' + utils.matchRecursoTrue(cita?.RecursosCita) : '' }} 
+        <h3>¿Deseas anular la hora reservada 
+          <span *ngIf="cita?.Servicio.IdArea !== 'RIS_IMAGENES'">{{ utils.matchRecursoTrue(cita?.RecursosCita) ? 'con el Dr(a). ' + utils.matchRecursoTrue(cita?.RecursosCita) : '' }} </span>
+          <span *ngIf="cita?.Servicio.IdArea === 'RIS_IMAGENES'"> de {{ cita.Servicio.Nombre }}</span>
+
             el {{ cita?.FechaHoraDesde | date:'longDate' }} a las {{ cita?.FechaHoraDesde | date:'HH:mm' }} hrs. ?</h3>
         <div class="btns" style="margin-top: 15px; text-align: center;">
             <button mat-stroked-button class="btn-azul cus-pad" style="margin-right: 15px;background-color: red;" (click)="actionAnular(true)">
-                <mat-icon class="icon-cus-pad">check</mat-icon>CONFIRMAR
+                <mat-icon class="icon-cus-pad">check</mat-icon>ANULAR
               </button>
             <button mat-stroked-button class="btn-blanco cus-pad" (click)="actionAnular(false)">
               <mat-icon class="icon-cus-pad">close</mat-icon>CANCELAR
@@ -12,7 +15,9 @@
           </div>
     </div>
     <div class="cntmodal" *ngIf="cita.fromReserva">
-      <h3>¿Deseas anular la hora reservada  {{ cita.nombreProfesional ? 'con el Dr(a).' + cita.nombreProfesional : '' }} 
+      <h3>¿Deseas anular la hora reservada 
+        <span *ngIf="cita?.IdArea !== 'RIS_IMAGENES'">{{ cita.nombreProfesional ? 'con el Dr(a).' + cita.nombreProfesional : '' }}</span> 
+        <span *ngIf="cita?.IdArea === 'RIS_IMAGENES'"> de {{ cita.nombreServicio }}</span> 
           el {{ cita.fechaHora | toLocalScl: cita.compensacion : 'DD/MM/YYYY' }} a las 
              {{ cita.fechaHora | toLocalScl: cita.compensacion : 'HH:mm' }} hrs. ?</h3>
       <div class="btns" style="margin-top: 15px; text-align: center;">

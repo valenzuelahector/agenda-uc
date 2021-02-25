@@ -16,7 +16,9 @@
         <p><b>Profesional:</b>  <span> {{ utils.matchRecursoTrue(dataAnularCita?.detalleCitaSeleccionada.RecursosCita) }}</span></p>
       </div>
       <div class="item size-half-noborder">
-        <p><b>Especialidad:</b><span> {{ dataAnularCita?.detalleCitaSeleccionada.Servicio.NombreEspecialidad }}</span></p>
+        <p><b>Especialidad:</b><span> {{ dataAnularCita?.detalleCitaSeleccionada.Servicio.NombreEspecialidad }} - 
+          {{ dataAnularCita?.detalleCitaSeleccionada.Servicio.Nombre }}
+        </span></p>
       </div>
       <div class="item size-half">
         <p><b>Centro:</b> {{ dataAnularCita?.detalleCitaSeleccionada.Centro.Nombre }}</p>

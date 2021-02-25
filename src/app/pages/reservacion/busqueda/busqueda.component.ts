@@ -121,20 +121,18 @@ export class BusquedaComponent implements OnInit {
   getParamsArea() {
     return new Promise((resolve, reject) => {
       this.aRouter.params.subscribe(params => {
-        resolve(params)
+        resolve(params);
       })
     })
   }
 
   setIdentificacion(params){
-    console.log(params)
     if(params.rut && params.tipoDocumento){
       this.datosPaciente = {
         tipoDocumento : params.tipoDocumento,
         documento: params.rut,
         documentoFormateado: this.utils.formatRut(params.rut)
       }
-      console.log(this.datosPaciente);
     }
   }
 
@@ -160,7 +158,7 @@ export class BusquedaComponent implements OnInit {
             if (
               (
                 (val['nombre'].toLowerCase() == 'consultas' && !qp['area']) ||
-                (qp['area'] && qp['area'].toLowerCase() == val['id'].toLowerCase())
+                (qp['area'] && qp['area'].toLowerCase() == val['id'].toString().toLowerCase())
               ) && !setParamArea
             ) {
               this.areaSelected = val;
@@ -226,7 +224,7 @@ export class BusquedaComponent implements OnInit {
           res['profesionales'].forEach((val, key) => {
 
             res['profesionales'][key]['detalle'] = val['nombreProfesional'];
-            if (qp['profesional'] && qp['profesional'].toLowerCase() == val['idProfesional'].toLowerCase()) {
+            if (qp['profesional'] && qp['profesional'].toLowerCase() == val['idProfesional'].toString().toLowerCase()) {
               matchProfesional = val;
             }
           })
@@ -355,8 +353,8 @@ export class BusquedaComponent implements OnInit {
               res['especialidadesPorServicio'][key]['detalle'] = val['nombreEspecialidad'] + " - " + val['nombreServicio'];
             }
 
-            if ((tipo == 'profesional' && qp['especialidad'] && qp['especialidad'].toLowerCase() == val['idServicio'].toLowerCase()) ||
-              (tipo == 'especialidad' && qp['especialidad'] && qp['especialidad'].toLowerCase() == val['idEspecialidad'].toLowerCase())) {
+            if ((tipo == 'profesional' && qp['especialidad'] && qp['especialidad'].toLowerCase() == val['idServicio'].toString().toLowerCase()) ||
+              (tipo == 'especialidad' && qp['especialidad'] && qp['especialidad'].toLowerCase() == val['idEspecialidad'].toString().toLowerCase())) {
               matEspecialidad = val;
             }
 
@@ -605,8 +603,8 @@ export class BusquedaComponent implements OnInit {
             direccion: { calle: null, numero: null, piso: null, comuna: 'Región Metropolitana' },
             horaApertura: null,
             horaCierre: null,
-            idCentro: region,
-            idRegion: region,
+            idCentro: ENV.idRegion,
+            idRegion: ENV.idRegion,
             latitud: null,
             longitud: null,
             nombre: "Todos",
@@ -618,10 +616,11 @@ export class BusquedaComponent implements OnInit {
 
         }
 
+       
         if (res['centros'] && res['centros'].length > 0) {
           res['centros'].forEach((val, key) => {
             res['centros'][key]['detalle'] = val['detalle'] ? val['detalle'] : val['nombre'];
-            if (qp['centro'] && qp['centro'].toLowerCase() == val['idCentro'].toLowerCase()) {
+            if (qp['centro'] && qp['centro'].toLowerCase() == val['idCentro'].toString().toLowerCase()) {
               matCentro = res['centros'][key];
             }
           })
@@ -629,11 +628,10 @@ export class BusquedaComponent implements OnInit {
           res['centros'] = this.orderPipe.transform(res['centros'], 'detalle');
 
           this.centrosAtencion = this.priorizarCentro(res['centros']);
-
           if (matCentro) {
             this.centroAtencionCtrl.patchValue(matCentro);
             this.centroAtencionSelection(matCentro);
-            if (this.datosPaciente.documento) {
+            if (this.datosPaciente.documento && this.areaSelected.id !== 'RIS_IMAGENES') {
               this.buscarHora();
             }else{
               this.emitterReadQuery(true)
@@ -644,7 +642,7 @@ export class BusquedaComponent implements OnInit {
             if (res['centros'].length == 1) {
               this.centroAtencionCtrl.patchValue(res['centros'][0]);
               this.centroAtencionSelection(res['centros'][0]);
-            } else if (objTodos && this.areaSelected.id === 'RIS_IMAGENES') {
+            } else if (objTodos && (this.areaSelected.id === 'RIS_IMAGENES' || this.areaSelected.nombre.toLowerCase() === 'telemedicina') ) {
               this.centroAtencionCtrl.patchValue(objTodos);
               this.centroAtencionSelection(objTodos);
             }
@@ -820,7 +818,7 @@ export class BusquedaComponent implements OnInit {
       return false;
     }
 
-    if (!this.centroAtencionSelected) {
+    if (!this.centroAtencionSelected && this.areaSelected.nombre.toLowerCase() !== 'telemedicina') {
       this.utils.mDialog('Error', 'Debe seleccionar un Centro de Atención.', 'message');
       return false;
     }
@@ -860,12 +858,11 @@ export class BusquedaComponent implements OnInit {
           this.utils.mDialog("Error", "Debe adjuntar orden médica.", "message");
           return;
         }
-
-        const respEnc:any = await this.agendaService.getEncuesta(this.servicioSelected.id, this.centroAtencionSelected.idCentro, this.datosImagenes.aplicaMedioContraste);
+        const codCentro = this.centroAtencionSelected.codigo && this.centroAtencionSelected.codigo === 'todos' ? null : this.centroAtencionSelected.idCentro;
+        const respEnc:any = await this.agendaService.getEncuesta(this.servicioSelected.id, codCentro, this.datosImagenes.aplicaMedioContraste);
         if(respEnc && respEnc.encuesta && respEnc.encuesta.length > 0){
           const ressp:any = await this.mostrarEncuesta({...this.datosPaciente, ...respEnc});
           continueEncuesta = ressp.action;
-          console.log(ressp)
           this.datosImagenes.idEncuesta = ressp.idRespuesta;
         }
       }
@@ -882,13 +879,13 @@ export class BusquedaComponent implements OnInit {
     gtag('event', gtagActionName, { 'event_category': gtagName, 'event_label': `a) Área Médica: ${this.areaSelected.nombre}`, 'value': '0' });
     gtag('event', gtagActionName, { 'event_category': gtagName, 'event_label': `b) Especiallidad: ${this.especialidadSelected.nombreEspecialidad}`, 'value': '0' });
     gtag('event', gtagActionName, { 'event_category': gtagName, 'event_label': `c) Área de Interés: ${this.especialidadSelected.nombreServicio}`, 'value': '0' });
-    gtag('event', gtagActionName, { 'event_category': gtagName, 'event_label': `d) Centro Médico: ${this.centroAtencionSelected.nombre}`, 'value': '0' });
+    gtag('event', gtagActionName, { 'event_category': gtagName, 'event_label': `d) Centro Médico:  ${this.centroAtencionSelected ? this.centroAtencionSelected.nombre : ''}`, 'value': '0' });
     gtag('event', gtagActionName, { 'event_category': gtagName, 'event_label': 'e) ETAPA 1 COMPLETADA', 'value': '0' });
 
     gtag('event', gtagActionEspProf, { 'event_category': gtagNameEsp, 'event_label': `a) Área Médica: ${this.areaSelected.nombre}`, 'value': '0' });
     gtag('event', gtagActionEspProf, { 'event_category': gtagNameEsp, 'event_label': `b) Especiallidad: ${this.especialidadSelected.nombreEspecialidad}`, 'value': '0' });
     gtag('event', gtagActionEspProf, { 'event_category': gtagNameEsp, 'event_label': `c) Área de Interés: ${this.especialidadSelected.nombreServicio}`, 'value': '0' });
-    gtag('event', gtagActionEspProf, { 'event_category': gtagNameEsp, 'event_label': `d) Centro Médico: ${this.centroAtencionSelected.nombre}`, 'value': '0' });
+    gtag('event', gtagActionEspProf, { 'event_category': gtagNameEsp, 'event_label': `d) Centro Médico: ${this.centroAtencionSelected ? this.centroAtencionSelected.nombre : ''}`, 'value': '0' });
     gtag('event', gtagActionEspProf, { 'event_category': gtagNameEsp, 'event_label': 'e) ETAPA 1 COMPLETADA', 'value': '0' });
 
     this.emitBusqueda.emit({

@@ -125,8 +125,7 @@ export class ReservacionComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   busquedaEmitter(data){
-    if (data && data.area && data.especialidad && data.centroAtencion) {
-      console.log(JSON.stringify(data))
+    if (data && data.area && data.especialidad) {
       this.busquedaInfo = data;
       this.cambiarEtapa(1);
     }
@@ -136,7 +135,7 @@ export class ReservacionComponent implements OnInit, AfterViewInit, OnDestroy {
   getParamsArea(){
 
     this.aRouter.params.subscribe( params => {
-      if(params['area'] === 'salud-integral'){
+      if(params['area'] === 'saludintegral'){
         this.saludIntegral = true;
         setTimeout(()=> {
           this.readQuery = true;
