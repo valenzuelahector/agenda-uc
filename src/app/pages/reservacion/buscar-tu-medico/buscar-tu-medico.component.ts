@@ -3,6 +3,7 @@ import { UtilsService } from 'src/app/services/utils.service';
 import { Validators, FormControl } from '@angular/forms';
 import { ENV } from 'src/environments/environment';
 import { AgendaAmbulatoriaService } from 'src/app/services/agenda-ambulatoria.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-buscar-tu-medico',
@@ -17,9 +18,20 @@ export class BuscarTuMedicoComponent implements OnInit {
 
   constructor(
     public utils: UtilsService,
-    public agendaService: AgendaAmbulatoriaService) { }
+    public agendaService: AgendaAmbulatoriaService,
+    public activateRoute: ActivatedRoute) { }
 
   ngOnInit() {
+
+    this.activateRoute.queryParams.subscribe( params => {
+      if(params['rut']){
+        this.documento = params['rut'];
+        this.documentoFC.setValue(params['rut']);
+        this.setFormatRut();
+        this.buscarRut();
+      }
+    });
+
   }
 
   eventEnter(event) {
