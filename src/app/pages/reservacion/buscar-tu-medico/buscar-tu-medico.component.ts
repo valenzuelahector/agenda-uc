@@ -84,6 +84,7 @@ export class BuscarTuMedicoComponent implements OnInit {
       if (!esBeneficiario) {
 
         this.documentoFC.setErrors({ notFoundRut: true });
+        this.utils.hideProgressBar();
 
       } else {
 
@@ -104,6 +105,9 @@ export class BuscarTuMedicoComponent implements OnInit {
               this.utils.mDialog('Error', 'No se ha podido finalizar la consulta. Intente más tarde.', 'message');
               this.utils.hideProgressBar();    
             });
+          }, ()=>{
+            this.utils.mDialog('Error', 'No se ha podido finalizar la consulta. Intente más tarde.', 'message');
+            this.utils.hideProgressBar();
           });
 
         } catch (err) {
