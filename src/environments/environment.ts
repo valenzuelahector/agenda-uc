@@ -5,7 +5,7 @@
 export const environment = {
   production: true
 };
-/*
+
 export const ENV = {
   baseApi: 'https://apigw.ucchristus.cl',
   servRoute: '/agendaambulatoria-test',
@@ -31,8 +31,8 @@ export const ENV = {
     idServicio: '507ef9a7-0d7e-41b8-ae09-a93400e5d5c8'
   }
 }
-*/
 
+/*
 export const ENV = {
   baseApi: 'https://apigw.ucchristus.cl',
     servRoute: '/agendaambulatoria-prod',
@@ -57,7 +57,7 @@ export const ENV = {
       idEspecialidad: '507ef9a7-0d7e-41b8-ae09-a93400e5d5c8',
       idServicio: '507ef9a7-0d7e-41b8-ae09-a93400e5d5c8'
     }
-}
+}*/
 
 export const dummyData = {
   profesionalAsignado: {

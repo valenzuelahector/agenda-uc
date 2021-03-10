@@ -23,8 +23,8 @@ export class BuscarTuMedicoComponent implements OnInit {
 
   ngOnInit() {
 
-    this.activateRoute.queryParams.subscribe( params => {
-      if(params['rut']){
+    this.activateRoute.queryParams.subscribe(params => {
+      if (params['rut']) {
         this.documento = params['rut'];
         this.documentoFC.setValue(params['rut']);
         this.setFormatRut();
@@ -96,16 +96,16 @@ export class BuscarTuMedicoComponent implements OnInit {
           const rutmed = res.rut_medico;
           const rutMedTr = `${rutmed.substring(0, rutmed.length - 1)}-${rutmed.charAt(rutmed.length - 1)}`;
           this.agendaService.getDatosProfesional(null, rutMedTr).subscribe(async (prof: any) => {
-            this.setBusquedaCalendario(prof.datosProfesional).then( busqueda => {
+            this.setBusquedaCalendario(prof.datosProfesional).then(busqueda => {
               this.datosBeneficiarioMedico.emit(busqueda);
               this.utils.hideProgressBar();
               this.documento = null;
               this.documentoFC.setValue('');
             }).catch(err => {
               this.utils.mDialog('Error', 'No se ha podido finalizar la consulta. Intente más tarde.', 'message');
-              this.utils.hideProgressBar();    
+              this.utils.hideProgressBar();
             });
-          }, ()=>{
+          }, () => {
             this.utils.mDialog('Error', 'No se ha podido finalizar la consulta. Intente más tarde.', 'message');
             this.utils.hideProgressBar();
           });
@@ -128,7 +128,7 @@ export class BuscarTuMedicoComponent implements OnInit {
     return new Promise((resolve, reject) => {
 
 
-      this.agendaService.getEspecialidadesByProfesional(prof.idProfesionalPRM, ENV.areaConsultaMedica.id).subscribe((srvRequest: any) => {
+      this.agendaService.getEspecialidadesByProfesional(prof.idProfesionalPRM, ENV.areaConsultaMedica.id).subscribe(async (srvRequest: any) => {
 
         try {
 
@@ -136,7 +136,7 @@ export class BuscarTuMedicoComponent implements OnInit {
 
           if (srvRequest && srvRequest.especialidadesPorServicio && srvRequest.especialidadesPorServicio.length > 0) {
 
-            servicio = srvRequest.especialidadesPorServicio.find( item => {
+            servicio = srvRequest.especialidadesPorServicio.find(item => {
               return item.idEspecialidad === ENV.saludIntegral.idEspecialidad
             });
 
@@ -182,10 +182,12 @@ export class BuscarTuMedicoComponent implements OnInit {
 
           const centrosDisponibles = [];
           const area = ENV.areaConsultaMedica;
+          const idPaciente = await this.getDatosPaciente();
           const documentoPaciente = {
             tipoDocumento: "RUN",
             documento: this.documento,
-            documentoFormateado: this.utils.formatRut(this.documento)
+            documentoFormateado: this.utils.formatRut(this.documento),
+            idPaciente: idPaciente
           };
 
           const especialidad = servicio;
@@ -221,6 +223,28 @@ export class BuscarTuMedicoComponent implements OnInit {
     });
 
 
+  }
+
+  getDatosPaciente() {
+    return new Promise((resolve, reject) => {
+
+      try {
+        const tipoDocumento = 'RUN';
+        const documento = this.documento;
+        this.agendaService.getPaciente(documento, tipoDocumento, ENV.areaConsultaMedica).subscribe((res: any) => {
+          if (res && res.listaPacientes && res.listaPacientes.length > 0) {
+            resolve(res.listaPacientes[0].id);
+            return;
+          }
+          resolve(null);
+        }, () => {
+          resolve(null);
+        });
+
+      } catch (err) {
+        resolve(null);
+      }
+    });
   }
 
 }
