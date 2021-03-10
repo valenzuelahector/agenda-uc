@@ -66,7 +66,7 @@
             <p class="datos-usuario">
               {{ paciente.nombreCompleto }} | {{ busquedaPaciente.tipoDocumento == 'PAS' ? 'Pasaporte' : 'RUT' }}:
               {{ paciente.numeroDocumentoFormateado }}
-               <button mat-icon-button class="rmvBtn" (click)="limpiarFormulario(true)" *ngIf="!rutMatch && busquedaInicial?.fromCuposInmediatos">
+               <button mat-icon-button class="rmvBtn" (click)="limpiarFormulario(true)" *ngIf="paciente && !busquedaInicial?.documentoPaciente?.idPaciente">
                 <mat-icon>close</mat-icon>
               </button>
             </p>
@@ -74,7 +74,7 @@
         </div>
       </div>
       
-      <div class="row" style="margin-top:20px;" *ngIf="!paciente && busquedaInicial?.fromCuposInmediatos">
+      <div class="row" style="margin-top:20px;" *ngIf="!paciente && !busquedaInicial?.documentoPaciente?.idPaciente">
         <div class="col-md-4">
           <mat-form-field class="full bgwhite-input" appearance="fill" >
             <mat-label>Tipo de Documento</mat-label>

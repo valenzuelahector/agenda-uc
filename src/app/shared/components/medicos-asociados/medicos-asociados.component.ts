@@ -147,6 +147,7 @@ export class MedicosAsociadosComponent implements OnInit, OnDestroy {
         idServicio: this.detalleBusqueda.especialidad.idServicio,
         idPlanSalud: ENV.idPlanSaludInit,
         idProfesional: null,
+        idPaciente: this.detalleBusqueda.documentoPaciente.idPaciente,
         fromProfRel: true
       }).subscribe(data => {
 

@@ -20,6 +20,7 @@ export class Interceptor implements HttpInterceptor {
     if(
       !request.url.includes('/Servicios/Rel/Especialidades') && 
       !request.url.includes('/Profesionales?idArea') && 
+      !request.url.includes('/Profesionales?codCanal') && 
       !request.url.includes('validarenrolamiento') && 
       !request.url.includes('fromProfRel=true') && !request.url.includes('/CuposInmediatos') && 
       !request.url.includes('Areas') && !request.url.includes('Paises') &&  !request.url.includes('/Especialidades') &&

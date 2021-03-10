@@ -68,10 +68,11 @@ export class AgendaAmbulatoriaService {
     let fromProfRel = (queryData.fromProfRel) ? '&fromProfRel=true' : '';
     let idArea = (queryData.idArea === 'RIS_IMAGENES') ? '&idArea=RIS_IMAGENES' : '';
     let codCanal = (queryData.idArea !== 'RIS_IMAGENES') ? '&codCanal=PatientPortal' : '';
+    let idPaciente = (queryData.idPaciente) ? '&idPaciente=' + queryData.idPaciente : '';
 
     return this.http.get(this.baseApi +
       '/Agenda/'+endpoint+'?tipoResponse=2&fechaInicio=' + queryData.fechaInicio +'&fechaTermino=' + queryData.fechaTermino +
-      '&idServicio=' + queryData.idServicio + '&idPlanSalud=' + queryData.idPlanSalud + queryProfesional  + queryCentro + fromProfRel + idArea + codCanal
+      '&idServicio=' + queryData.idServicio + '&idPlanSalud=' + queryData.idPlanSalud + queryProfesional  + queryCentro + fromProfRel + idArea + codCanal + idPaciente
   );
   }
 
