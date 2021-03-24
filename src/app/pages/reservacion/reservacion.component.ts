@@ -156,6 +156,10 @@ export class ReservacionComponent implements OnInit, AfterViewInit, OnDestroy {
 
   }
 
+  irPortalPacientes(){
+    window.location.href = "https://agenda.clinicasancarlos.cl/";
+  }
+  
   ngOnDestroy(){
     this.emitterReloadBusqueda.unsubscribe();
     this.buscarProfesionalRelacionadoSuscription.unsubscribe();

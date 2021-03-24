@@ -14,6 +14,8 @@ export class BuscarTuMedicoComponent implements OnInit {
 
   documento = null;
   documentoFC = new FormControl('');
+  clave = new FormControl('', Validators.required);
+
   @Output() datosBeneficiarioMedico: EventEmitter<any> = new EventEmitter();
 
   constructor(
@@ -28,7 +30,7 @@ export class BuscarTuMedicoComponent implements OnInit {
         this.documento = params['rut'];
         this.documentoFC.setValue(params['rut']);
         this.setFormatRut();
-        this.buscarRut();
+     //   this.buscarRut();
       }
     });
 
@@ -59,23 +61,52 @@ export class BuscarTuMedicoComponent implements OnInit {
     }
   }
 
-  buscarRut() {
+  async buscarRut() {
 
     let rut = this.documento;
+    let clave = this.clave.value;
+    let countError = 0;
+    let isAutenticated = false;
 
     this.documentoFC.markAsTouched();
 
     if (!rut) {
       this.documentoFC.setErrors({ required: true });
-      return false;
+      countError++;
+    }
+
+    if (!clave) {
+      this.clave.setErrors({ required: true });
+      countError++;
     }
 
     if (!this.utils.validateRun(this.documento)) {
       this.documentoFC.setErrors({ invalidRut: true });
-      return false;
+      countError++;
+    }
+
+    if(countError > 0){
+      return;
     }
 
     this.utils.showProgressBar();
+    
+    try{
+      const detalleAutenticacion:any = await this.agendaService.autenticar(rut, clave);
+      if(detalleAutenticacion.statusCod === 'OK'){
+        isAutenticated = true;
+      }else{
+        this.utils.mDialog('Estimado paciente', 'El rut y la contraseña ingresada no coinciden. Intente nuevamente', "message");
+        this.utils.hideProgressBar();
+        return;
+      }
+    }catch(err){
+      console.log(err);
+      this.utils.mDialog('Estimado paciente', 'El rut y la contraseña ingresada no coinciden. Intente nuevamente', "message");
+      this.utils.hideProgressBar();
+      return;
+
+    }
 
     this.agendaService.validarEnrolamiento(rut.split('-').join('')).then(async (res: any) => {
 

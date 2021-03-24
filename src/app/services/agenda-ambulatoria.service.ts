@@ -178,4 +178,8 @@ export class AgendaAmbulatoriaService {
     return this.http.get(`${ENV.validarEnrolamiento}?rut=${rut}`).toPromise();
   }
 
+  autenticar(username, password){
+    return this.http.post(this.baseApi + `/Autenticar`, { username, password }).toPromise();
+
+  }
 }

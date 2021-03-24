@@ -573,6 +573,32 @@ export class BusquedaComponent implements OnInit {
     return centros;
   }
 
+  organizarCentros(centros) {
+    let arrCentros = [];
+    const clSanCarlos = centros.find(item => item.detalle.toLowerCase().includes('san carlos'));
+    const clTodos = centros.find(item => item.detalle.toLowerCase().includes('todos'));
+    const centrosSinTodosSanCarlos: any[] = centros.filter(item => {
+      const validSanCarlos = item.detalle.toLowerCase().includes('san carlos');
+      const validTodos = item.detalle.toLowerCase().includes('todos')
+      if (!validSanCarlos && !validTodos) {
+        return item;
+      }
+    });
+
+    console.log(centrosSinTodosSanCarlos)
+    if (clTodos) {
+      arrCentros.push(clTodos);
+    }
+
+    if (clSanCarlos) {
+      arrCentros.push(clSanCarlos);
+    }
+
+    const arr = arrCentros.concat(centrosSinTodosSanCarlos);
+
+    return arr;
+  }
+
   getCentros(idServicio) {
 
     let isProf = (this.profesionalSelected) ? this.profesionalSelected['idProfesional'] : null;
@@ -585,7 +611,7 @@ export class BusquedaComponent implements OnInit {
         let matCentro = null;
         let qp = params;
 
-        if(qp['centro']){
+        if (qp['centro']) {
           this.hasQueryParams = true;
         }
         let region = (res['regiones'] && res['regiones'][0]) ? res['regiones'][0]['idRegion'] : null;
@@ -619,9 +645,7 @@ export class BusquedaComponent implements OnInit {
           }
 
           res['centros'].unshift(objTodos);
-
         }
-
 
         if (res['centros'] && res['centros'].length > 0) {
           res['centros'].forEach((val, key) => {
@@ -632,8 +656,9 @@ export class BusquedaComponent implements OnInit {
           })
 
           res['centros'] = this.orderPipe.transform(res['centros'], 'detalle');
+          res['centros'] = this.organizarCentros(res['centros']);
+          this.centrosAtencion = res['centros'];
 
-          this.centrosAtencion = this.priorizarCentro(res['centros']);
           if (matCentro) {
             this.centroAtencionCtrl.patchValue(matCentro);
             this.centroAtencionSelection(matCentro);
@@ -645,7 +670,7 @@ export class BusquedaComponent implements OnInit {
 
           } else {
 
-            if (res['centros'].length == 1) {
+            if (res['centros'].length == 1 || (res['centros'].length > 1 && this.tipoConsulta === 'profesional')) {
               this.centroAtencionCtrl.patchValue(res['centros'][0]);
               this.centroAtencionSelection(res['centros'][0]);
             } else if (objTodos && (this.areaSelected.id === 'RIS_IMAGENES' || this.areaSelected.nombre.toLowerCase() === 'telemedicina')) {
@@ -786,7 +811,7 @@ export class BusquedaComponent implements OnInit {
   centroAtencionSelection(event) {
     this.centroAtencionCtrl.disable();
     this.centroAtencionSelected = this.centroAtencionCtrl.value;
-    if(this.hasQueryParams){
+    if (this.hasQueryParams) {
       this.buscarHora();
     }
   }
@@ -919,12 +944,12 @@ export class BusquedaComponent implements OnInit {
 
   getDatosPaciente() {
     return new Promise((resolve, reject) => {
-      
-      try{
+
+      try {
         const tipoDocumento = this.datosPaciente.tipoDocumento;
         const documento = this.datosPaciente.documento;
         this.agendaService.getPaciente(documento, tipoDocumento, this.areaSelected.id).subscribe((res: any) => {
-          if (res && res.listaPacientes && res.listaPacientes.length > 0){
+          if (res && res.listaPacientes && res.listaPacientes.length > 0) {
             this.datosPaciente.idPaciente = res.listaPacientes[0].id;
           }
           resolve(true);
@@ -932,7 +957,7 @@ export class BusquedaComponent implements OnInit {
           resolve(true);
         });
 
-      }catch(err){
+      } catch (err) {
         resolve(true);
       }
     });
