@@ -60,7 +60,7 @@
                 (click)="cambiarEtapa((curEtapa === 4) ? curEtapa - 2 : curEtapa - 1)" *ngIf="!reservaRealizada && curEtapa != 0 && !confirmacionListaEsperaData">
                 <mat-icon class="icon-cus-pad">keyboard_backspace</mat-icon>Volver
         </button>
-        <button mat-stroked-button class="btn-morado cus-pad cus" *ngIf="curEtapa != 0" (click)="irPortalPacientes()" style="margin-left:20px">
+        <button mat-stroked-button class="btn-morado cus-pad cus" *ngIf="curEtapa != 0 && saludIntegral" (click)="irPortalPacientes()" style="margin-left:20px">
           Ir al Portal Pacientes
         </button>
       </div>
