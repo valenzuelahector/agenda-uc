@@ -966,6 +966,12 @@ export class BusquedaComponent implements OnInit {
 
   buscarProximaHora(data) {
     data['fromCuposInmediatos'] = true;
+    data['documentoPaciente']  =  {
+      tipoDocumento: 'RUN',
+      documento: null,
+      documentoFormateado: null
+    }
+    console.log(data)
     this.emitBusqueda.emit(data);
   }
 
