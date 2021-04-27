@@ -30,7 +30,9 @@ export const ENV = {
     idEspecialidad: '507ef9a7-0d7e-41b8-ae09-a93400e5d5c8',
     idServicio: '507ef9a7-0d7e-41b8-ae09-a93400e5d5c8'
   },
-  tokenAutenticar: 'T3BMdXo5ckdJaXlvY0FJNg=='
+  tokenAutenticar: 'T3BMdXo5ckdJaXlvY0FJNg==',
+  pathAutenticar: '/auth-test/Autenticar',
+  analyticsCode: 'UA-160641014-1'
 }
 
 /*

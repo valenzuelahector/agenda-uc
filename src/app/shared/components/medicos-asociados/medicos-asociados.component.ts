@@ -4,6 +4,7 @@ import { ENV } from 'src/environments/environment';
 import { AgendaAmbulatoriaService } from 'src/app/services/agenda-ambulatoria.service';
 import { OrderPipe } from 'ngx-order-pipe';
 import * as clone from 'clone';
+import gtag, { install } from 'ga-gtag';
 
 @Component({
   selector: 'app-medicos-asociados',
@@ -101,6 +102,9 @@ export class MedicosAsociadosComponent implements OnInit, OnDestroy {
     }
 
     this.utils.setBuscarProfesionalRelacionado(detalleBusqueda);
+    gtag('config', ENV.analyticsCode, 
+    {'page_path': `/busqueda/profesionalRecomendado/area/${this.detalleBusqueda.area.id}/profesional/${this.detalleBusqueda.profesional.idProfesional}/servicio/${this.detalleBusqueda.especialidad.idServicio}/centro/${this.detalleBusqueda.centroAtencion.idCentro}` });
+
     this.loading = true;
     this.displayRecursos = false;
     

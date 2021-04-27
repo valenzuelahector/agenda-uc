@@ -3,6 +3,8 @@ import { UtilsService } from 'src/app/services/utils.service';
 import { MatDialog } from '@angular/material';
 import { ConfirmarAnularReservaComponent } from 'src/app/shared/components/modals/confirmar-anular-reserva/confirmar-anular-reserva.component';
 import { AgendaAmbulatoriaService } from 'src/app/services/agenda-ambulatoria.service';
+import gtag, { install } from 'ga-gtag';
+import { ENV } from 'src/environments/environment';
 
 @Component({
   selector: 'app-anular-reserva',
@@ -27,6 +29,9 @@ export class AnularReservaComponent implements OnInit {
 
   ngOnInit() {
     this.utils.showProgressBar();
+    gtag('config', ENV.analyticsCode, 
+    {'page_path': `/busqueda/anulae` });
+
     setTimeout(() => {
       this.utils.hideProgressBar();
     },2000)

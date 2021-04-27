@@ -134,7 +134,6 @@ export class SeleccionComponent implements OnInit, OnChanges {
   }
 
   determinarMesSinCupo() {
-
     this.recursos.forEach((val, key) => {
       let posee = false;
       let listFechaDis = Object.keys(val['fechasDisponibles']);
@@ -146,9 +145,10 @@ export class SeleccionComponent implements OnInit, OnChanges {
         ) {
           posee = true;
         }
-      })
+      });
       this.recursos[key]['poseeMes'] = posee;
     });
+
 
     this.moverSinCuposAlFinal();
 
@@ -221,13 +221,6 @@ export class SeleccionComponent implements OnInit, OnChanges {
       this.getRecursos();
     }
 
-  }
-
-  goTop() {
-    /* let dayWeekPos = this.getOffsetTop((<HTMLElement>document.getElementById('dayWeek')));
-     $("body, html").animate({
-       scrollTop: "0px"
-     }, 500)*/
   }
 
   filtrarRecursosSoloProfesional(data) {
@@ -469,6 +462,10 @@ export class SeleccionComponent implements OnInit, OnChanges {
     this.dayWeekFixed = false;
     this.numberSearchs = 0;
     this.goTop();
+  }
+
+  goTop() {
+ 
   }
 
   mergeRecursos(recursosActuales, recursosNuevos) {
@@ -731,6 +728,9 @@ export class SeleccionComponent implements OnInit, OnChanges {
 
     }
 
+    gtag('config', ENV.analyticsCode, 
+    {'page_path': `/busqueda/especialidad/area/${this.busquedaInicial.area.id}/profesional/${data.recurso.id}servicio/${this.busquedaInicial.especialidad.idServicio}/centro/${this.busquedaInicial.centroAtencion.idCentro}/cupo` });
+
   }
 
   verPerfil(re) {
@@ -989,7 +989,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
       const horas = listaCupos.map(item => {
         return item.cupos[0].horaEpoch
       });
-      return Math.min(...horas);
+      return Math.min(horas);
     } else {
       return null;
     }

@@ -136,11 +136,18 @@ export class IdentificacionComponent implements OnInit, OnChanges {
       }
 
       if (this.listaEspera) {
+        gtag('config', ENV.analyticsCode, 
+        {'page_path': `/busqueda/listaEsperaa/area/${this.busquedaInicial.area.id}/servicio/${this.busquedaInicial.especialidad.idServicio}/centro/${this.busquedaInicial.centroAtencion.idCentro}` });
+    
         this.getProfesionales(idServicio);
       }
 
       if (this.isProcedimiento) {
 
+        gtag('config', ENV.analyticsCode, 
+        {'page_path': `/busqueda/listaEsperaa/area/${this.busquedaInicial.area.id}/servicio/${this.busquedaInicial.especialidad.idServicio}/centro/${this.busquedaInicial.centroAtencion.idCentro}` });
+
+        
         this.procedimientoSeleccion = {
           centro: null,
           horario: null,
@@ -531,7 +538,7 @@ export class IdentificacionComponent implements OnInit, OnChanges {
 
       this.confirmarReservaEnable = false;
 
-      
+  
       this.reglasValidacion(fecha, fTermino).then(async data => {
 
 

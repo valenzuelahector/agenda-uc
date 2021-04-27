@@ -189,6 +189,7 @@ export class BusquedaComponent implements OnInit {
             this.centroAtencionCtrl.disable();
             this.getEspecialidades('especialidad');
           }
+          gtag('config', ENV.analyticsCode, {'page_path': `/busqueda/${this.tipoConsulta}/area/${this.areaSelected.id}` });
 
         })
 
@@ -457,6 +458,7 @@ export class BusquedaComponent implements OnInit {
     this.filterCentrosAtencion = null;
     this.getEspecialidades('especialidad');
     this.expanded = false;
+    gtag('config', ENV.analyticsCode, {'page_path': `/busqueda/${this.tipoConsulta}/area/${this.areaSelected.id}` });
 
   }
 
@@ -783,11 +785,14 @@ export class BusquedaComponent implements OnInit {
     if (tipo == 'especialidad') {
       this.getServicios();
       this.servicioCtrl.enable();
+      gtag('config', ENV.analyticsCode, 
+      {'page_path': `/busqueda/${this.tipoConsulta}/area/${this.areaSelected.id}` });
 
     } else {
       this.centroAtencionCtrl.enable();
       this.getCentros(this.especialidadCtrl.value.idServicio);
-
+      gtag('config', ENV.analyticsCode, 
+      {'page_path': `/busqueda/${this.tipoConsulta}/area/${this.areaSelected.id}/profesional/${this.profesionalSelected.idProfesional}/servicio/${this.especialidadSelected.idServicio}/` });
     }
 
   }
@@ -798,6 +803,8 @@ export class BusquedaComponent implements OnInit {
     this.verificarDonantePaciente();
     this.centroAtencionCtrl.enable();
     this.getCentros(this.servicioCtrl.value.idServicio);
+    gtag('config', ENV.analyticsCode, {'page_path': `/busqueda/${this.tipoConsulta}/area/${this.areaSelected.id}/servicio/${this.servicioCtrl.value.idServicio}` });
+
   }
 
 
@@ -806,11 +813,30 @@ export class BusquedaComponent implements OnInit {
     this.profesionalSelected = this.profesionalCtrl.value;
     this.especialidadCtrl.enable();
     this.getEspecialidades('profesional');
+
+    if(this.tipoConsulta === 'especialidad'){
+      gtag('config', ENV.analyticsCode, 
+      {'page_path': `/busqueda/${this.tipoConsulta}/area/${this.areaSelected.id}` });
+    }else{
+      gtag('config', ENV.analyticsCode, 
+      {'page_path': `/busqueda/${this.tipoConsulta}/area/${this.areaSelected.id}/profesional/${this.profesionalSelected.idProfesional}/` });
+    }
+
+
   }
 
   centroAtencionSelection(event) {
     this.centroAtencionCtrl.disable();
     this.centroAtencionSelected = this.centroAtencionCtrl.value;
+
+    if(this.tipoConsulta === 'especialidad'){
+      gtag('config', ENV.analyticsCode, 
+      {'page_path': `/busqueda/${this.tipoConsulta}/area/${this.areaSelected.id}/servicio/${this.servicioCtrl.value.idServicio}/centro/${this.centroAtencionCtrl.value.idCentro}` });
+    }else{
+      gtag('config', ENV.analyticsCode, 
+      {'page_path': `/busqueda/${this.tipoConsulta}/area/${this.areaSelected.id}/profesional/${this.profesionalSelected.idProfesional}/servicio/${this.especialidadSelected.idServicio}/centro/${this.centroAtencionCtrl.value.idCentro}` });
+    }
+
     if (this.hasQueryParams) {
       this.buscarHora();
     }
@@ -972,7 +998,16 @@ export class BusquedaComponent implements OnInit {
       documentoFormateado: null
     }
     console.log(data)
+
     this.emitBusqueda.emit(data);
+
+    if(!data.profesional){
+      gtag('config', ENV.analyticsCode, 
+      {'page_path': `/busqueda/cuposinmediatos/area/${data.area.id}/servicio/${data.especialidad.idServicio}/centro/${data.centroAtencion.idCentro}` });
+    }else{
+      gtag('config', ENV.analyticsCode, 
+      {'page_path': `/busqueda/cuposinmediatos/area/${data.area.id}/profesional/${data.profesional.idProfesional}/servicio/${data.especialidad.idServicio}/centro/${data.centroAtencion.idCentro}` });
+    }
   }
 
   emitterReadQuery(status) {

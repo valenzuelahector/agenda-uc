@@ -30,7 +30,7 @@ export class BuscarTuMedicoComponent implements OnInit {
         this.documento = params['rut'];
         this.documentoFC.setValue(params['rut']);
         this.setFormatRut();
-     //   this.buscarRut();
+        //   this.buscarRut();
       }
     });
 
@@ -85,22 +85,22 @@ export class BuscarTuMedicoComponent implements OnInit {
       countError++;
     }
 
-    if(countError > 0){
+    if (countError > 0) {
       return;
     }
 
     this.utils.showProgressBar();
-    
-    try{
-      const detalleAutenticacion:any = await this.agendaService.autenticar(rut, clave);
-      if(detalleAutenticacion.statusCod === 'OK'){
+
+    try {
+      const detalleAutenticacion: any = await this.agendaService.autenticar(rut, clave);
+      if (detalleAutenticacion.statusCod === 'OK') {
         isAutenticated = true;
-      }else{
+      } else {
         this.utils.mDialog('Estimado paciente', 'El rut y la contraseña ingresada no coinciden. Intente nuevamente', "message");
         this.utils.hideProgressBar();
         return;
       }
-    }catch(err){
+    } catch (err) {
       console.log(err);
       this.utils.mDialog('Estimado paciente', 'El rut y la contraseña ingresada no coinciden. Intente nuevamente', "message");
       this.utils.hideProgressBar();
@@ -127,7 +127,8 @@ export class BuscarTuMedicoComponent implements OnInit {
           const rutmed = res.rut_medico;
           const rutMedTr = `${rutmed.substring(0, rutmed.length - 1)}-${rutmed.charAt(rutmed.length - 1)}`;
           this.agendaService.getDatosProfesional(null, rutMedTr).subscribe(async (prof: any) => {
-            this.setBusquedaCalendario(prof.datosProfesional).then(busqueda => {
+            this.setBusquedaCalendario(prof.datosProfesional).then((busqueda: any) => {
+              busqueda.fromSaludIntegral = true;
               this.datosBeneficiarioMedico.emit(busqueda);
               this.utils.hideProgressBar();
               this.documento = null;

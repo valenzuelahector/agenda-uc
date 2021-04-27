@@ -18,7 +18,7 @@ export class AgendaAmbulatoriaService {
       headers: new HttpHeaders({
         'X-AppTimezone': "-180",
         'Content-Type': "application/json;",
-        'Authorization': "Bearer " + ENV.tokenAutenticar
+      //  'Authorization': "Bearer " + ENV.tokenAutenticar
       })
     };
   }
@@ -180,7 +180,14 @@ export class AgendaAmbulatoriaService {
   }
 
   autenticar(username, password) {
-    return this.http.post(ENV.baseApi + `/auth-test/Autenticar`, { username, password }, this.httpOptions).toPromise();
+    const httpHd =  {
+      headers: new HttpHeaders({
+        'Content-Type': "application/json;"
+      })
+    };
+
+
+    return this.http.post(ENV.baseApi + ENV.pathAutenticar, { username, password }, httpHd).toPromise();
 
   }
 }

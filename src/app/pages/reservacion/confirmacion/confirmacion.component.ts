@@ -8,6 +8,7 @@ import { ConfirmarAnularReservaComponent } from 'src/app/shared/components/modal
 import { MatDialog } from '@angular/material';
 import * as $ from 'jquery';
 import { IfStmt } from '@angular/compiler';
+import { ENV } from 'src/environments/environment';
 
 @Component({
   selector: 'app-confirmacion',
@@ -121,6 +122,10 @@ export class ConfirmacionComponent implements OnInit, OnChanges, OnDestroy {
 
         this.reservaFinalizada = true;
         this.idreserva = data['idCita'];
+       
+        gtag('config', ENV.analyticsCode, 
+        {'page_path': `/busqueda/especialidad/area/${this.busquedaInicial.area.id}/profesional/${data.recurso.id}servicio/${this.busquedaInicial.especialidad.idServicio}/centro/${this.busquedaInicial.centroAtencion.idCentro}/cupo/reservado/${data['idCita']}` });
+    
        // this.codCita = this.busquedaInicial.area.id === 'RIS_IMAGENES' ? data['idCita'] : data['codCita'];
 
         if (this.busquedaInicial.fromCuposInmediatos) {
