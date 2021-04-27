@@ -37,7 +37,8 @@ export const ENV = {
     url:"http://ecommerceucv2.lfi.cl/ServicioMarcaPaciente/token",
     consultaDerivacion: "http://ecommerceucv2.lfi.cl/serviciomarcapaciente/consultaderivacion",
     user : "UCCHRISTUS",
-    pass : "VsqBYUpyQabwx5mx1Tit"  
+    pass : "VsqBYUpyQabwx5mx1Tit" , 
+    token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiMjYwNDIwMjExNDU5MzFVQ0NIUklTVFVTMjYwNDIwMjExNDU5MzEiLCJuYmYiOjE2MTk0NjM1NzEsImV4cCI6MTYxOTQ2Mzg3MSwiaWF0IjoxNjE5NDYzNTcxfQ.aoXUdgVsR1m-M_3jY8jTAiXT9qT_V2wL8Ngm9k6-EoE"
   }
 }
 

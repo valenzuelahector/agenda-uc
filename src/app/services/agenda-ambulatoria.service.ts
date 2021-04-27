@@ -202,15 +202,15 @@ export class AgendaAmbulatoriaService {
 
   }
 
-  getDerivaciones(token){
+  getDerivaciones(){
     const httpHd =  { 
       headers: new HttpHeaders({
         'Content-Type': "application/json;",
-        "Authorization" : "Bearer " + token
+        "Authorization" : "Bearer " + ENV.derivaciones.token
       })
     };
 
-    return this.http.post(ENV.derivaciones.consultaDerivacion, { user: ENV.derivaciones.user, password : ENV.derivaciones.pass }, httpHd).toPromise();
+    return this.http.post(ENV.derivaciones.consultaDerivacion, { idPaciente: '19501621-6', estadoDerivacion : 'VIGENTE' }, httpHd).toPromise();
 
   }
 }

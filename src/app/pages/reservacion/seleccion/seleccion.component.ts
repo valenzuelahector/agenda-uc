@@ -92,7 +92,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
 
   async getDerivacion(){
     this.derivacion = true;
-    const token = await this.agendaService.getDerivacionesToken();
+    const token = await this.agendaService.getDerivaciones();
     console.log(token)
   }
   @HostListener('window:scroll', ['$event'])

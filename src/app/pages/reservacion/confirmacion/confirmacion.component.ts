@@ -124,7 +124,7 @@ export class ConfirmacionComponent implements OnInit, OnChanges, OnDestroy {
         this.idreserva = data['idCita'];
        
         gtag('config', ENV.analyticsCode, 
-        {'page_path': `/busqueda/especialidad/area/${this.busquedaInicial.area.id}/profesional/${data.recurso.id}servicio/${this.busquedaInicial.especialidad.idServicio}/centro/${this.busquedaInicial.centroAtencion.idCentro}/cupo/reservado/${data['idCita']}` });
+        {'page_path': `/busqueda/especialidad/area/${this.busquedaInicial.area.id}/profesional/${this.calendario.recurso.id}servicio/${this.busquedaInicial.especialidad.idServicio}/centro/${this.busquedaInicial.centroAtencion.idCentro}/cupo/reservado/${data['idCita']}` });
     
        // this.codCita = this.busquedaInicial.area.id === 'RIS_IMAGENES' ? data['idCita'] : data['codCita'];
 
