@@ -32,7 +32,13 @@ export const ENV = {
   },
   tokenAutenticar: 'T3BMdXo5ckdJaXlvY0FJNg==',
   pathAutenticar: '/auth-test/Autenticar',
-  analyticsCode: 'UA-143119471-1'
+  analyticsCode: 'UA-143119471-1',
+  derivaciones:{
+    url:"http://ecommerceucv2.lfi.cl/ServicioMarcaPaciente/token",
+    consultaDerivacion: "http://ecommerceucv2.lfi.cl/serviciomarcapaciente/consultaderivacion",
+    user : "UCCHRISTUS",
+    pass : "VsqBYUpyQabwx5mx1Tit"  
+  }
 }
 
 /*

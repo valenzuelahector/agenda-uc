@@ -190,4 +190,27 @@ export class AgendaAmbulatoriaService {
     return this.http.post(ENV.baseApi + ENV.pathAutenticar, { username, password }, httpHd).toPromise();
 
   }
+
+  getDerivacionesToken() {
+    const httpHd =  { 
+      headers: new HttpHeaders({
+    //    'Content-Type': "application/json;"
+      })
+    };
+
+    return this.http.post(ENV.derivaciones.url, { user: ENV.derivaciones.user, password : ENV.derivaciones.pass }, httpHd).toPromise();
+
+  }
+
+  getDerivaciones(token){
+    const httpHd =  { 
+      headers: new HttpHeaders({
+        'Content-Type': "application/json;",
+        "Authorization" : "Bearer " + token
+      })
+    };
+
+    return this.http.post(ENV.derivaciones.consultaDerivacion, { user: ENV.derivaciones.user, password : ENV.derivaciones.pass }, httpHd).toPromise();
+
+  }
 }

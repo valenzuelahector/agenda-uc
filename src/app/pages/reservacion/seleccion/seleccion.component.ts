@@ -62,6 +62,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
   public filtroAplicado = false;
   public centrosFiltros = [];
   public recursoCache: string = "";
+  public derivacion = false;
   public idLaboratorioClinico = ENV.idLaboratorioClinico;
   public filtro: any = {
     idCentro: ENV.idRegion,
@@ -89,6 +90,11 @@ export class SeleccionComponent implements OnInit, OnChanges {
     return offsetTop;
   }
 
+  async getDerivacion(){
+    this.derivacion = true;
+    const token = await this.agendaService.getDerivacionesToken();
+    console.log(token)
+  }
   @HostListener('window:scroll', ['$event'])
   onScroll(event) {
     //if (this.enableScroll) {
@@ -128,9 +134,18 @@ export class SeleccionComponent implements OnInit, OnChanges {
         this.resetCalendario();
       }
       this.cambiarFiltroHoras('ALL');
+      if(this.busquedaInicial.fromSaludIntegral){
+        this.getDerivacion();
+      }
     }
+  }
 
-
+  verAgenda(){
+    this.utils.showProgressBar();
+    setTimeout(()=> {
+      this.derivacion = false;
+      this.utils.hideProgressBar();
+    },3000)
   }
 
   determinarMesSinCupo() {

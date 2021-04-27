@@ -1,5 +1,5 @@
 <div *ngIf="busquedaInicial && !enableAutoSearch">
-	<div class="resultados-para wrap">
+	<div class="resultados-para wrap" *ngIf="!busquedaInicial.fromSaludIntegral || (busquedaInicial.fromSaludIntegral && !derivacion)">
 		<div>
 			<div class="cuadro-res">
 				<div class="item-res">
@@ -20,7 +20,7 @@
 		</div>
 	</div>
 
-	<div class="resultados-para-mobile wrap">
+	<div class="resultados-para-mobile wrap" *ngIf="!busquedaInicial.fromSaludIntegral || (busquedaInicial.fromSaludIntegral && !derivacion)">
 		<h4>Para tu búsqueda en:</h4>
 		<span class='item-rb'><b>Área Médica:</b> {{ busquedaInicial.area.nombre }}</span>
 		<span class='item-rb'><b>Clínica / Centro:</b> {{ busquedaInicial.centroAtencion.nombre }}</span>
@@ -49,7 +49,8 @@
 				</div>
 			</div>
 		</div>
-		<div class="filtro-combo-all" *ngIf="recursos.length > 0 || filtroAplicado">
+		<div class="filtro-combo-all" *ngIf="(recursos.length > 0 || filtroAplicado) && 
+			(!busquedaInicial.fromSaludIntegral || (busquedaInicial.fromSaludIntegral && !derivacion))">
 			<mat-accordion>
 				<mat-expansion-panel [expanded]="true">
 					<mat-expansion-panel-header [ngStyle]="{ 'background' : utils.getColorCentro(filtro.idCentro)}">
@@ -105,13 +106,8 @@
 				</mat-expansion-panel>
 			</mat-accordion>
 		</div>
-		<!-- <p *ngIf="recursos.length > 0 && (nActivosFiltroCentro === 0 || nActivosFiltroHoras === 0)" style="margin: 30px 0px;font-weight: 500;">
-			No se encontraron coincidencias con el filtro seleccionado.</p> -->
-		<!-- 
-						<div id="dayWeek" *ngIf="recursos.length > 0" [ngStyle]="{'opacity' : (nActivosFiltroCentro === 0 || nActivosFiltroHoras === 0) ? '0' : '1' }">
 
-			-->
-		<div id="dayWeek" *ngIf="recursos.length > 0">
+		<div id="dayWeek" *ngIf="recursos.length > 0 && (!busquedaInicial.fromSaludIntegral || (busquedaInicial.fromSaludIntegral && !derivacion))">
 			<app-days-of-week [contadorMeses]="counterLoader" [dayWeekFixed]="dayWeekFixed"
 				[disableNavigation]="disableNavigation" [minDateIn]="navigationDate['min']"
 				[maxDateIn]="navigationDate['max']" (navigate)="navigateMonth($event, true)">
@@ -119,7 +115,6 @@
 		</div>
 		<div class="content-res">
 			<ng-container *ngFor="let re of recursos; let i = index">
-				<!-- [hidden]="(!filtrarCentrosAction(re.listaCupos) || !filtrarHorasAction(re.listaCupos)) && centroTodos" -->
 				<div class="item-doc">
 					<div class="row">
 						<div class="col-lg-6">
@@ -130,17 +125,19 @@
 									</figure>
 									<div class="txt-doc" fxFlex="{{ busquedaInicial.area.id !== 'RIS_IMAGENES' ? '60%' : '100%'}}">
 										<h4>{{ re.nombre }}</h4>
-										<!-- <p>Especialidad del Médico</p> -->
-										<button style="margin:20px 0px" class="ver-perfil full-btn" mat-stroked-button
-											(click)="verPerfil(re)" *ngIf="busquedaInicial.area.id !== 'RIS_IMAGENES'">Ver
+										<button style="margin:20px 20px 0px 0px" class="ver-perfil full-btn" mat-stroked-button
+											(click)="verPerfil(re)" *ngIf="busquedaInicial.area.id !== 'RIS_IMAGENES'" >Ver
 											perfil
 											<i class="fa fa-angle-right" aria-hidden="true"></i>
 										</button>
+										<button mat-stroked-button class="btn-morado cus-pad cus" (click)="verAgenda()" *ngIf="busquedaInicial.fromSaludIntegral && derivacion">
+											Ver Agenda
+										  </button>
 									</div>
 								</div>
 								<p class="small bxsmall" *ngIf="re?.informacionAdicional">
 									{{ re?.informacionAdicional }}</p>
-								<div class="leyenda" style="margin-top: 20px;" *ngIf="re?.listaCuposMes.length > 0">
+								<div class="leyenda" style="margin-top: 20px;" *ngIf="(re?.listaCuposMes.length > 0) && (!busquedaInicial.fromSaludIntegral || (busquedaInicial.fromSaludIntegral && !derivacion))">
 									<b class="smly">{{ busquedaInicial.area.id === 'RIS_IMAGENES' ? 'Este examen está disponible en:' : 'Este profesional atiende en:' }}</b>
 									<div fxLayout="row wrap" fxLayoutAlign="space-between">
 										<div *ngFor="let ct of re?.listaCuposMes" fxFlex="49%" fxFlex.sm="100%"
@@ -162,7 +159,20 @@
 								</div>
 							</div>
 						</div>
-						<div class="col-lg-6">
+						<div class="col-lg-6" *ngIf="busquedaInicial.fromSaludIntegral && derivacion">
+							<span class="titleDer">Derivaciones</span>
+							<div fxLayout="row wrap" fxLayoutAlign="space-between">
+								<div fxFlex="48%">
+									<span class="titleDer">Especialidad</span>
+									<span class="detDer">Item</span>
+								</div>
+								<div fxFlex="48%">
+									<span class="titleDer">Fecha Solicitud</span>
+									<span class="detDer">Item</span>
+								</div>
+							</div>
+						</div>
+						<div class="col-lg-6" [ngClass]="{'hide' : (busquedaInicial.fromSaludIntegral && derivacion)}">
 							<div class="cal-doc calendario" data-rel="cal3">
 								<div class="calendar-utils">
 									<div class="container-calendar"
