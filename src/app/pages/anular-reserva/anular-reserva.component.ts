@@ -30,7 +30,7 @@ export class AnularReservaComponent implements OnInit {
   ngOnInit() {
     this.utils.showProgressBar();
     gtag('config', ENV.analyticsCode, 
-    {'page_path': `/busqueda/anulae` });
+    {'page_path': `/busqueda/anular` });
 
     setTimeout(() => {
       this.utils.hideProgressBar();

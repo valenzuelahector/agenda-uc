@@ -32,7 +32,7 @@ export const ENV = {
   },
   tokenAutenticar: 'T3BMdXo5ckdJaXlvY0FJNg==',
   pathAutenticar: '/auth-test/Autenticar',
-  analyticsCode: 'UA-160641014-1'
+  analyticsCode: 'UA-143119471-1'
 }
 
 /*
