@@ -108,7 +108,7 @@ export class BuscarTuMedicoComponent implements OnInit {
 
     }
 
-    this.agendaService.validarEnrolamiento(rut.split('-').join('')).then(async (res: any) => {
+    this.agendaService.validarEnrolamiento(rut.split("-").join("")).then(async (res: any) => {
 
       const esBeneficiario = (res.estado && res.estado.toUpperCase() === 'OK');
 
@@ -129,6 +129,7 @@ export class BuscarTuMedicoComponent implements OnInit {
           this.agendaService.getDatosProfesional(null, rutMedTr).subscribe(async (prof: any) => {
             this.setBusquedaCalendario(prof.datosProfesional).then((busqueda: any) => {
               busqueda.fromSaludIntegral = true;
+              busqueda.derivacion = res.derivacion;
               this.datosBeneficiarioMedico.emit(busqueda);
               this.utils.hideProgressBar();
               this.documento = null;

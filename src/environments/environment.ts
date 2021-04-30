@@ -10,7 +10,7 @@ export const ENV = {
   baseApi: 'https://apigw.ucchristus.cl',
   servRoute: '/agendaambulatoria-test',
   profRoute: '/profesionales-test',
-  validarEnrolamiento: 'http://ecommerceucv2.lfi.cl/serviciosaludintegral/validarenrolamiento',
+  validarEnrolamiento: 'http://ecommerceucv2.lfi.cl/ServicioMarcaPaciente/validarenrolamiento',
   idPlanSaludInit: '4c30555e-5ed3-418f-8f54-a91a00ace99b',
   idCentrosNoDisponibles: [],
   idCentroPrioritario: '52e43c90-8ab7-4e34-afcb-a96f0106bbd1',

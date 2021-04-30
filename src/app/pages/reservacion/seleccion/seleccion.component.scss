@@ -430,3 +430,15 @@ opacity: 0.5 !important;
   display: block;
   text-align: center;
 }
+
+.derv-it{
+  padding:0px 20px 20px 20px;;
+  .itm{
+    padding: 15px 0px;
+    border-bottom: 1px solid #ddd;;
+
+    &:last-child{
+      border: 0px !important
+    }
+  }
+}

@@ -109,7 +109,7 @@
         <div class="col-md-4 field-margin">
           <mat-form-field class="full bgwhite-input" appearance="fill">
             <mat-label>Prevision</mat-label>
-            <mat-select [(ngModel)]="busquedaPaciente.prevision" [compareWith]="utils.compareFn" (selectionChange)="cambioPrevision()">
+            <mat-select [(ngModel)]="busquedaPaciente.prevision" [compareWith]="utils.compareFn" (selectionChange)="cambioPrevision()" [disabled]="busquedaInicial.fromSaludIntegral">
               <mat-optgroup [label]="'Previsión Recomendada'">
                 <mat-option *ngFor="let com of planesSalud.companias" [value]="com.planes[0]">
                   {{com.planes[0]?.nombrePlan}}
