@@ -15,7 +15,8 @@ export class MedicosAsociadosComponent implements OnInit, OnDestroy {
   
   @Input() medicosAsociados = [];
   @Input() title = 'REVISA QUÉ OTROS MÉDICOS TIENEN HORAS DISPONIBLES';
-  
+  @Input() fromSaludIntegral = false;
+
   subMedicos;
   detalleBusqueda;
   counterLoader = 0;
@@ -149,7 +150,7 @@ export class MedicosAsociadosComponent implements OnInit, OnDestroy {
         fechaInicio: this.utils.trDateStr(fechaHoy, null, this.compensacion),
         fechaTermino: this.utils.trDateStr(fechaLimite, null, this.compensacion),
         idServicio: this.detalleBusqueda.especialidad.idServicio,
-        idPlanSalud: ENV.idPlanSaludInit,
+        idPlanSalud: this.fromSaludIntegral ? ENV.idPlanSaludAdministrada :  ENV.idPlanSaludInit,
         idProfesional: null,
         idPaciente: this.detalleBusqueda.documentoPaciente.idPaciente,
         fromProfRel: true

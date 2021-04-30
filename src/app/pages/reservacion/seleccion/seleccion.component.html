@@ -325,5 +325,5 @@
 	</div>
 </div>
 <div style="margin-top:20px" *ngIf="busquedaInicial && busquedaInicial.profesional">
-	<app-medicos-asociados [title]="'Otros especialistas del área'"></app-medicos-asociados>
+	<app-medicos-asociados [fromSaludIntegral]="busquedaInicial.fromSaludIntegral" [title]="'Otros especialistas del área'"></app-medicos-asociados>
 </div>

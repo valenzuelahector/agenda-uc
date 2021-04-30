@@ -12,6 +12,7 @@ export const ENV = {
   profRoute: '/profesionales-test',
   validarEnrolamiento: 'http://ecommerceucv2.lfi.cl/ServicioMarcaPaciente/validarenrolamiento',
   idPlanSaludInit: '4c30555e-5ed3-418f-8f54-a91a00ace99b',
+  idPlanSaludAdministrada: '018ed73d-6bd2-46e9-8e95-acfc0134435b',
   idCentrosNoDisponibles: [],
   idCentroPrioritario: '52e43c90-8ab7-4e34-afcb-a96f0106bbd1',
   mensajeSinCupos: '<h5>Estimado paciente, actualmente no encontramos citas disponibles en el centro de su elección. Intente nueva búsqueda en todos los centros.</h5>',

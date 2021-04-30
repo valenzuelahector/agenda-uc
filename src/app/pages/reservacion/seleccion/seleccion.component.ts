@@ -296,7 +296,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
         fechaInicio: this.utils.trDateStr(fechaHoy, null, this.compensacion),
         fechaTermino: this.utils.trDateStr(fechaLimite, null, this.compensacion),
         idServicio: this.busquedaInicial.especialidad.idServicio,
-        idPlanSalud: ENV.idPlanSaludInit,
+        idPlanSalud: this.busquedaInicial.fromSaludIntegral ? ENV.idPlanSaludAdministrada : ENV.idPlanSaludInit,
         idProfesional: idProfesional,
         idArea: this.busquedaInicial.area.id,
         idPaciente: this.busquedaInicial.documentoPaciente.idPaciente
