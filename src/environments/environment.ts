@@ -34,6 +34,7 @@ export const ENV = {
   tokenAutenticar: 'T3BMdXo5ckdJaXlvY0FJNg==',
   pathAutenticar: '/auth-test/Autenticar',
   analyticsCode: 'UA-143119471-1',
+  activarSaludIntegral: false,
   derivaciones:{
     url:"http://ecommerceucv2.lfi.cl/ServicioMarcaPaciente/token",
     consultaDerivacion: "http://ecommerceucv2.lfi.cl/serviciomarcapaciente/consultaderivacion",

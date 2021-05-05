@@ -136,6 +136,9 @@ export class ReservacionComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.aRouter.params.subscribe( params => {
       if(params['area'] === 'saludintegral'){
+        if(!ENV.activarSaludIntegral){
+          location.href="/";
+        }
         this.saludIntegral = true;
         setTimeout(()=> {
           this.readQuery = true;
