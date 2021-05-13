@@ -121,6 +121,9 @@ export class AnularReservaComponent implements OnInit {
             this.tabGroup.selectedIndex = 3;
             this.curTab = 3;
 
+            gtag('event', this.dataAnularCita.dataBusqueda.documento + ' ANULA HORAMÉDICA', { 'event_category': 'ANULACIÓN DE HORAS', 'event_label': `Paciente Anula Hora Médica`, 'value': '0' });
+
+
           }else{
             this.avanzarEtapa({ code: 'ERROR', message: res['statusDesc']}, 'error');
           }

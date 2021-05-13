@@ -230,6 +230,9 @@ export class SeleccionComponent implements OnInit, OnChanges {
 
     }
 
+    gtag('event', this.busquedaInicial.gtagActionName, { 'event_category': this.busquedaInicial.gtagName, 'event_label': `Cambia Mes`, 'value': '0' });
+
+
     if (this.busquedaInicial.profesional) {
       this.getRecursos(this.busquedaInicial.profesional.idProfesional);
     } else {
@@ -744,7 +747,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
     }
 
     gtag('config', ENV.analyticsCode, 
-    {'page_path': `/busqueda/especialidad/area/${this.busquedaInicial.area.id}/profesional/${data.recurso.id}servicio/${this.busquedaInicial.especialidad.idServicio}/centro/${this.busquedaInicial.centroAtencion.idCentro}/cupo` });
+    {'page_path': `/busqueda/${this.busquedaInicial.tipoConsulta}/area/${this.busquedaInicial.area.id}/profesional/${data.recurso.id}servicio/${this.busquedaInicial.especialidad.idServicio}/centro/${this.busquedaInicial.centroAtencion.idCentro}/cupo` });
 
   }
 
@@ -773,6 +776,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
           nombre: this.busquedaInicial.profesional.nombreProfesional
         }
       }
+      gtag('event', this.busquedaInicial.gtagActionName, { 'event_category': this.busquedaInicial.gtagName, 'event_label': `Selecciona Lista de Espera`, 'value': '0' });
 
       this.listaEspera.emit(data);
 
@@ -862,6 +866,8 @@ export class SeleccionComponent implements OnInit, OnChanges {
     this.nActivosFiltroCentro = 0;
     this.filtro = centro;
     this.filtrarBusqueda();
+    gtag('event', this.busquedaInicial.gtagActionName, { 'event_category': this.busquedaInicial.gtagName, 'event_label': `Cambia Filtro Centro`, 'value': '0' });
+
   }
 
   filtrarCentrosAction(listaCupos) {
@@ -884,6 +890,8 @@ export class SeleccionComponent implements OnInit, OnChanges {
     this.filtroHoras = hora;
     this.nActivosFiltroHoras = 0;
     this.filtrarBusqueda();
+    gtag('event', this.busquedaInicial.gtagActionName, { 'event_category': this.busquedaInicial.gtagName, 'event_label': `Cambia Filtro Horas`, 'value': '0' });
+
   }
 
   filtrarBusqueda() {
@@ -986,6 +994,8 @@ export class SeleccionComponent implements OnInit, OnChanges {
 
         //  this.setCentrosBusquedas(this.recursos);
 
+        gtag('event', this.busquedaInicial.gtagActionName, { 'event_category': this.busquedaInicial.gtagName, 'event_label': `Cambia Filtro Horas`, 'value': '0' });
+
         setTimeout(() => {
           this.restoreCalendar();
           this.prepareTooltip();
@@ -996,6 +1006,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
       } catch (err) {
       }
     });
+
 
   }
 

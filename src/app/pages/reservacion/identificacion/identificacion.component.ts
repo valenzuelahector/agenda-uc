@@ -717,6 +717,7 @@ export class IdentificacionComponent implements OnInit, OnChanges {
       const resp = await Promise.all([this.reglasValidacion(fecha, fTermino), this.updDatosBusqCliente(data)]);
 
       this.calendario.cupo.valorConvenio = resp[0]['valorConvenio'] ? resp[0]['valorConvenio'] : 0;
+      gtag('event', this.busquedaInicial.gtagActionName, { 'event_category': this.busquedaInicial.gtagName, 'event_label': `Cambio de Previsión`, 'value': '0' });
 
     } catch (err) {
 

@@ -189,7 +189,7 @@ export class BusquedaComponent implements OnInit {
             this.centroAtencionCtrl.disable();
             this.getEspecialidades('especialidad');
           }
-          gtag('config', ENV.analyticsCode, {'page_path': `/busqueda/${this.tipoConsulta}/area/${this.areaSelected.id}` });
+          //gtag('config', ENV.analyticsCode, {'page_path': `/busqueda/${this.tipoConsulta}/area/${this.areaSelected.id}` });
 
         })
 
@@ -458,7 +458,7 @@ export class BusquedaComponent implements OnInit {
     this.filterCentrosAtencion = null;
     this.getEspecialidades('especialidad');
     this.expanded = false;
-    gtag('config', ENV.analyticsCode, {'page_path': `/busqueda/${this.tipoConsulta}/area/${this.areaSelected.id}` });
+    //gtag('config', ENV.analyticsCode, {'page_path': `/busqueda/${this.tipoConsulta}/area/${this.areaSelected.id}` });
 
   }
 
@@ -587,7 +587,6 @@ export class BusquedaComponent implements OnInit {
       }
     });
 
-    console.log(centrosSinTodosSanCarlos)
     if (clTodos) {
       arrCentros.push(clTodos);
     }
@@ -785,14 +784,14 @@ export class BusquedaComponent implements OnInit {
     if (tipo == 'especialidad') {
       this.getServicios();
       this.servicioCtrl.enable();
-      gtag('config', ENV.analyticsCode, 
-      {'page_path': `/busqueda/${this.tipoConsulta}/area/${this.areaSelected.id}` });
+      /*gtag('config', ENV.analyticsCode, 
+      {'page_path': `/busqueda/${this.tipoConsulta}/area/${this.areaSelected.id}` });*/
 
     } else {
       this.centroAtencionCtrl.enable();
       this.getCentros(this.especialidadCtrl.value.idServicio);
-      gtag('config', ENV.analyticsCode, 
-      {'page_path': `/busqueda/${this.tipoConsulta}/area/${this.areaSelected.id}/profesional/${this.profesionalSelected.idProfesional}/servicio/${this.especialidadSelected.idServicio}/` });
+     /* gtag('config', ENV.analyticsCode, 
+      {'page_path': `/busqueda/${this.tipoConsulta}/area/${this.areaSelected.id}/profesional/${this.profesionalSelected.idProfesional}/servicio/${this.especialidadSelected.idServicio}/` });*/
     }
 
   }
@@ -803,7 +802,7 @@ export class BusquedaComponent implements OnInit {
     this.verificarDonantePaciente();
     this.centroAtencionCtrl.enable();
     this.getCentros(this.servicioCtrl.value.idServicio);
-    gtag('config', ENV.analyticsCode, {'page_path': `/busqueda/${this.tipoConsulta}/area/${this.areaSelected.id}/servicio/${this.servicioCtrl.value.idServicio}` });
+    //gtag('config', ENV.analyticsCode, {'page_path': `/busqueda/${this.tipoConsulta}/area/${this.areaSelected.id}/servicio/${this.servicioCtrl.value.idServicio}` });
 
   }
 
@@ -815,11 +814,11 @@ export class BusquedaComponent implements OnInit {
     this.getEspecialidades('profesional');
 
     if(this.tipoConsulta === 'especialidad'){
-      gtag('config', ENV.analyticsCode, 
-      {'page_path': `/busqueda/${this.tipoConsulta}/area/${this.areaSelected.id}` });
+     /* gtag('config', ENV.analyticsCode, 
+      {'page_path': `/busqueda/${this.tipoConsulta}/area/${this.areaSelected.id}` });*/
     }else{
-      gtag('config', ENV.analyticsCode, 
-      {'page_path': `/busqueda/${this.tipoConsulta}/area/${this.areaSelected.id}/profesional/${this.profesionalSelected.idProfesional}/` });
+      /*gtag('config', ENV.analyticsCode, 
+      {'page_path': `/busqueda/${this.tipoConsulta}/area/${this.areaSelected.id}/profesional/${this.profesionalSelected.idProfesional}/` });*/
     }
 
 
@@ -830,11 +829,11 @@ export class BusquedaComponent implements OnInit {
     this.centroAtencionSelected = this.centroAtencionCtrl.value;
 
     if(this.tipoConsulta === 'especialidad'){
-      gtag('config', ENV.analyticsCode, 
-      {'page_path': `/busqueda/${this.tipoConsulta}/area/${this.areaSelected.id}/servicio/${this.servicioCtrl.value.idServicio}/centro/${this.centroAtencionCtrl.value.idCentro}` });
+    /*  gtag('config', ENV.analyticsCode, 
+      {'page_path': `/busqueda/${this.tipoConsulta}/area/${this.areaSelected.id}/servicio/${this.servicioCtrl.value.idServicio}/centro/${this.centroAtencionCtrl.value.idCentro}` });*/
     }else{
-      gtag('config', ENV.analyticsCode, 
-      {'page_path': `/busqueda/${this.tipoConsulta}/area/${this.areaSelected.id}/profesional/${this.profesionalSelected.idProfesional}/servicio/${this.especialidadSelected.idServicio}/centro/${this.centroAtencionCtrl.value.idCentro}` });
+      /*gtag('config', ENV.analyticsCode, 
+      {'page_path': `/busqueda/${this.tipoConsulta}/area/${this.areaSelected.id}/profesional/${this.profesionalSelected.idProfesional}/servicio/${this.especialidadSelected.idServicio}/centro/${this.centroAtencionCtrl.value.idCentro}` });*/
     }
 
     if (this.hasQueryParams) {
@@ -909,7 +908,7 @@ export class BusquedaComponent implements OnInit {
     }
 
     let continueEncuesta: any = true;
-
+    let completaEncuesta = false;
     try {
 
       if (this.areaSelected.id === 'RIS_IMAGENES') {
@@ -922,6 +921,7 @@ export class BusquedaComponent implements OnInit {
         const respEnc: any = await this.agendaService.getEncuesta(this.servicioSelected.id, codCentro, this.datosImagenes.aplicaMedioContraste);
         if (respEnc && respEnc.encuesta && respEnc.encuesta.length > 0) {
           const ressp: any = await this.mostrarEncuesta({ ...this.datosPaciente, ...respEnc });
+          completaEncuesta = true;
           continueEncuesta = ressp.action;
           this.datosImagenes.idEncuesta = ressp.idRespuesta;
         }
@@ -940,17 +940,39 @@ export class BusquedaComponent implements OnInit {
     gtag('event', gtagActionName, { 'event_category': gtagName, 'event_label': `b) Especiallidad: ${this.especialidadSelected.nombreEspecialidad}`, 'value': '0' });
     gtag('event', gtagActionName, { 'event_category': gtagName, 'event_label': `c) Área de Interés: ${this.especialidadSelected.nombreServicio}`, 'value': '0' });
     gtag('event', gtagActionName, { 'event_category': gtagName, 'event_label': `d) Centro Médico:  ${this.centroAtencionSelected ? this.centroAtencionSelected.nombre : ''}`, 'value': '0' });
-    gtag('event', gtagActionName, { 'event_category': gtagName, 'event_label': 'e) ETAPA 1 COMPLETADA', 'value': '0' });
+    
+    if(completaEncuesta){
+      gtag('event', gtagActionName, { 'event_category': gtagName, 'event_label': `e) Completa Encuesta en Área Imágenes`, 'value': '0' });
+      gtag('event', gtagActionName, { 'event_category': gtagName, 'event_label': `f) Adjunta Orden Médica`, 'value': '0' });
+    }
+    
+    gtag('event', gtagActionName, { 'event_category': gtagName, 'event_label': 'g) ETAPA 1 COMPLETADA', 'value': '0' });
 
     gtag('event', gtagActionEspProf, { 'event_category': gtagNameEsp, 'event_label': `a) Área Médica: ${this.areaSelected.nombre}`, 'value': '0' });
     gtag('event', gtagActionEspProf, { 'event_category': gtagNameEsp, 'event_label': `b) Especiallidad: ${this.especialidadSelected.nombreEspecialidad}`, 'value': '0' });
     gtag('event', gtagActionEspProf, { 'event_category': gtagNameEsp, 'event_label': `c) Área de Interés: ${this.especialidadSelected.nombreServicio}`, 'value': '0' });
     gtag('event', gtagActionEspProf, { 'event_category': gtagNameEsp, 'event_label': `d) Centro Médico: ${this.centroAtencionSelected ? this.centroAtencionSelected.nombre : ''}`, 'value': '0' });
-    gtag('event', gtagActionEspProf, { 'event_category': gtagNameEsp, 'event_label': 'e) ETAPA 1 COMPLETADA', 'value': '0' });
+    
+    if(completaEncuesta){
+      gtag('event', gtagActionEspProf, { 'event_category': gtagNameEsp, 'event_label': `e) Completa Encuesta en Área Imágenes`, 'value': '0' });
+      gtag('event', gtagActionEspProf, { 'event_category': gtagNameEsp, 'event_label': `f) Adjunta Orden Médica`, 'value': '0' });
+    }
+    
+    gtag('event', gtagActionEspProf, { 'event_category': gtagNameEsp, 'event_label': 'g) ETAPA 1 COMPLETADA', 'value': '0' });
+
 
     await this.getDatosPaciente();
 
+    if(this.tipoConsulta === 'especialidad'){
+        gtag('config', ENV.analyticsCode, 
+        {'page_path': `/busqueda/${this.tipoConsulta}/area/${this.areaSelected.id}/servicio/${this.servicioCtrl.value.idServicio}/centro/${this.centroAtencionCtrl.value.idCentro}` });
+      }else{
+        gtag('config', ENV.analyticsCode, 
+        {'page_path': `/busqueda/${this.tipoConsulta}/area/${this.areaSelected.id}/profesional/${this.profesionalSelected.idProfesional}/servicio/${this.especialidadSelected.idServicio}/centro/${this.centroAtencionCtrl.value.idCentro}` });
+      }
+
     this.emitBusqueda.emit({
+      tipoConsulta: this.tipoConsulta,
       area: this.areaSelected,
       profesional: this.profesionalSelected,
       especialidad: this.especialidadSelected,
@@ -997,7 +1019,6 @@ export class BusquedaComponent implements OnInit {
       documento: null,
       documentoFormateado: null
     }
-    console.log(data)
 
     this.emitBusqueda.emit(data);
 
