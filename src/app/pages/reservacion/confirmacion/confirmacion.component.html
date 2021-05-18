@@ -42,10 +42,10 @@
             <p *ngIf=" calendario.cupo?.valorConvenio?.toString().trim() != '0'"><b>Valor Convenio :</b> ${{ calendario.cupo.valorConvenio | currency:'CLP':'' }}</p>
             <span *ngIf=" calendario.cupo?.valorConvenio?.toString().trim() != '0'" style="color:#999">(*) El valor convenio es referencial para la previsión seleccionada. El copago a cancelar por el paciente, puede cambiar según su plan de salud y cobertura</span>
           </div>
-          <div class="paybtn" *ngIf="reservaFinalizada && !anulada && calendario.cupo?.valorConvenio?.toString().trim() != '0'" style="">
+          <!-- <div class="paybtn" *ngIf="reservaFinalizada && !anulada && calendario.cupo?.valorConvenio?.toString().trim() != '0'" style="">
             <button mat-raised-button class="full-btn btn-morado btn-reser btn-pay" (click)="pagar()" >PAGUE SU RESERVA</button>
             <span style="text-align: center;">¡Ahorre tiempo! Pague online su reserva y luego sólo valide su huella</span>
-          </div>
+          </div> -->
         </mat-expansion-panel>
       </mat-accordion>
     </div>
