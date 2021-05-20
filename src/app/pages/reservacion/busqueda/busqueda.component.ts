@@ -55,10 +55,8 @@ export class BusquedaComponent implements OnInit {
   public loadingEspecialidades: boolean = false;
   public loadingProfesionales: boolean = false;
 
-
   public loadedByUrlEspecialidades: boolean = false;
   public loadedByUrlProfesionales: boolean = false;
-
   public needLoadInitEspecialidades: boolean = false;
   public needLoadInitProfesionales: boolean = false;
   public aplicaMedioContraste = false;
@@ -79,7 +77,8 @@ export class BusquedaComponent implements OnInit {
   }
 
   public datasUpload = [];
-
+  public bloquearRadiologia = false;
+  
   @Output() public emitReadQuery: EventEmitter<boolean> = new EventEmitter();
   @Output() public emitBusqueda: EventEmitter<any> = new EventEmitter();
   @Input() public etapaActual: number;
@@ -450,7 +449,6 @@ export class BusquedaComponent implements OnInit {
 
     this.areaSelected = event.value;
     this.clearSelection('profesional');
-
     this.tituloIdt = 'Datos del Paciente';
     this.tipoConsulta = 'especialidad';
     this.filterEspecialidades = null;
@@ -458,6 +456,11 @@ export class BusquedaComponent implements OnInit {
     this.filterCentrosAtencion = null;
     this.getEspecialidades('especialidad');
     this.expanded = false;
+    console.log(ENV.bloquearAreaRadiologia)
+    if(ENV.bloquearAreaRadiologia && this.areaSelected.id === 'RIS_IMAGENES'){
+        this.bloquearRadiologia = true;
+    }
+
     //gtag('config', ENV.analyticsCode, {'page_path': `/busqueda/${this.tipoConsulta}/area/${this.areaSelected.id}` });
 
   }

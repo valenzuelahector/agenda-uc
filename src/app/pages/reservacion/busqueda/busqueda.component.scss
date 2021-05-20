@@ -297,3 +297,27 @@
   text-transform: uppercase;
   text-align: center;
 }
+
+.mensaje-radio{
+  font-size: 16px;
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    line-height: 24px;
+}
+
+.locked-rad{
+  opacity: 0.5;
+  cursor: not-allowed;
+  position: relative;
+  
+  &::before{
+    content:'';
+    position: absolute;
+    top:0; 
+    left:0;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+  }
+}
