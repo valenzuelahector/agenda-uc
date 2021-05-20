@@ -459,6 +459,8 @@ export class BusquedaComponent implements OnInit {
     console.log(ENV.bloquearAreaRadiologia)
     if(ENV.bloquearAreaRadiologia && this.areaSelected.id === 'RIS_IMAGENES'){
         this.bloquearRadiologia = true;
+    }else{
+      this.bloquearRadiologia = false;
     }
 
     //gtag('config', ENV.analyticsCode, {'page_path': `/busqueda/${this.tipoConsulta}/area/${this.areaSelected.id}` });
