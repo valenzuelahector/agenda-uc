@@ -36,6 +36,7 @@ export const ENV = {
   analyticsCode: 'UA-143119471-1',
   activarSaludIntegral: true,
   bloquearAreaRadiologia:true,
+  pathUsuarios:'/auth-test',
   derivaciones:{
     url:"http://ecommerceucv2.lfi.cl/ServicioMarcaPaciente/token",
     consultaDerivacion: "http://ecommerceucv2.lfi.cl/serviciomarcapaciente/consultaderivacion",

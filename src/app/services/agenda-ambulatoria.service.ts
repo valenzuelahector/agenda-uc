@@ -215,10 +215,10 @@ export class AgendaAmbulatoriaService {
   }
 
   guardarUsuario(data) {
-    return this.http.post(this.baseApi + '/Usuarios', data).toPromise()
+    return this.http.post(ENV.baseApi + ENV.pathUsuarios + '/Usuarios', data).toPromise()
   }
 
   recuperarClave(rut) {
-    return this.http.get(this.baseApi + '/Usuarios/ResetearPass?username=' + rut).toPromise()
+    return this.http.get(ENV.baseApi + ENV.pathUsuarios + '/Usuarios/ResetearPass?username=' + rut).toPromise()
   }
 }
