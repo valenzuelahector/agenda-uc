@@ -1,0 +1,141 @@
+<h2 mat-dialog-title>Cree su cuenta</h2>
+<mat-dialog-content>
+    
+    <form [formGroup]="mainForm">
+        <div class="dialog-spinner" *ngIf="loading">
+            <mat-spinner [diameter]="50"></mat-spinner>
+        </div>
+        <div fxLayout="row wrap" fxLayoutAlign="space-between"  *ngIf="!rutConfirmado">
+            <div fxFlex="49%">
+                <mat-form-field class="full" appearance="outline">
+                    <mat-label>RUT</mat-label>
+                    <input type="text" matInput formControlName="username" maxlength="15"
+                    (keypress)="utils.numberOnly($event, true)"
+                    (focusout)="setFormatRut()"
+                    (focusin)="restoreFormatRut()"
+                    placeholder="Rut sin puntos ni guión" autocomplete="off" required>
+                    <mat-error *ngIf="mf.username.errors">
+                        <span *ngIf="mf.username.errors.required">Campo Obligatorio</span>
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div fxFlex="49%">
+                <button mat-stroked-button  class="btn-morado btnm cus-pad full" 
+                style="padding:12px !important; margin-top:3px !important" (click)="confirmarRut()">CONFIRMAR</button>
+
+            </div>
+        </div>
+        <div fxLayout="row wrap" fxLayoutAlign="space-between" *ngIf="rutConfirmado">
+            <div fxFlex="49%">
+                <mat-form-field class="full" appearance="outline">
+                    <mat-label>RUT</mat-label>
+                    <input type="text" matInput formControlName="identificador" maxlength="15"
+                    placeholder="Rut sin puntos ni guión" autocomplete="off" required readonly>
+                    <button mat-button matSuffix mat-icon-button aria-label="Clear" (click)="clearForm()" matTooltip="Limpiar Seleccion">
+                        <mat-icon>close</mat-icon>
+                    </button>
+                    <mat-error *ngIf="mf.identificador.errors">
+                        <span *ngIf="mf.identificador.errors.required">Campo Obligatorio</span>
+                    </mat-error>
+                    
+                </mat-form-field>
+            </div>
+            <div fxFlex="49%">
+                <mat-form-field class="full" appearance="outline">
+                    <mat-label>Contraseña</mat-label>
+                    <input type="password" matInput formControlName="password" required>
+                    <mat-error *ngIf="mf.password.errors">
+                        <span *ngIf="mf.password.errors.required">Campo Obligatorio</span>
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div fxFlex="49%">
+                <mat-form-field class="full" appearance="outline">
+                    <mat-label>Nombre</mat-label>
+                    <input type="text" matInput formControlName="nombre" required>
+                    <mat-error *ngIf="mf.nombre.errors">
+                        <span *ngIf="mf.nombre.errors.required">Campo Obligatorio</span>
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div fxFlex="49%">
+                <mat-form-field class="full" appearance="outline">
+                    <mat-label>Apellido Paterno</mat-label>
+                    <input type="text" matInput formControlName="apellido_paterno" required>
+                    <mat-error *ngIf="mf.apellido_paterno.errors">
+                        <span *ngIf="mf.apellido_paterno.errors.required">Campo Obligatorio</span>
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div fxFlex="49%">
+                <mat-form-field class="full" appearance="outline">
+                    <mat-label>Apellido Materno</mat-label>
+                    <input type="text" matInput formControlName="apellido_materno">
+                </mat-form-field>
+            </div>
+            <div fxFlex="49%">
+                <mat-form-field class="full bgwhite-input" (click)="picker.open()" appearance="outline">
+                    <mat-label>Fecha de Nacimiento</mat-label>
+                    <input matInput [matDatepicker]="picker" formControlName="fecha_nacimiento" [max]="today" readonly
+                      required>
+                    <mat-datepicker #picker></mat-datepicker>
+                    <mat-error *ngIf="mf.fecha_nacimiento.errors">
+                        <span *ngIf="mf.fecha_nacimiento.errors.required">Campo Obligatorio</span>
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div fxFlex="49%">
+                <mat-form-field class="full" appearance="outline">
+                    <mat-label>Sexo</mat-label>
+                    <mat-select formControlName="sexo" required>
+                        <mat-option [value]="'M'">Masculino</mat-option>
+                        <mat-option [value]="'F'">Femenino</mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="mf.sexo.errors">
+                        <span *ngIf="mf.sexo.errors.required">Campo Obligatorio</span>
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div fxFlex="49%">
+                <mat-form-field class="full" appearance="outline">
+                    <mat-label>Celular</mat-label>
+                    <input type="text" matInput formControlName="fono_movil" maxlength="9" (keypress)="utils.numberOnly($event, true)" placeholder="912345678" required>
+                    <mat-error *ngIf="mf.fono_movil.errors">
+                        <span *ngIf="mf.fono_movil.errors.required">Campo Obligatorio</span>
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div fxFlex="100%">
+                <mat-form-field class="full" appearance="outline">
+                    <mat-label>Email</mat-label>
+                    <input type="text" matInput formControlName="email"  required>
+                    <mat-error *ngIf="mf.email.errors">
+                        <span *ngIf="mf.email.errors.email">Correo Invàlido</span>
+                        <span *ngIf="mf.email.errors.required">Campo Obligatorio</span>
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div fxFlex="100%">
+                <mat-form-field class="full bgwhite-input" appearance="outline">
+                    <mat-label>Prevision</mat-label>
+                    <mat-select formControlName="prevision">
+                      <ng-container *ngFor="let com of planesSalud.companias">
+                        <mat-option *ngFor="let plan of com.planes" [value]="plan.nombrePlan">
+                          {{plan.nombrePlan}}
+                        </mat-option>
+                      </ng-container>
+                    </mat-select>
+                    <mat-error *ngIf="mf.prevision.errors">
+                      <span *ngIf="mf.prevision.errors.required">Campo Obligatorio</span>
+                    </mat-error>
+                  </mat-form-field>
+            </div>
+        </div>
+    </form>
+
+</mat-dialog-content>
+<mat-dialog-actions align="end" style="margin:10px 0px 0px 0px" *ngIf="!loading">
+    <button mat-stroked-button style="margin-right: 15px;" class="btnm" mat-dialog-close>SALIR</button>
+    <button mat-stroked-button  class="btn-morado btnm cuspad"  *ngIf="rutConfirmado" (click)="guardar(true)">GUARDAR</button>
+  </mat-dialog-actions>
+  

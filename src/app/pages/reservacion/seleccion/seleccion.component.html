@@ -33,7 +33,7 @@
 	<section class="w-resultados wrap">
 
 		<div class="cwarn"
-			*ngIf="recursos && recursos.length == 0 && loadedRecursos && !isProcedimiento && displayCalendar"
+			*ngIf="recursos && recursos.length == 0 && loadedRecursos && !isProcedimiento && displayCalendar && !busquedaInicial.fromSaludIntegral"
 			[ngStyle]="{ 'margin-bottom' :recursos && loadedRecursos && recursos.length == 0 ? '30px' : '0px' }">
 			<!-- <h5 style="margin:0px" *ngIf="recursos.length > 0">Se han encontrado {{ recursos.length }} resultado(s).
 			</h5> -->
@@ -43,7 +43,7 @@
 						fxFlex.xs="100%" [innerHTML]="sanitizer.bypassSecurityTrustHtml(customMensaje)">
 						<div></div>
 					</div>
-					<div fxFlex="30%" fxFlex.sm="100%" fxFlex.xs="100%" style="text-align: right;"
+					<div fxFlex="30%" fxFlex.sm="100%" fxFlex.xs="100%" style="text-align: center; margin-top: 20px;"
 						*ngIf="busquedaInicial.area.id !== 'RIS_IMAGENES' && busquedaInicial.area.id !== idLaboratorioClinico">
 						<button mat-stroked-button class="btn-morado cus-pad cus" (click)="procesarListaEspera({})">
 							Inscríbase aquí
@@ -159,7 +159,7 @@
 											<p class="ily">
 												<span class="circl-ily"
 													[ngStyle]="{ 'background' : utils.getColorCentro(ct.centro?.id)}"></span>
-												{{ ct.centro?.nombre }}
+													{{ ct.centro?.nombre }} 
 											</p>
 										</div>
 										<div fxFlex="49%" *ngIf="re?.hasCupoMultiple" fxFlex.sm="100%" fxFlex.xs="100%">
@@ -176,7 +176,7 @@
 							<span class="titleDer">Derivaciones</span>
 							<div fxLayout="row wrap" fxLayoutAlign="space-between">
 								<div fxFlex="48%">
-									<span class="titlesDer">Especialidad</span>
+									<span class="titlesDer ">Especialidad</span>
 								</div>
 								<div fxFlex="48%">
 									<span class="titlesDer">Fecha Solicitud</span>
@@ -187,7 +187,7 @@
 								<div fxLayout="row wrap" fxLayoutAlign="space-between" class="itm"
 									*ngFor="let item of busquedaInicial.derivacion.info">
 									<div fxFlex="48%">
-										<span class="detDer">{{ item.DescripcionEspecialidad || '--' }}</span>
+										<span class="detDer ties" (click)="consultarCalendario(item)">{{ item.DescripcionEspecialidad || '--' }}</span>
 									</div>
 									<div fxFlex="48%">
 										<span class="detDer">{{ item.fechaingreso?.split(" ")[0] }}</span>
@@ -272,14 +272,7 @@
 											<p class="sinHorasMes" *ngIf="!re.poseeMes">Sin disponibilidad de horas este
 												mes. Puedes buscar citas en meses siguientes o llamarnos al 22 676 7000.
 											</p>
-											<!-- 
-											<p *ngIf="!re.proximaHoraDisponible?.cupo?.horaEpoch && re.poseeMes">Sin
-												próxima hora disponible.</p>
-											<p *ngIf="re.proximaHoraDisponible?.cupo?.horaEpoch && re.poseeMes">Próxima
-												hora disponible:
-												<span>{{ re.proximaHoraDisponible?.cupo.horaEpoch * 1000 | toLocalScl: re.proximaHoraDisponible?.cupo.compensacion : 'dddd DD/MM/YYYY [a las] HH:mm'}}</span>
-											</p>
-											-->
+		
 										</div>
 									</div>
 									<div *ngIf="busquedaInicial.area.id !== 'RIS_IMAGENES'">
@@ -307,7 +300,59 @@
 					</div>
 				</div>
 			</ng-container>
+			<div class="item-doc" *ngIf="busquedaInicial.fromSaludIntegral && derivacion && recursos.length === 0 && loadedRecursos">
+					<div class="row">
+						<div class="col-lg-6">
+							<div class="box-doc">
+								<div fxLayout="row wrap" style="margin-top:00px" fxLayoutAlign="space-evenly">
+									<figure fxFlex="35%" >
+										<img [src]="profesionalCabecera?.profesional?.urlImagenProfesional" alt="">
+									</figure>
+									<div class="txt-doc"
+										fxFlex="60%">
+										<h4>{{ profesionalCabecera?.profesional?.nombreProfesional }}</h4>
+										<button style="margin:20px 20px 0px 0px" class="ver-perfil full-btn"
+											mat-stroked-button (click)="verPerfil(profesionalCabecera?.profesional)">Ver perfil
+											<i class="fa fa-angle-right" aria-hidden="true"></i>
+										</button>
+										<button mat-stroked-button class="btn-morado cus-pad cus" >
+											SIN AGENDA
+										</button>
+									</div>
+								</div>
+								<p class="small bxsmall" *ngIf="profesionalCabecera?.profesional?.informacionAdicional">
+									{{ profesionalCabecera?.profesional?.informacionAdicional }}</p>
+							</div>
+						</div>
+						<div class="col-lg-6 contentDerivation" *ngIf="derivacion">
+							<span class="titleDer">Derivaciones</span>
+							<div fxLayout="row wrap" fxLayoutAlign="space-between">
+								<div fxFlex="48%">
+									<span class="titlesDer ">Especialidad</span>
+								</div>
+								<div fxFlex="48%">
+									<span class="titlesDer">Fecha Solicitud</span>
+								</div>
 
+							</div>
+							<div class="derv-it">
+								<div fxLayout="row wrap" fxLayoutAlign="space-between" class="itm"
+									*ngFor="let item of busquedaInicial.derivacion.info">
+									<div fxFlex="48%">
+										<span class="detDer ties" (click)="consultarCalendario(item)">{{ item.DescripcionEspecialidad || '--' }}</span>
+									</div>
+									<div fxFlex="48%">
+										<span class="detDer">{{ item.fechaingreso?.split(" ")[0] }}</span>
+									</div>
+								</div>
+							</div>
+
+							<p *ngIf="!busquedaInicial.derivacion || busquedaInicial.derivacion.info.length === 0" style="text-align: center;">No
+								hay derivaciones disponibles.</p>
+						</div>
+
+					</div>
+				</div>
 		</div>
 	</section>
 	<div class="detalleProcedimiento wrap" *ngIf="isProcedimiento && recursos.length === 0 && loadedRecursos">

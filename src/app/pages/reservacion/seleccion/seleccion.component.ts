@@ -11,6 +11,7 @@ import 'moment-timezone';
 import { DomSanitizer } from '@angular/platform-browser';
 import { DeviceDetectorService } from 'ngx-device-detector';
 import * as clone from 'clone';
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
 @Component({
   selector: 'app-seleccion',
@@ -21,6 +22,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
 
   @Input() busquedaInicial: any;
   @Input() reloadBusqueda: number = 0;
+  @Input() removerDerivacion = false;
   @Output() calendario: EventEmitter<any> = new EventEmitter();
   @Output() readQuery: EventEmitter<any> = new EventEmitter();
   @Output() listaEspera: EventEmitter<any> = new EventEmitter();
@@ -64,6 +66,9 @@ export class SeleccionComponent implements OnInit, OnChanges {
   public recursoCache: string = "";
   public derivacion = false;
   public idLaboratorioClinico = ENV.idLaboratorioClinico;
+  public volverSaludIntegral;
+  public profesionalCabecera;
+  
   public filtro: any = {
     idCentro: ENV.idRegion,
     nombre: 'TODOS'
@@ -75,7 +80,28 @@ export class SeleccionComponent implements OnInit, OnChanges {
     public sanitizer: DomSanitizer,
     public orderPipe: OrderPipe,
     private deviceService: DeviceDetectorService
-  ) { }
+  ) { 
+    this.volverSaludIntegral = this.utils.actionSaludIntegralVolver().getVolver().subscribe( data => {
+      console.log(data);
+      switch(data){
+        case 'VISTA_AGENDA_PROFESIONAL':
+          this.utils.showProgressBar();
+          setTimeout(()=> {
+            this.derivacion = true;
+            this.utils.saludIntegralVolver().setVolver('VISTA_DERIVACION');
+            this.utils.hideProgressBar();
+          },3000)
+        break;
+
+        case 'VISTA_CALENDARIO':
+          this.removerDerivacion = false;
+          this.utils.saludIntegralVolver().setVolver('VISTA_DERIVACION');
+          this.utils.especialidadDerivaciones().setEspecialidad(this.profesionalCabecera);
+
+          break;
+      }
+    })
+  }
 
   ngOnInit() {
     this.today = new Date(this.utils.toLocalScl(new Date(), this.compensacion, 'YYYY-MM-DDTHH:mm:ss'));
@@ -90,9 +116,8 @@ export class SeleccionComponent implements OnInit, OnChanges {
     return offsetTop;
   }
 
-  async getDerivacion(){
-    this.derivacion = true;
-    console.log(this.busquedaInicial.derivacion)
+  async setDerivacion(status){
+    this.derivacion = status;
   }
 
   @HostListener('window:scroll', ['$event'])
@@ -112,11 +137,14 @@ export class SeleccionComponent implements OnInit, OnChanges {
       this.navigationDate = { min: null, max: null };
       this.counterLoader = 0;
       this.navDirection = 'next';
-
+      console.log(this.busquedaInicial)
       this.isProcedimiento = this.busquedaInicial.area.id === ENV.idExamenProcedimiento;
       this.centroTodos = (this.busquedaInicial.centroAtencion.nombre.toLowerCase() === 'todos') ? true : false;
       this.setRecursosCache().clearItem();
       this.recursos = null;
+      const derivacion = JSON.parse(localStorage.getItem('derivacion'));
+      this.busquedaInicial.derivacion = derivacion;
+
       if (this.busquedaInicial && this.busquedaInicial.especialidad) {
         this.displayCalendar = true;
         this.resetCalendario();
@@ -134,9 +162,12 @@ export class SeleccionComponent implements OnInit, OnChanges {
         this.resetCalendario();
       }
       this.cambiarFiltroHoras('ALL');
+
       if(this.busquedaInicial.fromSaludIntegral){
-        this.getDerivacion();
+        this.setDerivacion(this.removerDerivacion ? false : true);
+        this.profesionalCabecera = JSON.parse(localStorage.getItem("profesionalCabeceraCalendario"))
       }
+      
     }
   }
 
@@ -144,6 +175,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
     this.utils.showProgressBar();
     setTimeout(()=> {
       this.derivacion = false;
+      this.utils.saludIntegralVolver().setVolver('VISTA_AGENDA_PROFESIONAL');
       this.utils.hideProgressBar();
     },3000)
   }
@@ -1059,5 +1091,100 @@ export class SeleccionComponent implements OnInit, OnChanges {
     });
 
     return hasCupoMultiple;
+  }
+  consultarCalendario2(item){
+    const search = {
+      area: ENV.areaConsultaMedica.id,
+      tipo: 'especialidad',
+      especialidad:'b2182750-ec15-4e3a-9be1-a93400e35665',
+      servicio: item.idServicioDerivado.toLowerCase(),
+      centro: ENV.idRegion,
+      rut: this.busquedaInicial.documentoPaciente.documento,
+      tipoDocumento: 'RUN'
+    }
+    this.removerDerivacion = true;
+    this.utils.saludIntegralVolver().setVolver('VISTA_CALENDARIO');
+    this.utils.especialidadDerivaciones().setEspecialidad(search);
+  }
+
+  consultarCalendario(deriv){
+
+    this.utils.showProgressBar();
+    this.agendaService.getEspecialidadesByGeneric(ENV.areaConsultaMedica.id, null, deriv.idServicioDerivado.toLowerCase()).subscribe(async (srvRequest: any) => {
+
+      try {
+        const idEspecialidad = "b2182750-ec15-4e3a-9be1-a93400e35665";
+        const especialidad = srvRequest.especialidades.find(item => {
+          return item.idEspecialidad === idEspecialidad
+        });
+        const servEspRequest:any = await this.agendaService.getServiciosByEspecialidad(idEspecialidad, ENV.areaConsultaMedica.id);
+        const servicio = servEspRequest.servicios.find(item => {
+          return item.id === deriv.idServicioDerivado.toLowerCase()
+        });
+
+        especialidad.idServicio = servicio.id;
+        especialidad.nombreServicio = servicio.nombre;
+        
+        const profesional = null;
+        const centroAtencion = {
+          direccion: {
+            calle: null,
+            numero: null,
+            piso: null,
+            comuna: "Región Metropolitana"
+          },
+          horaApertura: null,
+          horaCierre: null,
+          idCentro: ENV.idRegion,
+          idRegion: ENV.idRegion,
+          latitud: null,
+          longitud: null,
+          nombre: "Todos",
+          codigo: "todos",
+          detalle: "Todos - Región Metropolitana"
+        };
+
+        const centrosDisponibles = [];
+        const area = ENV.areaConsultaMedica;
+        const documentoPaciente = this.profesionalCabecera.documentoPaciente
+        const datosImagenes = {
+          aplicaMedioContraste: false,
+          archivo: null,
+          requierePresupuesto: false,
+          idEncuesta: null
+        };
+
+        const gtagName = 'PROCESO DE RESERVA DE HORA';
+        const gtagNameEsp = "PROCESO DE RESERVA DE HORA";
+        const gtagActionName = "ESPECIALIDAD";
+        const gtagActionEspProf = "PROFESIONAL";
+
+        const busqueda = {
+          area,
+          profesional,
+          especialidad,
+          centroAtencion,
+          documentoPaciente,
+          centrosDisponibles,
+          datosImagenes,
+          fromSaludIntegral: true,
+          gtagActionName,
+          gtagName,
+          gtagActionEspProf,
+          gtagNameEsp
+        };
+
+        this.removerDerivacion = true;
+        
+        this.utils.saludIntegralVolver().setVolver('VISTA_CALENDARIO');
+        this.utils.especialidadDerivaciones().setEspecialidad(busqueda);
+
+      } catch (err) {
+        console.log(err)
+
+      }
+
+    });
+
   }
 }

@@ -4,6 +4,9 @@ import { Validators, FormControl } from '@angular/forms';
 import { ENV } from 'src/environments/environment';
 import { AgendaAmbulatoriaService } from 'src/app/services/agenda-ambulatoria.service';
 import { ActivatedRoute } from '@angular/router';
+import { MatDialog } from '@angular/material';
+import { RegistroUsuarioComponent } from 'src/app/shared/components/modals/registro-usuario/registro-usuario.component';
+import { RecuperarClaveUsuarioComponent } from 'src/app/shared/components/modals/recuperar-clave-usuario/recuperar-clave-usuario.component';
 
 @Component({
   selector: 'app-buscar-tu-medico',
@@ -21,6 +24,7 @@ export class BuscarTuMedicoComponent implements OnInit {
   constructor(
     public utils: UtilsService,
     public agendaService: AgendaAmbulatoriaService,
+    public dialog: MatDialog,
     public activateRoute: ActivatedRoute) { }
 
   ngOnInit() {
@@ -129,11 +133,14 @@ export class BuscarTuMedicoComponent implements OnInit {
           this.agendaService.getDatosProfesional(null, rutMedTr).subscribe(async (prof: any) => {
             this.setBusquedaCalendario(prof.datosProfesional).then((busqueda: any) => {
               busqueda.fromSaludIntegral = true;
-              busqueda.derivacion = res.derivacion;
+              //busqueda.derivacion = res.derivacion;
+              localStorage.setItem("derivacion", JSON.stringify(res.derivacion))
               this.datosBeneficiarioMedico.emit(busqueda);
               this.utils.hideProgressBar();
               this.documento = null;
               this.documentoFC.setValue('');
+              this.clave.setValue('');
+              this.clave.reset();
             }).catch(err => {
               this.utils.mDialog('Error', 'No se ha podido finalizar la consulta. Intente más tarde.', 'message');
               this.utils.hideProgressBar();
@@ -186,6 +193,7 @@ export class BuscarTuMedicoComponent implements OnInit {
           }
 
           const profesional = {
+            id: prof.idProfesionalPRM,
             idProfesional: prof.idProfesionalPRM,
             nombreProfesional: `${prof.nombres} ${prof.apellidoPaterno} ${prof.apellidoMaterno}`,
             esProfesional: true,
@@ -239,8 +247,12 @@ export class BuscarTuMedicoComponent implements OnInit {
             centroAtencion,
             documentoPaciente,
             centrosDisponibles,
+            fromSaludIntegral: true,
             datosImagenes
           };
+
+          localStorage.setItem('profesionalCabeceraCalendario', JSON.stringify(busqueda));
+          this.utils.saludIntegralVolver().setVolver('VISTA_DERIVACION');
 
           resolve(busqueda);
 
@@ -277,6 +289,24 @@ export class BuscarTuMedicoComponent implements OnInit {
       } catch (err) {
         resolve(null);
       }
+    });
+  }
+
+  registrarse(){
+    this.dialog.open(RegistroUsuarioComponent,{
+      data: null,
+      width: '720px',
+      autoFocus: false,
+      disableClose: true
+    });
+  }
+
+  recuperarClave(){
+    this.dialog.open(RecuperarClaveUsuarioComponent,{
+      data: null,
+      width: '480px',
+      autoFocus: false,
+      disableClose: true
     });
   }
 

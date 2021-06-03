@@ -1,0 +1,26 @@
+<h2 mat-dialog-title>Recuperar Clave</h2>
+<mat-dialog-content>
+    
+        <div class="dialog-spinner" *ngIf="loading">
+            <mat-spinner [diameter]="50"></mat-spinner>
+        </div>
+        <div fxLayout="row wrap" fxLayoutAlign="space-between" >
+            <div fxFlex="100%">
+                <mat-form-field class="full" appearance="outline">
+                    <mat-label>RUT</mat-label>
+                    <input type="text" matInput [(ngModel)]="documentoFormatted" maxlength="15"
+                    (keypress)="utils.numberOnly($event, true)"
+                    (focusout)="setFormatRut()"
+                    (focusin)="restoreFormatRut()"
+                    placeholder="Rut sin puntos ni guión" autocomplete="off" required>
+                </mat-form-field>
+            </div>
+        </div>
+
+
+</mat-dialog-content>
+<mat-dialog-actions align="end" style="margin:10px 0px 0px 0px" *ngIf="!loading">
+    <button mat-stroked-button style="margin-right: 15px;" class="btnm" mat-dialog-close>SALIR</button>
+    <button mat-stroked-button  class="btn-morado btnm cuspad" (click)="recuperar()">RECUPERAR CLAVE</button>
+</mat-dialog-actions>
+  

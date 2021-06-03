@@ -28,6 +28,9 @@ export class UtilsService {
   public emitBuscarProfesionalRelacionado: any = new Subject();
   public resetReserva : any = new Subject();
   public runReserva: any =  new Subject();
+  public cargarEspecialidadDerivaciones: any = new Subject();
+  public saludVolverDerivacion: any = new Subject();
+  public actionVolverDerivacion: any = new Subject();
 
   constructor(
     public dialog: MatDialog,
@@ -44,8 +47,10 @@ export class UtilsService {
     this.progressBar = false;
   }
 
-  mDialog(title: string, message: string, type: string) {
-    this.dialog.closeAll();
+  mDialog(title: string, message: string, type: string, closeAll = true) {
+    if(closeAll){
+      this.dialog.closeAll();
+    }
     let dialogConfirm = this.dialog.open(MessageComponent, {
       minWidth: '420px',
       maxWidth: '720px',
@@ -386,5 +391,38 @@ export class UtilsService {
 
     return isValid;
 
+  }
+
+  especialidadDerivaciones(){
+    return {
+      setEspecialidad: (data)=>{
+         this.cargarEspecialidadDerivaciones.next(data);
+      },
+      getEspecialidad: () => {
+        return this.cargarEspecialidadDerivaciones.asObservable();
+      }
+    }
+  }
+
+  saludIntegralVolver(){
+    return {
+      setVolver: (data)=>{
+         this.saludVolverDerivacion.next(data);
+      },
+      getVolver: () => {
+        return this.saludVolverDerivacion.asObservable();
+      }
+    }
+  }
+
+  actionSaludIntegralVolver(){
+    return {
+      setVolver: (data)=>{
+         this.actionVolverDerivacion.next(data);
+      },
+      getVolver: () => {
+        return this.actionVolverDerivacion.asObservable();
+      }
+    }
   }
 }

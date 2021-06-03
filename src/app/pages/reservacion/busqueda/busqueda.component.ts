@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter, ViewChild, Input } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, ViewChild, Input, OnDestroy } from '@angular/core';
 import { AgendaAmbulatoriaService } from 'src/app/services/agenda-ambulatoria.service';
 import { FormControl } from '@angular/forms'
 import { map, startWith, debounceTime, tap, switchMap, finalize } from 'rxjs/operators';
@@ -17,7 +17,7 @@ import { EncuestasComponent } from 'src/app/shared/components/modals/encuestas/e
   templateUrl: './busqueda.component.html',
   styleUrls: ['./busqueda.component.scss']
 })
-export class BusquedaComponent implements OnInit {
+export class BusquedaComponent implements OnInit, OnDestroy {
 
   public expanded = false;
   public areas: any = []
@@ -62,6 +62,8 @@ export class BusquedaComponent implements OnInit {
   public aplicaMedioContraste = false;
   public tituloIdt = 'Datos del Paciente';
 
+  @Input() isSaludIntegral;
+
   public datosPaciente: any = {
     tipoDocumento: 'RUN',
     documento: null,
@@ -78,7 +80,7 @@ export class BusquedaComponent implements OnInit {
 
   public datasUpload = [];
   public bloquearRadiologia = false;
-  
+
   @Output() public emitReadQuery: EventEmitter<boolean> = new EventEmitter();
   @Output() public emitBusqueda: EventEmitter<any> = new EventEmitter();
   @Input() public etapaActual: number;
@@ -93,10 +95,14 @@ export class BusquedaComponent implements OnInit {
     public aRouter: ActivatedRoute,
     public orderPipe: OrderPipe,
     public dialog: MatDialog
-  ) { }
+  ) {
+  
+
+  }
 
   ngOnInit() {
-    this.getAreas();
+      this.getAreas();
+
     // this.mostrarEncuesta({ data: null});
     this.utils.nuevaHora.subscribe(r => {
       this.clearSelection('profesional');
@@ -116,6 +122,10 @@ export class BusquedaComponent implements OnInit {
       }
 
     });
+
+  }
+
+  ngOnDestroy() {
 
   }
 
@@ -457,9 +467,9 @@ export class BusquedaComponent implements OnInit {
     this.getEspecialidades('especialidad');
     this.expanded = false;
     console.log(ENV.bloquearAreaRadiologia)
-    if(ENV.bloquearAreaRadiologia && this.areaSelected.id === 'RIS_IMAGENES'){
-        this.bloquearRadiologia = true;
-    }else{
+    if (ENV.bloquearAreaRadiologia && this.areaSelected.id === 'RIS_IMAGENES') {
+      this.bloquearRadiologia = true;
+    } else {
       this.bloquearRadiologia = false;
     }
 
@@ -795,8 +805,8 @@ export class BusquedaComponent implements OnInit {
     } else {
       this.centroAtencionCtrl.enable();
       this.getCentros(this.especialidadCtrl.value.idServicio);
-     /* gtag('config', ENV.analyticsCode, 
-      {'page_path': `/busqueda/${this.tipoConsulta}/area/${this.areaSelected.id}/profesional/${this.profesionalSelected.idProfesional}/servicio/${this.especialidadSelected.idServicio}/` });*/
+      /* gtag('config', ENV.analyticsCode, 
+       {'page_path': `/busqueda/${this.tipoConsulta}/area/${this.areaSelected.id}/profesional/${this.profesionalSelected.idProfesional}/servicio/${this.especialidadSelected.idServicio}/` });*/
     }
 
   }
@@ -818,10 +828,10 @@ export class BusquedaComponent implements OnInit {
     this.especialidadCtrl.enable();
     this.getEspecialidades('profesional');
 
-    if(this.tipoConsulta === 'especialidad'){
-     /* gtag('config', ENV.analyticsCode, 
-      {'page_path': `/busqueda/${this.tipoConsulta}/area/${this.areaSelected.id}` });*/
-    }else{
+    if (this.tipoConsulta === 'especialidad') {
+      /* gtag('config', ENV.analyticsCode, 
+       {'page_path': `/busqueda/${this.tipoConsulta}/area/${this.areaSelected.id}` });*/
+    } else {
       /*gtag('config', ENV.analyticsCode, 
       {'page_path': `/busqueda/${this.tipoConsulta}/area/${this.areaSelected.id}/profesional/${this.profesionalSelected.idProfesional}/` });*/
     }
@@ -833,10 +843,10 @@ export class BusquedaComponent implements OnInit {
     this.centroAtencionCtrl.disable();
     this.centroAtencionSelected = this.centroAtencionCtrl.value;
 
-    if(this.tipoConsulta === 'especialidad'){
-    /*  gtag('config', ENV.analyticsCode, 
-      {'page_path': `/busqueda/${this.tipoConsulta}/area/${this.areaSelected.id}/servicio/${this.servicioCtrl.value.idServicio}/centro/${this.centroAtencionCtrl.value.idCentro}` });*/
-    }else{
+    if (this.tipoConsulta === 'especialidad') {
+      /*  gtag('config', ENV.analyticsCode, 
+        {'page_path': `/busqueda/${this.tipoConsulta}/area/${this.areaSelected.id}/servicio/${this.servicioCtrl.value.idServicio}/centro/${this.centroAtencionCtrl.value.idCentro}` });*/
+    } else {
       /*gtag('config', ENV.analyticsCode, 
       {'page_path': `/busqueda/${this.tipoConsulta}/area/${this.areaSelected.id}/profesional/${this.profesionalSelected.idProfesional}/servicio/${this.especialidadSelected.idServicio}/centro/${this.centroAtencionCtrl.value.idCentro}` });*/
     }
@@ -876,7 +886,6 @@ export class BusquedaComponent implements OnInit {
       this.utils.mDialog('Error', 'Debe seleccionar una Especialidad Médica.', 'message');
       return false;
     }
-
     if (!this.servicioSelected && this.tipoConsulta === 'especialidad') {
       this.utils.mDialog('Error', 'Debe seleccionar una Área de Interés.', 'message');
       return false;
@@ -945,36 +954,36 @@ export class BusquedaComponent implements OnInit {
     gtag('event', gtagActionName, { 'event_category': gtagName, 'event_label': `b) Especiallidad: ${this.especialidadSelected.nombreEspecialidad}`, 'value': '0' });
     gtag('event', gtagActionName, { 'event_category': gtagName, 'event_label': `c) Área de Interés: ${this.especialidadSelected.nombreServicio}`, 'value': '0' });
     gtag('event', gtagActionName, { 'event_category': gtagName, 'event_label': `d) Centro Médico:  ${this.centroAtencionSelected ? this.centroAtencionSelected.nombre : ''}`, 'value': '0' });
-    
-    if(completaEncuesta){
+
+    if (completaEncuesta) {
       gtag('event', gtagActionName, { 'event_category': gtagName, 'event_label': `e) Completa Encuesta en Área Imágenes`, 'value': '0' });
       gtag('event', gtagActionName, { 'event_category': gtagName, 'event_label': `f) Adjunta Orden Médica`, 'value': '0' });
     }
-    
+
     gtag('event', gtagActionName, { 'event_category': gtagName, 'event_label': 'g) ETAPA 1 COMPLETADA', 'value': '0' });
 
     gtag('event', gtagActionEspProf, { 'event_category': gtagNameEsp, 'event_label': `a) Área Médica: ${this.areaSelected.nombre}`, 'value': '0' });
     gtag('event', gtagActionEspProf, { 'event_category': gtagNameEsp, 'event_label': `b) Especiallidad: ${this.especialidadSelected.nombreEspecialidad}`, 'value': '0' });
     gtag('event', gtagActionEspProf, { 'event_category': gtagNameEsp, 'event_label': `c) Área de Interés: ${this.especialidadSelected.nombreServicio}`, 'value': '0' });
     gtag('event', gtagActionEspProf, { 'event_category': gtagNameEsp, 'event_label': `d) Centro Médico: ${this.centroAtencionSelected ? this.centroAtencionSelected.nombre : ''}`, 'value': '0' });
-    
-    if(completaEncuesta){
+
+    if (completaEncuesta) {
       gtag('event', gtagActionEspProf, { 'event_category': gtagNameEsp, 'event_label': `e) Completa Encuesta en Área Imágenes`, 'value': '0' });
       gtag('event', gtagActionEspProf, { 'event_category': gtagNameEsp, 'event_label': `f) Adjunta Orden Médica`, 'value': '0' });
     }
-    
+
     gtag('event', gtagActionEspProf, { 'event_category': gtagNameEsp, 'event_label': 'g) ETAPA 1 COMPLETADA', 'value': '0' });
 
 
     await this.getDatosPaciente();
 
-    if(this.tipoConsulta === 'especialidad'){
-        gtag('config', ENV.analyticsCode, 
-        {'page_path': `/busqueda/${this.tipoConsulta}/area/${this.areaSelected.id}/servicio/${this.servicioCtrl.value.idServicio}/centro/${this.centroAtencionCtrl.value.idCentro}` });
-      }else{
-        gtag('config', ENV.analyticsCode, 
-        {'page_path': `/busqueda/${this.tipoConsulta}/area/${this.areaSelected.id}/profesional/${this.profesionalSelected.idProfesional}/servicio/${this.especialidadSelected.idServicio}/centro/${this.centroAtencionCtrl.value.idCentro}` });
-      }
+    if (this.tipoConsulta === 'especialidad') {
+      gtag('config', ENV.analyticsCode,
+        { 'page_path': `/busqueda/${this.tipoConsulta}/area/${this.areaSelected.id}/servicio/${this.servicioCtrl.value.idServicio}/centro/${this.centroAtencionCtrl.value.idCentro}` });
+    } else {
+      gtag('config', ENV.analyticsCode,
+        { 'page_path': `/busqueda/${this.tipoConsulta}/area/${this.areaSelected.id}/profesional/${this.profesionalSelected.idProfesional}/servicio/${this.especialidadSelected.idServicio}/centro/${this.centroAtencionCtrl.value.idCentro}` });
+    }
 
     this.emitBusqueda.emit({
       tipoConsulta: this.tipoConsulta,
@@ -1019,7 +1028,7 @@ export class BusquedaComponent implements OnInit {
 
   buscarProximaHora(data) {
     data['fromCuposInmediatos'] = true;
-    data['documentoPaciente']  =  {
+    data['documentoPaciente'] = {
       tipoDocumento: 'RUN',
       documento: null,
       documentoFormateado: null
@@ -1027,12 +1036,12 @@ export class BusquedaComponent implements OnInit {
 
     this.emitBusqueda.emit(data);
 
-    if(!data.profesional){
-      gtag('config', ENV.analyticsCode, 
-      {'page_path': `/busqueda/cuposinmediatos/area/${data.area.id}/servicio/${data.especialidad.idServicio}/centro/${data.centroAtencion.idCentro}` });
-    }else{
-      gtag('config', ENV.analyticsCode, 
-      {'page_path': `/busqueda/cuposinmediatos/area/${data.area.id}/profesional/${data.profesional.idProfesional}/servicio/${data.especialidad.idServicio}/centro/${data.centroAtencion.idCentro}` });
+    if (!data.profesional) {
+      gtag('config', ENV.analyticsCode,
+        { 'page_path': `/busqueda/cuposinmediatos/area/${data.area.id}/servicio/${data.especialidad.idServicio}/centro/${data.centroAtencion.idCentro}` });
+    } else {
+      gtag('config', ENV.analyticsCode,
+        { 'page_path': `/busqueda/cuposinmediatos/area/${data.area.id}/profesional/${data.profesional.idProfesional}/servicio/${data.especialidad.idServicio}/centro/${data.centroAtencion.idCentro}` });
     }
   }
 
@@ -1044,13 +1053,16 @@ export class BusquedaComponent implements OnInit {
   }
 
   async setDataQueryParams() {
-    let p = {};
-    await this.aRouter.queryParams.subscribe(params => {
-      if (!this.readQuery) {
-        p = params;
-      }
+    return new Promise((resolve, reject) => {
+      let p = {};
+      this.aRouter.queryParams.subscribe(params => {
+        if (!this.readQuery) {
+          p = params;
+        }
+        resolve(p);
+      });
     })
-    return p;
+
   }
 
   cambiarTipoBusqueda(tipo) {

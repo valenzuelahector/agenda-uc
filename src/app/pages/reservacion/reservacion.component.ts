@@ -28,7 +28,7 @@ export class ReservacionComponent implements OnInit, AfterViewInit, OnDestroy {
   public mensajesActuales: any = [];
   public codCita: number;
   public valorConvenio: number;
-  public emitterReloadBusqueda:any;
+  public emitterReloadBusqueda: any;
   public reloadNumber = 0;
   public saludIntegral = false;
   public checkSaludIntegral = false;
@@ -41,6 +41,13 @@ export class ReservacionComponent implements OnInit, AfterViewInit, OnDestroy {
   public isProcedimiento = false;
   public buscarProfesionalRelacionadoSuscription;
   public resetReservaObj;
+  public volverSaludIntegralSuscription;
+  public removerDerivacion = false;
+  public saludEspecialidad;
+  public saludIntgralBotonVolver = {
+    text: '',
+    estado: ''
+  };
 
   @ViewChild('tabGroup', { static: false }) tabGroup: any;
   @ViewChild('seleccion', { static: false }) seleccion: SeleccionComponent;
@@ -54,11 +61,11 @@ export class ReservacionComponent implements OnInit, AfterViewInit, OnDestroy {
 
   }
 
-  ngAfterViewInit(){
+  ngAfterViewInit() {
 
     this.cambiarEtapa(0);
 
-    this.resetReservaObj = this.utils.obsClearReserva().subscribe( r => {
+    this.resetReservaObj = this.utils.obsClearReserva().subscribe(r => {
       this.resetReserva();
     });
 
@@ -77,45 +84,80 @@ export class ReservacionComponent implements OnInit, AfterViewInit, OnDestroy {
       this.calendario.cupo.centro['direccion'] = data['direccionCentro'];
       this.calendario.cupo['valorConvenio'] = data.valorConvenio;
 
-      if(!this.busquedaInfo.documentoPaciente){
+      if (!this.busquedaInfo.documentoPaciente) {
         this.busquedaInfo.documentoPaciente = {
           tipoDocumento: data.busquedaPaciente.tipoDocumento,
           documento: data.busquedaPaciente.documento,
           documentoFormateado: data.busquedaPaciente.documentoFormateado
         }
       }
-      
+
       if (data.reglas && data.reglas.length > 0) {
         this.reglasActuales = { reglas: data.reglas, reservable: data.reservable };
-      } 
-      
-      setTimeout(()=>{
+      }
+
+      setTimeout(() => {
         this.utils.setEmitReservar();
       }, 500);
-      
-      
+
+
     });
 
-    this.identificacion.confirmacionListaEspera.subscribe( data => {
+    this.identificacion.confirmacionListaEspera.subscribe(data => {
       this.confirmacionListaEsperaData = data;
       this.reservaRealizada = true;
       this.cambiarEtapa(4);
     });
 
-    this.identificacion.confirmacionProcedimiento.subscribe( data => {
+    this.identificacion.confirmacionProcedimiento.subscribe(data => {
       this.confirmacionProcedimiento = data;
       this.reservaRealizada = true;
       this.cambiarEtapa(4);
     });
-    
-    this.buscarProfesionalRelacionadoSuscription = this.utils.getBuscarProfesionalRelacionado().subscribe( data => {
+
+    this.buscarProfesionalRelacionadoSuscription = this.utils.getBuscarProfesionalRelacionado().subscribe(data => {
       this.busquedaInfo = data;
       this.cambiarEtapa(1);
     });
 
+    this.volverSaludIntegralSuscription = this.utils.saludIntegralVolver().getVolver().subscribe(res => {
+
+      switch (res) {
+        case 'VISTA_DERIVACION':
+          this.saludIntgralBotonVolver.text = 'SALIR';
+          break;
+        case 'VISTA_CALENDARIO':
+        case 'VISTA_AGENDA_PROFESIONAL':
+          this.saludIntgralBotonVolver.text = 'VOLVER';
+          break;
+      }
+
+      this.saludIntgralBotonVolver.estado = res;
+
+    });
+
+    this.saludEspecialidad = this.utils.especialidadDerivaciones().getEspecialidad().subscribe(data => {
+      this.utils.showProgressBar()
+      this.busquedaEmitter(data);
+    });
+
   }
 
-  confirmarReserva(data){
+  volverSaludIntegral() {
+    switch (this.saludIntgralBotonVolver.estado) {
+      case 'VISTA_DERIVACION':
+        this.nuevaReserva()
+        break;
+      case 'VISTA_AGENDA_PROFESIONAL':
+        this.utils.actionSaludIntegralVolver().setVolver('VISTA_AGENDA_PROFESIONAL')
+        break;
+      case 'VISTA_CALENDARIO':
+          this.utils.actionSaludIntegralVolver().setVolver('VISTA_CALENDARIO');
+          break;
+    }
+  }
+
+  confirmarReserva(data) {
     if (data['response']) {
       this.reservaRealizada = true;
       this.listaEsperaData = null;
@@ -124,7 +166,7 @@ export class ReservacionComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  busquedaEmitter(data){
+  busquedaEmitter(data) {
     if (data && data.area && data.especialidad) {
       this.busquedaInfo = data;
       this.cambiarEtapa(1);
@@ -132,38 +174,38 @@ export class ReservacionComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
 
-  getParamsArea(){
+  getParamsArea() {
 
-    this.aRouter.params.subscribe( params => {
-      if(params['area'] === 'saludintegral'){
-        if(!ENV.activarSaludIntegral){
-          location.href="/";
+    this.aRouter.params.subscribe(params => {
+      if (params['area'] === 'saludintegral') {
+        if (!ENV.activarSaludIntegral) {
+          location.href = "/";
         }
         this.saludIntegral = true;
-        setTimeout(()=> {
+        setTimeout(() => {
           this.readQuery = true;
-        },2000)
+        }, 2000)
       }
       this.checkSaludIntegral = true;
     })
-  
+
   }
 
   ngOnInit() {
 
     this.getParamsArea();
-    this.emitterReloadBusqueda = this.utils.getReloadBusqueda().subscribe( r => {
+    this.emitterReloadBusqueda = this.utils.getReloadBusqueda().subscribe(r => {
       this.cambiarEtapa(1);
-      this.reloadNumber = this.utils.aleatorio(1,99999);
+      this.reloadNumber = this.utils.aleatorio(1, 99999);
     });
 
   }
 
-  irPortalPacientes(){
+  irPortalPacientes() {
     window.location.href = "https://agenda.clinicasancarlos.cl/";
   }
-  
-  ngOnDestroy(){
+
+  ngOnDestroy() {
     this.emitterReloadBusqueda.unsubscribe();
     this.buscarProfesionalRelacionadoSuscription.unsubscribe();
     this.resetReservaObj.unsubscribe();
@@ -174,7 +216,7 @@ export class ReservacionComponent implements OnInit, AfterViewInit, OnDestroy {
     this.curEtapa = index;
     this.tabGroup.selectedIndex = this.curEtapa;
 
-    if(index < 2){
+    if (index < 2) {
       this.listaEsperaData = null;
       this.isProcedimiento = false;
     }
@@ -197,16 +239,16 @@ export class ReservacionComponent implements OnInit, AfterViewInit, OnDestroy {
     this.confirmacionProcedimiento = null;
     this.cambiarEtapa(0);
 
-    if(this.saludIntegral){
-        this.nuevaBusquedaCM()
+    if (this.saludIntegral) {
+      this.nuevaBusquedaCM()
     }
 
   }
 
-  resetReserva(){
-    setTimeout(()=> {
+  resetReserva() {
+    setTimeout(() => {
       this.nuevaReserva();
-    },1000)
+    }, 1000)
 
   }
 
@@ -233,11 +275,11 @@ export class ReservacionComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  reservar(){
+  reservar() {
     this.utils.setEmitReservar()
   }
 
-  setDatosBeneficiario(data){
+  setDatosBeneficiario(data) {
 
     this.datosBeneficiarioMedico = data;
     this.busquedaInfo = data;
@@ -245,33 +287,33 @@ export class ReservacionComponent implements OnInit, AfterViewInit, OnDestroy {
     this.readQuery = false;
     this.cambiarEtapa(1);
 
-    setTimeout(()=> {
+    setTimeout(() => {
       this.readQuery = true;
       this.utils.hideProgressBar();
-    },2000);
+    }, 2000);
 
   }
 
-  nuevaBusquedaCM(){
+  nuevaBusquedaCM() {
 
     this.utils.showProgressBar();
     this.readQuery = false;
     this.verMedicoAsociado = false;
     this.datosBeneficiarioMedico = null;
     this.rutMatch = null;
-    setTimeout(()=> {
+    setTimeout(() => {
       this.readQuery = true;
       this.utils.hideProgressBar();
-    },1500);
+    }, 1500);
 
   }
 
-  listaEspera(data){
+  listaEspera(data) {
     this.listaEsperaData = data;
     this.cambiarEtapa(2);
   }
 
-  setProcedimiento(){
+  setProcedimiento() {
     this.isProcedimiento = true;
     this.cambiarEtapa(2);
   }

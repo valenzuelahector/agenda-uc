@@ -57,8 +57,12 @@
     <div fxLayout="row">
       <div fxFlex="50%">
         <button mat-stroked-button class="btn-azul cus-pad" 
-                (click)="cambiarEtapa((curEtapa === 4) ? curEtapa - 2 : curEtapa - 1)" *ngIf="!reservaRealizada && curEtapa != 0 && !confirmacionListaEsperaData">
+                (click)="cambiarEtapa((curEtapa === 4) ? curEtapa - 2 : curEtapa - 1)" 
+                *ngIf="!reservaRealizada && !confirmacionListaEsperaData && ((curEtapa != 0 && !saludIntegral) || (curEtapa > 1 && saludIntegral))">
                 <mat-icon class="icon-cus-pad">keyboard_backspace</mat-icon>Volver
+        </button>
+        <button mat-stroked-button class="btn-azul cus-pad" *ngIf="!reservaRealizada && curEtapa < 2 && saludIntegral" (click)="volverSaludIntegral()">
+                <mat-icon class="icon-cus-pad">keyboard_backspace</mat-icon>{{ saludIntgralBotonVolver.text }}
         </button>
         <button mat-stroked-button class="btn-morado cus-pad cus" *ngIf="curEtapa != 0 && saludIntegral" (click)="irPortalPacientes()" style="margin-left:20px">
           Ir al Portal Pacientes
@@ -80,12 +84,12 @@
   <mat-tab-group dynamicHeight #tabGroup>
     <mat-tab label="Búsqueda">
       <div *ngIf="checkSaludIntegral">
-        <app-busqueda (emitReadQuery)="readQuerySetter($event)" (emitBusqueda)="busquedaEmitter($event)" *ngIf="!saludIntegral" [etapaActual]="curEtapa"></app-busqueda>
+        <app-busqueda (emitReadQuery)="readQuerySetter($event)" [isSaludIntegral]="saludIntegral" (emitBusqueda)="busquedaEmitter($event)" [hidden]="saludIntegral" [etapaActual]="curEtapa"></app-busqueda>
         <app-buscar-tu-medico *ngIf="saludIntegral" (datosBeneficiarioMedico)="setDatosBeneficiario($event)"></app-buscar-tu-medico>
       </div>
     </mat-tab>
     <mat-tab label="Selección">
-      <app-seleccion #seleccion [busquedaInicial]="busquedaInfo" (readQuery)="readQuery = $event" [reloadBusqueda]="reloadNumber" (listaEspera)="listaEspera($event)" (procedimiento)="setProcedimiento()"></app-seleccion>
+      <app-seleccion #seleccion [busquedaInicial]="busquedaInfo"  (readQuery)="readQuery = $event" [reloadBusqueda]="reloadNumber" (listaEspera)="listaEspera($event)" (procedimiento)="setProcedimiento()"></app-seleccion>
     </mat-tab>
     <mat-tab label="Identificación">
       <app-identificacion #identificacion [listaEspera]="listaEsperaData" [isProcedimiento]="isProcedimiento" [busquedaInicial]="busquedaInfo" [calendario]="calendario" [rutMatch]="calendario ? rutMatch : null">

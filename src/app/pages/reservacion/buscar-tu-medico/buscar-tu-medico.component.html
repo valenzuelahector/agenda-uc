@@ -27,9 +27,21 @@
                 </mat-error>
 
           </mat-form-field>
-            <button mat-stroked-button class="btn-continue" (click)="buscarRut()">
+            <button mat-stroked-button class="btn-continue" (click)="buscarRut()" style="width:100%;">
                 INGRESAR
             </button>
+            <div fxLayout="row wrap" fxLayoutAlign="space-between" style="margin-top:30px">
+              <div fxFlex="48%">
+                <button mat-stroked-button class="btn-azul cus-pad" (click)="recuperarClave()" style="width:100%;">
+                  RECUPERAR CLAVE
+                </button>
+              </div>
+              <div fxFlex="48%">
+                <button mat-stroked-button class="btn-morado cus-pad" (click)="registrarse()" style="width:100%;">
+                  REGISTRARSE
+                </button>
+              </div>
+            </div>
 
         </div>
     </div>

@@ -442,3 +442,18 @@ opacity: 0.5 !important;
     }
   }
 }
+.ties{
+  color: #2A7DE1;
+  cursor: pointer;
+  background: #fff;
+  box-shadow: 1px 1px 10px 1px #eee;
+  padding: 10px;
+  font-size: 15px;
+  transition: all 0.5s;
+}
+
+.ties:hover{
+  background: #2A7DE1;
+  color:#fff;
+  transition: all 0.5s;
+}

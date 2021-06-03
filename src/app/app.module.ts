@@ -48,6 +48,8 @@ import { SolicitudProcedimientoEfectuadoComponent } from './pages/reservacion/so
 import { DeviceDetectorService } from 'ngx-device-detector';
 import { EncuestasComponent } from './shared/components/modals/encuestas/encuestas.component';
 import { DebounceClickDirective } from './shared/directives/preventDbclick.directive';
+import { RegistroUsuarioComponent } from './shared/components/modals/registro-usuario/registro-usuario.component';
+import { RecuperarClaveUsuarioComponent } from './shared/components/modals/recuperar-clave-usuario/recuperar-clave-usuario.component';
 
 @NgModule({
   declarations: [
@@ -82,6 +84,10 @@ import { DebounceClickDirective } from './shared/directives/preventDbclick.direc
     ListaEsperaEfectuadaComponent,
     SolicitudProcedimientoEfectuadoComponent,
     EncuestasComponent,
+    RegistroUsuarioComponent,
+    RecuperarClaveUsuarioComponent,
+    RegistroUsuarioComponent,
+    RecuperarClaveUsuarioComponent
   ],
   imports: [
     BrowserModule,
@@ -109,7 +115,9 @@ import { DebounceClickDirective } from './shared/directives/preventDbclick.direc
       PerfilProfesionalComponent,
       ConfirmarAnularReservaComponent,
       ErrorReservaComponent,
-      EncuestasComponent
+      EncuestasComponent,
+      RegistroUsuarioComponent,
+      RecuperarClaveUsuarioComponent
   ]
 })
 export class AppModule { }

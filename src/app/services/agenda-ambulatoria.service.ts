@@ -213,4 +213,12 @@ export class AgendaAmbulatoriaService {
     return this.http.post(ENV.derivaciones.consultaDerivacion, { idPaciente: '19501621-6', estadoDerivacion : 'VIGENTE' }, httpHd).toPromise();
 
   }
+
+  guardarUsuario(data) {
+    return this.http.post(this.baseApi + '/Usuarios', data).toPromise()
+  }
+
+  recuperarClave(rut) {
+    return this.http.get(this.baseApi + '/Usuarios/ResetearPass?username=' + rut).toPromise()
+  }
 }
