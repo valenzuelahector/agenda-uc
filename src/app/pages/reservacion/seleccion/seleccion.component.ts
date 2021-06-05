@@ -11,7 +11,6 @@ import 'moment-timezone';
 import { DomSanitizer } from '@angular/platform-browser';
 import { DeviceDetectorService } from 'ngx-device-detector';
 import * as clone from 'clone';
-import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
 @Component({
   selector: 'app-seleccion',
@@ -68,7 +67,10 @@ export class SeleccionComponent implements OnInit, OnChanges {
   public idLaboratorioClinico = ENV.idLaboratorioClinico;
   public volverSaludIntegral;
   public profesionalCabecera;
-  
+  public beneficiarioSelected;
+  public beneficiarioTitular;
+  public isTitular = true;
+  public beneficiarios = [];
   public filtro: any = {
     idCentro: ENV.idRegion,
     nombre: 'TODOS'
@@ -137,14 +139,11 @@ export class SeleccionComponent implements OnInit, OnChanges {
       this.navigationDate = { min: null, max: null };
       this.counterLoader = 0;
       this.navDirection = 'next';
-      console.log(this.busquedaInicial)
       this.isProcedimiento = this.busquedaInicial.area.id === ENV.idExamenProcedimiento;
       this.centroTodos = (this.busquedaInicial.centroAtencion.nombre.toLowerCase() === 'todos') ? true : false;
       this.setRecursosCache().clearItem();
       this.recursos = null;
-      const derivacion = JSON.parse(localStorage.getItem('derivacion'));
-      this.busquedaInicial.derivacion = derivacion;
-
+      
       if (this.busquedaInicial && this.busquedaInicial.especialidad) {
         this.displayCalendar = true;
         this.resetCalendario();
@@ -164,6 +163,11 @@ export class SeleccionComponent implements OnInit, OnChanges {
       this.cambiarFiltroHoras('ALL');
 
       if(this.busquedaInicial.fromSaludIntegral){
+        const der = JSON.parse(localStorage.getItem('derivacion'));
+        this.beneficiarios = JSON.parse(localStorage.getItem('beneficiarios'));
+        this.busquedaInicial.derivacion = der.derivacion;
+        this.beneficiarioTitular = this.beneficiarios[0];
+        this.beneficiarioSelected = der;
         this.setDerivacion(this.removerDerivacion ? false : true);
         this.profesionalCabecera = JSON.parse(localStorage.getItem("profesionalCabeceraCalendario"))
       }
@@ -1113,7 +1117,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
     this.agendaService.getEspecialidadesByGeneric(ENV.areaConsultaMedica.id, null, deriv.idServicioDerivado.toLowerCase()).subscribe(async (srvRequest: any) => {
 
       try {
-        const idEspecialidad = "b2182750-ec15-4e3a-9be1-a93400e35665";
+        const idEspecialidad = deriv.idEspecialidad;
         const especialidad = srvRequest.especialidades.find(item => {
           return item.idEspecialidad === idEspecialidad
         });
@@ -1180,11 +1184,20 @@ export class SeleccionComponent implements OnInit, OnChanges {
         this.utils.especialidadDerivaciones().setEspecialidad(busqueda);
 
       } catch (err) {
+
+        this.utils.mDialog("Error", "No se puede consultar el calendario de la derivación. Intente más tarde", "message");
         console.log(err)
 
       }
 
     });
 
+  }
+
+  verAgendaDerivacion(titular = false){
+    this.utils.showProgressBar();
+    const benf = titular ? this.beneficiarioTitular : this.beneficiarioSelected;
+    this.isTitular = titular;
+    this.utils.actionAgendaBeneficiarios().setAgenda(benf);
   }
 }

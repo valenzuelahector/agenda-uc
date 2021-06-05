@@ -222,3 +222,4 @@ export class AgendaAmbulatoriaService {
     return this.http.get(ENV.baseApi + ENV.pathUsuarios + '/Usuarios/ResetearPass?username=' + rut).toPromise()
   }
 }
+2

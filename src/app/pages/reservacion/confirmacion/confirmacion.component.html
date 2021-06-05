@@ -28,7 +28,7 @@
             <p><b>Hora de la cita:</b>
               {{ calendario.cupo.fechaHora | toLocalScl: calendario.cupo.compensacion : 'DD/MM/YYYY HH:mm'}}</p>
             <p><b>{{ busquedaInicial.area.id === 'RIS_IMAGENES' ? 'Examen' : 'Profesional'}}:</b> {{ calendario.recurso.nombre }}</p>
-            <p *ngIf="busquedaInicial.area.id !== 'RIS_IMAGENES'"><b>Especialidad:</b> {{ busquedaInicial.especialidad.detalle }}</p>
+            <p *ngIf="busquedaInicial.area.id !== 'RIS_IMAGENES'"><b>Especialidad:</b> {{ busquedaInicial.especialidad.detalle ?  busquedaInicial.especialidad.detalle : busquedaInicial.especialidad.nombreEspecialidad }}</p>
             <p *ngIf="utils.slugify(busquedaInicial.area.nombre, '-') !== 'telemedicina' && 
             utils.slugify(busquedaInicial.area.nombre, '-') !== 'consulta-medica-virtual'"><b>Centro:</b>
               {{ calendario.cupo.centro.nombre }}</p>

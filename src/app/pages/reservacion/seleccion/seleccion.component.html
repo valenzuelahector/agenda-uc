@@ -33,7 +33,7 @@
 	<section class="w-resultados wrap">
 
 		<div class="cwarn"
-			*ngIf="recursos && recursos.length == 0 && loadedRecursos && !isProcedimiento && displayCalendar && !busquedaInicial.fromSaludIntegral"
+			*ngIf="recursos && recursos.length == 0 && loadedRecursos && !isProcedimiento && displayCalendar && !derivacion"
 			[ngStyle]="{ 'margin-bottom' :recursos && loadedRecursos && recursos.length == 0 ? '30px' : '0px' }">
 			<!-- <h5 style="margin:0px" *ngIf="recursos.length > 0">Se han encontrado {{ recursos.length }} resultado(s).
 			</h5> -->
@@ -145,8 +145,11 @@
 											*ngIf="busquedaInicial.fromSaludIntegral && derivacion">
 											Ver Agenda
 										</button>
+	
 									</div>
 								</div>
+								<div *ngTemplateOutlet="listBeneficiarios"></div>
+
 								<p class="small bxsmall" *ngIf="re?.informacionAdicional">
 									{{ re?.informacionAdicional }}</p>
 								<div class="leyenda" style="margin-top: 20px;"
@@ -185,7 +188,7 @@
 							</div>
 							<div class="derv-it">
 								<div fxLayout="row wrap" fxLayoutAlign="space-between" class="itm"
-									*ngFor="let item of busquedaInicial.derivacion.info">
+									*ngFor="let item of busquedaInicial.derivacion">
 									<div fxFlex="48%">
 										<span class="detDer ties" (click)="consultarCalendario(item)">{{ item.DescripcionEspecialidad || '--' }}</span>
 									</div>
@@ -195,7 +198,7 @@
 								</div>
 							</div>
 
-							<p *ngIf="!busquedaInicial.derivacion || busquedaInicial.derivacion.info.length === 0" style="text-align: center;">No
+							<p *ngIf="!busquedaInicial.derivacion || busquedaInicial.derivacion.length === 0" style="text-align: center;">No
 								hay derivaciones disponibles.</p>
 						</div>
 						<div class="col-lg-6" [ngClass]="{'hide' : (busquedaInicial.fromSaludIntegral && derivacion)}">
@@ -322,6 +325,7 @@
 								</div>
 								<p class="small bxsmall" *ngIf="profesionalCabecera?.profesional?.informacionAdicional">
 									{{ profesionalCabecera?.profesional?.informacionAdicional }}</p>
+									<div *ngTemplateOutlet="listBeneficiarios"></div>
 							</div>
 						</div>
 						<div class="col-lg-6 contentDerivation" *ngIf="derivacion">
@@ -337,7 +341,7 @@
 							</div>
 							<div class="derv-it">
 								<div fxLayout="row wrap" fxLayoutAlign="space-between" class="itm"
-									*ngFor="let item of busquedaInicial.derivacion.info">
+									*ngFor="let item of busquedaInicial.derivacion">
 									<div fxFlex="48%">
 										<span class="detDer ties" (click)="consultarCalendario(item)">{{ item.DescripcionEspecialidad || '--' }}</span>
 									</div>
@@ -347,7 +351,7 @@
 								</div>
 							</div>
 
-							<p *ngIf="!busquedaInicial.derivacion || busquedaInicial.derivacion.info.length === 0" style="text-align: center;">No
+							<p *ngIf="!busquedaInicial.derivacion || busquedaInicial.derivacion.length === 0" style="text-align: center;">No
 								hay derivaciones disponibles.</p>
 						</div>
 
@@ -372,3 +376,29 @@
 <div style="margin-top:20px" *ngIf="busquedaInicial && busquedaInicial.profesional">
 	<app-medicos-asociados [fromSaludIntegral]="busquedaInicial.fromSaludIntegral" [title]="'Otros especialistas del área'"></app-medicos-asociados>
 </div>
+
+<ng-template #listBeneficiarios>
+	<div class="beneficiarios" *ngIf="busquedaInicial.fromSaludIntegral && beneficiarios.length > 1 && derivacion">
+		<p class="datoPaciente"><b>Titular:</b> {{ beneficiarioTitular.nombrebeneficiario }}</p>
+		<mat-form-field class="full" appearance="outline">
+			<mat-label>Beneficiarios Disponibles</mat-label>
+			<mat-select [(ngModel)]="beneficiarioSelected" [compareWith]="utils.compareFn">
+				<ng-container *ngFor="let ben of beneficiarios">
+					<mat-option *ngIf="ben.idPaciente !== beneficiarioTitular.idPaciente" [value]="ben">
+						{{ ben.nombrebeneficiario}}
+					</mat-option>
+				</ng-container>
+			</mat-select>
+		</mat-form-field>
+		<div style="text-align: right;">
+			<button mat-stroked-button class="btn-azul cus-pad cus"  style="margin-right: 15px;" (click)="verAgendaDerivacion(true)"
+			*ngIf="!isTitular" >
+				Volver a Titular
+			</button>
+			<button mat-stroked-button class="btn-morado cus-pad cus" (click)="verAgendaDerivacion()"
+			*ngIf="beneficiarioSelected?.idPaciente !== beneficiarioTitular?.idPaciente" >
+				Ver Agenda y Derivaciones
+			</button>
+		</div>
+	</div>
+</ng-template>

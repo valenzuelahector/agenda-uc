@@ -31,6 +31,7 @@ export class UtilsService {
   public cargarEspecialidadDerivaciones: any = new Subject();
   public saludVolverDerivacion: any = new Subject();
   public actionVolverDerivacion: any = new Subject();
+  public agendaBeneficiario: any = new Subject();
 
   constructor(
     public dialog: MatDialog,
@@ -425,4 +426,16 @@ export class UtilsService {
       }
     }
   }
+
+  actionAgendaBeneficiarios(){
+    return {
+      setAgenda: (data)=>{
+         this.agendaBeneficiario.next(data);
+      },
+      getAgenda: () => {
+        return this.agendaBeneficiario.asObservable();
+      }
+    }
+  }
+
 }

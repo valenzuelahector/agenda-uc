@@ -18,6 +18,7 @@ export class BuscarTuMedicoComponent implements OnInit {
   documento = null;
   documentoFC = new FormControl('');
   clave = new FormControl('', Validators.required);
+  agendaBeneficiario;
 
   @Output() datosBeneficiarioMedico: EventEmitter<any> = new EventEmitter();
 
@@ -28,14 +29,17 @@ export class BuscarTuMedicoComponent implements OnInit {
     public activateRoute: ActivatedRoute) { }
 
   ngOnInit() {
-
+    localStorage.clear();
     this.activateRoute.queryParams.subscribe(params => {
       if (params['rut']) {
         this.documento = params['rut'];
         this.documentoFC.setValue(params['rut']);
-        this.setFormatRut();
-        //   this.buscarRut();
-      }
+        this.setFormatRut();      }
+    });
+
+    this.agendaBeneficiario = this.utils.actionAgendaBeneficiarios().getAgenda().subscribe( res => {
+      this.documento = res.idPaciente;
+      this.setProfesionalRol(res.idMedicoCabecera, res);
     });
 
   }
@@ -125,41 +129,49 @@ export class BuscarTuMedicoComponent implements OnInit {
 
         this.documentoFC.markAsUntouched();
         this.documentoFC.setErrors({});
+        const rutmed = res.beneficiario[0].idMedicoCabecera;
+        res.beneficiario.forEach((val, key) => {
+          val.id = val.idPaciente;
+        });
+        localStorage.setItem("beneficiarios", JSON.stringify(res.beneficiario));
 
-        try {
-
-          const rutmed = res.rut_medico;
-          const rutMedTr = `${rutmed.substring(0, rutmed.length - 1)}-${rutmed.charAt(rutmed.length - 1)}`;
-          this.agendaService.getDatosProfesional(null, rutMedTr).subscribe(async (prof: any) => {
-            this.setBusquedaCalendario(prof.datosProfesional).then((busqueda: any) => {
-              busqueda.fromSaludIntegral = true;
-              //busqueda.derivacion = res.derivacion;
-              localStorage.setItem("derivacion", JSON.stringify(res.derivacion))
-              this.datosBeneficiarioMedico.emit(busqueda);
-              this.utils.hideProgressBar();
-              this.documento = null;
-              this.documentoFC.setValue('');
-              this.clave.setValue('');
-              this.clave.reset();
-            }).catch(err => {
-              this.utils.mDialog('Error', 'No se ha podido finalizar la consulta. Intente más tarde.', 'message');
-              this.utils.hideProgressBar();
-            });
-          }, () => {
-            this.utils.mDialog('Error', 'No se ha podido finalizar la consulta. Intente más tarde.', 'message');
-            this.utils.hideProgressBar();
-          });
-
-        } catch (err) {
-
-          this.utils.mDialog('Error', 'No se ha podido finalizar la consulta. Intente más tarde.', 'message');
-          this.utils.hideProgressBar();
-
-        }
+        this.setProfesionalRol(rutmed, res.beneficiario[0])
 
       }
 
     });
+
+  }
+  async setProfesionalRol(rutmed, beneficiario){
+
+
+    try {
+      this.agendaService.getDatosProfesional(null, rutmed).subscribe(async (prof: any) => {
+        this.setBusquedaCalendario(prof.datosProfesional).then((busqueda: any) => {
+          busqueda.fromSaludIntegral = true;
+          //busqueda.derivacion = res.derivacion;
+          localStorage.setItem("derivacion", JSON.stringify(beneficiario))
+          this.datosBeneficiarioMedico.emit(busqueda);
+          this.utils.hideProgressBar();
+          this.documento = null;
+          this.documentoFC.setValue('');
+          this.clave.setValue('');
+          this.clave.reset();
+        }).catch(err => {
+          this.utils.mDialog('Error', 'No se ha podido finalizar la consulta. Intente más tarde.', 'message');
+          this.utils.hideProgressBar();
+        });
+      }, () => {
+        this.utils.mDialog('Error', 'No se ha podido finalizar la consulta. Intente más tarde.', 'message');
+        this.utils.hideProgressBar();
+      });
+
+    } catch (err) {
+
+      this.utils.mDialog('Error', 'No se ha podido finalizar la consulta. Intente más tarde.', 'message');
+      this.utils.hideProgressBar();
+
+    }
 
   }
 
