@@ -176,30 +176,7 @@
 							</div>
 						</div>
 						<div class="col-lg-6 contentDerivation" *ngIf="busquedaInicial.fromSaludIntegral && derivacion">
-							<span class="titleDer">Derivaciones</span>
-							<div fxLayout="row wrap" fxLayoutAlign="space-between">
-								<div fxFlex="48%">
-									<span class="titlesDer ">Especialidad</span>
-								</div>
-								<div fxFlex="48%">
-									<span class="titlesDer">Fecha Solicitud</span>
-								</div>
-
-							</div>
-							<div class="derv-it">
-								<div fxLayout="row wrap" fxLayoutAlign="space-between" class="itm"
-									*ngFor="let item of busquedaInicial.derivacion">
-									<div fxFlex="48%">
-										<span class="detDer ties" (click)="consultarCalendario(item)">{{ item.DescripcionEspecialidad || '--' }}</span>
-									</div>
-									<div fxFlex="48%">
-										<span class="detDer">{{ item.fechaingreso?.split(" ")[0] }}</span>
-									</div>
-								</div>
-							</div>
-
-							<p *ngIf="!busquedaInicial.derivacion || busquedaInicial.derivacion.length === 0" style="text-align: center;">No
-								hay derivaciones disponibles.</p>
+							<ng-container *ngTemplateOutlet="listDerivaciones"></ng-container>
 						</div>
 						<div class="col-lg-6" [ngClass]="{'hide' : (busquedaInicial.fromSaludIntegral && derivacion)}">
 							<div class="cal-doc calendario" data-rel="cal3">
@@ -328,31 +305,8 @@
 									<div *ngTemplateOutlet="listBeneficiarios"></div>
 							</div>
 						</div>
-						<div class="col-lg-6 contentDerivation" *ngIf="derivacion">
-							<span class="titleDer">Derivaciones</span>
-							<div fxLayout="row wrap" fxLayoutAlign="space-between">
-								<div fxFlex="48%">
-									<span class="titlesDer ">Especialidad</span>
-								</div>
-								<div fxFlex="48%">
-									<span class="titlesDer">Fecha Solicitud</span>
-								</div>
-
-							</div>
-							<div class="derv-it">
-								<div fxLayout="row wrap" fxLayoutAlign="space-between" class="itm"
-									*ngFor="let item of busquedaInicial.derivacion">
-									<div fxFlex="48%">
-										<span class="detDer ties" (click)="consultarCalendario(item)">{{ item.DescripcionEspecialidad || '--' }}</span>
-									</div>
-									<div fxFlex="48%">
-										<span class="detDer">{{ item.fechaingreso?.split(" ")[0] }}</span>
-									</div>
-								</div>
-							</div>
-
-							<p *ngIf="!busquedaInicial.derivacion || busquedaInicial.derivacion.length === 0" style="text-align: center;">No
-								hay derivaciones disponibles.</p>
+						<div class="col-lg-6 contentDerivation" *ngIf="busquedaInicial.fromSaludIntegral && derivacion">
+							<ng-container *ngTemplateOutlet="listDerivaciones"></ng-container>
 						</div>
 
 					</div>
@@ -399,6 +353,53 @@
 			*ngIf="beneficiarioSelected?.idPaciente !== beneficiarioTitular?.idPaciente" >
 				Ver Agenda y Derivaciones
 			</button>
+		</div>
+	</div>
+</ng-template>
+
+<ng-template #listDerivaciones>
+	<span class="titleDer">Derivaciones</span>
+	<div fxLayout="row wrap" fxLayoutAlign="space-between">
+		<div fxFlex="48%">
+			<span class="titlesDer ">Especialidad</span>
+		</div>
+		<div fxFlex="48%">
+			<span class="titlesDer">Fecha Solicitud</span>
+		</div>
+
+	</div>
+	<div class="derv-it">
+		<div fxLayout="row wrap" fxLayoutAlign="space-between" class="itm"
+			*ngFor="let item of busquedaInicial.derivacion">
+			<div fxFlex="48%">
+				<span class="detDer ties" (click)="consultarCalendario(item)">{{ item.DescripcionEspecialidad || '--' }}</span>
+			</div>
+			<div fxFlex="48%">
+				<span class="detDer">{{ item.fechaingreso?.split(" ")[0] }}</span>
+			</div>
+		</div>
+	</div>
+
+	<p *ngIf="!busquedaInicial.derivacion || busquedaInicial.derivacion.length === 0" class="noderivaciones" >No
+		hay derivaciones disponibles.</p>
+	
+	<div class="oespec">
+		<p>También puede consultar las siguientes especialidades</p>
+		<div fxLayout="row wrap" fxLayoutAlign="space-between" class="itm">
+			<div fxFlex="100%">
+				<span class="detDer ties" (click)="consultarCalendario({
+					idServicioDerivado: ginecologia.idServicio,
+					idEspecialidad: ginecologia.idEspecialidad
+				})">{{ ginecologia.nombre }} - Consulta Médica</span>
+			</div>
+		</div>
+		<div fxLayout="row wrap" fxLayoutAlign="space-between" class="itm">
+			<div fxFlex="100%">
+				<span class="detDer ties" (click)="consultarCalendario({
+					idServicioDerivado: oftalmologia.idServicio,
+					idEspecialidad: oftalmologia.idEspecialidad
+				})">{{ oftalmologia.nombre }} - Consulta Médica</span>
+			</div>
 		</div>
 	</div>
 </ng-template>

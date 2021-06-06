@@ -194,20 +194,56 @@ export class IdentificacionComponent implements OnInit, OnChanges {
           });
         });
 
+        data['companias'] = this.removerPlanesSalud(data['companias']);
+
         if (data['companiasExtendido']) {
           data['companiasExtendido'].forEach((val, key) => {
             val['planes'].forEach((valp, keyp) => {
               data['companiasExtendido'][key]['planes'][keyp]['id'] = valp['idPlan'];
             });
           });
+          data['companiasExtendido'] = this.removerPlanesSalud(data['companiasExtendido']);
 
           this.busquedaPaciente.prevision = data['companias'][0]['planes'][0];
           this.cambioPrevision();
         }
-
+        console.log(data);
         this.planesSalud = data;
       }
     })
+  }
+
+  removerPlanesSalud(data){
+    const itemsDelete = [];
+    const companiaDelete = [];
+    console.log(data);
+      data.forEach((val, key) => {
+        val.planes.forEach((valp, keyp) => {
+          ENV.planesSaludOcultos.forEach( (idOculto, idx) => {
+            if(idOculto === valp.idPlan){
+              itemsDelete.push({
+                idxCompania: key, idxPlan: keyp
+              });
+            }
+          });
+        });
+      });
+
+      itemsDelete.forEach((val, key)=> {
+        data[val.idxCompania].planes.splice(val.idxPlan, 1);
+      });
+
+      data.forEach((val, key) => {
+        if(val.planes.length === 0){
+          companiaDelete.push(key)
+        }
+      });
+
+      companiaDelete.forEach((val, key) => {
+         data.splice(val, 1);
+      });
+
+      return data;
   }
 
   resetDir() {

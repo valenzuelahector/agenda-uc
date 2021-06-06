@@ -31,6 +31,17 @@ export const ENV = {
     idEspecialidad: '507ef9a7-0d7e-41b8-ae09-a93400e5d5c8',
     idServicio: '507ef9a7-0d7e-41b8-ae09-a93400e5d5c8'
   },
+  ginecologia:{
+    nombre:'GINECOLOGIA Y OBSTETRICIA',
+    idEspecialidad:'b6fb250f-fff4-4f6e-9436-a93400e4d00d',
+    idServicio:'8193f6de-8308-420e-9309-a934015b1999'
+  },
+  oftalmologia:{
+    nombre:'OFTALMOLOGIA',
+    idEspecialidad:'274daf84-5ed6-4e8c-bbf0-a93400e91bd4',
+    idServicio:'a163c23a-285a-4e9a-9e37-a934015b223e'
+  },
+  planesSaludOcultos:['018ed73d-6bd2-46e9-8e95-acfc0134435b'],
   tokenAutenticar: 'T3BMdXo5ckdJaXlvY0FJNg==',
   pathAutenticar: '/auth-test/Autenticar',
   analyticsCode: 'UA-143119471-1',

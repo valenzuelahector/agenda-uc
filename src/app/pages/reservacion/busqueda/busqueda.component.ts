@@ -466,7 +466,7 @@ export class BusquedaComponent implements OnInit, OnDestroy {
     this.filterCentrosAtencion = null;
     this.getEspecialidades('especialidad');
     this.expanded = false;
-    console.log(ENV.bloquearAreaRadiologia)
+    
     if (ENV.bloquearAreaRadiologia && this.areaSelected.id === 'RIS_IMAGENES') {
       this.bloquearRadiologia = true;
     } else {

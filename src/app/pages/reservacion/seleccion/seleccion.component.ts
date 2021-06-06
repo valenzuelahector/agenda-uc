@@ -75,6 +75,8 @@ export class SeleccionComponent implements OnInit, OnChanges {
     idCentro: ENV.idRegion,
     nombre: 'TODOS'
   }
+  public ginecologia = ENV.ginecologia;
+  public oftalmologia = ENV.oftalmologia;
   constructor(
     public agendaService: AgendaAmbulatoriaService,
     public utils: UtilsService,
