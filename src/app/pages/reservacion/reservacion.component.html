@@ -92,7 +92,7 @@
       <app-seleccion #seleccion [busquedaInicial]="busquedaInfo"  (readQuery)="readQuery = $event" [reloadBusqueda]="reloadNumber" (listaEspera)="listaEspera($event)" (procedimiento)="setProcedimiento()"></app-seleccion>
     </mat-tab>
     <mat-tab label="Identificación">
-      <app-identificacion #identificacion [listaEspera]="listaEsperaData" [isProcedimiento]="isProcedimiento" [busquedaInicial]="busquedaInfo" [calendario]="calendario" [rutMatch]="calendario ? rutMatch : null">
+      <app-identificacion #identificacion [fromSaludIntegral]="saludIntegral" [listaEspera]="listaEsperaData" [isProcedimiento]="isProcedimiento" [busquedaInicial]="busquedaInfo" [calendario]="calendario" [rutMatch]="calendario ? rutMatch : null">
       </app-identificacion>
     </mat-tab>
     <mat-tab label="Error">

@@ -25,6 +25,7 @@ export class IdentificacionComponent implements OnInit, OnChanges {
   @Input() rutMatch;
   @Input() listaEspera: any;
   @Input() isProcedimiento: boolean = false;
+  @Input() fromSaludIntegral;
 
   public today: Date = new Date();
   public paciente: any;
@@ -114,7 +115,6 @@ export class IdentificacionComponent implements OnInit, OnChanges {
   ngOnChanges() {
 
     if (this.busquedaInicial) {
-
       this.limpiarFormulario(true);
       if (this.rutMatch || (this.busquedaInicial.documentoPaciente && this.busquedaInicial.documentoPaciente.documento)) {
         const documento = this.rutMatch ? this.rutMatch : this.busquedaInicial.documentoPaciente.documento;
@@ -193,8 +193,10 @@ export class IdentificacionComponent implements OnInit, OnChanges {
             data['companias'][key]['planes'][keyp]['id'] = valp['idPlan'];
           });
         });
-
-        data['companias'] = this.removerPlanesSalud(data['companias']);
+        console.log(this.fromSaludIntegral)
+        if(!this.fromSaludIntegral){
+          data['companias'] = this.removerPlanesSalud(data['companias']);
+        }
 
         if (data['companiasExtendido']) {
           data['companiasExtendido'].forEach((val, key) => {
@@ -202,7 +204,10 @@ export class IdentificacionComponent implements OnInit, OnChanges {
               data['companiasExtendido'][key]['planes'][keyp]['id'] = valp['idPlan'];
             });
           });
-          data['companiasExtendido'] = this.removerPlanesSalud(data['companiasExtendido']);
+
+          if(!this.fromSaludIntegral){
+            data['companiasExtendido'] = this.removerPlanesSalud(data['companiasExtendido']);
+          }
 
           this.busquedaPaciente.prevision = data['companias'][0]['planes'][0];
           this.cambioPrevision();
