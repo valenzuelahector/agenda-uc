@@ -401,10 +401,10 @@ opacity: 0.5 !important;
 }
 
 .titleDer{
-  font-size: 24px;
+  font-size: 20px;
   font-weight: bold;
   text-transform: uppercase;
-  letter-spacing: 2px;
+  letter-spacing: 0px;
   color: #2A7DE1;
   text-align: center;
   display: block;
@@ -423,8 +423,8 @@ opacity: 0.5 !important;
 
 .contentDerivation{
   background: #fafafa;
-  border: 1px solid #eee;
-  box-shadow: 1px 1px 10px 1px #eee;
+  border: 3px solid #2A7DE1;
+  border-radius: 10px;
 }
 
 .detDer{
@@ -432,6 +432,11 @@ opacity: 0.5 !important;
   text-align: center;
 }
 
+.mdcb{
+  text-transform: uppercase;
+  font-weight: bold;
+  color: #2A7DE1;
+}
 .derv-it{
   padding:0px 20px 20px 20px;;
   .itm{
@@ -488,4 +493,8 @@ opacity: 0.5 !important;
     padding: 15px;
     font-weight: bold;
     border: 1px solid #eeda00;
+}
+
+.datoPaciente span{
+  font-weight: bold;
 }

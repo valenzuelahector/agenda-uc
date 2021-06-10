@@ -64,9 +64,6 @@
         <button mat-stroked-button class="btn-azul cus-pad" *ngIf="!reservaRealizada && curEtapa < 2 && saludIntegral" (click)="volverSaludIntegral()">
                 <mat-icon class="icon-cus-pad">keyboard_backspace</mat-icon>{{ saludIntgralBotonVolver.text }}
         </button>
-        <button mat-stroked-button class="btn-morado cus-pad cus" *ngIf="curEtapa != 0 && saludIntegral" (click)="irPortalPacientes()" style="margin-left:20px">
-          Ir al Portal Pacientes
-        </button>
       </div>
       <div fxFlex="50%" style="text-align: right;">
         <button mat-stroked-button class="btn-morado cus-pad cus" [routerLink]="['/anular-reserva']" *ngIf="curEtapa == 0 && !listaEsperaData">
