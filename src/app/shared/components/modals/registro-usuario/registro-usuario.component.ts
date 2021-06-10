@@ -30,10 +30,8 @@ export class RegistroUsuarioComponent implements OnInit {
     sexo: new FormControl('', [Validators.required]),
     email: new FormControl('', [Validators.required, Validators.email]),
     fono_movil: new FormControl('', [Validators.required]),
-    fono_fijo: new FormControl(''),
     prevision: new FormControl('', [Validators.required]),
     origen_registro: new FormControl('portal_web'),
-    id_dispositivo: new FormControl(''),
     marca_email: new FormControl(true)
   });
 
@@ -143,7 +141,8 @@ export class RegistroUsuarioComponent implements OnInit {
       let form = this.mainForm.getRawValue();
       form.username = this.documento;
       form.identificador = this.documento;
-
+      form.fono_movil = '+56' + form.fono_movil;
+      form.fecha_nacimiento = form.fecha_nacimiento.toISOString().split("T")[0];
       if(!this.utils.validateEmail(form.email)){
         this.utils.mDialog("Error", "Formato de correo incorrecto.", "message");
         return;
