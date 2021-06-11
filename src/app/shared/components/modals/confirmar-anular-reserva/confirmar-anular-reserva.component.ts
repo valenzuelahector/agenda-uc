@@ -19,7 +19,6 @@ export class ConfirmarAnularReservaComponent implements OnInit {
 
   ) { 
     this.cita = citaData;
-    console.log(citaData)
   }
 
   ngOnInit() {

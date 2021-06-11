@@ -109,7 +109,6 @@ export class BuscarTuMedicoComponent implements OnInit {
         return;
       }
     } catch (err) {
-      console.log(err);
       this.utils.mDialog('Estimado paciente', 'El rut y la contraseña ingresada no coinciden. Intente nuevamente', "message");
       this.utils.hideProgressBar();
       return;

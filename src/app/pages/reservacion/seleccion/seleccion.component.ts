@@ -86,7 +86,6 @@ export class SeleccionComponent implements OnInit, OnChanges {
     private deviceService: DeviceDetectorService
   ) { 
     this.volverSaludIntegral = this.utils.actionSaludIntegralVolver().getVolver().subscribe( data => {
-      console.log(data);
       switch(data){
         case 'VISTA_AGENDA_PROFESIONAL':
           this.utils.showProgressBar();
@@ -267,9 +266,6 @@ export class SeleccionComponent implements OnInit, OnChanges {
         break;
 
     }
-
-    gtag('event', this.busquedaInicial.gtagActionName, { 'event_category': this.busquedaInicial.gtagName, 'event_label': `Cambia Mes`, 'value': '0' });
-
 
     if (this.busquedaInicial.profesional) {
       this.getRecursos(this.busquedaInicial.profesional.idProfesional);
@@ -663,7 +659,9 @@ export class SeleccionComponent implements OnInit, OnChanges {
     Object.keys(agrupCentros).forEach(key => {
       agrupCentros[key]['habilitado'] = enableCentro;
       this.centrosProfesional[i].push(agrupCentros[key]);
-    })
+    });
+    const dayCal = fechaDisSel['day'] + "." + fechaDisSel['month'] + '.' + fechaDisSel['year'];
+    gtag('event', 'Selección Cupo', { 'event_category': 'Seleccionar Día', 'event_label': dayCal , 'value': '0' });
 
   }
 
@@ -769,20 +767,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
 
     this.horaSeleccionada = data;
     this.calendario.emit(data);
-
-    if (this.busquedaInicial.gtagActionName) {
-
-      gtag('event', this.busquedaInicial.gtagActionName, { 'event_category': this.busquedaInicial.gtagName, 'event_label': `f) Fecha y Hora Consulta: ${data.cupo.fechaHora}`, 'value': '0' });
-      gtag('event', this.busquedaInicial.gtagActionName, { 'event_category': this.busquedaInicial.gtagName, 'event_label': `g) Centro de Consulta: ${data.cupo.centro.nombre}`, 'value': '0' });
-      gtag('event', this.busquedaInicial.gtagActionName, { 'event_category': this.busquedaInicial.gtagName, 'event_label': `h) Profesional: ${data.recurso.nombre}`, 'value': '0' });
-      gtag('event', this.busquedaInicial.gtagActionName, { 'event_category': this.busquedaInicial.gtagName, 'event_label': 'i) ETAPA 2 COMPLETADA - SELECCIÓN HORA', 'value': '0' });
-
-      gtag('event', this.busquedaInicial.gtagActionEspProf, { 'event_category': this.busquedaInicial.gtagNameEsp, 'event_label': `f) Fecha y Hora Consulta: ${data.cupo.fechaHora}`, 'value': '0' });
-      gtag('event', this.busquedaInicial.gtagActionEspProf, { 'event_category': this.busquedaInicial.gtagNameEsp, 'event_label': `g) Centro de Consulta: ${data.cupo.centro.nombre}`, 'value': '0' });
-      gtag('event', this.busquedaInicial.gtagActionEspProf, { 'event_category': this.busquedaInicial.gtagNameEsp, 'event_label': `h) Profesional: ${data.recurso.nombre}`, 'value': '0' });
-      gtag('event', this.busquedaInicial.gtagActionEspProf, { 'event_category': this.busquedaInicial.gtagNameEsp, 'event_label': 'i) ETAPA 2 COMPLETADA - SELECCIÓN HORA', 'value': '0' });
-
-    }
+    gtag('event', 'Selección Cupo', { 'event_category': 'Seleccionar Hora', 'event_label': data.cupo.hora , 'value': '0' });
 
     gtag('config', ENV.analyticsCode, 
     {'page_path': `/busqueda/${this.busquedaInicial.tipoConsulta}/area/${this.busquedaInicial.area.id}/profesional/${data.recurso.id}servicio/${this.busquedaInicial.especialidad.idServicio}/centro/${this.busquedaInicial.centroAtencion.idCentro}/cupo` });
@@ -814,7 +799,6 @@ export class SeleccionComponent implements OnInit, OnChanges {
           nombre: this.busquedaInicial.profesional.nombreProfesional
         }
       }
-      gtag('event', this.busquedaInicial.gtagActionName, { 'event_category': this.busquedaInicial.gtagName, 'event_label': `Selecciona Lista de Espera`, 'value': '0' });
 
       this.listaEspera.emit(data);
 
@@ -904,7 +888,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
     this.nActivosFiltroCentro = 0;
     this.filtro = centro;
     this.filtrarBusqueda();
-    gtag('event', this.busquedaInicial.gtagActionName, { 'event_category': this.busquedaInicial.gtagName, 'event_label': `Cambia Filtro Centro`, 'value': '0' });
+    gtag('event', 'Selección Cupo', { 'event_category': 'Filtrar Centro', 'event_label': centro.nombre , 'value': '0' });
 
   }
 
@@ -927,9 +911,8 @@ export class SeleccionComponent implements OnInit, OnChanges {
   cambiarFiltroHoras(hora) {
     this.filtroHoras = hora;
     this.nActivosFiltroHoras = 0;
+    gtag('event', 'Selección Cupo', { 'event_category': 'Filtrar Horario', 'event_label': hora === 'ALL' ? 'AM/PM' : hora , 'value': '0' });
     this.filtrarBusqueda();
-    gtag('event', this.busquedaInicial.gtagActionName, { 'event_category': this.busquedaInicial.gtagName, 'event_label': `Cambia Filtro Horas`, 'value': '0' });
-
   }
 
   filtrarBusqueda() {
@@ -1029,10 +1012,6 @@ export class SeleccionComponent implements OnInit, OnChanges {
             }
           })
         }
-
-        //  this.setCentrosBusquedas(this.recursos);
-
-        gtag('event', this.busquedaInicial.gtagActionName, { 'event_category': this.busquedaInicial.gtagName, 'event_label': `Cambia Filtro Horas`, 'value': '0' });
 
         setTimeout(() => {
           this.restoreCalendar();
@@ -1160,11 +1139,6 @@ export class SeleccionComponent implements OnInit, OnChanges {
           idEncuesta: null
         };
 
-        const gtagName = 'PROCESO DE RESERVA DE HORA';
-        const gtagNameEsp = "PROCESO DE RESERVA DE HORA";
-        const gtagActionName = "ESPECIALIDAD";
-        const gtagActionEspProf = "PROFESIONAL";
-
         const busqueda = {
           area,
           profesional,
@@ -1173,11 +1147,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
           documentoPaciente,
           centrosDisponibles,
           datosImagenes,
-          fromSaludIntegral: true,
-          gtagActionName,
-          gtagName,
-          gtagActionEspProf,
-          gtagNameEsp
+          fromSaludIntegral: true
         };
 
         this.removerDerivacion = true;
@@ -1188,7 +1158,6 @@ export class SeleccionComponent implements OnInit, OnChanges {
       } catch (err) {
 
         this.utils.mDialog("Error", "No se puede consultar el calendario de la derivación. Intente más tarde", "message");
-        console.log(err)
 
       }
 

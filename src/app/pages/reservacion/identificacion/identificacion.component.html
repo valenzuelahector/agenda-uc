@@ -128,7 +128,7 @@
           <mat-form-field class="full bgwhite-input" appearance="fill">
             <mat-label>Teléfono</mat-label>
             <input matInput placeholder="56912345678" (keyup)="eventEnter($event, 'procesarPaciente')" maxlength="11"
-              [(ngModel)]="busquedaPaciente.telefono" (keypress)="this.utils.numberOnly($event)" onpaste="return false;"
+              [(ngModel)]="busquedaPaciente.telefono" (keypress)="this.utils.numberOnly($event)" (focusout)="focusOutTelefono()" onpaste="return false;"
               autocomplete="off" />
             <mat-icon matSuffix>local_phone</mat-icon>
           </mat-form-field>
@@ -137,7 +137,7 @@
           <mat-form-field class="full bgwhite-input" appearance="fill">
             <mat-label>Correo</mat-label>
             <input matInput placeholder="nombre@mail.com" (keyup)="eventEnter($event, 'procesarPaciente')"
-              [(ngModel)]="busquedaPaciente.correo" autocomplete="off" />
+              [(ngModel)]="busquedaPaciente.correo" (focusout)="focusOutCorreo()" autocomplete="off" />
             <mat-icon matSuffix>mail_outline</mat-icon>
           </mat-form-field>
         </div>

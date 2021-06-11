@@ -6,10 +6,9 @@ import { ConfirmacionComponent } from './confirmacion/confirmacion.component';
 import { UtilsService } from 'src/app/services/utils.service';
 import { ENV } from 'src/environments/environment';
 import gtag, { install } from 'ga-gtag';
-import { ActivatedRoute } from '@angular/router';
-import { IfStmt } from '@angular/compiler';
+import { ActivatedRoute, Router } from '@angular/router';
 
-install('UA-143119471-2');
+install(ENV.analyticsCode);
 
 @Component({
   selector: 'app-reservacion',
@@ -57,6 +56,7 @@ export class ReservacionComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(
     public utils: UtilsService,
     public aRouter: ActivatedRoute,
+    public router: Router
   ) {
 
   }
@@ -173,7 +173,11 @@ export class ReservacionComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
+  anularhHora(){
+    this.router.navigate(['/anular-reserva'])
+    gtag('event', 'Filtro de Búsqueda', { 'event_category': 'Anular Hora', 'event_label': `Anular`, 'value': '0' });
 
+  }
   getParamsArea() {
 
     this.aRouter.params.subscribe(params => {
@@ -242,6 +246,8 @@ export class ReservacionComponent implements OnInit, AfterViewInit, OnDestroy {
     if (this.saludIntegral) {
       this.nuevaBusquedaCM()
     }
+
+    gtag('event', 'Reserva Exitosa', { 'event_category': 'Tomar otra hora', 'event_label': 'Nueva Hora' , 'value': '0' });
 
   }
 

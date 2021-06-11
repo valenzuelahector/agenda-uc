@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, OnChanges, Output, EventEmitter, SimpleChange, SimpleChanges } from '@angular/core';
 import { UtilsService } from 'src/app/services/utils.service';
 import * as clone from 'clone';
+import gtag, { install } from 'ga-gtag';
 
 @Component({
   selector: 'app-days-of-week',
@@ -47,6 +48,8 @@ export class DaysOfWeekComponent implements OnInit, OnChanges {
       this.dateNext = this.months[minDateIn.getMonth()] + "<br/>" + minDateIn.getFullYear();
       minDateIn.setMonth(minDateIn.getMonth() -2);
       this.dateBefore = this.months[minDateIn.getMonth()] + "<br/>" + minDateIn.getFullYear();
+      gtag('event', 'Selección Cupo', { 'event_category': 'Cambiar Mes', 'event_label': this.datedisplay , 'value': '0' });
+
     }
   }
 

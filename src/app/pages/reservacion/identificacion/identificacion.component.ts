@@ -193,7 +193,6 @@ export class IdentificacionComponent implements OnInit, OnChanges {
             data['companias'][key]['planes'][keyp]['id'] = valp['idPlan'];
           });
         });
-        console.log(this.fromSaludIntegral)
         if(!this.fromSaludIntegral){
           data['companias'] = this.removerPlanesSalud(data['companias']);
         }
@@ -212,7 +211,6 @@ export class IdentificacionComponent implements OnInit, OnChanges {
           this.busquedaPaciente.prevision = data['companias'][0]['planes'][0];
           this.cambioPrevision();
         }
-        console.log(data);
         this.planesSalud = data;
       }
     })
@@ -221,7 +219,6 @@ export class IdentificacionComponent implements OnInit, OnChanges {
   removerPlanesSalud(data){
     const itemsDelete = [];
     const companiaDelete = [];
-    console.log(data);
       data.forEach((val, key) => {
         val.planes.forEach((valp, keyp) => {
           ENV.planesSaludOcultos.forEach( (idOculto, idx) => {
@@ -331,6 +328,9 @@ export class IdentificacionComponent implements OnInit, OnChanges {
         this.getComunas({ value: rm[0]})
       }
     }
+
+    gtag('event', 'Datos Paciente', { 'event_category': 'Cambiar Dirección', 'event_label': 'Dirección' , 'value': '0' });
+
   }
 
   buscarPaciente() {
@@ -368,7 +368,6 @@ export class IdentificacionComponent implements OnInit, OnChanges {
       }
 
       this.findPaciente = true;
-      gtag('event', 'Clic', { 'event_category': 'Reserva de Hora', 'event_label': 'Paso3:Identificación-Buscar' });
 
     }, err => {
       this.utils.mDialog("Error", "No se ha podido consultar al paciente, intente nuevamente", "message");
@@ -478,14 +477,10 @@ export class IdentificacionComponent implements OnInit, OnChanges {
           this.busquedaPaciente.documentoFormateado = this.utils.formatRut(data['identificador']);
           this.busquedaPaciente.tipoDocumento = data['tipo_identificador']
           this.busquedaPaciente.prevision = data['previsionObj'];
-          if(this.busquedaInicial.gtagActionName){
-            gtag('event', this.busquedaInicial.gtagActionName, { 'event_category': this.busquedaInicial.gtagName, 'event_label': `j.4) Registro de Nuevo Paciente`, 'value': '0' });
-            gtag('event', this.busquedaInicial.gtagActionEspProf, { 'event_category': this.busquedaInicial.gtagNameEsp, 'event_label': `j.4) Registro de Nuevo Paciente`, 'value': '0' });
-  
-          }
-
           this.buscarPaciente();
           this.resetDir();
+          gtag('event', 'Datos Paciente', { 'event_category': 'Crear Paciente', 'event_label': 'Nuevo Paciente' , 'value': '0' });
+
         } else {
           this.utils.mDialog("Error", "No se pudo guardar la información requerida. Detalle: " + res['statusDesc'], "message")
         }
@@ -586,10 +581,12 @@ export class IdentificacionComponent implements OnInit, OnChanges {
         if ((!data['listaTiposDeCita'] || !data['listaTiposDeCita'][0]) && this.busquedaInicial.area.id !== 'RIS_IMAGENES') {
           if (data['statusCod'] && data['statusCod'].toUpperCase() == 'ERR') {
             await this.errReserva(data['usrMsg']);
+            
           } else {
             this.utils.mDialog("Error", "No se ha podido verificar la Disponibilidad del Cupo. Intente nuevamente.", "message");
           }
           this.confirmarReservaEnable = true;
+          gtag('event', 'Datos Paciente', { 'event_category': 'Mensaje Bloqueante', 'event_label': 'Bloqueo Reserva' , 'value': '0' });
           return false;
         }
 
@@ -621,6 +618,8 @@ export class IdentificacionComponent implements OnInit, OnChanges {
 
             if (mensajeDeRegla) {
               action = await this.errReserva(mensajeDeRegla + mensajes, 'CONTINUAR');
+              gtag('event', 'Datos Paciente', { 'event_category': 'Mensaje Informativo', 'event_label': 'Información de Reserva' , 'value': '0' });
+
             } else {
               action = "CONTINUAR";
             }
@@ -631,14 +630,9 @@ export class IdentificacionComponent implements OnInit, OnChanges {
 
               action = await this.errReserva(mensajeDeRegla);
 
-              gtag('event', this.busquedaInicial.gtagActionName, { 'event_category': this.busquedaInicial.gtagName, 'event_label': `j.5) Cupo No Reservable / Mensajes de Reglas`, 'value': '0' });
-              gtag('event', this.busquedaInicial.gtagActionEspProf, { 'event_category': this.busquedaInicial.gtagNameEsp, 'event_label': `j.5) Cupo No Reservable / Mensajes de Reglas`, 'value': '0' });
+              gtag('event', 'Datos Paciente', { 'event_category': 'Mensaje Bloqueante', 'event_label': 'Bloqueo Reserva' , 'value': '0' });
 
             } else {
-
-              gtag('event', this.busquedaInicial.gtagActionName, { 'event_category': this.busquedaInicial.gtagName, 'event_label': `j.5) Cupo No Reservable`, 'value': '0' });
-              gtag('event', this.busquedaInicial.gtagActionEspProf, { 'event_category': this.busquedaInicial.gtagNameEsp, 'event_label': `j.5) Cupo No Reservable`, 'value': '0' });
-
 
               action = await this.errReserva('El cupo seleccionado ya no se encuentra disponible. ¿Que desea hacer?');
 
@@ -648,12 +642,6 @@ export class IdentificacionComponent implements OnInit, OnChanges {
           }
 
           if (action === 'CONTINUAR') {
-
-            if (this.busquedaInicial.gtagActionName) {
-              gtag('event', this.busquedaInicial.gtagActionName, { 'event_category': this.busquedaInicial.gtagName, 'event_label': `j) ETAPA 3 IDENTIFICACIÓN COMPLETADA`, 'value': '0' });
-              gtag('event', this.busquedaInicial.gtagActionEspProf, { 'event_category': this.busquedaInicial.gtagNameEsp, 'event_label': `j) ETAPA 3 IDENTIFICACIÓN COMPLETADA`, 'value': '0' });
-
-            }
 
             let mensajes = (dt && dt['mensajes']) ? dt['mensajes'] : [];
             this.datosPaciente.emit({
@@ -667,31 +655,13 @@ export class IdentificacionComponent implements OnInit, OnChanges {
               direccionCentro: (data['listaCentros'] && data['listaCentros'][0] && data['listaCentros'][0]['direccion']) ? data['listaCentros'][0]['direccion'] : null
             });
 
-
-            if (this.listaEspera) {
-              if (this.busquedaInicial.gtagActionName) {
-                gtag('event', this.busquedaInicial.gtagActionName, { 'event_category': this.busquedaInicial.gtagName, 'event_label': `j.1) Inscripción en Lista de Espera`, 'value': '0' });
-                gtag('event', this.busquedaInicial.gtagActionEspProf, { 'event_category': this.busquedaInicial.gtagNameEsp, 'event_label': `j.1) Inscripción en Lista de Espera`, 'value': '0' });
-
-              }
-            }
-
-            if (this.isProcedimiento) {
-              if (this.busquedaInicial.gtagActionName) {
-                gtag('event', this.busquedaInicial.gtagActionName, { 'event_category': this.busquedaInicial.gtagName, 'event_label': `j.2) Procedimiento Médico Solicitado`, 'value': '0' });
-                gtag('event', this.busquedaInicial.gtagActionEspProf, { 'event_category': this.busquedaInicial.gtagNameEsp, 'event_label': `j.2) Procedimiento Médico Solicitado`, 'value': '0' });
-              }
-            }
-
           }
 
           this.confirmarReservaEnable = true;
 
-
         });
 
       }).catch(async err => {
-        console.log(err)
         if (err === 'no-reservable') {
           await this.errReserva('El cupo seleccionado no se encuentra disponible. Seleccione otra hora.');
         } else {
@@ -723,9 +693,6 @@ export class IdentificacionComponent implements OnInit, OnChanges {
       }
     }
 
-    gtag('event', 'Clic', { 'event_category': 'Reserva de Hora', 'event_label': 'Paso3:Identificación-Siguiente' });
-
-
   }
 
   getFechasInicioTermino() {
@@ -756,15 +723,21 @@ export class IdentificacionComponent implements OnInit, OnChanges {
       }
 
       const resp = await Promise.all([this.reglasValidacion(fecha, fTermino), this.updDatosBusqCliente(data)]);
-
       this.calendario.cupo.valorConvenio = resp[0]['valorConvenio'] ? resp[0]['valorConvenio'] : 0;
-      gtag('event', this.busquedaInicial.gtagActionName, { 'event_category': this.busquedaInicial.gtagName, 'event_label': `Cambio de Previsión`, 'value': '0' });
+      gtag('event', 'Datos Paciente', { 'event_category': 'Seleccionar Previsión', 'event_label': this.busquedaPaciente.prevision.nombrePlan , 'value': '0' });
 
     } catch (err) {
 
     }
 
+  }
 
+  focusOutTelefono(){
+    gtag('event', 'Datos Paciente', { 'event_category': 'Cambiar Teléfono', 'event_label': this.busquedaPaciente.telefono , 'value': '0' });
+  }
+
+  focusOutCorreo(){
+    gtag('event', 'Datos Paciente', { 'event_category': 'Cambiar Correo', 'event_label': this.busquedaPaciente.correo , 'value': '0' });
   }
 
   reglasValidacion(fecha, fTermino) {

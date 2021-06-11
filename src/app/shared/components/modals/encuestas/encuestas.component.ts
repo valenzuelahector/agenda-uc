@@ -25,9 +25,7 @@ export class EncuestasComponent implements OnInit {
     public agendaService: AgendaAmbulatoriaService,
     public utils: UtilsService
   ) {
-    console.log(this.inp)
     this.preguntas = this.inp.encuesta;
-
   }
 
   ngOnInit() {

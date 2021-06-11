@@ -198,7 +198,6 @@ export class BusquedaComponent implements OnInit, OnDestroy {
             this.centroAtencionCtrl.disable();
             this.getEspecialidades('especialidad');
           }
-          //gtag('config', ENV.analyticsCode, {'page_path': `/busqueda/${this.tipoConsulta}/area/${this.areaSelected.id}` });
 
         })
 
@@ -472,8 +471,8 @@ export class BusquedaComponent implements OnInit, OnDestroy {
     } else {
       this.bloquearRadiologia = false;
     }
+    gtag('event', 'Filtro de Búsqueda', { 'event_category': 'Seleccionar Área', 'event_label': this.areaSelected.nombre, 'value': '0' });
 
-    //gtag('config', ENV.analyticsCode, {'page_path': `/busqueda/${this.tipoConsulta}/area/${this.areaSelected.id}` });
 
   }
 
@@ -799,15 +798,13 @@ export class BusquedaComponent implements OnInit, OnDestroy {
     if (tipo == 'especialidad') {
       this.getServicios();
       this.servicioCtrl.enable();
-      /*gtag('config', ENV.analyticsCode, 
-      {'page_path': `/busqueda/${this.tipoConsulta}/area/${this.areaSelected.id}` });*/
-
     } else {
       this.centroAtencionCtrl.enable();
       this.getCentros(this.especialidadCtrl.value.idServicio);
-      /* gtag('config', ENV.analyticsCode, 
-       {'page_path': `/busqueda/${this.tipoConsulta}/area/${this.areaSelected.id}/profesional/${this.profesionalSelected.idProfesional}/servicio/${this.especialidadSelected.idServicio}/` });*/
     }
+
+    gtag('event', 'Filtro de Búsqueda', { 'event_category': 'Seleccionar Especialidad', 'event_label': this.especialidadSelected.detalle, 'value': '0' });
+
 
   }
 
@@ -816,8 +813,8 @@ export class BusquedaComponent implements OnInit, OnDestroy {
     this.servicioSelected = this.servicioCtrl.value;
     this.verificarDonantePaciente();
     this.centroAtencionCtrl.enable();
+    gtag('event', 'Filtro de Búsqueda', { 'event_category': 'Seleccionar Servicio', 'event_label': this.servicioSelected.nombreServicio, 'value': '0' });
     this.getCentros(this.servicioCtrl.value.idServicio);
-    //gtag('config', ENV.analyticsCode, {'page_path': `/busqueda/${this.tipoConsulta}/area/${this.areaSelected.id}/servicio/${this.servicioCtrl.value.idServicio}` });
 
   }
 
@@ -826,30 +823,15 @@ export class BusquedaComponent implements OnInit, OnDestroy {
     this.profesionalCtrl.disable();
     this.profesionalSelected = this.profesionalCtrl.value;
     this.especialidadCtrl.enable();
+    gtag('event', 'Filtro de Búsqueda', { 'event_category': 'Seleccionar Profesional', 'event_label': this.profesionalSelected.detalle, 'value': '0' });
+
     this.getEspecialidades('profesional');
-
-    if (this.tipoConsulta === 'especialidad') {
-      /* gtag('config', ENV.analyticsCode, 
-       {'page_path': `/busqueda/${this.tipoConsulta}/area/${this.areaSelected.id}` });*/
-    } else {
-      /*gtag('config', ENV.analyticsCode, 
-      {'page_path': `/busqueda/${this.tipoConsulta}/area/${this.areaSelected.id}/profesional/${this.profesionalSelected.idProfesional}/` });*/
-    }
-
-
   }
 
   centroAtencionSelection(event) {
     this.centroAtencionCtrl.disable();
     this.centroAtencionSelected = this.centroAtencionCtrl.value;
-
-    if (this.tipoConsulta === 'especialidad') {
-      /*  gtag('config', ENV.analyticsCode, 
-        {'page_path': `/busqueda/${this.tipoConsulta}/area/${this.areaSelected.id}/servicio/${this.servicioCtrl.value.idServicio}/centro/${this.centroAtencionCtrl.value.idCentro}` });*/
-    } else {
-      /*gtag('config', ENV.analyticsCode, 
-      {'page_path': `/busqueda/${this.tipoConsulta}/area/${this.areaSelected.id}/profesional/${this.profesionalSelected.idProfesional}/servicio/${this.especialidadSelected.idServicio}/centro/${this.centroAtencionCtrl.value.idCentro}` });*/
-    }
+    gtag('event', 'Filtro de Búsqueda', { 'event_category': 'Seleccionar Centro', 'event_label': this.centroAtencionSelected.detalle, 'value': '0' });
 
     if (this.hasQueryParams) {
       this.buscarHora();
@@ -872,10 +854,6 @@ export class BusquedaComponent implements OnInit, OnDestroy {
 
     const dateTm: any = this.utils.trDateStr(new Date(), null, -240);
     const dateTime = dateTm.split("-04:00").join("");
-    const gtagActionName = `(${dateTime}) - ${this.datosPaciente.tipoDocumento} : ${this.datosPaciente.documento}`;
-    const gtagName = 'PROCESO DE RESERVA DE HORA';
-    let gtagNameEsp = "PROCESO DE RESERVA DE HORA"
-    let gtagActionEspProf = "";
 
     if (this.tipoConsulta === 'profesional' && !this.profesionalSelected) {
       this.utils.mDialog('Error', 'Debe seleccionar el Profesional con quien se desea atender.', 'message');
@@ -907,18 +885,8 @@ export class BusquedaComponent implements OnInit, OnDestroy {
     }
 
     if (this.tipoConsulta == 'especialidad') {
-      gtagNameEsp += ' | ESPECIALIDAD';
-      gtagActionEspProf = this.especialidadSelected.nombreEspecialidad.toUpperCase();
       this.especialidadSelected['idServicio'] = this.servicioSelected['idServicio'];
       this.especialidadSelected['nombreServicio'] = this.servicioSelected['nombreServicio'];
-    }
-
-    if (this.profesionalSelected) {
-      gtagNameEsp += ' | PROFESIONAL';
-      gtagActionEspProf = this.profesionalSelected.nombreProfesional.toLowerCase();
-      gtag('event', gtagActionName, { 'event_category': gtagName, 'event_label': `a.1) Profesional: ${this.profesionalSelected.nombreProfesional}`, 'value': '0' });
-      gtag('event', gtagActionEspProf, { 'event_category': gtagNameEsp, 'event_label': `a.1) Profesional: ${this.profesionalSelected.nombreProfesional}`, 'value': '0' });
-
     }
 
     let continueEncuesta: any = true;
@@ -938,7 +906,12 @@ export class BusquedaComponent implements OnInit, OnDestroy {
           completaEncuesta = true;
           continueEncuesta = ressp.action;
           this.datosImagenes.idEncuesta = ressp.idRespuesta;
+          gtag('event', 'Filtro de Búsqueda', { 'event_category': 'Encuesta Médica', 'event_label': 'Completar Encuesta', 'value': '0' });
+
         }
+
+        gtag('event', 'Filtro de Búsqueda', { 'event_category': 'Adjuntar Orden', 'event_label': 'Ingresar Órden Médica', 'value': '0' });
+
       }
 
     } catch (err) {
@@ -948,32 +921,6 @@ export class BusquedaComponent implements OnInit, OnDestroy {
     if (!continueEncuesta) {
       return;
     }
-
-
-    gtag('event', gtagActionName, { 'event_category': gtagName, 'event_label': `a) Área Médica: ${this.areaSelected.nombre}`, 'value': '0' });
-    gtag('event', gtagActionName, { 'event_category': gtagName, 'event_label': `b) Especiallidad: ${this.especialidadSelected.nombreEspecialidad}`, 'value': '0' });
-    gtag('event', gtagActionName, { 'event_category': gtagName, 'event_label': `c) Área de Interés: ${this.especialidadSelected.nombreServicio}`, 'value': '0' });
-    gtag('event', gtagActionName, { 'event_category': gtagName, 'event_label': `d) Centro Médico:  ${this.centroAtencionSelected ? this.centroAtencionSelected.nombre : ''}`, 'value': '0' });
-
-    if (completaEncuesta) {
-      gtag('event', gtagActionName, { 'event_category': gtagName, 'event_label': `e) Completa Encuesta en Área Imágenes`, 'value': '0' });
-      gtag('event', gtagActionName, { 'event_category': gtagName, 'event_label': `f) Adjunta Orden Médica`, 'value': '0' });
-    }
-
-    gtag('event', gtagActionName, { 'event_category': gtagName, 'event_label': 'g) ETAPA 1 COMPLETADA', 'value': '0' });
-
-    gtag('event', gtagActionEspProf, { 'event_category': gtagNameEsp, 'event_label': `a) Área Médica: ${this.areaSelected.nombre}`, 'value': '0' });
-    gtag('event', gtagActionEspProf, { 'event_category': gtagNameEsp, 'event_label': `b) Especiallidad: ${this.especialidadSelected.nombreEspecialidad}`, 'value': '0' });
-    gtag('event', gtagActionEspProf, { 'event_category': gtagNameEsp, 'event_label': `c) Área de Interés: ${this.especialidadSelected.nombreServicio}`, 'value': '0' });
-    gtag('event', gtagActionEspProf, { 'event_category': gtagNameEsp, 'event_label': `d) Centro Médico: ${this.centroAtencionSelected ? this.centroAtencionSelected.nombre : ''}`, 'value': '0' });
-
-    if (completaEncuesta) {
-      gtag('event', gtagActionEspProf, { 'event_category': gtagNameEsp, 'event_label': `e) Completa Encuesta en Área Imágenes`, 'value': '0' });
-      gtag('event', gtagActionEspProf, { 'event_category': gtagNameEsp, 'event_label': `f) Adjunta Orden Médica`, 'value': '0' });
-    }
-
-    gtag('event', gtagActionEspProf, { 'event_category': gtagNameEsp, 'event_label': 'g) ETAPA 1 COMPLETADA', 'value': '0' });
-
 
     await this.getDatosPaciente();
 
@@ -985,6 +932,9 @@ export class BusquedaComponent implements OnInit, OnDestroy {
         { 'page_path': `/busqueda/${this.tipoConsulta}/area/${this.areaSelected.id}/profesional/${this.profesionalSelected.idProfesional}/servicio/${this.especialidadSelected.idServicio}/centro/${this.centroAtencionCtrl.value.idCentro}` });
     }
 
+    gtag('event', 'Filtro de Búsqueda', { 'event_category': 'Ingresar RUT', 'event_label': this.datosPaciente.documento, 'value': '0' });
+    gtag('event', 'Filtro de Búsqueda', { 'event_category': 'Buscar Hora', 'event_label': 'Búsqueda Completa', 'value': '0' });
+
     this.emitBusqueda.emit({
       tipoConsulta: this.tipoConsulta,
       area: this.areaSelected,
@@ -993,11 +943,7 @@ export class BusquedaComponent implements OnInit, OnDestroy {
       centroAtencion: this.centroAtencionSelected,
       documentoPaciente: this.datosPaciente,
       centrosDisponibles: [],
-      datosImagenes: this.datosImagenes,
-      gtagActionName,
-      gtagName,
-      gtagActionEspProf,
-      gtagNameEsp
+      datosImagenes: this.datosImagenes
     })
 
     this.emitterReadQuery(true);
@@ -1033,6 +979,7 @@ export class BusquedaComponent implements OnInit, OnDestroy {
       documento: null,
       documentoFormateado: null
     }
+    gtag('event', 'Horas Disponibles', { 'event_category': 'Cupo Inmediato', 'event_label': `Cupo Especialidad`, 'value': '0' });
 
     this.emitBusqueda.emit(data);
 

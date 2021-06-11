@@ -126,21 +126,6 @@ export class ConfirmacionComponent implements OnInit, OnChanges, OnDestroy {
         gtag('config', ENV.analyticsCode, 
         {'page_path': `/busqueda/especialidad/area/${this.busquedaInicial.area.id}/profesional/${this.calendario.recurso.id}servicio/${this.busquedaInicial.especialidad.idServicio}/centro/${this.busquedaInicial.centroAtencion.idCentro}/cupo/reservado/${data['idCita']}` });
     
-       // this.codCita = this.busquedaInicial.area.id === 'RIS_IMAGENES' ? data['idCita'] : data['codCita'];
-
-        if (this.busquedaInicial.fromCuposInmediatos) {
-          gtag('event', 'Reserva Cupos Inmediatos', { 'event_category': 'Reserva de Hora', 'event_label': 'Paso5:Reserva-Confirmada' });
-        }
-
-        if (this.busquedaInicial.fromMedicosRelacionados) {
-          gtag('event', 'Reserva Profesional Relacionado', { 'event_category': 'Reserva de Hora', 'event_label': 'Paso5:Reserva-Confirmada' });
-        }
-
-        if (this.busquedaInicial.gtagActionName) {
-          gtag('event', this.busquedaInicial.gtagActionName, { 'event_category': this.busquedaInicial.gtagName, 'event_label': `k) ETAPA 4: RESERVA CONFIRMADA`, 'value': '0' });
-          gtag('event', this.busquedaInicial.gtagActionEspProf, { 'event_category': this.busquedaInicial.gtagNameEsp, 'event_label': `k) ETAPA 4: RESERVA CONFIRMADA`, 'value': '0' });
-        }
-
         if (data.hasOwnProperty('listaRecetas') && data.listaRecetas.length > 0) {
           this.setListaRecetas(data.listaRecetas);
         }
@@ -154,8 +139,6 @@ export class ConfirmacionComponent implements OnInit, OnChanges, OnDestroy {
       }
       this.disableBarReserva = false;
     })
-
-    gtag('event', 'Clic', { 'event_category': 'Reserva de Hora', 'event_label': 'Paso4:Confirmación' });
 
   }
 
@@ -235,7 +218,8 @@ export class ConfirmacionComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   pagar() {
-    location.href = 'https://cmv.ucchristus.cl/pago/reserva/' + this.idreserva
+    gtag('event', 'Reserva Exitosa', { 'event_category': 'Pagar Reserva', 'event_label': 'Pagar' , 'value': '0' });
+    location.href = 'https://cmv.ucchristus.cl/pago/reserva/' + this.idreserva;
   }
 
   anularReserva() {
@@ -273,9 +257,7 @@ export class ConfirmacionComponent implements OnInit, OnChanges, OnDestroy {
           if (res['statusCod'] == 'OK') {
             this.anulada = true;
             this.successMsg = '¡Reserva ha sido anulada correctamente!';
-            gtag('event', this.busquedaInicial.gtagActionName, { 'event_category': this.busquedaInicial.gtagName, 'event_label': `l) RESERVA CONFIRMADA HA SIDO ANULADA`, 'value': '0' });
-            gtag('event', this.busquedaInicial.gtagActionEspProf, { 'event_category': this.busquedaInicial.gtagNameEsp, 'event_label': `l) RESERVA CONFIRMADA HA SIDO ANULADA`, 'value': '0' });
-
+            gtag('event', 'Reserva Exitosa', { 'event_category': 'Anular Reserva', 'event_label': 'Anular' , 'value': '0' });
           } else {
             this.utils.mDialog("Error", "La Hora ha sido no pudo ser anulada. Intente nuevamente.", "message");
           }

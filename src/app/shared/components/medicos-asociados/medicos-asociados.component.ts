@@ -108,7 +108,8 @@ export class MedicosAsociadosComponent implements OnInit, OnDestroy {
 
     this.loading = true;
     this.displayRecursos = false;
-    
+    gtag('event', 'Profesional Relacionado', { 'event_category': 'Horas Disponible', 'event_label': 'Ver Horas' , 'value': '0' });
+
   }
 
   getRecursosRelacionados() {
