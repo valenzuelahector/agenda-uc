@@ -225,4 +225,8 @@ export class AgendaAmbulatoriaService {
   recuperarClave(rut) {
     return this.http.get(ENV.baseApi + ENV.pathUsuarios + '/Usuarios/ResetearPass?username=' + rut).toPromise()
   }
+
+  cambiarClave(data) {
+    return this.http.post(ENV.baseApi + ENV.pathUsuarios + '/Usuarios/ResetearPass', data).toPromise()
+  }
 }
