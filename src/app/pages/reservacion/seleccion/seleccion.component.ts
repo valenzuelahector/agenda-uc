@@ -1158,6 +1158,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
       } catch (err) {
 
         this.utils.mDialog("Error", "No se puede consultar el calendario de la derivación. Intente más tarde", "message");
+        this.utils.hideProgressBar();
 
       }
 

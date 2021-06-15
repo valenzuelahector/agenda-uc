@@ -300,6 +300,7 @@ export class BuscarTuMedicoComponent implements OnInit {
 
       } catch (err) {
         resolve(null);
+        
       }
     });
   }

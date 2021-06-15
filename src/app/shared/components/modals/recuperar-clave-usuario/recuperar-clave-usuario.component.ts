@@ -92,7 +92,7 @@ export class RecuperarClaveUsuarioComponent implements OnInit {
 
     this.agendaService.cambiarClave(data).then((res:any) => {
       if(res.statusCod === 'OK'){
-        this.utils.mDialog('Error', 'La contraseña ha sido cambiada correctamente.', 'message');
+        this.utils.mDialog('Estimado Usuario', 'La contraseña ha sido cambiada correctamente.', 'message');
       }else{
         this.utils.mDialog("Estimado Usuario", "La clave no pudo ser cambiada. Intente nuevamente...", "message", false);
       }
