@@ -16,6 +16,10 @@ export class RegistroUsuarioComponent implements OnInit {
   planesSalud:any = [];
   rutConfirmado = false;
   loading = false;
+  displayInputCode = false;
+  codeInput ;
+  codeReady = false;
+  correo;
 
   public mainForm = new FormGroup({
     username: new FormControl('', [Validators.required]),
@@ -139,6 +143,7 @@ export class RegistroUsuarioComponent implements OnInit {
     this.triggedValidation(true);
     if(this.mainForm.valid){
       let form = this.mainForm.getRawValue();
+      this.correo = form.email;
       form.username = this.documento;
       form.identificador = this.documento;
       form.fono_movil = '+56' + form.fono_movil;
@@ -151,13 +156,34 @@ export class RegistroUsuarioComponent implements OnInit {
       this.agendaService.guardarUsuario(form).then( (res:any) => {
         this.loading = false;
         if(res.statusCod === 'OK'){
-          this.utils.mDialog("Estimado Usuario", "Datos han sido guardados correctamente.", "message");
+            this.displayInputCode = true;
         }else{
           this.utils.mDialog("Estimado Usuario", "Los datos no pudieron ser guardados. Intente nuevamente.", "message", false);
         }
       }).catch( err =>{
         this.loading = false;
       })
+    }
+  }
+
+  validarCodigo(){
+    if(this.codeInput){
+      const data = {
+        username: this.documento,
+        codigo: this.codeInput
+      }
+      this.agendaService.validarUsuario(data).then( (res:any) => {
+        
+        if(res.statusCod === 'OK'){
+          this.utils.mDialog("Estimado Usuario", "Código validado correctamente. Ya puede ingresar con su RUT y clave.", "message");
+        }else{
+          this.utils.mDialog("Estimado Usuario", "La clave no pudo ser validada. Intente nuevamente...", "message", false);
+        }
+
+      });
+    }else{
+      this.utils.mDialog("Estimado Usuario", "Debe ingresar el código solicitado.", "message", false);
+
     }
   }
 

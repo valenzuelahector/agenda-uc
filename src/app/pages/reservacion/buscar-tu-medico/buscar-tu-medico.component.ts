@@ -271,6 +271,7 @@ export class BuscarTuMedicoComponent implements OnInit {
         } catch (err) {
 
           reject(false);
+          this.utils.hideProgressBar();
 
         }
 

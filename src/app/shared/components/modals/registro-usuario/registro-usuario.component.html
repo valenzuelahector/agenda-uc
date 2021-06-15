@@ -1,10 +1,10 @@
 <h2 mat-dialog-title>Cree su cuenta</h2>
 <mat-dialog-content>
-    
-    <form [formGroup]="mainForm">
-        <div class="dialog-spinner" *ngIf="loading">
-            <mat-spinner [diameter]="50"></mat-spinner>
-        </div>
+    <div class="dialog-spinner" *ngIf="loading">
+        <mat-spinner [diameter]="50"></mat-spinner>
+    </div>
+    <form [formGroup]="mainForm" *ngIf="!displayInputCode">
+ 
         <div fxLayout="row wrap" fxLayoutAlign="space-between"  *ngIf="!rutConfirmado">
             <div fxFlex="49%">
                 <mat-form-field class="full" appearance="outline">
@@ -133,9 +133,27 @@
         </div>
     </form>
 
+    <p *ngIf="displayInputCode" class="aal">SU REGISTRO HA SIDO COMPLETADO CORRECTAMENTE. <br/>
+        INGRESE EL CÓDIGO DE VERIFICACIÓN ENVIADO A SU CORREO ELECTRÓNICO: <b>{{ correo }}</b></p>
+    <div fxLayout="row wrap" fxLayoutAlign="space-between"  *ngIf="displayInputCode">
+        <div fxFlex="49%">
+            <mat-form-field class="full" appearance="outline">
+                <mat-label>Código de Validación</mat-label>
+                <input type="password" matInput [(ngModel)]="codeInput" maxlength="8"
+                (keypress)="utils.numberOnly($event, true)"
+                placeholder="Código" autocomplete="off" required>
+            </mat-form-field>
+        </div>
+        <div fxFlex="49%">
+            <button mat-stroked-button  class="btn-morado btnm cus-pad full" 
+            style="padding:12px !important; margin-top:3px !important" (click)="validarCodigo()">VALIDAR CÓDIGO</button>
+
+        </div>
+    </div>
+
 </mat-dialog-content>
-<mat-dialog-actions align="end" style="margin:10px 0px 0px 0px" *ngIf="!loading">
+<mat-dialog-actions align="end" style="margin:10px 0px 0px 0px" *ngIf="!loading && !displayInputCode">
     <button mat-stroked-button style="margin-right: 15px;" class="btnm" mat-dialog-close>SALIR</button>
-    <button mat-stroked-button  class="btn-morado btnm cuspad"  *ngIf="rutConfirmado" (click)="guardar(true)">GUARDAR</button>
+    <button mat-stroked-button  class="btn-morado btnm cuspad"  *ngIf="rutConfirmado && !displayInputCode" (click)="guardar(true)">GUARDAR</button>
   </mat-dialog-actions>
   
