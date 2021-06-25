@@ -32,6 +32,7 @@ export class UtilsService {
   public saludVolverDerivacion: any = new Subject();
   public actionVolverDerivacion: any = new Subject();
   public agendaBeneficiario: any = new Subject();
+  public nuevaHoraSaludIntegral:any = new Subject();
 
   constructor(
     public dialog: MatDialog,
@@ -434,6 +435,17 @@ export class UtilsService {
       },
       getAgenda: () => {
         return this.agendaBeneficiario.asObservable();
+      }
+    }
+  }
+
+  actionNuevaHoraSaludIntegral(){
+    return {
+      setNuevaHora: (data)=>{
+         this.nuevaHoraSaludIntegral.next(data);
+      },
+      getNuevaHora: () => {
+        return this.nuevaHoraSaludIntegral.asObservable();
       }
     }
   }

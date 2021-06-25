@@ -229,7 +229,7 @@ export class ReservacionComponent implements OnInit, AfterViewInit, OnDestroy {
 
   }
 
-  nuevaReserva() {
+  nuevaReserva(fromBtn = false) {
 
     this.utils.reiniciarReserva();
     this.utils.resetPaciente();
@@ -243,8 +243,8 @@ export class ReservacionComponent implements OnInit, AfterViewInit, OnDestroy {
     this.confirmacionProcedimiento = null;
     this.cambiarEtapa(0);
 
-    if (this.saludIntegral) {
-      this.nuevaBusquedaCM()
+    if (this.saludIntegral && fromBtn) {
+      this.utils.actionNuevaHoraSaludIntegral().setNuevaHora(true);
     }
 
     gtag('event', 'Reserva Exitosa', { 'event_category': 'Tomar otra hora', 'event_label': 'Nueva Hora' , 'value': '0' });

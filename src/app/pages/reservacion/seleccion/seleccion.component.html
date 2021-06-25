@@ -287,10 +287,11 @@
 					<div class="row">
 						<div class="col-lg-6">
 							<div class="box-doc">
+								<div *ngIf="busquedaInicial.fromSaludIntegral && derivacion" class="mdcb">
+									Tu médico de cabecera es:
+								</div>
 								<div fxLayout="row wrap" style="margin-top:00px" fxLayoutAlign="space-evenly">
-									<div *ngIf="busquedaInicial.fromSaludIntegral && derivacion" class="mdcb">
-										Tu médico de cabecera es:
-									</div>
+
 									<figure fxFlex="35%" >
 										<img [src]="profesionalCabecera?.profesional?.urlImagenProfesional" alt="">
 									</figure>

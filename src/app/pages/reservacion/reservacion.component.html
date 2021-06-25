@@ -109,6 +109,6 @@
 
 <div class="wrap">
   <div class="mainBtnCnt" *ngIf="reservaRealizada">
-    <button mat-stroked-button class="mainBtn" (click)="nuevaReserva()">{{ conoceTuMedico || listaEsperaData ? 'NUEVA BÚSQUEDA' : 'TOMAR OTRA HORA' }}</button>
+    <button mat-stroked-button class="mainBtn" (click)="nuevaReserva(true)">{{ conoceTuMedico || listaEsperaData ? 'NUEVA BÚSQUEDA' : 'TOMAR OTRA HORA' }}</button>
   </div>
 </div>

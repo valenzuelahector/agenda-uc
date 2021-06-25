@@ -1151,7 +1151,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
         };
 
         this.removerDerivacion = true;
-        
+        this.resetCalendario();
         this.utils.saludIntegralVolver().setVolver('VISTA_CALENDARIO');
         this.utils.especialidadDerivaciones().setEspecialidad(busqueda);
 
@@ -1168,6 +1168,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
 
   verAgendaDerivacion(titular = false){
     this.utils.showProgressBar();
+    this.resetCalendario();
     const benf = titular ? this.beneficiarioTitular : this.beneficiarioSelected;
     this.isTitular = titular;
     this.utils.actionAgendaBeneficiarios().setAgenda(benf);

@@ -19,6 +19,7 @@ export class BuscarTuMedicoComponent implements OnInit {
   documentoFC = new FormControl('');
   clave = new FormControl('', Validators.required);
   agendaBeneficiario;
+  nuevaHoraSaludIntegral;
 
   @Output() datosBeneficiarioMedico: EventEmitter<any> = new EventEmitter();
 
@@ -40,6 +41,11 @@ export class BuscarTuMedicoComponent implements OnInit {
     this.agendaBeneficiario = this.utils.actionAgendaBeneficiarios().getAgenda().subscribe( res => {
       this.documento = res.idPaciente;
       this.setProfesionalRol(res.idMedicoCabecera, res);
+    });
+
+    this.nuevaHoraSaludIntegral = this.utils.actionNuevaHoraSaludIntegral().getNuevaHora().subscribe( res => {
+      this.setFormatRut();
+      this.buscarRut();
     });
 
   }
@@ -68,6 +74,8 @@ export class BuscarTuMedicoComponent implements OnInit {
       this.documento = this.utils.replaceAll(rutPuntos, ".", "");
     }
   }
+
+
 
   async buscarRut() {
 
@@ -152,10 +160,10 @@ export class BuscarTuMedicoComponent implements OnInit {
           localStorage.setItem("derivacion", JSON.stringify(beneficiario))
           this.datosBeneficiarioMedico.emit(busqueda);
           this.utils.hideProgressBar();
-          this.documento = null;
+        /*  this.documento = null;
           this.documentoFC.setValue('');
           this.clave.setValue('');
-          this.clave.reset();
+          this.clave.reset();*/
         }).catch(err => {
           this.utils.mDialog('Error', 'No se ha podido finalizar la consulta. Intente más tarde.', 'message');
           this.utils.hideProgressBar();
