@@ -4,7 +4,7 @@ import { AgendaAmbulatoriaService } from 'src/app/services/agenda-ambulatoria.se
 import { MatCalendarCellCssClasses } from '@angular/material';
 import { MatDialog } from '@angular/material';
 import { OrderPipe } from 'ngx-order-pipe';
-import { ENV } from 'src/environments/environment';
+import { ENV, EspecialidadesDerivaciones } from 'src/environments/environment';
 import gtag, { install } from 'ga-gtag';
 import * as $ from 'jquery';
 import 'moment-timezone';
@@ -77,6 +77,9 @@ export class SeleccionComponent implements OnInit, OnChanges {
   }
   public ginecologia = ENV.ginecologia;
   public oftalmologia = ENV.oftalmologia;
+  public EspecialidadesDerivaciones = EspecialidadesDerivaciones;
+  public modelEspDeriv;
+
   constructor(
     public agendaService: AgendaAmbulatoriaService,
     public utils: UtilsService,
@@ -1093,6 +1096,11 @@ export class SeleccionComponent implements OnInit, OnChanges {
   }
 
   consultarCalendario(deriv){
+    
+    if(!this.modelEspDeriv){
+      this.utils.mDialog("Error", "Debe elegir una especialidad.", "message");
+      return;
+    }
 
     this.utils.showProgressBar();
     this.agendaService.getEspecialidadesByGeneric(ENV.areaConsultaMedica.id, null, deriv.idServicioDerivado.toLowerCase()).subscribe(async (srvRequest: any) => {

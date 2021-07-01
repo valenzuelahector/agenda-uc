@@ -57,6 +57,19 @@ export const ENV = {
   }
 }
 
+export const EspecialidadesDerivaciones = [
+  { 
+    idEspecialidad: 'b6fb250f-fff4-4f6e-9436-a93400e4d00d',
+    idServicio: 'a163c23a-285a-4e9a-9e37-a934015b223e',
+    nombre: 'GINECOLOGIA Y OBSTETRICIA - Consulta Médica'
+  },
+  { 
+    idEspecialidad: '274daf84-5ed6-4e8c-bbf0-a93400e91bd4',
+    idServicio: '8193f6de-8308-420e-9309-a934015b1999',
+    nombre: 'OFTALMOLOGIA - Consulta Médica'
+  }
+]
+
 /*
 export const ENV = {
   baseApi: 'https://apigw.ucchristus.cl',

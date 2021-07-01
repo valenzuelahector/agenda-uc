@@ -392,21 +392,29 @@
 	
 	<div class="oespec">
 		<p>También puede consultar las siguientes especialidades</p>
-		<div fxLayout="row wrap" fxLayoutAlign="space-between" class="itm">
+		<div fxLayout="row wrap">
 			<div fxFlex="100%">
-				<span class="detDer ties" (click)="consultarCalendario({
-					idServicioDerivado: ginecologia.idServicio,
-					idEspecialidad: ginecologia.idEspecialidad
-				})">{{ ginecologia.nombre }} - Consulta Médica</span>
+				<mat-form-field class="full" appearance="outline">
+					<mat-label>Especialidades</mat-label>
+					<mat-select [(ngModel)]="modelEspDeriv">
+						<mat-option *ngFor="let esp of EspecialidadesDerivaciones" [value]="esp">
+							{{ esp.nombre}}
+						</mat-option>
+					</mat-select>
+				</mat-form-field>
+			</div>
+			<div fxFlex="100%">
+				<button mat-stroked-button class="full btn-morado cus-pad cus" 
+				style="margin-bottom: 20px;"
+				(click)="consultarCalendario({
+					idServicioDerivado: modelEspDeriv?.idServicio,
+					idEspecialidad:  modelEspDeriv?.idEspecialidad
+				})" >
+				Consultar Especialidad
+			</button>
 			</div>
 		</div>
-		<div fxLayout="row wrap" fxLayoutAlign="space-between" class="itm">
-			<div fxFlex="100%">
-				<span class="detDer ties" (click)="consultarCalendario({
-					idServicioDerivado: oftalmologia.idServicio,
-					idEspecialidad: oftalmologia.idEspecialidad
-				})">{{ oftalmologia.nombre }} - Consulta Médica</span>
-			</div>
-		</div>
+
+
 	</div>
 </ng-template>
