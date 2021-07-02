@@ -39,7 +39,9 @@
             <p><b>Nombre:</b> {{ paciente.nombreCompleto }}</p>
             <p><b>RUT:</b> {{ paciente.numeroDocumentoFormateado }}</p>
             <p *ngIf="paciente.adicional?.prevision"><b>Previsión:</b> {{ paciente.adicional?.prevision?.nombrePlan }}</p>
-            <p *ngIf=" calendario.cupo?.valorConvenio?.toString().trim() != '0'"><b>Valor Convenio :</b> ${{ calendario.cupo.valorConvenio | currency:'CLP':'' }}</p>
+            <p *ngIf=" calendario.cupo?.valorConvenio?.toString().trim() != '0' && 
+            (utils.slugify(busquedaInicial.area.nombre, '-') === 'telemedicina' || 
+            utils.slugify(busquedaInicial.area.nombre, '-') === 'consultas')"><b>Valor Convenio :</b> ${{ calendario.cupo.valorConvenio | currency:'CLP':'' }}</p>
             <span *ngIf=" calendario.cupo?.valorConvenio?.toString().trim() != '0'" style="color:#999">(*) El valor convenio es referencial para la previsión seleccionada. El copago a cancelar por el paciente, puede cambiar según su plan de salud y cobertura</span>
           </div>
           <!-- <div class="paybtn" *ngIf="reservaFinalizada && !anulada && calendario.cupo?.valorConvenio?.toString().trim() != '0'" style="">
