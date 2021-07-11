@@ -156,14 +156,10 @@ export class BuscarTuMedicoComponent implements OnInit {
       this.agendaService.getDatosProfesional(null, rutmed).subscribe(async (prof: any) => {
         this.setBusquedaCalendario(prof.datosProfesional).then((busqueda: any) => {
           busqueda.fromSaludIntegral = true;
-          //busqueda.derivacion = res.derivacion;
           localStorage.setItem("derivacion", JSON.stringify(beneficiario))
           this.datosBeneficiarioMedico.emit(busqueda);
           this.utils.hideProgressBar();
-        /*  this.documento = null;
-          this.documentoFC.setValue('');
-          this.clave.setValue('');
-          this.clave.reset();*/
+
         }).catch(err => {
           this.utils.mDialog('Error', 'No se ha podido finalizar la consulta. Intente más tarde.', 'message');
           this.utils.hideProgressBar();
@@ -192,12 +188,16 @@ export class BuscarTuMedicoComponent implements OnInit {
         try {
 
           let servicio = null;
+          let especialidades = null;
 
           if (srvRequest && srvRequest.especialidadesPorServicio && srvRequest.especialidadesPorServicio.length > 0) {
 
-            servicio = srvRequest.especialidadesPorServicio.find(item => {
-              return item.idEspecialidad === ENV.saludIntegral.idEspecialidad
-            });
+             especialidades = srvRequest.especialidadesPorServicio.map( item => {
+              item.id = item.idEspecialidad;
+              return item;
+            })
+
+            servicio = especialidades[0];
 
             if (!servicio) {
               reject(false);
@@ -267,7 +267,8 @@ export class BuscarTuMedicoComponent implements OnInit {
             documentoPaciente,
             centrosDisponibles,
             fromSaludIntegral: true,
-            datosImagenes
+            datosImagenes, 
+            listadoEspecialidades: especialidades
           };
 
           localStorage.setItem('profesionalCabeceraCalendario', JSON.stringify(busqueda));

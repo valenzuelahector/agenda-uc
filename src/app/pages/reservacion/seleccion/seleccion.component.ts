@@ -71,6 +71,7 @@ export class SeleccionComponent implements OnInit, OnChanges {
   public beneficiarioTitular;
   public isTitular = true;
   public beneficiarios = [];
+  public especialidadSelected;
   public filtro: any = {
     idCentro: ENV.idRegion,
     nombre: 'TODOS'
@@ -173,7 +174,12 @@ export class SeleccionComponent implements OnInit, OnChanges {
         this.beneficiarioTitular = this.beneficiarios[0];
         this.beneficiarioSelected = der;
         this.setDerivacion(this.removerDerivacion ? false : true);
-        this.profesionalCabecera = JSON.parse(localStorage.getItem("profesionalCabeceraCalendario"))
+        this.profesionalCabecera = JSON.parse(localStorage.getItem("profesionalCabeceraCalendario"));
+
+        if( !this.especialidadSelected){
+          this.especialidadSelected = this.busquedaInicial.listadoEspecialidades[0];
+        }
+
       }
       
     }
@@ -1095,9 +1101,9 @@ export class SeleccionComponent implements OnInit, OnChanges {
     this.utils.especialidadDerivaciones().setEspecialidad(search);
   }
 
-  consultarCalendario(deriv){
+  consultarCalendario(deriv, vista = 'VISTA_CALENDARIO'){
     
-    if(!this.modelEspDeriv){
+    if(!deriv.idEspecialidad){
       this.utils.mDialog("Error", "Debe elegir una especialidad.", "message");
       return;
     }
@@ -1107,6 +1113,12 @@ export class SeleccionComponent implements OnInit, OnChanges {
 
       try {
         const idEspecialidad = deriv.idEspecialidad;
+
+        const especialidades = srvRequest.especialidades.map( item => {
+          item.id = item.idEspecialidad;
+          return item;
+        })
+
         const especialidad = srvRequest.especialidades.find(item => {
           return item.idEspecialidad === idEspecialidad
         });
@@ -1155,12 +1167,16 @@ export class SeleccionComponent implements OnInit, OnChanges {
           documentoPaciente,
           centrosDisponibles,
           datosImagenes,
-          fromSaludIntegral: true
+          fromSaludIntegral: true,
+          listadoEspecialidades: this.busquedaInicial.listadoEspecialidades
         };
 
-        this.removerDerivacion = true;
+        if(vista !== 'VISTA_DERIVACION'){
+          this.removerDerivacion = true;
+        }
+
         this.resetCalendario();
-        this.utils.saludIntegralVolver().setVolver('VISTA_CALENDARIO');
+        this.utils.saludIntegralVolver().setVolver(vista);
         this.utils.especialidadDerivaciones().setEspecialidad(busqueda);
 
       } catch (err) {
@@ -1177,8 +1193,16 @@ export class SeleccionComponent implements OnInit, OnChanges {
   verAgendaDerivacion(titular = false){
     this.utils.showProgressBar();
     this.resetCalendario();
+    this.especialidadSelected = null;
     const benf = titular ? this.beneficiarioTitular : this.beneficiarioSelected;
     this.isTitular = titular;
     this.utils.actionAgendaBeneficiarios().setAgenda(benf);
   }
+
+  changeSelectEspecialidad(e){
+    const esp = e.value;
+    esp.idServicioDerivado = esp.idServicio;
+    this.consultarCalendario(esp, 'VISTA_DERIVACION');
+  }
+
 }

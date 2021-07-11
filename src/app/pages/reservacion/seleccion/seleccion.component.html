@@ -151,6 +151,7 @@
 	
 									</div>
 								</div>
+								<div *ngTemplateOutlet="listEspecialidades"></div>
 								<div *ngTemplateOutlet="listBeneficiarios"></div>
 
 								<p class="small bxsmall" *ngIf="re?.informacionAdicional">
@@ -309,6 +310,7 @@
 								</div>
 								<p class="small bxsmall" *ngIf="profesionalCabecera?.profesional?.informacionAdicional">
 									{{ profesionalCabecera?.profesional?.informacionAdicional }}</p>
+									<div *ngTemplateOutlet="listEspecialidades"></div>
 									<div *ngTemplateOutlet="listBeneficiarios"></div>
 							</div>
 						</div>
@@ -337,6 +339,23 @@
 <div style="margin-top:20px" *ngIf="busquedaInicial && busquedaInicial.profesional">
 	<app-medicos-asociados [fromSaludIntegral]="busquedaInicial.fromSaludIntegral" [title]="busquedaInicial.fromSaludIntegral ? 'Otros médicos de Cabecera' : 'Otros especialistas del área'"></app-medicos-asociados>
 </div>
+
+<ng-template #listEspecialidades>
+	<div style="margin-bottom:30px" class="beneficiarios" *ngIf="busquedaInicial.fromSaludIntegral && busquedaInicial.listadoEspecialidades?.length > 0 && derivacion">
+		<p class="datoPaciente"><b>Especialidades del Médico Cabecera        :</b> </p>
+		<mat-form-field class="full" appearance="outline">
+			<mat-label>Especialidades</mat-label>
+			<mat-select [(ngModel)]="especialidadSelected" (selectionChange)="changeSelectEspecialidad($event)" [compareWith]="utils.compareFn">
+				<ng-container *ngFor="let esp of busquedaInicial.listadoEspecialidades">
+					<mat-option [value]="esp">
+						{{ esp.nombreEspecialidad }} - {{ esp.nombreServicio }}
+					</mat-option>
+				</ng-container>
+			</mat-select>
+		</mat-form-field>
+
+	</div>
+</ng-template>
 
 <ng-template #listBeneficiarios>
 	<div class="beneficiarios" *ngIf="busquedaInicial.fromSaludIntegral && beneficiarios.length > 1 && derivacion">

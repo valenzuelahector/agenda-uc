@@ -31,6 +31,10 @@ export const ENV = {
     idEspecialidad: '507ef9a7-0d7e-41b8-ae09-a93400e5d5c8',
     idServicio: '507ef9a7-0d7e-41b8-ae09-a93400e5d5c8'
   },
+  idOcultarServicios:[
+    'ec043ac3-8050-49bc-8699-ad5800fec14b',
+    'd8e192a8-acda-454f-907c-ad5800ff019c',
+    '4788642c-1fcc-469e-a2b9-ad5800ff2683'],
   ginecologia:{
     nombre:'GINECOLOGIA Y OBSTETRICIA',
     idEspecialidad:'c4749604-d48f-4f59-96cc-a97400d53190',

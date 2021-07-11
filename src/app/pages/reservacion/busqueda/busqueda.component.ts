@@ -351,8 +351,11 @@ export class BusquedaComponent implements OnInit, OnDestroy {
 
         this.especialidadCtrl.reset();
         let matEspecialidad = null;
+
         if (tipo == 'especialidad') {
           res = this.distinctEspecialidades(res);
+        }else{
+          res['especialidadesPorServicio'] = this.ocultarServicios(res['especialidadesPorServicio'], 'idServicio');
         }
 
         if (res['especialidadesPorServicio'] && res['especialidadesPorServicio'].length > 0) {
@@ -717,11 +720,23 @@ export class BusquedaComponent implements OnInit, OnDestroy {
 
   }
 
+  ocultarServicios(servicios, idCompare = 'id'){
+    return servicios.filter( item => {
+      const match = ENV.idOcultarServicios.find(itemOs => {
+        return item[idCompare] === itemOs;
+      });
+      if(!match){
+        return item;
+      }
+    });
+  }
+
   async getServicios() {
 
     const resServ = await this.agendaService.getServiciosByEspecialidad(this.especialidadSelected.idEspecialidad, this.areaSelected.id);
     const listServ = resServ && resServ['servicios'] ? resServ['servicios'] : [];
     this.servicios = (listServ && listServ.length > 0) ? listServ : [];
+    this.servicios = this.ocultarServicios(this.servicios);
 
     this.setDataQueryParams().then(params => {
 

@@ -81,7 +81,7 @@
   <mat-tab-group dynamicHeight #tabGroup>
     <mat-tab label="Búsqueda">
       <div *ngIf="checkSaludIntegral">
-        <app-busqueda (emitReadQuery)="readQuerySetter($event)" [isSaludIntegral]="saludIntegral" (emitBusqueda)="busquedaEmitter($event)" [hidden]="saludIntegral" [etapaActual]="curEtapa"></app-busqueda>
+        <app-busqueda (emitReadQuery)="readQuerySetter($event)" [isSaludIntegral]="saludIntegral" (emitBusqueda)="busquedaEmitter($event)" *ngIf="!saludIntegral" [etapaActual]="curEtapa"></app-busqueda>
         <app-buscar-tu-medico *ngIf="saludIntegral" (datosBeneficiarioMedico)="setDatosBeneficiario($event)"></app-buscar-tu-medico>
       </div>
     </mat-tab>
