@@ -35,15 +35,16 @@ export class BuscarTuMedicoComponent implements OnInit {
       if (params['rut']) {
         this.documento = params['rut'];
         this.documentoFC.setValue(params['rut']);
-        this.setFormatRut();      }
+        this.setFormatRut();
+      }
     });
 
-    this.agendaBeneficiario = this.utils.actionAgendaBeneficiarios().getAgenda().subscribe( res => {
+    this.agendaBeneficiario = this.utils.actionAgendaBeneficiarios().getAgenda().subscribe(res => {
       this.documento = res.idPaciente;
       this.setProfesionalRol(res.idMedicoCabecera, res);
     });
 
-    this.nuevaHoraSaludIntegral = this.utils.actionNuevaHoraSaludIntegral().getNuevaHora().subscribe( res => {
+    this.nuevaHoraSaludIntegral = this.utils.actionNuevaHoraSaludIntegral().getNuevaHora().subscribe(res => {
       this.setFormatRut();
       this.buscarRut();
     });
@@ -149,7 +150,7 @@ export class BuscarTuMedicoComponent implements OnInit {
     });
 
   }
-  async setProfesionalRol(rutmed, beneficiario){
+  async setProfesionalRol(rutmed, beneficiario) {
 
 
     try {
@@ -189,20 +190,37 @@ export class BuscarTuMedicoComponent implements OnInit {
 
           let servicio = null;
           let especialidades = null;
+          let listadoEspecialidades = [];
 
           if (srvRequest && srvRequest.especialidadesPorServicio && srvRequest.especialidadesPorServicio.length > 0) {
 
-             especialidades = srvRequest.especialidadesPorServicio.map( item => {
+            especialidades = srvRequest.especialidadesPorServicio.map(item => {
               item.id = item.idEspecialidad;
               return item;
             })
 
-            servicio = especialidades[0];
+            servicio = especialidades.find(item => {
+              return item.idEspecialidad === ENV.saludIntegral.idEspecialidad &&
+                item.idServicio === ENV.saludIntegral.idServicio
+            });
+
+            const extrasEspecialidades = especialidades.filter(item => {
+              const matchExtra = ENV.saludIntegral.mostrarEspecialidadCabeceraExtras.filter(itemExtra => {
+                return item.idEspecialidad === itemExtra.idEspecialidad &&
+                  item.idServicio === itemExtra.idServicio
+              });
+              if (matchExtra.length === 1) {
+                return true;
+              }
+            });
 
             if (!servicio) {
               reject(false);
               return false;
             }
+
+            listadoEspecialidades = [servicio]
+            listadoEspecialidades = listadoEspecialidades.concat(extrasEspecialidades);
 
           } else {
 
@@ -267,8 +285,8 @@ export class BuscarTuMedicoComponent implements OnInit {
             documentoPaciente,
             centrosDisponibles,
             fromSaludIntegral: true,
-            datosImagenes, 
-            listadoEspecialidades: especialidades
+            datosImagenes,
+            listadoEspecialidades: listadoEspecialidades
           };
 
           localStorage.setItem('profesionalCabeceraCalendario', JSON.stringify(busqueda));
@@ -309,13 +327,13 @@ export class BuscarTuMedicoComponent implements OnInit {
 
       } catch (err) {
         resolve(null);
-        
+
       }
     });
   }
 
-  registrarse(){
-    this.dialog.open(RegistroUsuarioComponent,{
+  registrarse() {
+    this.dialog.open(RegistroUsuarioComponent, {
       data: null,
       width: '720px',
       autoFocus: false,
@@ -323,8 +341,8 @@ export class BuscarTuMedicoComponent implements OnInit {
     });
   }
 
-  recuperarClave(){
-    this.dialog.open(RecuperarClaveUsuarioComponent,{
+  recuperarClave() {
+    this.dialog.open(RecuperarClaveUsuarioComponent, {
       data: null,
       width: '480px',
       autoFocus: false,

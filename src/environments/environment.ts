@@ -29,8 +29,16 @@ export const ENV = {
   idRegion: '6bad9b25-d5df-4565-b5fe-a6f701444053',
   saludIntegral:{
     idEspecialidad: '507ef9a7-0d7e-41b8-ae09-a93400e5d5c8',
-    idServicio: '507ef9a7-0d7e-41b8-ae09-a93400e5d5c8'
+    idServicio: 'eb29c47f-1774-4e0f-9a5d-ab8e00fc5716',
+    mostrarEspecialidadCabeceraExtras:[{
+      idEspecialidad: '******',
+      idServicio: '*****',
+    },{
+      idEspecialidad: '****',
+      idServicio: '*****',
+    }]
   },
+
   idOcultarServicios:[
     'd6d84ad5-b78c-4527-8316-ad3900da30ee',
     'eb29c47f-1774-4e0f-9a5d-ab8e00fc5716'],

@@ -29,7 +29,7 @@ export const ENV = {
   idRegion: '6bad9b25-d5df-4565-b5fe-a6f701444053',
   saludIntegral:{
     idEspecialidad: '507ef9a7-0d7e-41b8-ae09-a93400e5d5c8',
-    idServicio: '507ef9a7-0d7e-41b8-ae09-a93400e5d5c8'
+    idServicio: '507ef9a7-0d7e-41b8-ae09-a93400e5d5c8',
   },
   idOcultarServicios:[
     'ec043ac3-8050-49bc-8699-ad5800fec14b',
