@@ -28,8 +28,15 @@ export const ENV = {
   },
   idRegion: '6bad9b25-d5df-4565-b5fe-a6f701444053',
   saludIntegral:{
-    idEspecialidad: '507ef9a7-0d7e-41b8-ae09-a93400e5d5c8',
-    idServicio: '507ef9a7-0d7e-41b8-ae09-a93400e5d5c8',
+    idEspecialidad: '55741061-2813-4bfd-af3b-ad570164f446',
+    idServicio: 'ec043ac3-8050-49bc-8699-ad5800fec14b',
+    mostrarEspecialidadCabeceraExtras:[{
+      idEspecialidad: '55741061-2813-4bfd-af3b-ad570164f446',
+      idServicio: 'd8e192a8-acda-454f-907c-ad5800ff019c',
+    },{
+      idEspecialidad: '55741061-2813-4bfd-af3b-ad570164f446',
+      idServicio: '4788642c-1fcc-469e-a2b9-ad5800ff2683',
+    }]
   },
   idOcultarServicios:[
     'ec043ac3-8050-49bc-8699-ad5800fec14b',
@@ -45,7 +52,7 @@ export const ENV = {
     idEspecialidad:'274daf84-5ed6-4e8c-bbf0-a93400e91bd4',
     idServicio:'a163c23a-285a-4e9a-9e37-a934015b223e'
   },
-  planesSaludOcultos:['018ed73d-6bd2-46e9-8e95-acfc0134435b'],
+  planesSaludOcultos:['427cd404-170c-4c11-84eb-ad5800d103ab'],
   tokenAutenticar: 'T3BMdXo5ckdJaXlvY0FJNg==',
   pathAutenticar: '/auth-prod/Autenticar',
   analyticsCode: 'UA-143119471-1',
