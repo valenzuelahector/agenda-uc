@@ -1,10 +1,10 @@
 <h2 mat-dialog-title>Cree su cuenta</h2>
 <mat-dialog-content>
-    <div class="dialog-spinner" *ngIf="loading">
-        <mat-spinner [diameter]="50"></mat-spinner>
-    </div>
+    
     <form [formGroup]="mainForm" *ngIf="!displayInputCode">
- 
+        <div class="dialog-spinner" *ngIf="loading">
+            <mat-spinner [diameter]="50"></mat-spinner>
+        </div>
         <div fxLayout="row wrap" fxLayoutAlign="space-between"  *ngIf="!rutConfirmado">
             <div fxFlex="49%">
                 <mat-form-field class="full" appearance="outline">
@@ -44,6 +44,7 @@
                 <mat-form-field class="full" appearance="outline">
                     <mat-label>Contraseña</mat-label>
                     <input type="password" matInput formControlName="password" required>
+                    <mat-hint>La clave requiere 6 caracteres.</mat-hint>
                     <mat-error *ngIf="mf.password.errors">
                         <span *ngIf="mf.password.errors.required">Campo Obligatorio</span>
                     </mat-error>

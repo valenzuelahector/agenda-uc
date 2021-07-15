@@ -148,10 +148,17 @@ export class RegistroUsuarioComponent implements OnInit {
       form.identificador = this.documento;
       form.fono_movil = '+56' + form.fono_movil;
       form.fecha_nacimiento = form.fecha_nacimiento.toISOString().split("T")[0];
+      
       if(!this.utils.validateEmail(form.email)){
         this.utils.mDialog("Error", "Formato de correo incorrecto.", "message");
         return;
       }
+
+      if(form.password.length !== 6){
+        this.utils.mDialog("Error", "La clave requiere 6 caracteres..", "message");
+        return;
+      }
+
       this.loading = true;
       this.agendaService.guardarUsuario(form).then( (res:any) => {
         this.loading = false;
