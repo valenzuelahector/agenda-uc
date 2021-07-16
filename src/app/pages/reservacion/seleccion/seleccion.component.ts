@@ -97,6 +97,15 @@ export class SeleccionComponent implements OnInit, OnChanges {
             this.derivacion = true;
             this.utils.saludIntegralVolver().setVolver('VISTA_DERIVACION');
             this.utils.hideProgressBar();
+          },3000);
+        break;
+        
+        case 'VISTA_DERIVACION_TITULAR':
+          this.utils.showProgressBar();
+          setTimeout(()=> {
+            this.derivacion = true;
+            this.utils.saludIntegralVolver().setVolver('VISTA_DERIVACION');
+            this.verAgendaDerivacion(true);
           },3000)
         break;
 
@@ -104,7 +113,6 @@ export class SeleccionComponent implements OnInit, OnChanges {
           this.removerDerivacion = false;
           this.utils.saludIntegralVolver().setVolver('VISTA_DERIVACION');
           this.utils.especialidadDerivaciones().setEspecialidad(this.profesionalCabecera);
-
           break;
       }
     })
@@ -167,12 +175,13 @@ export class SeleccionComponent implements OnInit, OnChanges {
       }
       this.cambiarFiltroHoras('ALL');
 
-      if(this.busquedaInicial.fromSaludIntegral){
+      if(this.busquedaInicial.fromSaludIntegral && !this.busquedaInicial.fromMedicosRelacionados){
         const der = JSON.parse(localStorage.getItem('derivacion'));
         this.beneficiarios = JSON.parse(localStorage.getItem('beneficiarios'));
         this.busquedaInicial.derivacion = der.derivacion;
         this.beneficiarioTitular = this.beneficiarios[0];
         this.beneficiarioSelected = der;
+
         this.setDerivacion(this.removerDerivacion ? false : true);
         this.profesionalCabecera = JSON.parse(localStorage.getItem("profesionalCabeceraCalendario"));
 
@@ -180,6 +189,9 @@ export class SeleccionComponent implements OnInit, OnChanges {
           this.especialidadSelected = this.busquedaInicial.listadoEspecialidades[0];
         }
 
+      }else if(this.busquedaInicial.fromSaludIntegral && this.busquedaInicial.fromMedicosRelacionados){
+        this.utils.saludIntegralVolver().setVolver('VISTA_DERIVACION_TITULAR');
+        this.setDerivacion(false);
       }
       
     }

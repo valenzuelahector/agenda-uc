@@ -102,6 +102,9 @@ export class MedicosAsociadosComponent implements OnInit, OnDestroy {
       detalle: 'Todos'
     }
 
+    detalleBusqueda.fromSaludIntegral = this.fromSaludIntegral;
+    detalleBusqueda.fromMedicosRelacionados = true;
+    
     this.utils.setBuscarProfesionalRelacionado(detalleBusqueda);
     gtag('config', ENV.analyticsCode, 
     {'page_path': `/busqueda/profesionalRecomendado/area/${this.detalleBusqueda.area.id}/profesional/${this.detalleBusqueda.profesional.idProfesional}/servicio/${this.detalleBusqueda.especialidad.idServicio}/centro/${this.detalleBusqueda.centroAtencion.idCentro}` });

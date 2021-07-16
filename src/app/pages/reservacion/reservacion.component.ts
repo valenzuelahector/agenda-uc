@@ -130,6 +130,9 @@ export class ReservacionComponent implements OnInit, AfterViewInit, OnDestroy {
         case 'VISTA_AGENDA_PROFESIONAL':
           this.saludIntgralBotonVolver.text = 'VOLVER';
           break;
+        case 'VISTA_DERIVACION_TITULAR':
+          this.saludIntgralBotonVolver.text = 'VOLVER';
+          break;
       }
 
       this.saludIntgralBotonVolver.estado = res;
@@ -152,8 +155,11 @@ export class ReservacionComponent implements OnInit, AfterViewInit, OnDestroy {
         this.utils.actionSaludIntegralVolver().setVolver('VISTA_AGENDA_PROFESIONAL')
         break;
       case 'VISTA_CALENDARIO':
-          this.utils.actionSaludIntegralVolver().setVolver('VISTA_CALENDARIO');
-          break;
+        this.utils.actionSaludIntegralVolver().setVolver('VISTA_CALENDARIO');
+        break;
+      case 'VISTA_DERIVACION_TITULAR':
+        this.utils.actionSaludIntegralVolver().setVolver('VISTA_DERIVACION_TITULAR')
+        break;
     }
   }
 
@@ -173,7 +179,7 @@ export class ReservacionComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  anularhHora(){
+  anularhHora() {
     this.router.navigate(['/anular-reserva'])
     gtag('event', 'Filtro de Búsqueda', { 'event_category': 'Anular Hora', 'event_label': `Anular`, 'value': '0' });
 
@@ -247,7 +253,7 @@ export class ReservacionComponent implements OnInit, AfterViewInit, OnDestroy {
       this.utils.actionNuevaHoraSaludIntegral().setNuevaHora(true);
     }
 
-    gtag('event', 'Reserva Exitosa', { 'event_category': 'Tomar otra hora', 'event_label': 'Nueva Hora' , 'value': '0' });
+    gtag('event', 'Reserva Exitosa', { 'event_category': 'Tomar otra hora', 'event_label': 'Nueva Hora', 'value': '0' });
 
   }
 
